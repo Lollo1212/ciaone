@@ -27,7 +27,7 @@ public class ServerGame extends Game{
 
     @Override
     public ImageIcon getImage(Chessman.NAMES name, boolean black) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return null;
     }
 
     @Override
@@ -41,10 +41,15 @@ public class ServerGame extends Game{
     }
 
     public ClientConnection getClient1() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return client1;
     }
 
     public ClientConnection getClient2() {
+        return client2;
+    }
+
+    @Override
+    public void finishedCalcs() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

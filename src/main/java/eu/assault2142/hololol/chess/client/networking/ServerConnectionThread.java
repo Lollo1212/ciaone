@@ -4,16 +4,13 @@
  */
 package eu.assault2142.hololol.chess.client.networking;
 
-import eu.assault2142.hololol.chess.client.game.LocalGame;
 import eu.assault2142.hololol.chess.game.chessmen.Pawn;
 import eu.assault2142.hololol.chess.game.chessmen.Queen;
-import eu.assault2142.hololol.chess.game.chessmen.Chessman;
 import eu.assault2142.hololol.chess.game.chessmen.Bishop;
 import eu.assault2142.hololol.chess.game.chessmen.Move;
 import eu.assault2142.hololol.chess.game.chessmen.Knight;
 import eu.assault2142.hololol.chess.game.chessmen.Rook;
 import eu.assault2142.hololol.chess.client.menus.MainMenu;
-import eu.assault2142.hololol.chess.client.game.ui.FigurenFrame;
 import java.util.NoSuchElementException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -215,7 +212,7 @@ public class ServerConnectionThread implements Runnable {
                     } else {
                         color = false;
                     }
-                    new FigurenFrame(client.g, (Pawn) client.g.getFiguren(color)[Integer.parseInt(message[2])]);
+                    JOptionPane.showInputDialog(client.getGame().getGameFrame(), "Promotion", "Promotion", JOptionPane.QUESTION_MESSAGE, null, new String[]{"Queen", "Rook", "Knight", "Bishop"}, "Queen");
                 }
                 
             } catch (NoSuchElementException nsee) {

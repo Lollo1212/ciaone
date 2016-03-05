@@ -1,13 +1,6 @@
 package eu.assault2142.hololol.chess.game;
 
-import eu.assault2142.hololol.chess.game.chessmen.Chessman;
-import eu.assault2142.hololol.chess.game.chessmen.Bishop;
-import eu.assault2142.hololol.chess.game.chessmen.King;
-import eu.assault2142.hololol.chess.game.chessmen.Knight;
-import eu.assault2142.hololol.chess.game.chessmen.Move;
-import eu.assault2142.hololol.chess.game.chessmen.Pawn;
-import eu.assault2142.hololol.chess.game.chessmen.Queen;
-import eu.assault2142.hololol.chess.game.chessmen.Rook;
+import eu.assault2142.hololol.chess.game.chessmen.*;
 import javax.swing.ImageIcon;
 
 /**
@@ -140,6 +133,7 @@ public abstract class Game {
     public abstract ImageIcon getImage(Chessman.NAMES name, boolean black);
     protected abstract void updateMovements();
     public abstract void promotion(Pawn pawn);
+    public abstract void finishedCalcs();
 }
     
 

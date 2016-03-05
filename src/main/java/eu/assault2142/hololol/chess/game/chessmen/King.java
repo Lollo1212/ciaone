@@ -1,6 +1,5 @@
 package eu.assault2142.hololol.chess.game.chessmen;
 
-import eu.assault2142.hololol.chess.game.Square;
 import eu.assault2142.hololol.chess.game.Game;
 import eu.assault2142.hololol.chess.game.GameSituation;
 import java.util.LinkedList;
@@ -173,6 +172,7 @@ public class King extends Chessman {
      */
     public boolean doCastling(CastlingMove move, GameSituation situation) {
         CastlingMove[] rochaden = computeCastlings(true, situation);
+        if(rochaden.length == 0) return false;
         if (game.getTurn() == black) {
             if (rochaden[0] != null && rochaden[0].equals(move)) {
                 //könig ziehen

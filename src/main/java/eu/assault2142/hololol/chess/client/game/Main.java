@@ -26,7 +26,7 @@ public class Main {
         int a=Integer.parseInt(pref.get("skin","0"));
         int b=Integer.parseInt(pref.get("sprache","0"));
         String c=pref.get("username","");
-        e=new Settings(a,b,c);
+        e=new Settings(b,c);
         //Öffnen des Hauptmenüs
         new Translator(Translator.DE);
         WebLookAndFeel.install();

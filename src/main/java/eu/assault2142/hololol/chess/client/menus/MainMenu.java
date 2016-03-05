@@ -69,7 +69,6 @@ public class MainMenu extends javax.swing.JFrame {
         //Add listener to components that can bring up popup menus.
         MouseListener popupListener = new PopupListener(popup);
         jList1.addMouseListener(popupListener);
-        jComboBox1.setSelectedIndex(Settings.SETTINGS.skin);
         if(Translator.TRANSLATOR.getLanguage().equals(Translator.EN)){
             jComboBox2.setSelectedIndex(0);
         }else{
@@ -127,8 +126,6 @@ public class MainMenu extends javax.swing.JFrame {
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jPanel5 = new javax.swing.JPanel();
-        jLabel7 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox<>();
         jLabel8 = new javax.swing.JLabel();
         jComboBox2 = new javax.swing.JComboBox<>();
         jButton5 = new javax.swing.JButton();
@@ -473,10 +470,6 @@ public class MainMenu extends javax.swing.JFrame {
 
         jTabbedPane1.addTab(Translator.TRANSLATOR.getTranslation("menu_main_tab_lan"), jPanel4);
 
-        jLabel7.setText(Translator.TRANSLATOR.getTranslation("menu_main_options_chessmen"));
-
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Normal High", "Normal Medium", "Normal Low", "Starcraft", "Stronghold" }));
-
         jLabel8.setText(Translator.TRANSLATOR.getTranslation("menu_main_options_language"));
 
         jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "English", "Deutsch" }));
@@ -494,28 +487,22 @@ public class MainMenu extends javax.swing.JFrame {
             jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(jPanel5Layout.createSequentialGroup()
                 .add(41, 41, 41)
-                .add(jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING, false)
+                .add(jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                     .add(jButton5)
                     .add(jLabel8)
-                    .add(jLabel7)
-                    .add(jComboBox1, 0, 180, Short.MAX_VALUE)
-                    .add(jComboBox2, 0, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(407, Short.MAX_VALUE))
+                    .add(jComboBox2, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 180, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(410, Short.MAX_VALUE))
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(jPanel5Layout.createSequentialGroup()
-                .add(30, 30, 30)
-                .add(jLabel7)
-                .add(18, 18, 18)
-                .add(jComboBox1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .add(32, 32, 32)
+                .add(114, 114, 114)
                 .add(jLabel8)
                 .add(18, 18, 18)
                 .add(jComboBox2, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .add(33, 33, 33)
                 .add(jButton5)
-                .addContainerGap(122, Short.MAX_VALUE))
+                .addContainerGap(157, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab(Translator.TRANSLATOR.getTranslation("menu_main_tab_options"), jPanel5);
@@ -532,7 +519,7 @@ public class MainMenu extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(0, 407, Short.MAX_VALUE)
             .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                .add(jTabbedPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE))
+                .add(jTabbedPane1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 300, Short.MAX_VALUE))
         );
 
         org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(getContentPane());
@@ -575,7 +562,6 @@ public class MainMenu extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
-        Settings.SETTINGS.updateSkinSettings(jComboBox1.getSelectedIndex());
         String langBefore = Translator.TRANSLATOR.getLanguage();
         if (jComboBox2.getSelectedIndex() == 0) {
             Translator.TRANSLATOR.setLanguage(Translator.EN);
@@ -743,7 +729,6 @@ public class MainMenu extends javax.swing.JFrame {
     private javax.swing.JButton jButton8;
     private javax.swing.JButton jButton9;
     private javax.swing.JCheckBox jCheckBox2;
-    private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JComboBox<String> jComboBox2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -751,7 +736,6 @@ public class MainMenu extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JList<String> jList1;
     private javax.swing.JPanel jPanel1;

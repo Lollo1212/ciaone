@@ -3,8 +3,6 @@
  * and open the template in the editor.
  */
 package eu.assault2142.hololol.chess.game;
-
-import eu.assault2142.hololol.chess.client.game.LocalGame;
 import eu.assault2142.hololol.chess.game.chessmen.King;
 import eu.assault2142.hololol.chess.game.chessmen.Move;
 import java.util.Arrays;
@@ -173,7 +171,7 @@ public abstract class MovementUpdater extends Thread{//Berechnet nach jedem Zug 
         //if (g.isLocal() && g.bot && g.getTurn()) {
             //Bot.doMove();
         //}
-        ((LocalGame)g).getGameFrame().getGameField().movementsupdating = false;
+        g.finishedCalcs();
     }
     
     protected abstract void onCheck();

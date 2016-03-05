@@ -41,12 +41,13 @@ public class ClientGame extends Game {
 
     @Override
     public ImageIcon getImage(Chessman.NAMES name, boolean black) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        String color = "white";
+        if(black) color = "black";
+        return new ImageIcon(getClass().getResource(Settings.SETTINGS.chessmenFolder + "/"+name+"_"+color+".gif"));
     }
 
     @Override
     public void updateMovements() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     public ServerConnection getClient() {
@@ -60,6 +61,11 @@ public class ClientGame extends Game {
     
     public ServerConnection getConnection(){
         return client;
+    }
+
+    @Override
+    public void finishedCalcs() {
+        p.getGameField().movementsupdating = false;
     }
 
 }

@@ -24,11 +24,6 @@ public class ClientMovementUpdater extends MovementUpdater{
     }
 
     @Override
-    public void testCheck() {
-        super.testCheck();
-    }
-
-    @Override
     protected void onCheck() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }

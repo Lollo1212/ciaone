@@ -1,6 +1,5 @@
 package eu.assault2142.hololol.chess.game.chessmen;
 
-import eu.assault2142.hololol.chess.game.Square;
 import eu.assault2142.hololol.chess.game.Game;
 import eu.assault2142.hololol.chess.game.GameSituation;
 import java.util.LinkedList;

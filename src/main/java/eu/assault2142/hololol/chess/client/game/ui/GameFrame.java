@@ -216,9 +216,9 @@ public class GameFrame extends JFrame{//Frame, in dem das Schachfeld eingebettet
                             CastlingMove[] rochaden;
                             if(angewählt.getClass()==King.class){
                                 rochaden=((King)angewählt).computeCastlings(true,game.getGameSituation());
-                                for(int v=0;v<2;v++){
-                                    if(rochaden[v]!=null){
-                                        game.getSquare(rochaden[v].getTargetX(),rochaden[v].getTargetY()).castling=true;
+                                for (CastlingMove rochaden1 : rochaden) {
+                                    if (rochaden1 != null) {
+                                        game.getSquare(rochaden1.getTargetX(), rochaden1.getTargetY()).castling = true;
                                     }
                                 }
                             }
