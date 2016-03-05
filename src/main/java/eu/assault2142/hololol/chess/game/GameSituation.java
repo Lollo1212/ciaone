@@ -276,10 +276,7 @@ public class GameSituation {
         for(int x=0;x<8;x++){
             for(int y=0;y<8;y++){
                 if(squares[10*x+y]!=null){
-                    squares[10*x+y].posmove=false;
-                    squares[10*x+y].postarget=false;
-                    squares[10*x+y].castling=false;
-                    squares[10*x+y].selected=false;
+                    squares[10*x+y].resetHighlighting();
                 }
             }
         }

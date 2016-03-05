@@ -155,7 +155,7 @@ public class GameFrame extends JFrame{//Frame, in dem das Schachfeld eingebettet
                     Square angeklickt;
                     if(10*feldx+feldy<=77&&10*feldx+feldy>=0){
                         angeklickt=game.getSquare(feldx,feldy);
-                        angeklickt.selected=true;//angeklicktes Feld in Cyan färben
+                        angeklickt.highlight(Square.HIGHLIGHT.SELECTED);//angeklicktes Feld in Cyan färben
                         if(angewählt!=null&&angeklickt!=null&&game.getType()==Game.TYPE.LOCAL){//beim letzten Klick wurde Figur angeklickt und lokales Spiel
                             boolean a=angewählt.doMove(angeklickt.getX(),angeklickt.getY());
                             boolean b=angewählt.doCapture(angeklickt.getX(),angeklickt.getY());
@@ -218,7 +218,7 @@ public class GameFrame extends JFrame{//Frame, in dem das Schachfeld eingebettet
                                 rochaden=((King)angewählt).computeCastlings(true,game.getGameSituation());
                                 for (CastlingMove rochaden1 : rochaden) {
                                     if (rochaden1 != null) {
-                                        game.getSquare(rochaden1.getTargetX(), rochaden1.getTargetY()).castling = true;
+                                        game.getSquare(rochaden1.getTargetX(), rochaden1.getTargetY()).highlight(Square.HIGHLIGHT.CASTLING);
                                     }
                                 }
                             }
@@ -226,7 +226,7 @@ public class GameFrame extends JFrame{//Frame, in dem das Schachfeld eingebettet
                                 int r=bewegungen.length;
                                 for(int v=0;v<=r-1;v++){
                                     if(bewegungen[v]!=null){
-                                        game.getSquare(bewegungen[v].getTargetX(),bewegungen[v].getTargetY()).posmove=true;
+                                        game.getSquare(bewegungen[v].getTargetX(),bewegungen[v].getTargetY()).highlight(Square.HIGHLIGHT.MOVETARGET);
                                     }   
                                 }
                             }
@@ -234,7 +234,7 @@ public class GameFrame extends JFrame{//Frame, in dem das Schachfeld eingebettet
                                 int r=schläge.length;
                                 for(int v=0;v<=r-1;v++){
                                     if(schläge[v]!=null){
-                                        game.getSquare(schläge[v].getTargetX(),schläge[v].getTargetY()).postarget=true;
+                                        game.getSquare(schläge[v].getTargetX(),schläge[v].getTargetY()).highlight(Square.HIGHLIGHT.CAPTURETARGET);
                                     }   
                                 }
                             }

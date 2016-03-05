@@ -16,7 +16,7 @@ public class Settings{
     //the username used to play online
     public String username;
     //the current chessmen-folder
-    public String chessmenFolder="/schach_figuren_medium";
+    public String chessmenFolder="/schach_figuren_high";
     //Color of dark squares
     public Color dark=new Color(209,139,71);
     //Color of light squares

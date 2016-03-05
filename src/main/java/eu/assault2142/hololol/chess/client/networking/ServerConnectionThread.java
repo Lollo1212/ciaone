@@ -107,9 +107,9 @@ public class ServerConnectionThread implements Runnable {
                     Runnable checkimage = () -> {
                         try {
                             Thread.sleep(100);
-                            client.g.getGameFrame().getGameField().schach = true;
+                            client.g.getGameFrame().getGameField().check = true;
                             Thread.sleep(3000);
-                            client.g.getGameFrame().getGameField().schach = false;
+                            client.g.getGameFrame().getGameField().check = false;
                         } catch (InterruptedException ex) {
                             Logger.getLogger(ServerConnectionThread.class.getName()).log(Level.SEVERE, null, ex);
                         }

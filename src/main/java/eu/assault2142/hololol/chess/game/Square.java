@@ -1,6 +1,8 @@
 package eu.assault2142.hololol.chess.game;
 
+import eu.assault2142.hololol.chess.client.game.Settings;
 import eu.assault2142.hololol.chess.game.chessmen.Chessman;
+import java.awt.Color;
 
 /**
  * Represents a square on the chessboard
@@ -9,16 +11,12 @@ import eu.assault2142.hololol.chess.game.chessmen.Chessman;
  */
 public class Square {
 
-    //whether the square is a castling target
-    public boolean castling = false;
-    //whether this square is a move target
-    public boolean posmove = false;
-    //whether this square is a capture target
-    public boolean postarget = false;
-    //whether the square is selected
-    public boolean selected = false;
-    //whether this is a light field
-    public boolean light;
+    public static enum HIGHLIGHT {
+        MOVETARGET, CAPTURETARGET, CASTLING, SELECTED
+    };
+
+    public Color baseColor;
+    public Color currentColor;
     //the x-coordinate
     private final int x;
     //the y-coordinate
@@ -65,23 +63,40 @@ public class Square {
      * Set the Color to light or dark depending on the coordinates
      */
     private void setColor() {
-        this.light = false;
-        if (x == 0 || x == 2 || x == 4 || x == 6) {
-            if (y == 0 || y == 2 || y == 4 || y == 6) {
-                this.light = true;
-            }
+        if ((x + y) % 2 == 0) {
+            baseColor = Settings.SETTINGS.light;
+        } else {
+            baseColor = Settings.SETTINGS.dark;
         }
-        if (x == 1 || x == 3 || x == 5 || x == 7) {
-            if (y == 1 || y == 3 || y == 5 || y == 7) {
-                this.light = true;
-            }
+        currentColor = baseColor;
+    }
+
+    public boolean isOccupied() {
+        return occupier != null;
+    }
+
+    public boolean isOccupiedByColor(boolean black) {
+        return isOccupied() && occupier.isBlack() == black;
+    }
+
+    public void highlight(HIGHLIGHT color) {
+        switch (color) {
+            case MOVETARGET:
+                currentColor = Color.BLUE;
+                break;
+            case CAPTURETARGET:
+                currentColor = Color.RED;
+                break;
+            case CASTLING:
+                currentColor = Color.MAGENTA;
+                break;
+            default:
+                currentColor = Color.CYAN;
+                break;
         }
     }
     
-    public boolean isOccupied(){
-        return occupier!=null;
-    }
-    public boolean isOccupiedByColor(boolean black){
-        return isOccupied()&&occupier.isBlack()==black;
+    public void resetHighlighting(){
+        currentColor = baseColor;
     }
 }
