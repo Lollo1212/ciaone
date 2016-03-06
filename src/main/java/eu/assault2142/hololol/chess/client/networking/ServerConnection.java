@@ -48,12 +48,12 @@ public class ServerConnection {
 
     public ServerConnection(InetAddress address) {
         try {
-            KeyStore ks = KeyStore.getInstance(Translator.getBundle().getString("JKS"));
-            ks.load(new FileInputStream(Translator.getBundle().getString("TRUSTSTORE")), Translator.getBundle().getString("ASSAULT").toCharArray());
+            KeyStore ks = KeyStore.getInstance("JKS");
+            ks.load(new FileInputStream("TRUSTSTORE"), "assault".toCharArray());
             TrustManagerFactory tmf = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
             tmf.init(ks);
 
-            SSLContext sslcon = SSLContext.getInstance(Translator.getBundle().getString("TLS"));
+            SSLContext sslcon = SSLContext.getInstance("TLS");
             TrustManager[] trustManagers = tmf.getTrustManagers();
             sslcon.init(null, trustManagers, null);
 
@@ -83,7 +83,7 @@ public class ServerConnection {
         s = so;
         sc = sca;
         pw = pwr;
-        write(Translator.getBundle().getString("N"));
+        write("n");
         ct = new ServerConnectionThread(this);
         t = new Thread(ct);
         t.start();
@@ -112,7 +112,7 @@ public class ServerConnection {
     public static void connect(String username, String password, boolean create) {
         ServerConnection c = null;
         try {
-            InetAddress i = InetAddress.getByName(Translator.getBundle().getString("OWNCLOUD.ASSAULT2142.EU"));
+            InetAddress i = InetAddress.getByName("assault2142.eu");
             c = new ServerConnection(i);
         } catch (UnknownHostException ex) {
             System.out.println(ex.getMessage());
@@ -123,13 +123,13 @@ public class ServerConnection {
             //Anmeldedaten an Server schicken
             String str = "";
             if (create) {
-                str += Translator.getBundle().getString("R:");
+                str += "r:";
             }
-            str += username + java.text.MessageFormat.format(Translator.getBundle().getString(":{0}"), new Object[]{password});
+            str += username + ":" + password;
             c.write(str);
             String input = c.getScanner().next();
             System.err.println(input);
-            if (input.equals(Translator.getBundle().getString("LOGGEDIN"))) {
+            if (input.equals("loggedin")) {
                 //Der Server bestätigt Anmeldung
 
                 c = new ServerConnection(c.getSocket(), c.getScanner(), c.getPrintWriter());
@@ -140,7 +140,7 @@ public class ServerConnection {
                     JOptionPane.showMessageDialog(MainMenu.MAINMENU, Translator.getBundle().getString("ACCOUNT EXISTIERT BEREITS"), Translator.getBundle().getString("LOGIN ERROR"), JOptionPane.ERROR_MESSAGE);
                     MainMenu.MAINMENU.enableLoginButton();
                     //InfoFrame f=new InfoFrame("Account existiert bereits",300,100,true);
-                } else if (input.equals(Translator.getBundle().getString("LOGINERROR:PASSWORD"))) {
+                } else if (input.equals("loginerror:password")) {
                     JOptionPane.showMessageDialog(MainMenu.MAINMENU, Translator.getBundle().getString("PASSWORT FALSCH"), Translator.getBundle().getString("LOGIN ERROR"), JOptionPane.ERROR_MESSAGE);
                     MainMenu.MAINMENU.enableLoginButton();
                 } else {
