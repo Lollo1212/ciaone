@@ -5,6 +5,7 @@
  */
 package eu.assault2142.hololol.chess.client.menus;
 
+import eu.assault2142.hololol.chess.client.translator.Translator;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Component;
@@ -78,7 +79,7 @@ public class ButtonTabComponent extends JPanel {
 
             int size = 17;
             setPreferredSize(new Dimension(size, size));
-            setToolTipText(java.util.ResourceBundle.getBundle("translations/translations").getString("TAB_CLOSE"));
+            setToolTipText(Translator.getBundle().getString("TAB_CLOSE"));
             //Make the button looks the same for all Laf's
             setUI(new BasicButtonUI());
             //Make it transparent

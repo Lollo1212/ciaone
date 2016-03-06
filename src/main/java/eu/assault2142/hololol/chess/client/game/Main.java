@@ -2,9 +2,11 @@ package eu.assault2142.hololol.chess.client.game;
 
 import com.alee.laf.WebLookAndFeel;
 import eu.assault2142.hololol.chess.client.menus.MainMenu;
+import eu.assault2142.hololol.chess.client.translator.Translator;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.util.Locale;
 import java.util.prefs.Preferences;
 
 /*
@@ -26,6 +28,7 @@ public class Main {
         String c = pref.get("username", "");
         e = new Settings(b, c);
         //Öffnen des Hauptmenüs
+        Translator.setLanguage(Locale.getDefault());
         WebLookAndFeel.install();
         new MainMenu().setVisible(true);
     }

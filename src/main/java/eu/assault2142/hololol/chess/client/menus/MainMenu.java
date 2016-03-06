@@ -8,12 +8,14 @@ package eu.assault2142.hololol.chess.client.menus;
 import eu.assault2142.hololol.chess.client.game.LocalGame;
 import eu.assault2142.hololol.chess.client.game.Settings;
 import eu.assault2142.hololol.chess.client.networking.ServerConnection;
+import eu.assault2142.hololol.chess.client.translator.Translator;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
+import java.util.Locale;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
@@ -57,12 +59,12 @@ public class MainMenu extends javax.swing.JFrame {
         JPopupMenu popup;
         JMenuItem menuItem;
         popup = new JPopupMenu();
-        menuItem = new JMenuItem(java.util.ResourceBundle.getBundle("translations/translations").getString("MENU_CHALLENGE"));
+        menuItem = new JMenuItem(Translator.getBundle().getString("MENU_CHALLENGE"));
         menuItem.addActionListener((ActionEvent e) -> {
             client.challengeFriend(jList1.getSelectedValue());
         });
         popup.add(menuItem);
-        menuItem = new JMenuItem(java.util.ResourceBundle.getBundle("translations/translations").getString("MENU_MESSAGE"));
+        menuItem = new JMenuItem(Translator.getBundle().getString("MENU_MESSAGE"));
         menuItem.addActionListener((ActionEvent e) -> {
             JTextArea text = new JTextArea();
             text.setEditable(false);
@@ -74,7 +76,7 @@ public class MainMenu extends javax.swing.JFrame {
             jTabbedPane2.setTabComponentAt(jTabbedPane2.getSelectedIndex(), new ButtonTabComponent(jTabbedPane2));
         });
         popup.add(menuItem);
-        menuItem = new JMenuItem(java.util.ResourceBundle.getBundle("translations/translations").getString("MENU_REMOVE"));
+        menuItem = new JMenuItem(Translator.getBundle().getString("MENU_REMOVE"));
         menuItem.addActionListener((ActionEvent e) -> {
             client.removeFriend(jList1.getSelectedValue());
         });
@@ -580,7 +582,7 @@ public class MainMenu extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton9ActionPerformed
 
     private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
-        String input = JOptionPane.showInputDialog(this, java.util.ResourceBundle.getBundle("translations/translations").getString("ADDFRIENDDIALOG_TEXT"), java.util.ResourceBundle.getBundle("translations/translations").getString("ADDFRIENDDIALOG_HEAD"), JOptionPane.PLAIN_MESSAGE);
+        String input = JOptionPane.showInputDialog(this, Translator.getBundle().getString("ADDFRIENDDIALOG_TEXT"), Translator.getBundle().getString("ADDFRIENDDIALOG_HEAD"), JOptionPane.PLAIN_MESSAGE);
         if (input != null) {
             client.addFriend(input);
         }
@@ -624,7 +626,7 @@ public class MainMenu extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton10ActionPerformed
 
     private void jButton11ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton11ActionPerformed
-        String input = JOptionPane.showInputDialog(this, java.util.ResourceBundle.getBundle("translations/translations").getString("CHANGENAME_TEXT"), java.util.ResourceBundle.getBundle("translations/translations").getString("CHANGENAME_HEAD"), JOptionPane.PLAIN_MESSAGE);
+        String input = JOptionPane.showInputDialog(this, Translator.getBundle().getString("CHANGENAME_TEXT"), Translator.getBundle().getString("CHANGENAME_HEAD"), JOptionPane.PLAIN_MESSAGE);
         if (input != null) {
             client.changeUsername(input);
         }
@@ -648,7 +650,7 @@ public class MainMenu extends javax.swing.JFrame {
         text.setEditable(false);
         JScrollPane scroll = new JScrollPane(text);
         areas.clear();
-        jTabbedPane2.add(scroll, java.util.ResourceBundle.getBundle("translations/translations").getString("TABBEDPANE_INFO"));
+        jTabbedPane2.add(scroll, Translator.getBundle().getString("TABBEDPANE_INFO"));
         jTabbedPane2.setSelectedComponent(scroll);
         client = c;
 
@@ -765,9 +767,9 @@ public class MainMenu extends javax.swing.JFrame {
         String text = jTextField1.getText();
         Settings.SETTINGS.username = text;
         if (text.length() < 4) {
-            JOptionPane.showMessageDialog(MainMenu.MAINMENU, java.util.ResourceBundle.getBundle("translations/translations").getString("NAMETOOSHORT_TEXT"), java.util.ResourceBundle.getBundle("translations/translations").getString("NAMETOOSHORT_HEAD"), JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(MainMenu.MAINMENU, Translator.getBundle().getString("NAMETOOSHORT_TEXT"), Translator.getBundle().getString("NAMETOOSHORT_HEAD"), JOptionPane.WARNING_MESSAGE);
         } else if (jPasswordField1.getPassword().length < 4) {
-            JOptionPane.showMessageDialog(this, java.util.ResourceBundle.getBundle("translations/translations").getString("PASSTOOSHORT_TEXT"), java.util.ResourceBundle.getBundle("translations/translations").getString("PASSTOOSHORT_HEAD"), JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(this, Translator.getBundle().getString("PASSTOOSHORT_TEXT"), Translator.getBundle().getString("PASSTOOSHORT_HEAD"), JOptionPane.WARNING_MESSAGE);
         } else {
             jButton1.setEnabled(false);
             ServerConnection.connect(jTextField1.getText(), new String(jPasswordField1.getPassword()), jCheckBox2.isSelected());
@@ -775,7 +777,15 @@ public class MainMenu extends javax.swing.JFrame {
     }
 
     private void saveSettings() {
-        jTabbedPane1.setSelectedIndex(0);
+        if (jComboBox2.getSelectedIndex() == 1) {
+            Locale.setDefault(Locale.GERMAN);
+        } else {
+            Locale.setDefault(Locale.ENGLISH);
+        }
+        setVisible(false);
+        MainMenu main = new MainMenu();
+        main.setVisible(true);
+        main.setLocation(this.getLocation());
     }
 
     private void logout() {
@@ -800,14 +810,14 @@ public class MainMenu extends javax.swing.JFrame {
         int option = JOptionPane.showConfirmDialog(
                 this,
                 passwordField,
-                java.util.ResourceBundle.getBundle("translations/translations").getString("CHANGEPASS_HEAD"),
+                Translator.getBundle().getString("CHANGEPASS_HEAD"),
                 JOptionPane.OK_CANCEL_OPTION);
         String input = new String(passwordField.getPassword());
         if (option == JOptionPane.OK_OPTION) {
             if (input.length() > 3) {
                 client.changePassword(input);
             } else {
-                JOptionPane.showMessageDialog(this, java.util.ResourceBundle.getBundle("translations/translations").getString("PASSTOOSHORT_TEXT"), java.util.ResourceBundle.getBundle("translations/translations").getString("PASSTOOSHORT_HEAD"), JOptionPane.WARNING_MESSAGE);
+                JOptionPane.showMessageDialog(this, Translator.getBundle().getString("PASSTOOSHORT_TEXT"), Translator.getBundle().getString("PASSTOOSHORT_HEAD"), JOptionPane.WARNING_MESSAGE);
             }
         }
     }

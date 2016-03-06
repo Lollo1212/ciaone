@@ -6,8 +6,9 @@ package eu.assault2142.hololol.chess.client.game.ui;
 
 import eu.assault2142.hololol.chess.client.game.ClientGame;
 import eu.assault2142.hololol.chess.client.menus.MainMenu;
-import eu.assault2142.hololol.chess.game.chessmen.Chessman;
+import eu.assault2142.hololol.chess.client.translator.Translator;
 import eu.assault2142.hololol.chess.game.Game;
+import eu.assault2142.hololol.chess.game.chessmen.Chessman;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
@@ -85,15 +86,15 @@ public class GameFrame extends JFrame implements MouseListener {//Frame, in dem 
         JLabel turn = new JLabel("");
         addComponent(turn, 0, 9, 10, 1, 8, 1);
         if (game.getType() == Game.TYPE.LOCAL) {//Überprüfen auf lokales Spiel
-            JButton b = new JButton(java.util.ResourceBundle.getBundle("translations/translations").getString("GAME_BUTTON_END"));
+            JButton b = new JButton(Translator.getBundle().getString("GAME_BUTTON_END"));
             b.addActionListener((ActionEvent e) -> {
                 setVisible(false);
                 MainMenu.MAINMENU.setVisible(true);
             });
             addComponent(b, 1, 9, 2, 1, 1, 1);
         } else if (game.getType() != Game.TYPE.LOCAL) {
-            JButton jb1 = new JButton(java.util.ResourceBundle.getBundle("translations/translations").getString("GAME_BUTTON_DRAW"));
-            JButton jb2 = new JButton(java.util.ResourceBundle.getBundle("translations/translations").getString("GAME_BUTTON_RESIGNATION"));
+            JButton jb1 = new JButton(Translator.getBundle().getString("GAME_BUTTON_DRAW"));
+            JButton jb2 = new JButton(Translator.getBundle().getString("GAME_BUTTON_RESIGNATION"));
             jb1.addActionListener((ActionEvent e) -> {
                 ((ClientGame) game).getConnection().offerDraw();
             });

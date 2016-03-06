@@ -6,6 +6,7 @@
 package eu.assault2142.hololol.chess.client.game;
 
 import eu.assault2142.hololol.chess.client.game.ui.GameFrame;
+import eu.assault2142.hololol.chess.client.translator.Translator;
 import eu.assault2142.hololol.chess.game.Game;
 import eu.assault2142.hololol.chess.game.Square;
 import eu.assault2142.hololol.chess.game.chessmen.Bishop;
@@ -59,7 +60,7 @@ public class LocalGame extends Game {
     @Override
     public void promotion(Pawn pawn) {
         Chessman man;
-        String promotion = (String) JOptionPane.showInputDialog(p, java.util.ResourceBundle.getBundle("translations/translations").getString("PROMOTIONDIALOG_HEADLINE"), java.util.ResourceBundle.getBundle("translations/translations").getString("PROMOTIONDIALOG_TEXT"), JOptionPane.QUESTION_MESSAGE, null, new String[]{java.util.ResourceBundle.getBundle("translations/translations").getString("CHESSMAN_QUEEN"), java.util.ResourceBundle.getBundle("translations/translations").getString("CHESSMAN_ROOK"), java.util.ResourceBundle.getBundle("translations/translations").getString("CHESSMAN_KNIGHT"), java.util.ResourceBundle.getBundle("translations/translations").getString("CHESSMAN_BISHOP")}, java.util.ResourceBundle.getBundle("translations/translations").getString("CHESSMAN_QUEEN"));
+        String promotion = (String) JOptionPane.showInputDialog(p, Translator.getBundle().getString("PROMOTIONDIALOG_HEADLINE"), Translator.getBundle().getString("PROMOTIONDIALOG_TEXT"), JOptionPane.QUESTION_MESSAGE, null, new String[]{Translator.getBundle().getString("CHESSMAN_QUEEN"), Translator.getBundle().getString("CHESSMAN_ROOK"), Translator.getBundle().getString("CHESSMAN_KNIGHT"), Translator.getBundle().getString("CHESSMAN_BISHOP")}, Translator.getBundle().getString("CHESSMAN_QUEEN"));
         switch (promotion) {
             //bei lokalem Spiel wird der Bauer direkt gesetzt,
             //bei Serverbasiertem senden der Daten an den Server
