@@ -30,6 +30,7 @@ import javax.swing.plaf.basic.BasicButtonUI;
  * @author jojo
  */
 public class ButtonTabComponent extends JPanel {
+
     private final JTabbedPane pane;
 
     public ButtonTabComponent(final JTabbedPane pane) {
@@ -41,10 +42,10 @@ public class ButtonTabComponent extends JPanel {
         this.pane = pane;
         init();
     }
-    
-    private void init(){
+
+    private void init() {
         setOpaque(false);
-        
+
         //make JLabel read titles from JTabbedPane
         JLabel label = new JLabel() {
             @Override
@@ -56,7 +57,7 @@ public class ButtonTabComponent extends JPanel {
                 return null;
             }
         };
-        
+
         add(label);
         //add more space between the label and the button
         label.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 5));
@@ -68,15 +69,16 @@ public class ButtonTabComponent extends JPanel {
     }
 
     private class TabButton extends JButton implements ActionListener {
+
         public TabButton() {
             init();
         }
-        
-        private void init(){
-            
+
+        private void init() {
+
             int size = 17;
             setPreferredSize(new Dimension(size, size));
-            setToolTipText("close this tab");
+            setToolTipText(java.util.ResourceBundle.getBundle("translations/translations").getString("TAB_CLOSE"));
             //Make the button looks the same for all Laf's
             setUI(new BasicButtonUI());
             //Make it transparent

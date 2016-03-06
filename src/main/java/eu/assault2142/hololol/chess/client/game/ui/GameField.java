@@ -5,7 +5,6 @@
 package eu.assault2142.hololol.chess.client.game.ui;
 
 import eu.assault2142.hololol.chess.client.game.Settings;
-import eu.assault2142.hololol.chess.client.translator.Translator;
 import eu.assault2142.hololol.chess.game.chessmen.Chessman;
 import java.awt.Color;
 import java.awt.Graphics;
@@ -25,7 +24,7 @@ public class GameField extends JPanel {//eigentliches Spielfeld
     protected int squarelength;
     public boolean movementsupdating = false;
     public boolean check = false;
-    
+
     private ImageIcon ibackschwarz;
     private ImageIcon ibackweiß;
     private ImageIcon itextweiß;
@@ -34,7 +33,7 @@ public class GameField extends JPanel {//eigentliches Spielfeld
     private ImageIcon itextschachb;
     private ImageIcon ibackschachw;
     private ImageIcon ibackschachb;
-    
+
     private Graphics graphics;
 
     public GameField(GameFrame gf) {
@@ -51,17 +50,17 @@ public class GameField extends JPanel {//eigentliches Spielfeld
         };
         new Timer(delay, taskPerformer).start();
     }
-    
-    private void loadImages(){
-        String sprache = Translator.TRANSLATOR.getLanguage();
-        ibackschwarz=new ImageIcon(getClass().getResource(Settings.SETTINGS.chessmenFolder+"/bschwarz.gif"));
-        ibackweiß=new ImageIcon(getClass().getResource(Settings.SETTINGS.chessmenFolder+"/bweiß.gif"));
-        itextweiß=new ImageIcon(getClass().getResource("/bilder/tweiß"+sprache+".gif"));
-        itextschwarz=new ImageIcon(getClass().getResource("/bilder/tschwarz"+sprache+".gif"));
-        itextschachw=new ImageIcon(getClass().getResource("/bilder/tschachw"+sprache+".gif"));
-        itextschachb=new ImageIcon(getClass().getResource("/bilder/tschachb"+sprache+".gif"));
-        ibackschachb=new ImageIcon(getClass().getResource(Settings.SETTINGS.chessmenFolder+"/bschachb.gif"));
-        ibackschachw=new ImageIcon(getClass().getResource(Settings.SETTINGS.chessmenFolder+"/bschachw.gif"));
+
+    private void loadImages() {
+        String sprache = "de";
+        ibackschwarz = new ImageIcon(getClass().getResource(Settings.SETTINGS.chessmenFolder + "/bschwarz.gif"));
+        ibackweiß = new ImageIcon(getClass().getResource(Settings.SETTINGS.chessmenFolder + "/bweiß.gif"));
+        itextweiß = new ImageIcon(getClass().getResource("/bilder/tweiß" + sprache + ".gif"));
+        itextschwarz = new ImageIcon(getClass().getResource("/bilder/tschwarz" + sprache + ".gif"));
+        itextschachw = new ImageIcon(getClass().getResource("/bilder/tschachw" + sprache + ".gif"));
+        itextschachb = new ImageIcon(getClass().getResource("/bilder/tschachb" + sprache + ".gif"));
+        ibackschachb = new ImageIcon(getClass().getResource(Settings.SETTINGS.chessmenFolder + "/bschachb.gif"));
+        ibackschachw = new ImageIcon(getClass().getResource(Settings.SETTINGS.chessmenFolder + "/bschachw.gif"));
     }
 
     @Override
@@ -95,36 +94,36 @@ public class GameField extends JPanel {//eigentliches Spielfeld
     public void drawChessman() {//Alle Figuren auf des Feld zeichenen
         for (int i = 0; i <= 15; i++) {
             Chessman f = gameframe.getGame().getFiguren(true)[i];
-            drawImage(f.getImage(),f.getX(),f.getY(),1,1);
+            drawImage(f.getImage(), f.getX(), f.getY(), 1, 1);
         }
         for (int i = 0; i <= 15; i++) {
             Chessman f = gameframe.getGame().getFiguren(false)[i];
-            drawImage(f.getImage(),f.getX(),f.getY(),1,1);
+            drawImage(f.getImage(), f.getX(), f.getY(), 1, 1);
         }
     }
 
     public void drawNotification() {
         if (movementsupdating) {
             if (gameframe.getGame().getTurn()) {
-                drawImage(ibackschwarz,0,0,8,8);
-                drawImage(itextschwarz,0,0,8,8);
+                drawImage(ibackschwarz, 0, 0, 8, 8);
+                drawImage(itextschwarz, 0, 0, 8, 8);
             } else {
-                drawImage(ibackweiß,0,0,8,8);
-                drawImage(itextweiß,0,0,8,8);
+                drawImage(ibackweiß, 0, 0, 8, 8);
+                drawImage(itextweiß, 0, 0, 8, 8);
             }
         }
         if (check) {
             if (gameframe.getGame().getTurn()) {
-                drawImage(ibackschachb,0,0,8,8);
-                drawImage(itextschachb,0,0,8,8);
+                drawImage(ibackschachb, 0, 0, 8, 8);
+                drawImage(itextschachb, 0, 0, 8, 8);
             } else {
-                drawImage(ibackschachw,0,0,8,8);
-                drawImage(itextschachw,0,0,8,8);
+                drawImage(ibackschachw, 0, 0, 8, 8);
+                drawImage(itextschachw, 0, 0, 8, 8);
             }
         }
     }
-    
-    private void drawImage(ImageIcon image,int posx,int posy,int widthx,int widthy){
-        graphics.drawImage(image.getImage(), posx*squarelength, posy*squarelength,widthx*squarelength,widthy*squarelength, image.getImageObserver());
+
+    private void drawImage(ImageIcon image, int posx, int posy, int widthx, int widthy) {
+        graphics.drawImage(image.getImage(), posx * squarelength, posy * squarelength, widthx * squarelength, widthy * squarelength, image.getImageObserver());
     }
 }

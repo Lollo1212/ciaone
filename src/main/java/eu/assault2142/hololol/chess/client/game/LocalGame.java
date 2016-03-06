@@ -5,12 +5,12 @@
  */
 package eu.assault2142.hololol.chess.client.game;
 
-import eu.assault2142.hololol.chess.game.Game;
-import eu.assault2142.hololol.chess.game.chessmen.Chessman;
 import eu.assault2142.hololol.chess.client.game.ui.GameFrame;
+import eu.assault2142.hololol.chess.game.Game;
 import eu.assault2142.hololol.chess.game.Square;
 import eu.assault2142.hololol.chess.game.chessmen.Bishop;
 import eu.assault2142.hololol.chess.game.chessmen.CastlingMove;
+import eu.assault2142.hololol.chess.game.chessmen.Chessman;
 import eu.assault2142.hololol.chess.game.chessmen.King;
 import eu.assault2142.hololol.chess.game.chessmen.Knight;
 import eu.assault2142.hololol.chess.game.chessmen.Move;
@@ -59,17 +59,17 @@ public class LocalGame extends Game {
     @Override
     public void promotion(Pawn pawn) {
         Chessman man;
-        String promotion = (String) JOptionPane.showInputDialog(p, "Promotion", "Promotion", JOptionPane.QUESTION_MESSAGE, null, new String[]{"Queen", "Rook", "Knight", "Bishop"}, "Queen");
+        String promotion = (String) JOptionPane.showInputDialog(p, java.util.ResourceBundle.getBundle("translations/translations").getString("PROMOTIONDIALOG_HEADLINE"), java.util.ResourceBundle.getBundle("translations/translations").getString("PROMOTIONDIALOG_TEXT"), JOptionPane.QUESTION_MESSAGE, null, new String[]{java.util.ResourceBundle.getBundle("translations/translations").getString("CHESSMAN_QUEEN"), java.util.ResourceBundle.getBundle("translations/translations").getString("CHESSMAN_ROOK"), java.util.ResourceBundle.getBundle("translations/translations").getString("CHESSMAN_KNIGHT"), java.util.ResourceBundle.getBundle("translations/translations").getString("CHESSMAN_BISHOP")}, java.util.ResourceBundle.getBundle("translations/translations").getString("CHESSMAN_QUEEN"));
         switch (promotion) {
             //bei lokalem Spiel wird der Bauer direkt gesetzt,
             //bei Serverbasiertem senden der Daten an den Server
-            case "Rook":
+            case "ROOK":
                 man = Rook.promotion(pawn, this);
                 break;
-            case "Knight":
+            case "KNIGHT":
                 man = Knight.promotion(pawn, this);
                 break;
-            case "Bishop":
+            case "BISHOP":
                 man = Bishop.promotion(pawn, this);
                 break;
             default:

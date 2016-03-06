@@ -8,7 +8,6 @@ package eu.assault2142.hololol.chess.client.menus;
 import eu.assault2142.hololol.chess.client.game.LocalGame;
 import eu.assault2142.hololol.chess.client.game.Settings;
 import eu.assault2142.hololol.chess.client.networking.ServerConnection;
-import eu.assault2142.hololol.chess.client.translator.Translator;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -47,23 +46,23 @@ public class MainMenu extends javax.swing.JFrame {
         initFriendsMenu();
 
         //Add listener to components that can bring up popup menus.
-        if (Translator.TRANSLATOR.getLanguage().equals(Translator.EN)) {
+        /*if (Translator.TRANSLATOR.getLanguage().equals(Translator.EN)) {
             jComboBox2.setSelectedIndex(0);
         } else {
             jComboBox2.setSelectedIndex(1);
-        }
+        }*/
     }
 
     private void initFriendsMenu() {
         JPopupMenu popup;
         JMenuItem menuItem;
         popup = new JPopupMenu();
-        menuItem = new JMenuItem("Challenge");
+        menuItem = new JMenuItem(java.util.ResourceBundle.getBundle("translations/translations").getString("MENU_CHALLENGE"));
         menuItem.addActionListener((ActionEvent e) -> {
             client.challengeFriend(jList1.getSelectedValue());
         });
         popup.add(menuItem);
-        menuItem = new JMenuItem("Message");
+        menuItem = new JMenuItem(java.util.ResourceBundle.getBundle("translations/translations").getString("MENU_MESSAGE"));
         menuItem.addActionListener((ActionEvent e) -> {
             JTextArea text = new JTextArea();
             text.setEditable(false);
@@ -75,7 +74,7 @@ public class MainMenu extends javax.swing.JFrame {
             jTabbedPane2.setTabComponentAt(jTabbedPane2.getSelectedIndex(), new ButtonTabComponent(jTabbedPane2));
         });
         popup.add(menuItem);
-        menuItem = new JMenuItem("Remove");
+        menuItem = new JMenuItem(java.util.ResourceBundle.getBundle("translations/translations").getString("MENU_REMOVE"));
         menuItem.addActionListener((ActionEvent e) -> {
             client.removeFriend(jList1.getSelectedValue());
         });
@@ -140,7 +139,8 @@ public class MainMenu extends javax.swing.JFrame {
         jButton5 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("Chess");
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("eu/assault2142/hololol/chess/client/menus/Bundle"); // NOI18N
+        setTitle(bundle.getString("MainMenu.title")); // NOI18N
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         setLocationByPlatform(true);
         setResizable(false);
@@ -156,7 +156,7 @@ public class MainMenu extends javax.swing.JFrame {
             }
         });
 
-        jButton6.setText(Translator.TRANSLATOR.getTranslation("menu_main_local_start"));
+        jButton6.setText(bundle.getString("MainMenu.jButton6.text")); // NOI18N
         jButton6.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton6ActionPerformed(evt);
@@ -164,16 +164,16 @@ public class MainMenu extends javax.swing.JFrame {
         });
 
         buttonGroup1.add(jRadioButton1);
-        jRadioButton1.setText(Translator.TRANSLATOR.getTranslation("menu_main_local_ai_ai"));
+        jRadioButton1.setText(bundle.getString("MainMenu.jRadioButton1.text")); // NOI18N
         jRadioButton1.setEnabled(false);
 
         buttonGroup1.add(jRadioButton2);
-        jRadioButton2.setText(Translator.TRANSLATOR.getTranslation("menu_main_local_human_ai"));
+        jRadioButton2.setText(bundle.getString("MainMenu.jRadioButton2.text")); // NOI18N
         jRadioButton2.setEnabled(false);
 
         buttonGroup1.add(jRadioButton3);
         jRadioButton3.setSelected(true);
-        jRadioButton3.setText(Translator.TRANSLATOR.getTranslation("menu_main_local_human_human"));
+        jRadioButton3.setText(bundle.getString("MainMenu.jRadioButton3.text")); // NOI18N
 
         org.jdesktop.layout.GroupLayout jPanel3Layout = new org.jdesktop.layout.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -202,20 +202,25 @@ public class MainMenu extends javax.swing.JFrame {
                 .add(57, 57, 57))
         );
 
-        jTabbedPane1.addTab(Translator.TRANSLATOR.getTranslation("menu_main_tab_local"), jPanel3);
+        jTabbedPane1.addTab(bundle.getString("MainMenu.jPanel3.TabConstraints.tabTitle"), jPanel3); // NOI18N
 
-        jCheckBox2.setText(Translator.TRANSLATOR.getTranslation("menu_main_online_create_account"));
+        jCheckBox2.setText(bundle.getString("MainMenu.jCheckBox2.text")); // NOI18N
+        jCheckBox2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCheckBox2ActionPerformed(evt);
+            }
+        });
 
-        jButton1.setText(Translator.TRANSLATOR.getTranslation("menu_main_online_login"));
+        jButton1.setText(bundle.getString("MainMenu.jButton1.text")); // NOI18N
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
             }
         });
 
-        jLabel1.setText(Translator.TRANSLATOR.getTranslation("menu_main_online_username"));
+        jLabel1.setText(bundle.getString("MainMenu.jLabel1.text")); // NOI18N
 
-        jLabel2.setText(Translator.TRANSLATOR.getTranslation("menu_main_online_password"));
+        jLabel2.setText(bundle.getString("MainMenu.jLabel2.text")); // NOI18N
 
         jPasswordField1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -236,7 +241,7 @@ public class MainMenu extends javax.swing.JFrame {
                     .add(jPasswordField1)
                     .add(jCheckBox2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .add(jTextField1))
-                .addContainerGap(450, Short.MAX_VALUE))
+                .addContainerGap(502, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
@@ -256,7 +261,7 @@ public class MainMenu extends javax.swing.JFrame {
                 .addContainerGap(114, Short.MAX_VALUE))
         );
 
-        jTabbedPane1.addTab(Translator.TRANSLATOR.getTranslation("menu_main_tab_online"), jPanel2);
+        jTabbedPane1.addTab(bundle.getString("MainMenu.jPanel2.TabConstraints.tabTitle"), jPanel2); // NOI18N
 
         jList1.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         jList1.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
@@ -270,35 +275,35 @@ public class MainMenu extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(jList1);
 
-        jButton7.setText("Play");
+        jButton7.setText(bundle.getString("MainMenu.jButton7.text")); // NOI18N
         jButton7.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton7ActionPerformed(evt);
             }
         });
 
-        jButton8.setText("Add Friend");
+        jButton8.setText(bundle.getString("MainMenu.jButton8.text")); // NOI18N
         jButton8.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton8ActionPerformed(evt);
             }
         });
 
-        jButton9.setText("Logout");
+        jButton9.setText(bundle.getString("MainMenu.jButton9.text")); // NOI18N
         jButton9.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton9ActionPerformed(evt);
             }
         });
 
-        jButton10.setText("Change Password");
+        jButton10.setText(bundle.getString("MainMenu.jButton10.text")); // NOI18N
         jButton10.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton10ActionPerformed(evt);
             }
         });
 
-        jButton11.setText("Change Username");
+        jButton11.setText(bundle.getString("MainMenu.jButton11.text")); // NOI18N
         jButton11.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton11ActionPerformed(evt);
@@ -322,18 +327,18 @@ public class MainMenu extends javax.swing.JFrame {
         });
         jScrollPane2.setViewportView(jTextArea1);
 
-        jTabbedPane2.addTab("Info", jScrollPane2);
+        jTabbedPane2.addTab(bundle.getString("MainMenu.jScrollPane2.TabConstraints.tabTitle"), jScrollPane2); // NOI18N
 
         jTextField4.setEnabled(false);
 
-        jButton12.setText("Send");
+        jButton12.setText(bundle.getString("MainMenu.jButton12.text")); // NOI18N
         jButton12.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton12ActionPerformed(evt);
             }
         });
 
-        jButton13.setText("Play against Random");
+        jButton13.setText(bundle.getString("MainMenu.jButton13.text")); // NOI18N
         jButton13.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton13ActionPerformed(evt);
@@ -395,7 +400,7 @@ public class MainMenu extends javax.swing.JFrame {
                 .addContainerGap(17, Short.MAX_VALUE))
         );
 
-        jTabbedPane1.addTab(Translator.TRANSLATOR.getTranslation("menu_main_online"), jPanel6);
+        jTabbedPane1.addTab(bundle.getString("MainMenu.jPanel6.TabConstraints.tabTitle"), jPanel6); // NOI18N
 
         org.jdesktop.layout.GroupLayout jPanel7Layout = new org.jdesktop.layout.GroupLayout(jPanel7);
         jPanel7.setLayout(jPanel7Layout);
@@ -408,23 +413,23 @@ public class MainMenu extends javax.swing.JFrame {
             .add(0, 370, Short.MAX_VALUE)
         );
 
-        jTabbedPane1.addTab("Leaderboard", jPanel7);
+        jTabbedPane1.addTab(bundle.getString("MainMenu.jPanel7.TabConstraints.tabTitle"), jPanel7); // NOI18N
 
-        jButton2.setText(Translator.TRANSLATOR.getTranslation("menu_main_lan_button_create"));
+        jButton2.setText(bundle.getString("MainMenu.jButton2.text")); // NOI18N
 
         jLabel3.setPreferredSize(new java.awt.Dimension(68, 14));
 
-        jButton3.setText(Translator.TRANSLATOR.getTranslation("menu_main_lan_start"));
+        jButton3.setText(bundle.getString("MainMenu.jButton3.text")); // NOI18N
 
-        jButton4.setText(Translator.TRANSLATOR.getTranslation("menu_main_lan_connect"));
+        jButton4.setText(bundle.getString("MainMenu.jButton4.text")); // NOI18N
 
-        jLabel4.setText(Translator.TRANSLATOR.getTranslation("menu_main_lan_ip"));
+        jLabel4.setText(bundle.getString("MainMenu.jLabel4.text")); // NOI18N
 
         jSeparator1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
-        jLabel5.setText(Translator.TRANSLATOR.getTranslation("menu_main_lan_create_server"));
+        jLabel5.setText(bundle.getString("MainMenu.jLabel5.text")); // NOI18N
 
-        jLabel6.setText(Translator.TRANSLATOR.getTranslation("menu_main_lan_connect"));
+        jLabel6.setText(bundle.getString("MainMenu.jLabel6.text")); // NOI18N
 
         org.jdesktop.layout.GroupLayout jPanel4Layout = new org.jdesktop.layout.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
@@ -440,7 +445,7 @@ public class MainMenu extends javax.swing.JFrame {
                     .add(jButton3))
                 .add(28, 28, 28)
                 .add(jSeparator1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 313, Short.MAX_VALUE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 293, Short.MAX_VALUE)
                 .add(jPanel4Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                     .add(jLabel4)
                     .add(jButton4)
@@ -477,13 +482,13 @@ public class MainMenu extends javax.swing.JFrame {
             .add(org.jdesktop.layout.GroupLayout.TRAILING, jSeparator1)
         );
 
-        jTabbedPane1.addTab(Translator.TRANSLATOR.getTranslation("menu_main_tab_lan"), jPanel4);
+        jTabbedPane1.addTab(bundle.getString("MainMenu.jPanel4.TabConstraints.tabTitle"), jPanel4); // NOI18N
 
-        jLabel8.setText(Translator.TRANSLATOR.getTranslation("menu_main_options_language"));
+        jLabel8.setText(bundle.getString("MainMenu.jLabel8.text")); // NOI18N
 
         jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "English", "Deutsch" }));
 
-        jButton5.setText(Translator.TRANSLATOR.getTranslation("menu_main_options_save"));
+        jButton5.setText(bundle.getString("MainMenu.jButton5.text")); // NOI18N
         jButton5.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton5ActionPerformed(evt);
@@ -514,7 +519,7 @@ public class MainMenu extends javax.swing.JFrame {
                 .addContainerGap(157, Short.MAX_VALUE))
         );
 
-        jTabbedPane1.addTab(Translator.TRANSLATOR.getTranslation("menu_main_tab_options"), jPanel5);
+        jTabbedPane1.addTab(bundle.getString("MainMenu.jPanel5.TabConstraints.tabTitle"), jPanel5); // NOI18N
 
         org.jdesktop.layout.GroupLayout jPanel1Layout = new org.jdesktop.layout.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -567,7 +572,7 @@ public class MainMenu extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton5ActionPerformed
 
     private void jTabbedPane1AncestorAdded(javax.swing.event.AncestorEvent evt) {//GEN-FIRST:event_jTabbedPane1AncestorAdded
-        
+
     }//GEN-LAST:event_jTabbedPane1AncestorAdded
 
     private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed
@@ -575,7 +580,7 @@ public class MainMenu extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton9ActionPerformed
 
     private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
-        String input = JOptionPane.showInputDialog(this, "Friendname", "Add Friend", JOptionPane.PLAIN_MESSAGE);
+        String input = JOptionPane.showInputDialog(this, java.util.ResourceBundle.getBundle("translations/translations").getString("ADDFRIENDDIALOG_TEXT"), java.util.ResourceBundle.getBundle("translations/translations").getString("ADDFRIENDDIALOG_HEAD"), JOptionPane.PLAIN_MESSAGE);
         if (input != null) {
             client.addFriend(input);
         }
@@ -619,7 +624,7 @@ public class MainMenu extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton10ActionPerformed
 
     private void jButton11ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton11ActionPerformed
-        String input = JOptionPane.showInputDialog(this, "Username", "Change Username", JOptionPane.PLAIN_MESSAGE);
+        String input = JOptionPane.showInputDialog(this, java.util.ResourceBundle.getBundle("translations/translations").getString("CHANGENAME_TEXT"), java.util.ResourceBundle.getBundle("translations/translations").getString("CHANGENAME_HEAD"), JOptionPane.PLAIN_MESSAGE);
         if (input != null) {
             client.changeUsername(input);
         }
@@ -629,17 +634,21 @@ public class MainMenu extends javax.swing.JFrame {
         client.playRandom();
     }//GEN-LAST:event_jButton13ActionPerformed
 
+    private void jCheckBox2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox2ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jCheckBox2ActionPerformed
+
     public void loggedIn(ServerConnection c) {
         jTabbedPane1.remove(jPanel2);
         jTabbedPane1.add(jPanel6, 1);
-        jTabbedPane1.setTitleAt(1, Translator.TRANSLATOR.getTranslation("menu_main_tab_online"));
+        jTabbedPane1.setTitleAt(1, "Online");
         jTabbedPane1.setSelectedIndex(1);
         jTabbedPane2.removeAll();
         JTextArea text = new JTextArea();
         text.setEditable(false);
         JScrollPane scroll = new JScrollPane(text);
         areas.clear();
-        jTabbedPane2.add(scroll, "Info");
+        jTabbedPane2.add(scroll, java.util.ResourceBundle.getBundle("translations/translations").getString("TABBEDPANE_INFO"));
         jTabbedPane2.setSelectedComponent(scroll);
         client = c;
 
@@ -651,7 +660,7 @@ public class MainMenu extends javax.swing.JFrame {
     }
 
     public void setPlayerName(String name) {
-        jTabbedPane1.setTitleAt(1, Translator.TRANSLATOR.getTranslation("menu_main_tab_online") + ": " + name);
+        jTabbedPane1.setTitleAt(1, "Online");
     }
 
     public String getTime() {
@@ -723,7 +732,8 @@ public class MainMenu extends javax.swing.JFrame {
     private javax.swing.JTextField jTextField2;
     private javax.swing.JTextField jTextField4;
     // End of variables declaration//GEN-END:variables
-class PopupListener extends MouseAdapter {
+
+    class PopupListener extends MouseAdapter {
 
         private JPopupMenu popup;
 
@@ -755,62 +765,49 @@ class PopupListener extends MouseAdapter {
         String text = jTextField1.getText();
         Settings.SETTINGS.username = text;
         if (text.length() < 4) {
-            JOptionPane.showMessageDialog(MainMenu.MAINMENU, "The Username must have at least 4 characters.", "Username too short", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(MainMenu.MAINMENU, java.util.ResourceBundle.getBundle("translations/translations").getString("NAMETOOSHORT_TEXT"), java.util.ResourceBundle.getBundle("translations/translations").getString("NAMETOOSHORT_HEAD"), JOptionPane.WARNING_MESSAGE);
         } else if (jPasswordField1.getPassword().length < 4) {
-            JOptionPane.showMessageDialog(this, "The Password must have at least 4 characters.", "Password too short", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(this, java.util.ResourceBundle.getBundle("translations/translations").getString("PASSTOOSHORT_TEXT"), java.util.ResourceBundle.getBundle("translations/translations").getString("PASSTOOSHORT_HEAD"), JOptionPane.WARNING_MESSAGE);
         } else {
             jButton1.setEnabled(false);
             ServerConnection.connect(jTextField1.getText(), new String(jPasswordField1.getPassword()), jCheckBox2.isSelected());
         }
     }
-    
-    private void saveSettings(){
-        String langBefore = Translator.TRANSLATOR.getLanguage();
-        if (jComboBox2.getSelectedIndex() == 0) {
-            Translator.TRANSLATOR.setLanguage(Translator.EN);
-        } else {
-            Translator.TRANSLATOR.setLanguage(Translator.DE);
-        }
-        if (!langBefore.equals(Translator.TRANSLATOR.getLanguage())) {
-            this.setVisible(false);
-            MainMenu main = new MainMenu();
-            main.setVisible(true);
-            main.setLocation(this.getLocation());
-        } else {
-            jTabbedPane1.setSelectedIndex(0);
-        }
+
+    private void saveSettings() {
+        jTabbedPane1.setSelectedIndex(0);
     }
-    
-    private void logout(){
+
+    private void logout() {
         client.logout();
         jTabbedPane1.remove(jPanel6);
         jTabbedPane1.add(jPanel2, 1);
-        jTabbedPane1.setTitleAt(1, Translator.TRANSLATOR.getTranslation("menu_main_tab_online"));
+        jTabbedPane1.setTitleAt(1, "Online");
         jTabbedPane1.setSelectedIndex(1);
         jButton1.setEnabled(true);
     }
-    
-    private void writeMessage(){
+
+    private void writeMessage() {
         String msg = jTextField4.getText();
         String name = jTabbedPane2.getTitleAt(jTabbedPane2.getSelectedIndex());
         areas.get(name).append("[" + getTime() + "] " + client.getName() + ": " + msg + System.lineSeparator());
         client.writeMessage(name, msg);
         jTextField4.setText("");
     }
-    
-    private void changePassword(){
+
+    private void changePassword() {
         JPasswordField passwordField = new JPasswordField();
         int option = JOptionPane.showConfirmDialog(
                 this,
                 passwordField,
-                "Enter password",
+                java.util.ResourceBundle.getBundle("translations/translations").getString("CHANGEPASS_HEAD"),
                 JOptionPane.OK_CANCEL_OPTION);
         String input = new String(passwordField.getPassword());
         if (option == JOptionPane.OK_OPTION) {
             if (input.length() > 3) {
                 client.changePassword(input);
             } else {
-                JOptionPane.showMessageDialog(this, "The Password must have at least 4 characters.", "Password too short", JOptionPane.WARNING_MESSAGE);
+                JOptionPane.showMessageDialog(this, java.util.ResourceBundle.getBundle("translations/translations").getString("PASSTOOSHORT_TEXT"), java.util.ResourceBundle.getBundle("translations/translations").getString("PASSTOOSHORT_HEAD"), JOptionPane.WARNING_MESSAGE);
             }
         }
     }

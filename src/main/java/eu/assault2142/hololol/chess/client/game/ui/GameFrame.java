@@ -6,12 +6,7 @@ package eu.assault2142.hololol.chess.client.game.ui;
 
 import eu.assault2142.hololol.chess.client.game.ClientGame;
 import eu.assault2142.hololol.chess.client.menus.MainMenu;
-import eu.assault2142.hololol.chess.game.chessmen.CastlingMove;
-import eu.assault2142.hololol.chess.game.chessmen.King;
 import eu.assault2142.hololol.chess.game.chessmen.Chessman;
-import eu.assault2142.hololol.chess.game.chessmen.Rook;
-import eu.assault2142.hololol.chess.game.chessmen.Move;
-import eu.assault2142.hololol.chess.game.Square;
 import eu.assault2142.hololol.chess.game.Game;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -90,15 +85,15 @@ public class GameFrame extends JFrame implements MouseListener {//Frame, in dem 
         JLabel turn = new JLabel("");
         addComponent(turn, 0, 9, 10, 1, 8, 1);
         if (game.getType() == Game.TYPE.LOCAL) {//Überprüfen auf lokales Spiel
-            JButton b = new JButton("Spiel beenden");
+            JButton b = new JButton(java.util.ResourceBundle.getBundle("translations/translations").getString("GAME_BUTTON_END"));
             b.addActionListener((ActionEvent e) -> {
                 setVisible(false);
                 MainMenu.MAINMENU.setVisible(true);
             });
             addComponent(b, 1, 9, 2, 1, 1, 1);
         } else if (game.getType() != Game.TYPE.LOCAL) {
-            JButton jb1 = new JButton("Unentschieden anbieten");
-            JButton jb2 = new JButton("Aufgeben");
+            JButton jb1 = new JButton(java.util.ResourceBundle.getBundle("translations/translations").getString("GAME_BUTTON_DRAW"));
+            JButton jb2 = new JButton(java.util.ResourceBundle.getBundle("translations/translations").getString("GAME_BUTTON_RESIGNATION"));
             jb1.addActionListener((ActionEvent e) -> {
                 ((ClientGame) game).getConnection().offerDraw();
             });
@@ -120,8 +115,7 @@ public class GameFrame extends JFrame implements MouseListener {//Frame, in dem 
 
             game.resetFields();
 
-            game.clickAt(e.getX()/squarelength, e.getY()/squarelength);
-            
+            game.clickAt(e.getX() / squarelength, e.getY() / squarelength);
 
         }
     }

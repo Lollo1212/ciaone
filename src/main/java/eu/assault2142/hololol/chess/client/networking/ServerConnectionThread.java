@@ -4,13 +4,13 @@
  */
 package eu.assault2142.hololol.chess.client.networking;
 
+import eu.assault2142.hololol.chess.client.menus.MainMenu;
+import eu.assault2142.hololol.chess.game.chessmen.Bishop;
+import eu.assault2142.hololol.chess.game.chessmen.Knight;
+import eu.assault2142.hololol.chess.game.chessmen.Move;
 import eu.assault2142.hololol.chess.game.chessmen.Pawn;
 import eu.assault2142.hololol.chess.game.chessmen.Queen;
-import eu.assault2142.hololol.chess.game.chessmen.Bishop;
-import eu.assault2142.hololol.chess.game.chessmen.Move;
-import eu.assault2142.hololol.chess.game.chessmen.Knight;
 import eu.assault2142.hololol.chess.game.chessmen.Rook;
-import eu.assault2142.hololol.chess.client.menus.MainMenu;
 import java.util.NoSuchElementException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -21,13 +21,13 @@ import javax.swing.JOptionPane;
  * @author jojo
  */
 public class ServerConnectionThread implements Runnable {
-    
+
     ServerConnection client;
-    
+
     public ServerConnectionThread(ServerConnection c) {
         this.client = c;
     }
-    
+
     @Override
     public void run() {
         String input;
@@ -39,7 +39,7 @@ public class ServerConnectionThread implements Runnable {
                 System.out.println(input);
                 if (message[0].equals("msg") && length == 3) {
                     if (message[1].equals("Info")) {
-                        JOptionPane.showMessageDialog(MainMenu.MAINMENU, message[2].replace("_", " "), "Info", JOptionPane.INFORMATION_MESSAGE);
+                        JOptionPane.showMessageDialog(MainMenu.MAINMENU, message[2].replace("_", " "), java.util.ResourceBundle.getBundle("translations/translations").getString("DIALOG_INFO_HEAD"), JOptionPane.INFORMATION_MESSAGE);
                     } else {
                         MainMenu.MAINMENU.newMessage(message[1], message[2].replace("_", " "));
                     }
@@ -56,16 +56,16 @@ public class ServerConnectionThread implements Runnable {
                 } else if (message[0].equals("change") && length >= 3) {
                     if (message[1].equals("username")) {
                         if (message[2].equals("accept") && length == 4) {
-                            JOptionPane.showMessageDialog(MainMenu.MAINMENU, "Neuer Benutzername: " + message[3], "Benutzername geändert", JOptionPane.INFORMATION_MESSAGE);
+                            JOptionPane.showMessageDialog(MainMenu.MAINMENU, java.text.MessageFormat.format(java.util.ResourceBundle.getBundle("translations/translations").getString("NAMECHANGED_TEXT"), new Object[]{message[3]}), java.util.ResourceBundle.getBundle("translations/translations").getString("NAMECHANGED_HEAD"), JOptionPane.INFORMATION_MESSAGE);
                         } else {
-                            JOptionPane.showMessageDialog(MainMenu.MAINMENU, "Der gewünschte Benutzername ist nicht verfügbar.", "Änderung nicht möglich", JOptionPane.WARNING_MESSAGE);
+                            JOptionPane.showMessageDialog(MainMenu.MAINMENU, java.util.ResourceBundle.getBundle("translations/translations").getString("NAMECHANGE_TAKEN_TEXT"), java.util.ResourceBundle.getBundle("translations/translations").getString("NAMECHANGE_TAKEN_HEAD"), JOptionPane.WARNING_MESSAGE);
                         }
                     }
                     if (message[1].equals("password") && message[2].equals("accept")) {
-                        JOptionPane.showMessageDialog(MainMenu.MAINMENU, "Password erfolgreich geändert", "Password geändert", JOptionPane.INFORMATION_MESSAGE);
+                        JOptionPane.showMessageDialog(MainMenu.MAINMENU, java.util.ResourceBundle.getBundle("translations/translations").getString("PASSCHANGED_TEXT"), java.util.ResourceBundle.getBundle("translations/translations").getString("PASSCHANGED_HEAD"), JOptionPane.INFORMATION_MESSAGE);
                     }
                 } else if (message[0].equals("request") && length == 2) {
-                    int addfriend = JOptionPane.showConfirmDialog(null, message[1] + " will dich als Freund hinzufügen", "Friend Request", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
+                    int addfriend = JOptionPane.showConfirmDialog(null, message[1] + java.util.ResourceBundle.getBundle("translations/translations").getString("FRIENDREQ_ADD_TEXT"), java.util.ResourceBundle.getBundle("translations/translations").getString("FRIENDREQ_ADD_HEAD"), JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
                     if (addfriend == JOptionPane.NO_OPTION) {
                         client.declineFriendRequest(message[1]);
                     } else {
@@ -73,10 +73,10 @@ public class ServerConnectionThread implements Runnable {
                     }
                 } else if (message[0].equals("newgame") && length == 2) {
                     if (message[1].equals("enemyoffline")) {
-                        JOptionPane.showMessageDialog(MainMenu.MAINMENU, "Gegner offline", "Offline", JOptionPane.INFORMATION_MESSAGE);
+                        JOptionPane.showMessageDialog(MainMenu.MAINMENU, java.util.ResourceBundle.getBundle("translations/translations").getString("GAME_ENEMYOFF_TEXT"), java.util.ResourceBundle.getBundle("translations/translations").getString("GAME_ENEMYOFF_HEAD"), JOptionPane.INFORMATION_MESSAGE);
                     } else {
                         String str = message[1];
-                        int selected = JOptionPane.showConfirmDialog(MainMenu.MAINMENU, "Spiel gegen " + str + " starten?", "Challenge", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+                        int selected = JOptionPane.showConfirmDialog(MainMenu.MAINMENU, java.text.MessageFormat.format(java.util.ResourceBundle.getBundle("translations/translations").getString("GAME_START?_TEXT"), new Object[]{str}), java.util.ResourceBundle.getBundle("translations/translations").getString("GAME_START?_HEAD"), JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
                         if (selected == JOptionPane.YES_OPTION) {
                             client.acceptChallenge(str);
                         } else {
@@ -122,8 +122,8 @@ public class ServerConnectionThread implements Runnable {
                     //f.setVisible(true);
                     client.g.getGameFrame().setVisible(false);
                 } else if (message[0].equals("stalemate")) {
-                    JOptionPane.showMessageDialog(null, "Unentschieden", "Login Error", JOptionPane.INFORMATION_MESSAGE);
-                    
+                    JOptionPane.showMessageDialog(null, java.util.ResourceBundle.getBundle("translations/translations").getString("DRAW_TEXT"), java.util.ResourceBundle.getBundle("translations/translations").getString("DRAW_HEAD"), JOptionPane.INFORMATION_MESSAGE);
+
                     client.g.getGameFrame().setVisible(false);
                 } //possible moves
                 else if (message[0].equals("moves") && length == 4) {
@@ -144,7 +144,7 @@ public class ServerConnectionThread implements Runnable {
                                 int posy = Integer.parseInt(y);
                                 String fn = str[a].substring(2);
                                 int f = Integer.parseInt(fn);
-                                
+
                                 client.g.getGameSituation().getAbstractChessmen(color)[f].addMove(new Move(posx, posy, client.g.getFiguren(color)[f]));
                             }
                         }
@@ -167,21 +167,21 @@ public class ServerConnectionThread implements Runnable {
                     client.g.resetFields();
                 } else if (message[0].equals("resignation") && length == 2) {
                     if (message[1].equals("1")) {
-                        JOptionPane.showMessageDialog(null, "Gegner aufgegeben", "Login Error", JOptionPane.INFORMATION_MESSAGE);
+                        JOptionPane.showMessageDialog(null, java.util.ResourceBundle.getBundle("translations/translations").getString("RESIGNATION_ENEMY_TEXT"), java.util.ResourceBundle.getBundle("translations/translations").getString("RESIGNATION_ENEMY_HEAD"), JOptionPane.INFORMATION_MESSAGE);
                     } else {
-                        JOptionPane.showMessageDialog(null, "Du aufgegeben", "Login Error", JOptionPane.INFORMATION_MESSAGE);
+                        JOptionPane.showMessageDialog(null, java.util.ResourceBundle.getBundle("translations/translations").getString("RESIGNATION_SELF_TEXT"), java.util.ResourceBundle.getBundle("translations/translations").getString("RESIGNATION_SELF_HEAD"), JOptionPane.INFORMATION_MESSAGE);
                     }
                     client.g.getGameFrame().setVisible(false);
                 } else if (message[0].equals("draw") && length == 2) {
                     if (message[1].equals("0")) {
-                        JOptionPane.showConfirmDialog(MainMenu.MAINMENU, "Unentschieden angeboten", "Unentschieden", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
-                        
+                        JOptionPane.showConfirmDialog(MainMenu.MAINMENU, java.util.ResourceBundle.getBundle("translations/translations").getString("DRAWOFFER_TEXT"), java.util.ResourceBundle.getBundle("translations/translations").getString("DRAWOFFER_HEAD"), JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+
                     } else {
-                        JOptionPane.showMessageDialog(MainMenu.MAINMENU, "Unentschieden", "Unentschieden", JOptionPane.INFORMATION_MESSAGE);
+                        JOptionPane.showMessageDialog(MainMenu.MAINMENU, java.util.ResourceBundle.getBundle("translations/translations").getString("DRAW_TEXT"), java.util.ResourceBundle.getBundle("translations/translations").getString("DRAW_HEAD"), JOptionPane.INFORMATION_MESSAGE);
                         client.g.getGameFrame().setVisible(false);
                     }
                 } else if (message[0].equals("promotion") && length == 3) {
-                    
+
                     int nummerinarray = Integer.parseInt(message[2]);
                     String co = message[1];
                     boolean color;
@@ -204,7 +204,7 @@ public class ServerConnectionThread implements Runnable {
                             client.g.getFiguren(color)[nummerinarray] = Queen.promotion((Pawn) client.g.getFiguren(color)[nummerinarray], client.g);
                             break;
                     }
-                    
+
                 } else if (message[0].equals("promote") && length == 3) {
                     boolean color;
                     if (message[1].equals("0")) {
@@ -212,9 +212,9 @@ public class ServerConnectionThread implements Runnable {
                     } else {
                         color = false;
                     }
-                    JOptionPane.showInputDialog(client.getGame().getGameFrame(), "Promotion", "Promotion", JOptionPane.QUESTION_MESSAGE, null, new String[]{"Queen", "Rook", "Knight", "Bishop"}, "Queen");
+                    JOptionPane.showInputDialog(client.getGame().getGameFrame(), java.util.ResourceBundle.getBundle("translations/translations").getString("PROMOTION_TEXT"), java.util.ResourceBundle.getBundle("translations/translations").getString("PROMOTION_HEAD"), JOptionPane.QUESTION_MESSAGE, null, new String[]{java.util.ResourceBundle.getBundle("translations/translations").getString("CHESSMAN_QUEEN"), java.util.ResourceBundle.getBundle("translations/translations").getString("CHESSMAN_ROOK"), java.util.ResourceBundle.getBundle("translations/translations").getString("CHESSMAN_KNIGHT"), java.util.ResourceBundle.getBundle("translations/translations").getString("CHESSMAN_BISHOP")}, java.util.ResourceBundle.getBundle("translations/translations").getString("CHESSMAN_QUEEN"));
                 }
-                
+
             } catch (NoSuchElementException nsee) {
                 break;
             }
