@@ -2,7 +2,7 @@ package eu.assault2142.hololol.chess.networking;
 
 import eu.assault2142.hololol.chess.game.GameSituation;
 import eu.assault2142.hololol.chess.game.chessmen.Move;
-import eu.assault2142.hololol.chess.server.game.ServerGame;
+import eu.assault2142.hololol.chess.game.ServerGame;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;

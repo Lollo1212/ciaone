@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package eu.assault2142.hololol.chess.server.game;
+package eu.assault2142.hololol.chess.game;
 
 import eu.assault2142.hololol.chess.game.Game;
 import eu.assault2142.hololol.chess.game.chessmen.Chessman;

@@ -2,7 +2,7 @@ package eu.assault2142.hololol.chess.server.networking;
 
 import eu.assault2142.hololol.chess.server.exceptions.UnknownUserException;
 import eu.assault2142.hololol.chess.server.exceptions.UsernameNotFreeException;
-import eu.assault2142.hololol.chess.server.game.ServerGame;
+import eu.assault2142.hololol.chess.game.ServerGame;
 import eu.assault2142.hololol.chess.server.util.Log;
 import eu.assault2142.hololol.chess.server.user.User;
 import eu.assault2142.hololol.chess.server.util.loginqueue.LoginQueue;

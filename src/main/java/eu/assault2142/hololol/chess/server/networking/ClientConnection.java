@@ -4,7 +4,7 @@ import eu.assault2142.hololol.chess.game.GameSituation;
 import eu.assault2142.hololol.chess.game.chessmen.Move;
 import eu.assault2142.hololol.chess.networking.GameClientConnection;
 import eu.assault2142.hololol.chess.server.exceptions.UnknownUserException;
-import eu.assault2142.hololol.chess.server.game.ServerGame;
+import eu.assault2142.hololol.chess.game.ServerGame;
 import eu.assault2142.hololol.chess.server.user.User;
 import eu.assault2142.hololol.chess.server.util.Log;
 import java.io.IOException;
