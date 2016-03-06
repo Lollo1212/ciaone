@@ -37,9 +37,24 @@ public class MainMenu extends javax.swing.JFrame {
      */
     public MainMenu() {
         initComponents();
+        init();
+    }
+
+    private void init() {
         MAINMENU = this;
         jTabbedPane1.remove(jPanel6);
         jTabbedPane1.remove(jPanel7);
+        initFriendsMenu();
+
+        //Add listener to components that can bring up popup menus.
+        if (Translator.TRANSLATOR.getLanguage().equals(Translator.EN)) {
+            jComboBox2.setSelectedIndex(0);
+        } else {
+            jComboBox2.setSelectedIndex(1);
+        }
+    }
+
+    private void initFriendsMenu() {
         JPopupMenu popup;
         JMenuItem menuItem;
         popup = new JPopupMenu();
@@ -66,14 +81,8 @@ public class MainMenu extends javax.swing.JFrame {
         });
         popup.add(menuItem);
 
-        //Add listener to components that can bring up popup menus.
         MouseListener popupListener = new PopupListener(popup);
         jList1.addMouseListener(popupListener);
-        if(Translator.TRANSLATOR.getLanguage().equals(Translator.EN)){
-            jComboBox2.setSelectedIndex(0);
-        }else{
-            jComboBox2.setSelectedIndex(1);
-        }
     }
 
     /**
@@ -550,45 +559,19 @@ public class MainMenu extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton6ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        Settings.SETTINGS.username = jTextField1.getText();
-        if (jTextField1.getText().length() < 4) {
-            JOptionPane.showMessageDialog(this, "The Username must have at least 4 characters.", "Username too short", JOptionPane.WARNING_MESSAGE);
-        } else if (jPasswordField1.getPassword().length < 4) {
-            JOptionPane.showMessageDialog(this, "The Password must have at least 4 characters.", "Password too short", JOptionPane.WARNING_MESSAGE);
-        } else {
-            jButton1.setEnabled(false);
-            ServerConnection.connect(jTextField1.getText(), new String(jPasswordField1.getPassword()), jCheckBox2.isSelected());
-        }
+        connectToServer();
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
-        String langBefore = Translator.TRANSLATOR.getLanguage();
-        if (jComboBox2.getSelectedIndex() == 0) {
-            Translator.TRANSLATOR.setLanguage(Translator.EN);
-        } else {
-            Translator.TRANSLATOR.setLanguage(Translator.DE);
-        }
-        if (!langBefore.equals(Translator.TRANSLATOR.getLanguage())) {
-            this.setVisible(false);
-            MainMenu main = new MainMenu();
-            main.setVisible(true);
-            main.setLocation(this.getLocation());
-        } else {
-            jTabbedPane1.setSelectedIndex(0);
-        }
+        saveSettings();
     }//GEN-LAST:event_jButton5ActionPerformed
 
     private void jTabbedPane1AncestorAdded(javax.swing.event.AncestorEvent evt) {//GEN-FIRST:event_jTabbedPane1AncestorAdded
-        // TODO add your handling code here:
+        
     }//GEN-LAST:event_jTabbedPane1AncestorAdded
 
     private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed
-        client.logout();
-        jTabbedPane1.remove(jPanel6);
-        jTabbedPane1.add(jPanel2, 1);
-        jTabbedPane1.setTitleAt(1, Translator.TRANSLATOR.getTranslation("menu_main_tab_online"));
-        jTabbedPane1.setSelectedIndex(1);
-        jButton1.setEnabled(true);
+        logout();
     }//GEN-LAST:event_jButton9ActionPerformed
 
     private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
@@ -628,28 +611,11 @@ public class MainMenu extends javax.swing.JFrame {
     }//GEN-LAST:event_jList1MousePressed
 
     private void jButton12ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton12ActionPerformed
-        String msg = jTextField4.getText();
-        String name = jTabbedPane2.getTitleAt(jTabbedPane2.getSelectedIndex());
-        areas.get(name).append("[" + getTime() + "] " + client.getName() + ": " + msg + System.lineSeparator());
-        client.writeMessage(name, msg);
-        jTextField4.setText("");
+        writeMessage();
     }//GEN-LAST:event_jButton12ActionPerformed
 
     private void jButton10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton10ActionPerformed
-        JPasswordField passwordField = new JPasswordField();
-        int option = JOptionPane.showConfirmDialog(
-                this,
-                passwordField,
-                "Enter password",
-                JOptionPane.OK_CANCEL_OPTION);
-        String input = new String(passwordField.getPassword());
-        if (option == JOptionPane.OK_OPTION) {
-            if (input.length() > 3) {
-                client.changePassword(input);
-            } else {
-                JOptionPane.showMessageDialog(this, "The Password must have at least 4 characters.", "Password too short", JOptionPane.WARNING_MESSAGE);
-            }
-        }
+        changePassword();
     }//GEN-LAST:event_jButton10ActionPerformed
 
     private void jButton11ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton11ActionPerformed
@@ -662,8 +628,6 @@ public class MainMenu extends javax.swing.JFrame {
     private void jButton13ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton13ActionPerformed
         client.playRandom();
     }//GEN-LAST:event_jButton13ActionPerformed
-
-    
 
     public void loggedIn(ServerConnection c) {
         jTabbedPane1.remove(jPanel2);
@@ -767,10 +731,12 @@ class PopupListener extends MouseAdapter {
             popup = pop;
         }
 
+        @Override
         public void mousePressed(MouseEvent e) {
             maybeShowPopup(e);
         }
 
+        @Override
         public void mouseReleased(MouseEvent e) {
             maybeShowPopup(e);
         }
@@ -783,5 +749,69 @@ class PopupListener extends MouseAdapter {
             }
         }
 
+    }
+
+    private void connectToServer() {
+        String text = jTextField1.getText();
+        Settings.SETTINGS.username = text;
+        if (text.length() < 4) {
+            JOptionPane.showMessageDialog(MainMenu.MAINMENU, "The Username must have at least 4 characters.", "Username too short", JOptionPane.WARNING_MESSAGE);
+        } else if (jPasswordField1.getPassword().length < 4) {
+            JOptionPane.showMessageDialog(this, "The Password must have at least 4 characters.", "Password too short", JOptionPane.WARNING_MESSAGE);
+        } else {
+            jButton1.setEnabled(false);
+            ServerConnection.connect(jTextField1.getText(), new String(jPasswordField1.getPassword()), jCheckBox2.isSelected());
+        }
+    }
+    
+    private void saveSettings(){
+        String langBefore = Translator.TRANSLATOR.getLanguage();
+        if (jComboBox2.getSelectedIndex() == 0) {
+            Translator.TRANSLATOR.setLanguage(Translator.EN);
+        } else {
+            Translator.TRANSLATOR.setLanguage(Translator.DE);
+        }
+        if (!langBefore.equals(Translator.TRANSLATOR.getLanguage())) {
+            this.setVisible(false);
+            MainMenu main = new MainMenu();
+            main.setVisible(true);
+            main.setLocation(this.getLocation());
+        } else {
+            jTabbedPane1.setSelectedIndex(0);
+        }
+    }
+    
+    private void logout(){
+        client.logout();
+        jTabbedPane1.remove(jPanel6);
+        jTabbedPane1.add(jPanel2, 1);
+        jTabbedPane1.setTitleAt(1, Translator.TRANSLATOR.getTranslation("menu_main_tab_online"));
+        jTabbedPane1.setSelectedIndex(1);
+        jButton1.setEnabled(true);
+    }
+    
+    private void writeMessage(){
+        String msg = jTextField4.getText();
+        String name = jTabbedPane2.getTitleAt(jTabbedPane2.getSelectedIndex());
+        areas.get(name).append("[" + getTime() + "] " + client.getName() + ": " + msg + System.lineSeparator());
+        client.writeMessage(name, msg);
+        jTextField4.setText("");
+    }
+    
+    private void changePassword(){
+        JPasswordField passwordField = new JPasswordField();
+        int option = JOptionPane.showConfirmDialog(
+                this,
+                passwordField,
+                "Enter password",
+                JOptionPane.OK_CANCEL_OPTION);
+        String input = new String(passwordField.getPassword());
+        if (option == JOptionPane.OK_OPTION) {
+            if (input.length() > 3) {
+                client.changePassword(input);
+            } else {
+                JOptionPane.showMessageDialog(this, "The Password must have at least 4 characters.", "Password too short", JOptionPane.WARNING_MESSAGE);
+            }
+        }
     }
 }

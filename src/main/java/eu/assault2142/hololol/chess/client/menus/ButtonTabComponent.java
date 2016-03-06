@@ -39,10 +39,15 @@ public class ButtonTabComponent extends JPanel {
             throw new NullPointerException("TabbedPane is null");
         }
         this.pane = pane;
+        init();
+    }
+    
+    private void init(){
         setOpaque(false);
         
         //make JLabel read titles from JTabbedPane
         JLabel label = new JLabel() {
+            @Override
             public String getText() {
                 int i = pane.indexOfTabComponent(ButtonTabComponent.this);
                 if (i != -1) {
@@ -64,6 +69,11 @@ public class ButtonTabComponent extends JPanel {
 
     private class TabButton extends JButton implements ActionListener {
         public TabButton() {
+            init();
+        }
+        
+        private void init(){
+            
             int size = 17;
             setPreferredSize(new Dimension(size, size));
             setToolTipText("close this tab");
@@ -117,7 +127,7 @@ public class ButtonTabComponent extends JPanel {
         }
     }
 
-    private final static MouseListener buttonMouseListener = new MouseAdapter() {
+    private final MouseListener buttonMouseListener = new MouseAdapter() {
         @Override
         public void mouseEntered(MouseEvent e) {
             Component component = e.getComponent();

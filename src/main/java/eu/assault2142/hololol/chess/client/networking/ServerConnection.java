@@ -5,6 +5,7 @@
 package eu.assault2142.hololol.chess.client.networking;
 
 import eu.assault2142.hololol.chess.client.game.LocalGame;
+import eu.assault2142.hololol.chess.client.game.Settings;
 import eu.assault2142.hololol.chess.client.game.ui.GameFrame;
 import eu.assault2142.hololol.chess.client.menus.MainMenu;
 import java.io.FileInputStream;
@@ -221,4 +222,6 @@ public class ServerConnection {
     public void promotion(String chessman,int color,int posinarray){
         write("promotion:"+chessman+":"+color+":"+posinarray);
     }
+
+    
 }
