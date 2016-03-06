@@ -10,18 +10,22 @@ import eu.assault2142.hololol.chess.client.game.Settings;
 import eu.assault2142.hololol.chess.client.networking.ServerConnection;
 import eu.assault2142.hololol.chess.client.translator.Translator;
 import java.awt.event.ActionEvent;
+import java.awt.event.FocusEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Locale;
+import java.util.ResourceBundle;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import javax.swing.event.AncestorEvent;
+import javax.swing.event.ChangeEvent;
 
 /**
  *
@@ -31,7 +35,8 @@ public class MainMenu extends javax.swing.JFrame {
 
     public static MainMenu MAINMENU;
     private ServerConnection client;
-    private HashMap<String, JTextArea> areas = new HashMap();
+    private final HashMap<String, JTextArea> areas = new HashMap();
+    private static Locale locale = Locale.ENGLISH;
 
     /**
      * Creates new form MainMenu
@@ -141,7 +146,7 @@ public class MainMenu extends javax.swing.JFrame {
         jButton5 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("eu/assault2142/hololol/chess/client/menus/Bundle"); // NOI18N
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("eu/assault2142/hololol/chess/client/menus/Bundle",locale); // NOI18N
         setTitle(bundle.getString("MainMenu.title")); // NOI18N
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         setLocationByPlatform(true);
@@ -556,48 +561,48 @@ public class MainMenu extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jPasswordField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jPasswordField1ActionPerformed
+    private void jPasswordField1ActionPerformed(ActionEvent evt) {//GEN-FIRST:event_jPasswordField1ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jPasswordField1ActionPerformed
 
-    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+    private void jButton6ActionPerformed(ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
         new LocalGame();
         setVisible(false);
     }//GEN-LAST:event_jButton6ActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void jButton1ActionPerformed(ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         connectToServer();
     }//GEN-LAST:event_jButton1ActionPerformed
 
-    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+    private void jButton5ActionPerformed(ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
         saveSettings();
     }//GEN-LAST:event_jButton5ActionPerformed
 
-    private void jTabbedPane1AncestorAdded(javax.swing.event.AncestorEvent evt) {//GEN-FIRST:event_jTabbedPane1AncestorAdded
+    private void jTabbedPane1AncestorAdded(AncestorEvent evt) {//GEN-FIRST:event_jTabbedPane1AncestorAdded
 
     }//GEN-LAST:event_jTabbedPane1AncestorAdded
 
-    private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed
+    private void jButton9ActionPerformed(ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed
         logout();
     }//GEN-LAST:event_jButton9ActionPerformed
 
-    private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
+    private void jButton8ActionPerformed(ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
         String input = JOptionPane.showInputDialog(this, Translator.getBundle().getString("ADDFRIENDDIALOG_TEXT"), Translator.getBundle().getString("ADDFRIENDDIALOG_HEAD"), JOptionPane.PLAIN_MESSAGE);
         if (input != null) {
             client.addFriend(input);
         }
     }//GEN-LAST:event_jButton8ActionPerformed
 
-    private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
+    private void jButton7ActionPerformed(ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
         client.challengeFriend(jList1.getSelectedValue());
         System.out.println("newgame:friend:" + jList1.getSelectedValue());
     }//GEN-LAST:event_jButton7ActionPerformed
 
-    private void jTextArea1FocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextArea1FocusGained
+    private void jTextArea1FocusGained(FocusEvent evt) {//GEN-FIRST:event_jTextArea1FocusGained
 
     }//GEN-LAST:event_jTextArea1FocusGained
 
-    private void jTabbedPane2StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jTabbedPane2StateChanged
+    private void jTabbedPane2StateChanged(ChangeEvent evt) {//GEN-FIRST:event_jTabbedPane2StateChanged
         if (jTabbedPane2.getSelectedIndex() == 0) {
             jTextField4.setEnabled(false);
             jButton12.setEnabled(false);
@@ -607,36 +612,36 @@ public class MainMenu extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jTabbedPane2StateChanged
 
-    private void jList1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jList1MouseClicked
+    private void jList1MouseClicked(MouseEvent evt) {//GEN-FIRST:event_jList1MouseClicked
 
     }//GEN-LAST:event_jList1MouseClicked
 
-    private void jList1MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jList1MousePressed
+    private void jList1MousePressed(MouseEvent evt) {//GEN-FIRST:event_jList1MousePressed
         if (evt.getButton() == MouseEvent.BUTTON3) {
             jList1.setSelectedIndex(jList1.locationToIndex(evt.getPoint()));
         }
     }//GEN-LAST:event_jList1MousePressed
 
-    private void jButton12ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton12ActionPerformed
+    private void jButton12ActionPerformed(ActionEvent evt) {//GEN-FIRST:event_jButton12ActionPerformed
         writeMessage();
     }//GEN-LAST:event_jButton12ActionPerformed
 
-    private void jButton10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton10ActionPerformed
+    private void jButton10ActionPerformed(ActionEvent evt) {//GEN-FIRST:event_jButton10ActionPerformed
         changePassword();
     }//GEN-LAST:event_jButton10ActionPerformed
 
-    private void jButton11ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton11ActionPerformed
+    private void jButton11ActionPerformed(ActionEvent evt) {//GEN-FIRST:event_jButton11ActionPerformed
         String input = JOptionPane.showInputDialog(this, Translator.getBundle().getString("CHANGENAME_TEXT"), Translator.getBundle().getString("CHANGENAME_HEAD"), JOptionPane.PLAIN_MESSAGE);
         if (input != null) {
             client.changeUsername(input);
         }
     }//GEN-LAST:event_jButton11ActionPerformed
 
-    private void jButton13ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton13ActionPerformed
+    private void jButton13ActionPerformed(ActionEvent evt) {//GEN-FIRST:event_jButton13ActionPerformed
         client.playRandom();
     }//GEN-LAST:event_jButton13ActionPerformed
 
-    private void jCheckBox2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox2ActionPerformed
+    private void jCheckBox2ActionPerformed(ActionEvent evt) {//GEN-FIRST:event_jCheckBox2ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jCheckBox2ActionPerformed
 
@@ -778,14 +783,18 @@ public class MainMenu extends javax.swing.JFrame {
 
     private void saveSettings() {
         if (jComboBox2.getSelectedIndex() == 1) {
-            Locale.setDefault(Locale.GERMAN);
+            Translator.setLanguage(Locale.GERMANY);
+            locale = Locale.GERMANY;
         } else {
-            Locale.setDefault(Locale.ENGLISH);
+            Translator.setLanguage(Locale.ENGLISH);
+            locale = Locale.ENGLISH;
         }
+        ResourceBundle.clearCache();
         setVisible(false);
         MainMenu main = new MainMenu();
         main.setVisible(true);
         main.setLocation(this.getLocation());
+        MAINMENU = main;
     }
 
     private void logout() {
