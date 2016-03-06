@@ -6,44 +6,22 @@ import eu.assault2142.hololol.chess.game.chessmen.Knight;
 import eu.assault2142.hololol.chess.game.chessmen.Pawn;
 import eu.assault2142.hololol.chess.game.chessmen.Queen;
 import eu.assault2142.hololol.chess.game.chessmen.Rook;
-import java.util.LinkedList;
-import java.util.NoSuchElementException;
-import java.util.function.Consumer;
 
 /**
  *
  * @author hololol2
  */
-public class GameConnectionThread extends Thread {
+public class GameConnectionThread extends ConnectionThread {
 
     private final GameClientConnection connection;
-    protected final LinkedList<Consumer<String[]>> consumers;
 
     public GameConnectionThread(GameClientConnection serverclient) {
+        super(serverclient.getScanner());
         this.connection = serverclient;
-        consumers = new LinkedList();
         consumers.add(this::consumeMove);
         consumers.add(this::consumeDraw);
         consumers.add(this::consumePromotion);
         consumers.add(this::consumeResignation);
-    }
-
-    @Override
-    public void run() {
-        String input;
-        while (true) {
-            try {
-                input = connection.getScanner().next();
-                String[] message = input.split(":");
-                consumers.forEach((Consumer<String[]> consumer) -> {
-                    consumer.accept(message);
-                });
-            }
-            catch (NoSuchElementException nsee) {
-                connection.closeConnection();
-                break;
-            }
-        }
     }
 
     private void consumeMove(String[] message) {
@@ -140,5 +118,10 @@ public class GameConnectionThread extends Thread {
             }
 
         }
+    }
+
+    @Override
+    protected void closeConnection() {
+        connection.closeConnection();
     }
 }
