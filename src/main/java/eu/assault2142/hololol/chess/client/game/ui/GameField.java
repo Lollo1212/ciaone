@@ -5,14 +5,12 @@
 package eu.assault2142.hololol.chess.client.game.ui;
 
 import eu.assault2142.hololol.chess.game.chessmen.Chessman;
-import eu.assault2142.hololol.chess.game.Square;
-import eu.assault2142.hololol.chess.client.game.Settings;
 import java.awt.Color;
 import java.awt.Graphics;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.ImageIcon;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import javax.swing.JPanel;
+import javax.swing.Timer;
 
 /**
  *
@@ -28,18 +26,15 @@ public class GameField extends JPanel {//eigentliches Spielfeld
     public GameField(GameFrame gf) {
         this.gameframe = gf;
         squarelength = gameframe.getFieldLength();
-        Runnable repaint = () -> {
-            try {
-                while (true) {
-                    gf.repaint();
-                    Thread.sleep(10);
-                }
-            }
-            catch (InterruptedException ex) {
-                Logger.getLogger(GameField.class.getName()).log(Level.SEVERE, null, ex);
-            }
+        init();
+    }
+
+    private void init() {
+        int delay = 33; //milliseconds
+        ActionListener taskPerformer = (ActionEvent evt) -> {
+            gameframe.repaint();
         };
-        new Thread(repaint).start();
+        new Timer(delay, taskPerformer).start();
     }
 
     @Override
@@ -48,24 +43,7 @@ public class GameField extends JPanel {//eigentliches Spielfeld
         paintEdgeZone(gr);
         paintBoard(gr);
         drawChessman(gr);
-        if (movementsupdating) {
-            if (gameframe.game.getTurn()) {
-                gr.drawImage(gameframe.ibackschwarz.getImage(), 0, 0, squarelength * 8, squarelength * 8, gameframe.ibackschwarz.getImageObserver());
-                gr.drawImage(gameframe.itextschwarz.getImage(), 0, 0, squarelength * 8, squarelength * 8, gameframe.itextschwarz.getImageObserver());
-            } else {
-                gr.drawImage(gameframe.ibackweiß.getImage(), 0, 0, squarelength * 8, squarelength * 8, gameframe.ibackweiß.getImageObserver());
-                gr.drawImage(gameframe.itextweiß.getImage(), 0, 0, squarelength * 8, squarelength * 8, gameframe.itextweiß.getImageObserver());
-            }
-        }
-        if (check) {
-            if (gameframe.game.getTurn()) {
-                gr.drawImage(gameframe.ibackschachb.getImage(), 0, 0, squarelength * 8, squarelength * 8, gameframe.ibackschwarz.getImageObserver());
-                gr.drawImage(gameframe.itextschachb.getImage(), 0, 0, squarelength * 8, squarelength * 8, gameframe.itextschachb.getImageObserver());
-            } else {
-                gr.drawImage(gameframe.ibackschachw.getImage(), 0, 0, squarelength * 8, squarelength * 8, gameframe.ibackweiß.getImageObserver());
-                gr.drawImage(gameframe.itextschachw.getImage(), 0, 0, squarelength * 8, squarelength * 8, gameframe.itextschachw.getImageObserver());
-            }
-        }
+        drawNotification(gr);
     }
 
     public void paintEdgeZone(Graphics gr) {
@@ -81,7 +59,7 @@ public class GameField extends JPanel {//eigentliches Spielfeld
         for (int x = 0; x <= 7; x++) {
             for (int y = 0; y <= 7; y++) {
                 g.setColor(gameframe.game.getSquare(x, y).currentColor);
-                g.fillRect(x*squarelength, y*squarelength, squarelength, squarelength);
+                g.fillRect(x * squarelength, y * squarelength, squarelength, squarelength);
             }
         }
     }
@@ -101,4 +79,24 @@ public class GameField extends JPanel {//eigentliches Spielfeld
         }
     }
 
+    public void drawNotification(Graphics gr) {
+        if (movementsupdating) {
+            if (gameframe.game.getTurn()) {
+                gr.drawImage(gameframe.ibackschwarz.getImage(), 0, 0, squarelength * 8, squarelength * 8, gameframe.ibackschwarz.getImageObserver());
+                gr.drawImage(gameframe.itextschwarz.getImage(), 0, 0, squarelength * 8, squarelength * 8, gameframe.itextschwarz.getImageObserver());
+            } else {
+                gr.drawImage(gameframe.ibackweiß.getImage(), 0, 0, squarelength * 8, squarelength * 8, gameframe.ibackweiß.getImageObserver());
+                gr.drawImage(gameframe.itextweiß.getImage(), 0, 0, squarelength * 8, squarelength * 8, gameframe.itextweiß.getImageObserver());
+            }
+        }
+        if (check) {
+            if (gameframe.game.getTurn()) {
+                gr.drawImage(gameframe.ibackschachb.getImage(), 0, 0, squarelength * 8, squarelength * 8, gameframe.ibackschwarz.getImageObserver());
+                gr.drawImage(gameframe.itextschachb.getImage(), 0, 0, squarelength * 8, squarelength * 8, gameframe.itextschachb.getImageObserver());
+            } else {
+                gr.drawImage(gameframe.ibackschachw.getImage(), 0, 0, squarelength * 8, squarelength * 8, gameframe.ibackweiß.getImageObserver());
+                gr.drawImage(gameframe.itextschachw.getImage(), 0, 0, squarelength * 8, squarelength * 8, gameframe.itextschachw.getImageObserver());
+            }
+        }
+    }
 }
