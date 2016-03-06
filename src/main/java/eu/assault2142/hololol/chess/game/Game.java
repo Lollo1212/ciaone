@@ -10,6 +10,10 @@ import javax.swing.ImageIcon;
  */
 public abstract class Game {
 
+    public abstract void endGame();
+
+    public abstract void clickAt(int feldx, int feldy);
+
     
     
     public static enum TYPE {LOCAL,SERVER,CLIENT};

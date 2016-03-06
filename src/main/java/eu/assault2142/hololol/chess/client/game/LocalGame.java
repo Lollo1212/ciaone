@@ -10,10 +10,14 @@ import eu.assault2142.hololol.chess.game.chessmen.Chessman;
 import eu.assault2142.hololol.chess.client.game.ui.GameFrame;
 import eu.assault2142.hololol.chess.game.Square;
 import eu.assault2142.hololol.chess.game.chessmen.Bishop;
+import eu.assault2142.hololol.chess.game.chessmen.CastlingMove;
+import eu.assault2142.hololol.chess.game.chessmen.King;
 import eu.assault2142.hololol.chess.game.chessmen.Knight;
+import eu.assault2142.hololol.chess.game.chessmen.Move;
 import eu.assault2142.hololol.chess.game.chessmen.Pawn;
 import eu.assault2142.hololol.chess.game.chessmen.Queen;
 import eu.assault2142.hololol.chess.game.chessmen.Rook;
+import java.util.Arrays;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 
@@ -25,6 +29,8 @@ public class LocalGame extends Game {
 
     private GameFrame p;
     public boolean bot;
+    private Chessman picked;
+    private Square selected;
 
     public LocalGame() {//Lokales Spiel
         super(TYPE.LOCAL);
@@ -53,26 +59,25 @@ public class LocalGame extends Game {
     @Override
     public void promotion(Pawn pawn) {
         Chessman man;
-        String selected = (String) JOptionPane.showInputDialog(p, "Promotion", "Promotion", JOptionPane.QUESTION_MESSAGE, null, new String[]{"Queen", "Rook", "Knight", "Bishop"}, "Queen");
-        switch (selected) {
+        String promotion = (String) JOptionPane.showInputDialog(p, "Promotion", "Promotion", JOptionPane.QUESTION_MESSAGE, null, new String[]{"Queen", "Rook", "Knight", "Bishop"}, "Queen");
+        switch (promotion) {
             //bei lokalem Spiel wird der Bauer direkt gesetzt,
             //bei Serverbasiertem senden der Daten an den Server
             case "Rook":
-                    man = Rook.promotion(pawn,this);
+                man = Rook.promotion(pawn, this);
                 break;
             case "Knight":
-                man = Knight.promotion(pawn,this);
+                man = Knight.promotion(pawn, this);
                 break;
             case "Bishop":
-                man = Bishop.promotion(pawn,this);
+                man = Bishop.promotion(pawn, this);
                 break;
             default:
-                man = Queen.promotion(pawn,this);
+                man = Queen.promotion(pawn, this);
                 break;
         }
         getFiguren(pawn.isBlack())[pawn.getPositionInArray()] = man;
         getSquare(man.getX(), man.getY()).occupier = man;
-        
 
         new ClientMovementUpdater(this).start();
     }
@@ -83,4 +88,68 @@ public class LocalGame extends Game {
         p.getGameField().movementsupdating = false;
     }
 
+    @Override
+    public void endGame() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void clickAt(int feldx, int feldy) {
+        selected = getSquare(feldx, feldy);
+        doMoveIfPossible();
+        showPossibleMoves();
+    }
+
+    private CastlingMove getCastlingMove() {
+        Rook t;
+        int tx;
+        int ty;
+        if (picked.getX() < selected.getX()) {
+            t = (Rook) getFiguren(picked.isBlack())[9];
+            tx = 5;
+        } else {
+            t = (Rook) getFiguren(picked.isBlack())[8];
+            tx = 3;
+        }
+        ty = picked.isBlack() ? 0 : 7;
+        return new CastlingMove(selected.getX(), selected.getY(), t, tx, ty, (King) picked);
+    }
+
+    private void doMoveIfPossible() {
+        if (selected != null) {
+            selected.highlight(Square.HIGHLIGHT.SELECTED);//angeklicktes Feld in Cyan färben
+            if (picked != null) {//beim letzten Klick wurde Figur angeklickt und lokales Spiel
+                picked.doMove(selected.getX(), selected.getY());
+                picked.doCapture(selected.getX(), selected.getY());
+
+                //Rochade
+                if (picked.getClass() == King.class) {
+                    ((King) picked).doCastling(getCastlingMove(), getGameSituation());
+                }
+            }
+            picked = null;
+        }
+    }
+
+    private void showPossibleMoves() {
+        if (selected.occupier != null) {//Anzeigen der Bewegungsmöglichkeiten für nächsten Zug
+            picked = selected.occupier;
+            Move[] bewegungen = getGameSituation().getAbstractChessmen(picked.isBlack())[picked.getPositionInArray()].getMoves();
+            Move[] schläge = getGameSituation().getAbstractChessmen(picked.isBlack())[picked.getPositionInArray()].getCaptures();
+            if (picked.getClass() == King.class) {
+                CastlingMove[] rochaden = ((King) picked).computeCastlings(true, getGameSituation());
+                Arrays.stream(rochaden).forEach((CastlingMove c) -> {
+                    getSquare(c.getTargetX(), c.getTargetY()).highlight(Square.HIGHLIGHT.CASTLING);
+                });
+
+            }
+            Arrays.stream(bewegungen).forEach((Move m) -> {
+                getSquare(m.getTargetX(), m.getTargetY()).highlight(Square.HIGHLIGHT.MOVETARGET);
+            });
+            Arrays.stream(schläge).forEach((Move m) -> {
+                getSquare(m.getTargetX(), m.getTargetY()).highlight(Square.HIGHLIGHT.CAPTURETARGET);
+            });
+
+        }
+    }
 }
