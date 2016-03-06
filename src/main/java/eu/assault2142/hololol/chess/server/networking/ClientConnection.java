@@ -2,6 +2,7 @@ package eu.assault2142.hololol.chess.server.networking;
 
 import eu.assault2142.hololol.chess.game.GameSituation;
 import eu.assault2142.hololol.chess.game.chessmen.Move;
+import eu.assault2142.hololol.chess.networking.GameClientConnection;
 import eu.assault2142.hololol.chess.server.exceptions.UnknownUserException;
 import eu.assault2142.hololol.chess.server.game.ServerGame;
 import eu.assault2142.hololol.chess.server.user.User;
@@ -15,7 +16,7 @@ import java.util.Scanner;
  *
  * @author hololol2
  */
-public class ClientConnection implements eu.assault2142.hololol.chess.networking.ClientConnection{
+public class ClientConnection extends GameClientConnection{
 
     private Socket socket;
     private Server server;
@@ -28,8 +29,8 @@ public class ClientConnection implements eu.assault2142.hololol.chess.networking
     private boolean draw;
 
     public ClientConnection(Socket socket, Server server) {
+        super(socket);
         this.server = server;
-        this.socket = socket;
         try {
             printwriter = new PrintWriter(socket.getOutputStream(), true);
             scanner = new Scanner(socket.getInputStream());
@@ -37,56 +38,6 @@ public class ClientConnection implements eu.assault2142.hololol.chess.networking
             Log.MAINLOG.log(ex.getMessage());
         }
         reader = new ConnectionThread(this, server);
-    }
-
-    public void write(String str) {
-        printwriter.println(str);
-    }
-
-    public void startReading() {
-        reader.start();
-    }
-
-    public void writeMovements() {
-        GameSituation gs = game.getGameSituation();
-        String str1 = "moves:black:move:";
-        String str2 = "moves:white:move:";
-        String str3 = "moves:black:capture:";
-        String str4 = "move:white:capture:";
-        for (int a = 0; a < 16; a++) {
-            Move[] m = gs.getAbstractChessmen(true)[a].getMoves();
-            for (Move m1 : m) {
-                if (m1 != null) {
-                    str1 += m1.getTargetX() + "" + m1.getTargetY() + "" + m1.getChessman().getPositionInArray() + ";";
-                }
-            }
-            m = gs.getAbstractChessmen(true)[a].getCaptures();
-            for (Move m1 : m) {
-                if (m1 != null) {
-                    str3 += m1.getTargetX() + "" + m1.getTargetY() + "" + m1.getChessman().getPositionInArray() + ";";
-                }
-            }
-            m = gs.getAbstractChessmen(false)[a].getMoves();
-            for (Move m1 : m) {
-                if (m1 != null) {
-                    str2 += m1.getTargetX() + "" + m1.getTargetY() + "" + m1.getChessman().getPositionInArray() + ";";
-                }
-            }
-            m = gs.getAbstractChessmen(false)[a].getCaptures();
-            for (Move m1 : m) {
-                if (m1 != null) {
-                    str4 += m1.getTargetX() + "" + m1.getTargetY() + "" + m1.getChessman().getPositionInArray() + ";";
-                }
-            }
-        }
-        write(str1);
-        write(str2);
-        write(str3);
-        write(str4);
-    }
-
-    public Scanner getScanner() {
-        return scanner;
     }
 
     public User getUser() {
@@ -97,6 +48,7 @@ public class ClientConnection implements eu.assault2142.hololol.chess.networking
         this.user = user;
     }
 
+    @Override
     public void closeConnection() {
         Server.SERVER.logoutUser(user.getID());
         printwriter.close();
@@ -117,21 +69,7 @@ public class ClientConnection implements eu.assault2142.hololol.chess.networking
         this.game = game;
     }
 
-    public boolean isWhite() {
-        return white;
-    }
-
-    public void setWhite(boolean white) {
-        this.white = white;
-    }
-
-    public boolean isDrawSet() {
-        return draw;
-    }
-
-    public void setDraw(boolean draw) {
-        this.draw = draw;
-    }
+    
 
     public void wrongUsername() {
         write("loginerror:username");
@@ -157,17 +95,7 @@ public class ClientConnection implements eu.assault2142.hololol.chess.networking
         write("loginerror:password");
     }
 
-    public void checkmate() {
-        write("checkmate");
-    }
-
-    public void stalemate() {
-        write("stalemate");
-    }
-
-    public void check() {
-        write("check");
-    }
+    
 
     void hello() {
         write("hello");
@@ -187,9 +115,5 @@ public class ClientConnection implements eu.assault2142.hololol.chess.networking
 
     void friendRequest(String name) {
         write("request:" + name);
-    }
-
-    public void promotion(int i, int positioninarray) {
-        write("promotion:" + i + ":" + positioninarray);
     }
 }
