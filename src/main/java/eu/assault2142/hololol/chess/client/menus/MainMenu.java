@@ -8,6 +8,7 @@ package eu.assault2142.hololol.chess.client.menus;
 import eu.assault2142.hololol.chess.client.game.LocalGame;
 import eu.assault2142.hololol.chess.client.game.Settings;
 import eu.assault2142.hololol.chess.client.networking.ServerConnection;
+import eu.assault2142.hololol.chess.client.networking.ServerMessages;
 import eu.assault2142.hololol.chess.client.translator.Translator;
 import java.awt.event.ActionEvent;
 import java.awt.event.FocusEvent;
@@ -66,7 +67,7 @@ public class MainMenu extends javax.swing.JFrame {
         popup = new JPopupMenu();
         menuItem = new JMenuItem(Translator.getBundle().getString("MENU_CHALLENGE"));
         menuItem.addActionListener((ActionEvent e) -> {
-            client.challengeFriend(jList1.getSelectedValue());
+            client.write(ServerMessages.Challenge, new Object[]{jList1.getSelectedValue()});
         });
         popup.add(menuItem);
         menuItem = new JMenuItem(Translator.getBundle().getString("MENU_MESSAGE"));
@@ -83,7 +84,7 @@ public class MainMenu extends javax.swing.JFrame {
         popup.add(menuItem);
         menuItem = new JMenuItem(Translator.getBundle().getString("MENU_REMOVE"));
         menuItem.addActionListener((ActionEvent e) -> {
-            client.removeFriend(jList1.getSelectedValue());
+            client.write(ServerMessages.FriendsRemove, new Object[]{jList1.getSelectedValue()});
         });
         popup.add(menuItem);
 
@@ -589,13 +590,12 @@ public class MainMenu extends javax.swing.JFrame {
     private void jButton8ActionPerformed(ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
         String input = JOptionPane.showInputDialog(this, Translator.getBundle().getString("ADDFRIENDDIALOG_TEXT"), Translator.getBundle().getString("ADDFRIENDDIALOG_HEAD"), JOptionPane.PLAIN_MESSAGE);
         if (input != null) {
-            client.addFriend(input);
+            client.write(ServerMessages.FriendsAdd, new Object[]{input});
         }
     }//GEN-LAST:event_jButton8ActionPerformed
 
     private void jButton7ActionPerformed(ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
-        client.challengeFriend(jList1.getSelectedValue());
-        System.out.println("newgame:friend:" + jList1.getSelectedValue());
+        client.write(ServerMessages.Challenge, new Object[]{jList1.getSelectedValue()});
     }//GEN-LAST:event_jButton7ActionPerformed
 
     private void jTextArea1FocusGained(FocusEvent evt) {//GEN-FIRST:event_jTextArea1FocusGained
@@ -633,12 +633,12 @@ public class MainMenu extends javax.swing.JFrame {
     private void jButton11ActionPerformed(ActionEvent evt) {//GEN-FIRST:event_jButton11ActionPerformed
         String input = JOptionPane.showInputDialog(this, Translator.getBundle().getString("CHANGENAME_TEXT"), Translator.getBundle().getString("CHANGENAME_HEAD"), JOptionPane.PLAIN_MESSAGE);
         if (input != null) {
-            client.changeUsername(input);
+            client.write(ServerMessages.ChangeUsername, new Object[]{input});
         }
     }//GEN-LAST:event_jButton11ActionPerformed
 
     private void jButton13ActionPerformed(ActionEvent evt) {//GEN-FIRST:event_jButton13ActionPerformed
-        client.playRandom();
+        client.write(ServerMessages.PlayRandom, null);
     }//GEN-LAST:event_jButton13ActionPerformed
 
     private void jCheckBox2ActionPerformed(ActionEvent evt) {//GEN-FIRST:event_jCheckBox2ActionPerformed
@@ -798,7 +798,7 @@ public class MainMenu extends javax.swing.JFrame {
     }
 
     private void logout() {
-        client.logout();
+        client.write(ServerMessages.Logout, null);
         jTabbedPane1.remove(jPanel6);
         jTabbedPane1.add(jPanel2, 1);
         jTabbedPane1.setTitleAt(1, "Online");
@@ -810,7 +810,7 @@ public class MainMenu extends javax.swing.JFrame {
         String msg = jTextField4.getText();
         String name = jTabbedPane2.getTitleAt(jTabbedPane2.getSelectedIndex());
         areas.get(name).append("[" + getTime() + "] " + client.getName() + ": " + msg + System.lineSeparator());
-        client.writeMessage(name, msg);
+        client.write(ServerMessages.Message, new Object[]{name, msg.replace(" ", "_")});
         jTextField4.setText("");
     }
 
@@ -824,7 +824,7 @@ public class MainMenu extends javax.swing.JFrame {
         String input = new String(passwordField.getPassword());
         if (option == JOptionPane.OK_OPTION) {
             if (input.length() > 3) {
-                client.changePassword(input);
+                client.write(ServerMessages.ChangePassword, new Object[]{input});
             } else {
                 JOptionPane.showMessageDialog(this, Translator.getBundle().getString("PASSTOOSHORT_TEXT"), Translator.getBundle().getString("PASSTOOSHORT_HEAD"), JOptionPane.WARNING_MESSAGE);
             }

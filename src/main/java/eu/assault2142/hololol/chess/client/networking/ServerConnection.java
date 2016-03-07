@@ -1,11 +1,6 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package eu.assault2142.hololol.chess.client.networking;
 
-import eu.assault2142.hololol.chess.client.game.LocalGame;
-import eu.assault2142.hololol.chess.client.game.ui.GameFrame;
+import eu.assault2142.hololol.chess.client.game.ClientGame;
 import eu.assault2142.hololol.chess.client.menus.MainMenu;
 import eu.assault2142.hololol.chess.client.translator.Translator;
 import java.io.FileInputStream;
@@ -20,6 +15,7 @@ import java.security.KeyStore;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
+import java.text.MessageFormat;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -31,22 +27,25 @@ import javax.net.ssl.TrustManagerFactory;
 import javax.swing.JOptionPane;
 
 /**
+ * The Connection to a (game-)server
  *
- * @author jojo
+ * @author hololol2
  */
 public class ServerConnection {
 
-    LocalGame g;
-    GameFrame gframe;
-    boolean gamestarted;
-    Scanner sc;
-    PrintWriter pw;
-    Socket s;
-    ServerConnectionThread ct;
-    public Thread t;
+    private ClientGame game;
+    private Scanner scanner;
+    private PrintWriter writer;
+    private Socket socket;
+    private ServerConnectionThread connectionThread;
     private String name;
 
-    public ServerConnection(InetAddress address) {
+    /**
+     * Connect to the official, central server at the given address
+     *
+     * @param address the address to connect to
+     */
+    private ServerConnection(InetAddress address) {
         try {
             KeyStore ks = KeyStore.getInstance("JKS");
             ks.load(new FileInputStream("TRUSTSTORE"), "assault".toCharArray());
@@ -60,55 +59,50 @@ public class ServerConnection {
             SSLSocketFactory ssf = sslcon.getSocketFactory();
             SSLSocket socket = (SSLSocket) ssf.createSocket(address, 1024);
             socket.startHandshake();
-            s = socket;
-            sc = new Scanner(s.getInputStream());
-            pw = new PrintWriter(s.getOutputStream(), true);
+            this.socket = socket;
+            scanner = new Scanner(this.socket.getInputStream());
+            writer = new PrintWriter(this.socket.getOutputStream(), true);
         } catch (ConnectException ex) {
             JOptionPane.showMessageDialog(MainMenu.MAINMENU, Translator.getBundle().getString("COULDN'T CONNECT TO SERVER"), Translator.getBundle().getString("CONNECTION ERROR"), JOptionPane.WARNING_MESSAGE);
             MainMenu.MAINMENU.enableLoginButton();
-        } catch (IOException ex) {
-            Logger.getLogger(ServerConnection.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (KeyStoreException ex) {
-            Logger.getLogger(ServerConnection.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (NoSuchAlgorithmException ex) {
-            Logger.getLogger(ServerConnection.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (CertificateException ex) {
-            Logger.getLogger(ServerConnection.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (KeyManagementException ex) {
+        } catch (IOException | KeyStoreException | NoSuchAlgorithmException | CertificateException | KeyManagementException ex) {
             Logger.getLogger(ServerConnection.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
+    /**
+     * Create a new ServerConnection with the given params
+     *
+     * @param so the socket of the connection
+     * @param sca the scanner
+     * @param pwr the writer
+     */
     public ServerConnection(Socket so, Scanner sca, PrintWriter pwr) {
-        s = so;
-        sc = sca;
-        pw = pwr;
+        socket = so;
+        scanner = sca;
+        writer = pwr;
         write("n");
-        ct = new ServerConnectionThread(this);
-        t = new Thread(ct);
+        connectionThread = new ServerConnectionThread(this, sca);
+        Thread t = new Thread(connectionThread);
         t.start();
     }
 
+    /**
+     * Writes a message to the server
+     *
+     * @param str the message to send
+     */
     private void write(String str) {
-        pw.println(str);
+        writer.println(str);
     }
 
-    public Scanner getScanner() {
-        return sc;
-    }
-
-    public Socket getSocket() {
-        return s;
-    }
-
-    public PrintWriter getPrintWriter() {
-        return pw;
-    }
-
-    public LocalGame getGame() {
-        return g;
-    }
-
+    /**
+     * Connects to the official, central server
+     *
+     * @param username the username
+     * @param password the password
+     * @param create wether to create an account
+     */
     public static void connect(String username, String password, boolean create) {
         ServerConnection c = null;
         try {
@@ -117,8 +111,8 @@ public class ServerConnection {
         } catch (UnknownHostException ex) {
             System.out.println(ex.getMessage());
         }
-        if (c.getScanner() != null) {
-            c.getScanner().next();
+        if (c.scanner != null) {
+            c.scanner.next();
             //Der Server ist online
             //Anmeldedaten an Server schicken
             String str = "";
@@ -127,12 +121,12 @@ public class ServerConnection {
             }
             str += username + ":" + password;
             c.write(str);
-            String input = c.getScanner().next();
+            String input = c.scanner.next();
             System.err.println(input);
             if (input.equals("loggedin")) {
                 //Der Server bestätigt Anmeldung
 
-                c = new ServerConnection(c.getSocket(), c.getScanner(), c.getPrintWriter());
+                c = new ServerConnection(c.socket, c.scanner, c.writer);
                 MainMenu.MAINMENU.loggedIn(c);//neues Fenster öffnen
             } else//Server verweigert Anmeldung
             {
@@ -151,76 +145,42 @@ public class ServerConnection {
         }
     }
 
+    /**
+     * Write a message to the server
+     *
+     * @param message the type of the message
+     * @param replace the things to replace placeholders with
+     */
+    public void write(ServerMessages message, Object[] replace) {
+        write(MessageFormat.format(message.getValue(), replace));
+    }
+
+    /**
+     * Sets the name of the client
+     *
+     * @param string the name of the client
+     */
     public void setName(String string) {
         name = string;
     }
 
+    /**
+     * Return the nam of the client
+     *
+     * @return the name of the client
+     */
     public String getName() {
         return name;
     }
 
-    public void writeMessage(String to, String msg) {
-        write("msg:" + to + ":" + msg.replace(" ", "_"));
-    }
-
-    public void addFriend(String name) {
-        write("friends:add:" + name);
-    }
-
-    public void removeFriend(String name) {
-        write("friends:remove:" + name);
-    }
-
-    public void acceptFriendRequest(String name) {
-        write("friends:accept:" + name);
-    }
-
-    public void declineFriendRequest(String name) {
-        write("friends:decline:" + name);
-    }
-
-    public void logout() {
-        write("logout");
-    }
-
-    public void changeUsername(String newname) {
-        write("change:username:" + newname);
-    }
-
-    public void changePassword(String newpass) {
-        write("change:password:" + newpass);
-    }
-
-    public void acceptChallenge(String challenger) {
-        write("game:accept:" + challenger);
-    }
-
-    public void declineChallenge(String challenger) {
-        write("game:decline:" + challenger);
-    }
-
-    public void challengeFriend(String name) {
-        write("newgame:friend:" + name);
-    }
-
-    public void playRandom() {
-        write("newgame:random");
-    }
-
-    public void doMove(int chessman, int x, int y) {
-        write("move:" + chessman + ":" + x + ":" + y);
-    }
-
-    public void resignate() {
-        write("resignation");
-    }
-
-    public void offerDraw() {
-        write("draw");
-    }
-
-    public void promotion(String chessman, int color, int posinarray) {
-        write("promotion:" + chessman + ":" + color + ":" + posinarray);
+    /**
+     * Start a new ClientGame
+     *
+     * @param color the color you play (0 = white, 1 = black)
+     */
+    void startGame(String color) {
+        game = new ClientGame(this, !color.equals("0"));
+        connectionThread.setGame(game);
     }
 
 }

@@ -1,9 +1,6 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package eu.assault2142.hololol.chess.client.networking;
 
+import eu.assault2142.hololol.chess.client.game.ClientGame;
 import eu.assault2142.hololol.chess.client.menus.MainMenu;
 import eu.assault2142.hololol.chess.client.translator.Translator;
 import eu.assault2142.hololol.chess.game.chessmen.Bishop;
@@ -13,20 +10,29 @@ import eu.assault2142.hololol.chess.game.chessmen.Pawn;
 import eu.assault2142.hololol.chess.game.chessmen.Queen;
 import eu.assault2142.hololol.chess.game.chessmen.Rook;
 import eu.assault2142.hololol.chess.networking.ConnectionThread;
+import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 /**
+ * Consumes inputs from the server
  *
- * @author jojo
+ * @author hololol2
  */
 public class ServerConnectionThread extends ConnectionThread {
 
     private final ServerConnection client;
+    private ClientGame game;
 
-    public ServerConnectionThread(ServerConnection c) {
-        super(c.getScanner());
+    /**
+     * Create a new ServerConnectionThread
+     *
+     * @param c the connection to the scanner
+     * @param scanner the scanner for the inputs
+     */
+    public ServerConnectionThread(ServerConnection c, Scanner scanner) {
+        super(scanner);
         this.client = c;
         consumers.add(this::consumeAccount);
         consumers.add(this::consumeCheckStaleMate);
@@ -39,6 +45,15 @@ public class ServerConnectionThread extends ConnectionThread {
         consumers.add(this::consumePromotion);
         consumers.add(this::consumeResignation);
         consumers.add(this::consumeStartGame);
+    }
+
+    /**
+     * Sets the game
+     *
+     * @param game the game
+     */
+    void setGame(ClientGame game) {
+        this.game = game;
     }
 
     @Override
@@ -87,9 +102,9 @@ public class ServerConnectionThread extends ConnectionThread {
         } else if (message[0].equals("request") && length == 2) {
             int addfriend = JOptionPane.showConfirmDialog(null, message[1] + Translator.getBundle().getString("FRIENDREQ_ADD_TEXT"), Translator.getBundle().getString("FRIENDREQ_ADD_HEAD"), JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
             if (addfriend == JOptionPane.NO_OPTION) {
-                client.declineFriendRequest(message[1]);
+                client.write(ServerMessages.FriendsReject, new Object[]{message[1]});
             } else {
-                client.acceptFriendRequest(message[1]);
+                client.write(ServerMessages.FriendsAccept, new Object[]{message[1]});
             }
         }
     }
@@ -103,13 +118,13 @@ public class ServerConnectionThread extends ConnectionThread {
                 String str = message[1];
                 int selected = JOptionPane.showConfirmDialog(MainMenu.MAINMENU, java.text.MessageFormat.format(Translator.getBundle().getString("GAME_START?_TEXT"), new Object[]{str}), Translator.getBundle().getString("GAME_START?_HEAD"), JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
                 if (selected == JOptionPane.YES_OPTION) {
-                    client.acceptChallenge(str);
+                    client.write(ServerMessages.AcceptChallenge, new Object[]{str});
                 } else {
-                    client.declineChallenge(str);
+                    client.write(ServerMessages.DeclineChallenge, new Object[]{str});
                 }
             }
         } else if (message[0].equals("gamestart") && length == 2) {
-            //client.g = new LocalGame(client, Integer.parseInt(message[1]));
+            client.startGame(message[1]);
         }
     }
 
@@ -122,7 +137,7 @@ public class ServerConnectionThread extends ConnectionThread {
             //Chessman f = client.g.getSquares()[a].occupier;
             //client.g.getGameSituation().getAbstractChessmen(f.isBlack())[f.getPositionInArray()].addMove(new Move(x, y, f));
             //f.doMove(x, y);
-            client.g.getGameFrame().getGameBoard().movementsupdating = true;
+            game.getGameFrame().getGameBoard().movementsupdating = true;
             //client.g.updateGameSituation();
         } else if (message[0].equals("capture") && length == 4) {
             int a = Integer.parseInt(message[1]);
@@ -131,7 +146,7 @@ public class ServerConnectionThread extends ConnectionThread {
             //Chessman f = client.g.getSquares()[a].occupier;
             //client.g.getGameSituation().getAbstractChessmen(f.isBlack())[f.getPositionInArray()].addCapture(new Move(x, y, f));
             //f.doCapture(x, y);
-            client.g.getGameFrame().getGameBoard().movementsupdating = true;
+            game.getGameFrame().getGameBoard().movementsupdating = true;
             //client.g.updateGameSituation();
         }
     }
@@ -141,9 +156,9 @@ public class ServerConnectionThread extends ConnectionThread {
             Runnable checkimage = () -> {
                 try {
                     Thread.sleep(100);
-                    client.g.getGameFrame().getGameBoard().check = true;
+                    game.getGameFrame().getGameBoard().check = true;
                     Thread.sleep(3000);
-                    client.g.getGameFrame().getGameBoard().check = false;
+                    game.getGameFrame().getGameBoard().check = false;
                 } catch (InterruptedException ex) {
                     Logger.getLogger(ServerConnectionThread.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -154,11 +169,11 @@ public class ServerConnectionThread extends ConnectionThread {
             //Checkmate
             //InfoFrame f=new InfoFrame(gewinner+Start.START.texte[Start.START.einstellungen.sprache][3],200,100,true);
             //f.setVisible(true);
-            client.g.getGameFrame().setVisible(false);
+            game.getGameFrame().setVisible(false);
         } else if (message[0].equals("stalemate")) {
             JOptionPane.showMessageDialog(null, Translator.getBundle().getString("DRAW_TEXT"), Translator.getBundle().getString("DRAW_HEAD"), JOptionPane.INFORMATION_MESSAGE);
 
-            client.g.getGameFrame().setVisible(false);
+            game.getGameFrame().setVisible(false);
         }
     }
 
@@ -183,7 +198,7 @@ public class ServerConnectionThread extends ConnectionThread {
                         String fn = str[a].substring(2);
                         int f = Integer.parseInt(fn);
 
-                        client.g.getGameSituation().getAbstractChessmen(color)[f].addMove(new Move(posx, posy, client.g.getFiguren(color)[f]));
+                        game.getGameSituation().getAbstractChessmen(color)[f].addMove(new Move(posx, posy, game.getFiguren(color)[f]));
                     }
                 }
             } else {
@@ -197,12 +212,12 @@ public class ServerConnectionThread extends ConnectionThread {
                         int posy = Integer.parseInt(y);
                         String fn = str[a].substring(2);
                         int f = Integer.parseInt(fn);
-                        client.g.getGameSituation().getAbstractChessmen(color)[f].addCapture(new Move(posx, posy, client.g.getFiguren(color)[f]));
+                        game.getGameSituation().getAbstractChessmen(color)[f].addCapture(new Move(posx, posy, game.getFiguren(color)[f]));
                     }
                 }
             }
-            client.g.getGameFrame().getGameBoard().movementsupdating = false;
-            client.g.resetFields();
+            game.getGameFrame().getGameBoard().movementsupdating = false;
+            game.resetFields();
         }
     }
 
@@ -214,7 +229,7 @@ public class ServerConnectionThread extends ConnectionThread {
             } else {
                 JOptionPane.showMessageDialog(null, Translator.getBundle().getString("RESIGNATION_SELF_TEXT"), Translator.getBundle().getString("RESIGNATION_SELF_HEAD"), JOptionPane.INFORMATION_MESSAGE);
             }
-            client.g.getGameFrame().setVisible(false);
+            game.getGameFrame().setVisible(false);
         }
     }
 
@@ -226,7 +241,7 @@ public class ServerConnectionThread extends ConnectionThread {
 
             } else {
                 JOptionPane.showMessageDialog(MainMenu.MAINMENU, Translator.getBundle().getString("DRAW_TEXT"), Translator.getBundle().getString("DRAW_HEAD"), JOptionPane.INFORMATION_MESSAGE);
-                client.g.getGameFrame().setVisible(false);
+                game.getGameFrame().setVisible(false);
             }
         }
     }
@@ -245,16 +260,16 @@ public class ServerConnectionThread extends ConnectionThread {
             }
             switch (Integer.parseInt(message[2])) {
                 case 0:
-                    client.g.getFiguren(color)[nummerinarray] = Rook.promotion((Pawn) client.g.getFiguren(color)[nummerinarray], client.g);
+                    game.getFiguren(color)[nummerinarray] = Rook.promotion((Pawn) game.getFiguren(color)[nummerinarray], game);
                     break;
                 case 1:
-                    client.g.getFiguren(color)[nummerinarray] = Knight.promotion((Pawn) client.g.getFiguren(color)[nummerinarray], client.g);
+                    game.getFiguren(color)[nummerinarray] = Knight.promotion((Pawn) game.getFiguren(color)[nummerinarray], game);
                     break;
                 case 2:
-                    client.g.getFiguren(color)[nummerinarray] = Bishop.promotion((Pawn) client.g.getFiguren(color)[nummerinarray], client.g);
+                    game.getFiguren(color)[nummerinarray] = Bishop.promotion((Pawn) game.getFiguren(color)[nummerinarray], game);
                     break;
                 case 3:
-                    client.g.getFiguren(color)[nummerinarray] = Queen.promotion((Pawn) client.g.getFiguren(color)[nummerinarray], client.g);
+                    game.getFiguren(color)[nummerinarray] = Queen.promotion((Pawn) game.getFiguren(color)[nummerinarray], game);
                     break;
             }
         }
@@ -269,7 +284,7 @@ public class ServerConnectionThread extends ConnectionThread {
             } else {
                 color = false;
             }
-            JOptionPane.showInputDialog(client.getGame().getGameFrame(), Translator.getBundle().getString("PROMOTION_TEXT"), Translator.getBundle().getString("PROMOTION_HEAD"), JOptionPane.QUESTION_MESSAGE, null, new String[]{Translator.getBundle().getString("CHESSMAN_QUEEN"), Translator.getBundle().getString("CHESSMAN_ROOK"), Translator.getBundle().getString("CHESSMAN_KNIGHT"), Translator.getBundle().getString("CHESSMAN_BISHOP")}, Translator.getBundle().getString("CHESSMAN_QUEEN"));
+            JOptionPane.showInputDialog(game.getGameFrame(), Translator.getBundle().getString("PROMOTION_TEXT"), Translator.getBundle().getString("PROMOTION_HEAD"), JOptionPane.QUESTION_MESSAGE, null, new String[]{Translator.getBundle().getString("CHESSMAN_QUEEN"), Translator.getBundle().getString("CHESSMAN_ROOK"), Translator.getBundle().getString("CHESSMAN_KNIGHT"), Translator.getBundle().getString("CHESSMAN_BISHOP")}, Translator.getBundle().getString("CHESSMAN_QUEEN"));
         }
     }
 }

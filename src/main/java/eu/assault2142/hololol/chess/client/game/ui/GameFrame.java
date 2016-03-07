@@ -2,6 +2,7 @@ package eu.assault2142.hololol.chess.client.game.ui;
 
 import eu.assault2142.hololol.chess.client.game.ClientGame;
 import eu.assault2142.hololol.chess.client.menus.MainMenu;
+import eu.assault2142.hololol.chess.client.networking.ServerMessages;
 import eu.assault2142.hololol.chess.client.translator.Translator;
 import eu.assault2142.hololol.chess.game.Game;
 import java.awt.*;
@@ -118,10 +119,10 @@ public class GameFrame extends JFrame implements MouseListener {
             JButton jb1 = new JButton(Translator.getBundle().getString("GAME_BUTTON_DRAW"));
             JButton jb2 = new JButton(Translator.getBundle().getString("GAME_BUTTON_RESIGNATION"));
             jb1.addActionListener((ActionEvent e) -> {
-                ((ClientGame) game).getConnection().offerDraw();
+                ((ClientGame) game).getConnection().write(ServerMessages.OfferDraw, null);
             });
             jb2.addActionListener((ActionEvent e) -> {
-                ((ClientGame) game).getConnection().resignate();
+                ((ClientGame) game).getConnection().write(ServerMessages.Resignation, null);
             });
             addComponent(jb1, 1, 9, 1, 1, 1, 1);
             addComponent(jb2, 2, 9, 1, 1, 1, 1);
