@@ -1,10 +1,8 @@
 package eu.assault2142.hololol.chess.server.networking;
 
-import eu.assault2142.hololol.chess.game.GameSituation;
-import eu.assault2142.hololol.chess.game.chessmen.Move;
+import eu.assault2142.hololol.chess.game.ServerGame;
 import eu.assault2142.hololol.chess.networking.GameClientConnection;
 import eu.assault2142.hololol.chess.server.exceptions.UnknownUserException;
-import eu.assault2142.hololol.chess.game.ServerGame;
 import eu.assault2142.hololol.chess.server.user.User;
 import eu.assault2142.hololol.chess.server.util.Log;
 import java.io.IOException;
@@ -16,11 +14,11 @@ import java.util.Scanner;
  *
  * @author hololol2
  */
-public class ClientConnection extends GameClientConnection{
+public class ClientConnection extends GameClientConnection {
 
     private Socket socket;
     private Server server;
-    private final ConnectionThread reader;
+    private final ClientConnectionThread reader;
     private Scanner scanner;
     private PrintWriter printwriter;
     private boolean white;
@@ -37,7 +35,7 @@ public class ClientConnection extends GameClientConnection{
         } catch (IOException ex) {
             Log.MAINLOG.log(ex.getMessage());
         }
-        reader = new ConnectionThread(this, server);
+        reader = new ClientConnectionThread(this, server);
     }
 
     public User getUser() {
@@ -69,8 +67,6 @@ public class ClientConnection extends GameClientConnection{
         this.game = game;
     }
 
-    
-
     public void wrongUsername() {
         write("loginerror:username");
     }
@@ -94,8 +90,6 @@ public class ClientConnection extends GameClientConnection{
     public void wrongPassword() {
         write("loginerror:password");
     }
-
-    
 
     void hello() {
         write("hello");

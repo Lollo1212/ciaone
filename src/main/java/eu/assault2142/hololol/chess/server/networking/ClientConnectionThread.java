@@ -9,12 +9,12 @@ import eu.assault2142.hololol.chess.server.util.Log;
  *
  * @author hololol2
  */
-public class ConnectionThread extends GameConnectionThread {
+public class ClientConnectionThread extends GameConnectionThread {
 
     private final ClientConnection connection;
     private final Server server;
 
-    public ConnectionThread(ClientConnection serverclient, Server server) {
+    public ClientConnectionThread(ClientConnection serverclient, Server server) {
         super(serverclient);
         this.connection = serverclient;
         this.server = server;
