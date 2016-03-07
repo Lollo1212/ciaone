@@ -253,11 +253,8 @@ public class ServerConnectionThread extends ConnectionThread {
             int nummerinarray = Integer.parseInt(message[2]);
             String co = message[1];
             boolean color;
-            if (client.equals("0")) {
-                color = true;
-            } else {
-                color = false;
-            }
+            color = co.equals("0");
+            game.promotion((Pawn) game.getFiguren(color)[nummerinarray]);
             switch (Integer.parseInt(message[2])) {
                 case 0:
                     game.getFiguren(color)[nummerinarray] = Rook.promotion((Pawn) game.getFiguren(color)[nummerinarray], game);
