@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package eu.assault2142.hololol.chess.client.game;
 
 import eu.assault2142.hololol.chess.client.game.ui.GameFrame;
@@ -23,24 +18,32 @@ import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 
 /**
+ * A Game which is completely played locally
  *
- * @author jojo
+ * @author hololol2
  */
 public class LocalGame extends Game {
 
-    private GameFrame p;
-    public boolean bot;
+    private final GameFrame gameframe;
     private Chessman picked;
     private Square selected;
 
-    public LocalGame() {//Lokales Spiel
+    /**
+     * Start a new LocalGame
+     */
+    public LocalGame() {
         super(TYPE.LOCAL);
-        p = new GameFrame(this);
+        gameframe = new GameFrame(this);
         new ClientMovementUpdater(this).start();
     }
 
+    /**
+     * Return the frame of the game
+     *
+     * @return the frame the game is played in
+     */
     public GameFrame getGameFrame() {
-        return p;
+        return gameframe;
     }
 
     @Override
@@ -60,7 +63,7 @@ public class LocalGame extends Game {
     @Override
     public void promotion(Pawn pawn) {
         Chessman man;
-        String promotion = (String) JOptionPane.showInputDialog(p, Translator.getBundle().getString("PROMOTION_HEAD"), Translator.getBundle().getString("PROMOTION_TEXT"), JOptionPane.QUESTION_MESSAGE, null, new String[]{Translator.getBundle().getString("CHESSMAN_QUEEN"), Translator.getBundle().getString("CHESSMAN_ROOK"), Translator.getBundle().getString("CHESSMAN_KNIGHT"), Translator.getBundle().getString("CHESSMAN_BISHOP")}, Translator.getBundle().getString("CHESSMAN_QUEEN"));
+        String promotion = (String) JOptionPane.showInputDialog(gameframe, Translator.getBundle().getString("PROMOTION_HEAD"), Translator.getBundle().getString("PROMOTION_TEXT"), JOptionPane.QUESTION_MESSAGE, null, new String[]{Translator.getBundle().getString("CHESSMAN_QUEEN"), Translator.getBundle().getString("CHESSMAN_ROOK"), Translator.getBundle().getString("CHESSMAN_KNIGHT"), Translator.getBundle().getString("CHESSMAN_BISHOP")}, Translator.getBundle().getString("CHESSMAN_QUEEN"));
         switch (promotion) {
             //bei lokalem Spiel wird der Bauer direkt gesetzt,
             //bei Serverbasiertem senden der Daten an den Server
@@ -86,7 +89,7 @@ public class LocalGame extends Game {
     @Override
     public void finishedCalcs() {
 
-        p.getGameField().movementsupdating = false;
+        gameframe.getGameField().movementsupdating = false;
     }
 
     @Override
@@ -101,6 +104,11 @@ public class LocalGame extends Game {
         showPossibleMoves();
     }
 
+    /**
+     * Assemble the CastlingMove which is currently selected
+     *
+     * @return the assembled CastlingMove
+     */
     private CastlingMove getCastlingMove() {
         Rook t;
         int tx;
@@ -116,14 +124,16 @@ public class LocalGame extends Game {
         return new CastlingMove(selected.getX(), selected.getY(), t, tx, ty, (King) picked);
     }
 
+    /**
+     * Execute the selected Move or Capture if it is possible
+     */
     private void doMoveIfPossible() {
         if (selected != null) {
-            selected.highlight(Square.HIGHLIGHT.SELECTED);//angeklicktes Feld in Cyan färben
-            if (picked != null) {//beim letzten Klick wurde Figur angeklickt und lokales Spiel
+            selected.highlight(Square.HIGHLIGHT.SELECTED);
+            if (picked != null) {
                 picked.doMove(selected.getX(), selected.getY());
                 picked.doCapture(selected.getX(), selected.getY());
 
-                //Rochade
                 if (picked.getClass() == King.class) {
                     ((King) picked).doCastling(getCastlingMove(), getGameSituation());
                 }
@@ -132,8 +142,11 @@ public class LocalGame extends Game {
         }
     }
 
+    /**
+     * Show all possible Moves for the currently selected chessman
+     */
     private void showPossibleMoves() {
-        if (selected.occupier != null) {//Anzeigen der Bewegungsmöglichkeiten für nächsten Zug
+        if (selected.occupier != null) {
             picked = selected.occupier;
             Move[] bewegungen = getGameSituation().getAbstractChessmen(picked.isBlack())[picked.getPositionInArray()].getMoves();
             Move[] schläge = getGameSituation().getAbstractChessmen(picked.isBlack())[picked.getPositionInArray()].getCaptures();

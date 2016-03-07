@@ -1,26 +1,28 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package eu.assault2142.hololol.chess.client.game;
 
 import eu.assault2142.hololol.chess.game.Game;
 import eu.assault2142.hololol.chess.game.MovementUpdater;
 
 /**
+ * Updates the possible moves and captures after each turn. Also checks for
+ * check/checkmate/stalemate-situations.
  *
- * @author jojo
+ * @author hololol2
  */
-public class ClientMovementUpdater extends MovementUpdater{
-    
+public class ClientMovementUpdater extends MovementUpdater {
+
+    /**
+     * Create a new Instance
+     *
+     * @param g the game to update
+     */
     public ClientMovementUpdater(Game g) {
         super(g);
     }
-    
+
     @Override
-    public void onStart(){
-        ((LocalGame)getGame()).getGameFrame().getGameField().movementsupdating=true;
+    public void onStart() {
+        ((LocalGame) getGame()).getGameFrame().getGameField().movementsupdating = true;
     }
 
     @Override
@@ -38,5 +40,4 @@ public class ClientMovementUpdater extends MovementUpdater{
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    
 }

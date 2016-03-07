@@ -7,31 +7,41 @@ import eu.assault2142.hololol.chess.game.chessmen.Chessman;
 import eu.assault2142.hololol.chess.game.chessmen.Pawn;
 import java.awt.EventQueue;
 import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
 
 /**
+ * A client-game for a game played on a server
  *
  * @author hololol2
  */
 public class ClientGame extends Game {
 
-    private GameFrame p;
+    private GameFrame gameframe;
     private ServerConnection client = null;
 
-    public ClientGame(ServerConnection c, final int farbe) {//Spiel eines Clienten
+    /**
+     * Create a new ClientGame
+     *
+     * @param c the connection to the server
+     * @param color the color you play (true -> black)
+     */
+    public ClientGame(ServerConnection c, boolean color) {//Spiel eines Clienten
         super(TYPE.CLIENT);
         client = c;
         final ClientGame g = this;
-        EventQueue.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                p = new GameFrame(g);
-                if (farbe == 0) {
-                    //p.write(Start.START.texte[Start.START.einstellungen.sprache][37]+Start.START.texte[Start.START.einstellungen.sprache][0]);
-                } else {
-                    //p.write(Start.START.texte[Start.START.einstellungen.sprache][37]+Start.START.texte[Start.START.einstellungen.sprache][1]);
-                }
-            }
+        EventQueue.invokeLater(() -> {
+            gameframe = new GameFrame(g);
+            JOptionPane.showConfirmDialog(gameframe, "Your color is ", "Info", JOptionPane.OK_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE);
         });
+    }
+
+    /**
+     * Returns the connection to the server
+     *
+     * @return the connection to the server
+     */
+    public ServerConnection getConnection() {
+        return client;
     }
 
     @Override
@@ -47,22 +57,14 @@ public class ClientGame extends Game {
     public void updateMovements() {
     }
 
-    public ServerConnection getClient() {
-        return client;
-    }
-
     @Override
     public void promotion(Pawn pawn) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    public ServerConnection getConnection() {
-        return client;
-    }
-
     @Override
     public void finishedCalcs() {
-        p.getGameField().movementsupdating = false;
+        gameframe.getGameField().movementsupdating = false;
     }
 
     @Override
