@@ -23,9 +23,9 @@ public class ClientMovementUpdater extends MovementUpdater {
     @Override
     public void onStart() {
         if (getGame().getClass() == LocalGame.class) {
-            ((LocalGame) getGame()).getGameFrame().getGameField().movementsupdating = true;
+            ((LocalGame) getGame()).getGameFrame().getGameBoard().movementsupdating = true;
         } else {
-            ((ClientGame) getGame()).getGameFrame().getGameField().movementsupdating = true;
+            ((ClientGame) getGame()).getGameFrame().getGameBoard().movementsupdating = true;
         }
     }
 

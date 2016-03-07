@@ -1,14 +1,9 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package eu.assault2142.hololol.chess.client.game.ui;
 
 import eu.assault2142.hololol.chess.client.game.ClientGame;
 import eu.assault2142.hololol.chess.client.menus.MainMenu;
 import eu.assault2142.hololol.chess.client.translator.Translator;
 import eu.assault2142.hololol.chess.game.Game;
-import eu.assault2142.hololol.chess.game.chessmen.Chessman;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
@@ -19,55 +14,79 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 
 /**
+ * The Frame in which the game is played. Contains the GameBoard and some
+ * additional information and buttons
  *
- * @author jojo
+ * @author hololol2
  */
-public class GameFrame extends JFrame implements MouseListener {//Frame, in dem das Schachfeld eingebettet ist
+public class GameFrame extends JFrame implements MouseListener {
 
     private final GridBagLayout layout;
     private final GridBagConstraints constraints;
     private final Game game;
-    private static Chessman picked = null;//beim letzten Klick angecklickte Figur
-    private int squarelength;//Länge eines Kästchen auf dem Schachfeld
-    private GameField gamefield;
+    private int squarelength;
+    private GameBoard gamefield;
     public boolean focus = true;
 
-    public GameFrame(Game gr) {
+    /**
+     * Create a new GameFrame
+     *
+     * @param g the game to display
+     */
+    public GameFrame(Game g) {
         super();
-        game = gr;
+        game = g;
         layout = new GridBagLayout();
         constraints = new GridBagConstraints();
         init();
     }
 
+    /**
+     * Initializes the GameFrame
+     */
     private void init() {
-        Dimension screensize = Toolkit.getDefaultToolkit().getScreenSize();//Bildschirmgröße
+        Dimension screensize = Toolkit.getDefaultToolkit().getScreenSize();
         double height = screensize.getHeight();
         double width = screensize.getWidth();
         int h = (int) height;
         int w = (int) width;
-        squarelength = Math.min(h / 9, w / 12);//Berechenen einer Kästchenlänge
-        this.setExtendedState(MAXIMIZED_BOTH);//Maximieren
-        setUndecorated(true);//"Rand" entfernen
+        squarelength = Math.min(h / 9, w / 12);
+        this.setExtendedState(MAXIMIZED_BOTH);
+        setUndecorated(true);
         setLayout(layout);
         setVisible(true);
+        initComponents();
     }
 
-    public void write(String text) {
-    }
-
-    public GameField getGameField() {
+    /**
+     * Returns the GameBoard
+     *
+     * @return the GameBoard to play on
+     */
+    public GameBoard getGameBoard() {
         return gamefield;
     }
 
-    public int getFieldLength() {
+    /**
+     * Returns the length of a square
+     *
+     * @return the length of one square of the board
+     */
+    public int getSquareLength() {
         return squarelength;
     }
 
-    public Game getGame() {
-        return game;
-    }
-
+    /**
+     * Adds a component at the specified position
+     *
+     * @param component the component to add
+     * @param gridx the x-position
+     * @param gridy the y-positon
+     * @param weightx the weight in x-direction
+     * @param weighty the weight in y-direction
+     * @param gridheight the height in y-direction
+     * @param gridwidth the width in x-direction
+     */
     private void addComponent(JComponent component, int gridx, int gridy, int weightx, int weighty, int gridheight, int gridwidth) {
         constraints.gridx = gridx;
         constraints.gridy = gridy;
@@ -79,9 +98,12 @@ public class GameFrame extends JFrame implements MouseListener {//Frame, in dem 
         add(component);
     }
 
+    /**
+     * Initializes the components like buttons etc.
+     */
     private void initComponents() {
         constraints.fill = GridBagConstraints.BOTH;
-        gamefield = new GameField(this);
+        gamefield = new GameBoard(this, game);
         addComponent(gamefield, 0, 0, 10, 10, 8, GridBagConstraints.REMAINDER);
         JLabel turn = new JLabel("");
         addComponent(turn, 0, 9, 10, 1, 8, 1);

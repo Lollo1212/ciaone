@@ -89,7 +89,7 @@ public class LocalGame extends Game {
     @Override
     public void finishedCalcs() {
 
-        gameframe.getGameField().movementsupdating = false;
+        gameframe.getGameBoard().movementsupdating = false;
     }
 
     @Override

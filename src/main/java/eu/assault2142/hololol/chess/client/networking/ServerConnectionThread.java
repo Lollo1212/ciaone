@@ -122,7 +122,7 @@ public class ServerConnectionThread extends ConnectionThread {
             //Chessman f = client.g.getSquares()[a].occupier;
             //client.g.getGameSituation().getAbstractChessmen(f.isBlack())[f.getPositionInArray()].addMove(new Move(x, y, f));
             //f.doMove(x, y);
-            client.g.getGameFrame().getGameField().movementsupdating = true;
+            client.g.getGameFrame().getGameBoard().movementsupdating = true;
             //client.g.updateGameSituation();
         } else if (message[0].equals("capture") && length == 4) {
             int a = Integer.parseInt(message[1]);
@@ -131,7 +131,7 @@ public class ServerConnectionThread extends ConnectionThread {
             //Chessman f = client.g.getSquares()[a].occupier;
             //client.g.getGameSituation().getAbstractChessmen(f.isBlack())[f.getPositionInArray()].addCapture(new Move(x, y, f));
             //f.doCapture(x, y);
-            client.g.getGameFrame().getGameField().movementsupdating = true;
+            client.g.getGameFrame().getGameBoard().movementsupdating = true;
             //client.g.updateGameSituation();
         }
     }
@@ -141,9 +141,9 @@ public class ServerConnectionThread extends ConnectionThread {
             Runnable checkimage = () -> {
                 try {
                     Thread.sleep(100);
-                    client.g.getGameFrame().getGameField().check = true;
+                    client.g.getGameFrame().getGameBoard().check = true;
                     Thread.sleep(3000);
-                    client.g.getGameFrame().getGameField().check = false;
+                    client.g.getGameFrame().getGameBoard().check = false;
                 } catch (InterruptedException ex) {
                     Logger.getLogger(ServerConnectionThread.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -201,7 +201,7 @@ public class ServerConnectionThread extends ConnectionThread {
                     }
                 }
             }
-            client.g.getGameFrame().getGameField().movementsupdating = false;
+            client.g.getGameFrame().getGameBoard().movementsupdating = false;
             client.g.resetFields();
         }
     }
