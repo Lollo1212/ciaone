@@ -44,6 +44,15 @@ public class ClientGame extends Game {
         return client;
     }
 
+    /**
+     * Return the frame of the game
+     *
+     * @return the frame the game is played in
+     */
+    public GameFrame getGameFrame() {
+        return gameframe;
+    }
+
     @Override
     public ImageIcon getImage(Chessman.NAMES name, boolean black) {
         String color = "white";
