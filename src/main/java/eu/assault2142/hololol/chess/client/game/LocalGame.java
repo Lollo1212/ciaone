@@ -169,13 +169,14 @@ public class LocalGame extends Game {
 
     @Override
     public void onCheckMate() {
-        JOptionPane.showMessageDialog(gameframe, "Schachmatt!","Schachmatt",JOptionPane.INFORMATION_MESSAGE);
+        JOptionPane.showMessageDialog(gameframe, "Checkmate!", "Checkmate", JOptionPane.INFORMATION_MESSAGE);
         this.endGame();
     }
 
     @Override
     public void onStaleMate() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        JOptionPane.showMessageDialog(gameframe, "Stalemate!", "Stalemate", JOptionPane.INFORMATION_MESSAGE);
+        this.endGame();
     }
 
     @Override

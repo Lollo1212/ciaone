@@ -5,14 +5,11 @@
  */
 package eu.assault2142.hololol.chess.game;
 
-import eu.assault2142.hololol.chess.game.Game;
-import eu.assault2142.hololol.chess.game.MovementUpdater;
-
 /**
  *
  * @author jojo
  */
-public class ServerMovementUpdater extends MovementUpdater{
+public class ServerMovementUpdater extends MovementUpdater {
 
     public ServerMovementUpdater(Game g) {
         super(g);
@@ -20,12 +17,18 @@ public class ServerMovementUpdater extends MovementUpdater{
 
     @Override
     protected void onStart() {
-        
+
     }
 
     @Override
     public void testCheck() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-    
+
+    @Override
+    public void run() {
+        updateMovements();
+        testCheck();
+    }
+
 }

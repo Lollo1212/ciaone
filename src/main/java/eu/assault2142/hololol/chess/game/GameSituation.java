@@ -48,7 +48,7 @@ public class GameSituation {
         }
         chessmenBlackAbstract = new AbstractChessman[16];
         chessmenWhiteAbstract = new AbstractChessman[16];
-        blackturn = true;
+        blackturn = false;
         this.game = game;
 
         chessmenBlack = game.buildChessmen(true, squares);

@@ -29,6 +29,22 @@ public class ClientMovementUpdater extends MovementUpdater {
         }
     }
 
-    
+    @Override
+    public void run() {
+        Runnable wait = () -> {
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException ex) {
+            }
+        };
+        Thread waitthread = new Thread(wait);
+        waitthread.start();
+        updateMovements();
+        try {
+            waitthread.join();
+        } catch (InterruptedException ex) {
+        }
+        testCheck();
+    }
 
 }
