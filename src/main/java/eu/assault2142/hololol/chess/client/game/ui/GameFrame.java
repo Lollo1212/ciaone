@@ -57,6 +57,7 @@ public class GameFrame extends JFrame implements MouseListener {
         setLayout(layout);
         setVisible(true);
         initComponents();
+        addMouseListener(this);
     }
 
     /**
@@ -136,7 +137,6 @@ public class GameFrame extends JFrame implements MouseListener {
     @Override
     public void mousePressed(MouseEvent e) {
         if (e.getClickCount() == 1 && !gamefield.movementsupdating && focus) {//Abfangen von Mehrfachklicks
-
             game.resetFields();
 
             game.clickAt(e.getX() / squarelength, e.getY() / squarelength);
