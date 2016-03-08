@@ -14,6 +14,12 @@ public abstract class Game {
 
     public abstract void clickAt(int feldx, int feldy);
 
+    public abstract void onCheckMate();
+
+    public abstract void onStaleMate();
+
+    public abstract void onCheck();
+
     
     
     public static enum TYPE {LOCAL,SERVER,CLIENT};

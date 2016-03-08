@@ -166,4 +166,29 @@ public class LocalGame extends Game {
 
         }
     }
+
+    @Override
+    public void onCheckMate() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void onStaleMate() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void onCheck() {
+        Runnable checkimage = () -> {
+            try {
+                Thread.sleep(100);
+                getGameFrame().getGameBoard().check = true;
+                Thread.sleep(3000);
+                getGameFrame().getGameBoard().check = false;
+            } catch (InterruptedException ex) {
+
+            }
+        };
+        new Thread(checkimage).start();
+    }
 }

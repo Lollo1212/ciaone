@@ -247,7 +247,7 @@ public abstract class Chessman {
         if (square != null) {
             if(square.isOccupiedByColor(!black)){
                 captures.add(new Move(posx , posy , this));
-                return true;
+                return false;
             }
             return !square.isOccupied();
         }

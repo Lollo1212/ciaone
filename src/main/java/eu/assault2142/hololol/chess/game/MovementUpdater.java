@@ -99,13 +99,13 @@ public abstract class MovementUpdater extends Thread{//Berechnet nach jedem Zug 
         }
         if(schachmatt){
             if(schach){
-                onCheckMate();
+                g.onCheckMate();
             }else{
-                onStaleMate();
+                g.onStaleMate();
             }
         }else{
             if(schach){
-                onCheck();
+                g.onCheck();
             }
         }
         /*if (schach && !g.isServer()) {
@@ -173,8 +173,4 @@ public abstract class MovementUpdater extends Thread{//Berechnet nach jedem Zug 
         //}
         g.finishedCalcs();
     }
-    
-    protected abstract void onCheck();
-    protected abstract void onCheckMate();
-    protected abstract void onStaleMate();
 }
