@@ -88,7 +88,7 @@ public class LocalGame extends Game {
 
     @Override
     public void finishedCalcs() {
-
+        resetFields();
         gameframe.getGameBoard().movementsupdating = false;
     }
 
