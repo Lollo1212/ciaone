@@ -73,9 +73,9 @@ public abstract class MovementUpdater extends Thread{//Berechnet nach jedem Zug 
     public void testCheck() {
         Move[] schläge = g.getGameSituation().getAllCaptures(!g.getTurn());
         //wenn ziel König ist, dann Schach
-        for (int a = 0; a < schläge.length; a++) {
-            if (schläge[a] != null) {
-                Square f = g.getSquares()[10 * schläge[a].getTargetX() + schläge[a].getTargetY()];
+        for (Move schläge1 : schläge) {
+            if (schläge1 != null) {
+                Square f = g.getSquare(schläge1.getTargetX(),schläge1.getTargetY());
                 if (f.occupier.getClass() == King.class) {
                     schach = true;
                     break;

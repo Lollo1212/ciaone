@@ -179,6 +179,7 @@ public class LocalGame extends Game {
 
     @Override
     public void onCheck() {
+        System.out.println("Schach");
         Runnable checkimage = () -> {
             try {
                 Thread.sleep(100);

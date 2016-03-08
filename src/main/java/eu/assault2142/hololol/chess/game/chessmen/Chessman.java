@@ -4,6 +4,7 @@ import eu.assault2142.hololol.chess.game.Square;
 import eu.assault2142.hololol.chess.game.Game;
 import eu.assault2142.hololol.chess.game.GameSituation;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import javax.swing.ImageIcon;
@@ -221,16 +222,18 @@ public abstract class Chessman {
         game.nextTurn();
     }
 
-    protected void removeCheckMoves(List<Move> moves, GameSituation situation) {
+    protected LinkedList<Move> removeCheckMoves(List<Move> moves, GameSituation situation) {
         GameSituation gsneu;
-        Move[] schlägegegner;
-        Move[] bewegungengegner;
+        LinkedList<Move> ret = new LinkedList();
         for (int c = 0; c < moves.size(); c++) {
             gsneu = situation.doMove(this, moves.get(c).targetX, moves.get(c).targetY);
             if (gsneu.dangerForKing(black, gsneu.getAllCaptures(!black))) {
-                moves.remove(c);
+                //moves.remove(c);
+            } else {
+                ret.add(moves.get(c));
             }
         }
+        return ret;
     }
 
     protected boolean addIfMovePossible(List<Move> moves, int posx, int posy,GameSituation situation) {

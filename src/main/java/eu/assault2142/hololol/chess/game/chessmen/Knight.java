@@ -67,7 +67,7 @@ public class Knight extends Chessman {
         addIfMovePossible(moves,posx+1,posy-2,situation);
         addIfMovePossible(moves,posx-1,posy-2,situation);
         if (checkForCheck) {
-            removeCheckMoves(moves,situation);
+            moves = removeCheckMoves(moves,situation);
         }
         Move[] ret = new Move[moves.size()];
         ret = moves.toArray(ret);
@@ -88,7 +88,7 @@ public class Knight extends Chessman {
         
         //Überprüfen auf Schach-Position
         if (checkForChecks) {
-            removeCheckMoves(captures,situation);
+            captures = removeCheckMoves(captures,situation);
         }
         Move[] ret = new Move[captures.size()];
         ret = captures.toArray(ret);

@@ -94,7 +94,7 @@ public class Queen extends Chessman {
         }
         //Überprüfen auf Schach-Position
         if (checkForCheck) {
-            removeCheckMoves(moves, situation);
+            moves = removeCheckMoves(moves, situation);
         }
         Move[] ret = new Move[moves.size()];
         ret = moves.toArray(ret);
@@ -130,7 +130,7 @@ public class Queen extends Chessman {
         }
         //Überprüfen auf Schach-Position
         if (checkForCheck) {
-            removeCheckMoves(captures, situation);
+            captures = removeCheckMoves(captures, situation);
         }
         Move[] ret = new Move[captures.size()];
         ret = captures.toArray(ret);
