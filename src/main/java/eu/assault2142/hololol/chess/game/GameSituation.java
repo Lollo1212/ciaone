@@ -94,7 +94,7 @@ public class GameSituation {
         if (black == true) {
             for (int a = 0; a < 16; a++) {
                 if (!chessmenBlackAbstract[a].isCaptured()) {
-                    Move[] z = chessmenBlackAbstract[a].getClone().computeMoves(false,this);
+                    Move[] z = chessmenBlackAbstract[a].getMoves();
                     m.addAll(Arrays.asList(z));
                     if (a == 15) {
                         Move[] x = ((King) chessmenBlackAbstract[a].getClone()).computeCastlings(false,this);
@@ -105,7 +105,7 @@ public class GameSituation {
         } else {
             for (int a = 0; a < 16; a++) {
                 if (!chessmenBlackAbstract[a].isCaptured()) {
-                    Move[] z = chessmenWhiteAbstract[a].getClone().computeMoves(false,this);
+                    Move[] z = chessmenWhiteAbstract[a].getMoves();
                     m.addAll(Arrays.asList(z));
                     if (a == 15) {
                         Move[] x = ((King) chessmenWhiteAbstract[a].getClone()).computeCastlings(false,this);
@@ -131,14 +131,14 @@ public class GameSituation {
         if (black) {
             for (int a = 0; a < 16; a++) {
                 if (!chessmenBlackAbstract[a].isCaptured()) {
-                    Move[] z = chessmenBlackAbstract[a].getClone().computeCaptures(false,this);
+                    Move[] z = chessmenBlackAbstract[a].getCaptures();
                     m.addAll(Arrays.asList(z));
                 }
             }
         } else {
             for (int a = 0; a < 16; a++) {
                 if (!chessmenWhiteAbstract[a].isCaptured()) {
-                    Move[] z = chessmenWhiteAbstract[a].getClone().computeCaptures(false,this);
+                    Move[] z = chessmenWhiteAbstract[a].getCaptures();
                     m.addAll(Arrays.asList(z));
                 }
             }

@@ -94,7 +94,7 @@ public class LocalGame extends Game {
 
     @Override
     public void endGame() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        gameframe.setVisible(false);
     }
 
     @Override
@@ -169,7 +169,8 @@ public class LocalGame extends Game {
 
     @Override
     public void onCheckMate() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        JOptionPane.showMessageDialog(gameframe, "Schachmatt!","Schachmatt",JOptionPane.INFORMATION_MESSAGE);
+        this.endGame();
     }
 
     @Override

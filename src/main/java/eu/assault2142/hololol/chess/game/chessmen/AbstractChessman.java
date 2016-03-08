@@ -36,6 +36,7 @@ public class AbstractChessman extends Chessman {
     /**
      * Compute next moves and captures
      */
+    
     public void updateMovements() {
         moves = chessman.computeMoves(true,game.getGameSituation());
         captures = chessman.computeCaptures(true,game.getGameSituation());
