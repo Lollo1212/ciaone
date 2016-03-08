@@ -138,16 +138,16 @@ public class MainMenu extends javax.swing.JFrame {
         jButton4 = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
         jTextField2 = new javax.swing.JTextField();
-        jSeparator1 = new javax.swing.JSeparator();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
+        jSeparator2 = new javax.swing.JSeparator();
         jPanel5 = new javax.swing.JPanel();
         jLabel8 = new javax.swing.JLabel();
         jComboBox2 = new javax.swing.JComboBox<>();
         jButton5 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("eu/assault2142/hololol/chess/client/menus/Bundle",locale); // NOI18N
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("eu/assault2142/hololol/chess/client/menus/Bundle"); // NOI18N
         setTitle(bundle.getString("MainMenu.title")); // NOI18N
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         setLocationByPlatform(true);
@@ -172,14 +172,17 @@ public class MainMenu extends javax.swing.JFrame {
         });
 
         buttonGroup1.add(jRadioButton1);
+        jRadioButton1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jRadioButton1.setText(bundle.getString("MainMenu.jRadioButton1.text")); // NOI18N
         jRadioButton1.setEnabled(false);
 
         buttonGroup1.add(jRadioButton2);
+        jRadioButton2.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jRadioButton2.setText(bundle.getString("MainMenu.jRadioButton2.text")); // NOI18N
         jRadioButton2.setEnabled(false);
 
         buttonGroup1.add(jRadioButton3);
+        jRadioButton3.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jRadioButton3.setSelected(true);
         jRadioButton3.setText(bundle.getString("MainMenu.jRadioButton3.text")); // NOI18N
 
@@ -188,26 +191,26 @@ public class MainMenu extends javax.swing.JFrame {
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(jPanel3Layout.createSequentialGroup()
-                .add(70, 70, 70)
-                .add(jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(jRadioButton3)
+                .add(222, 222, 222)
+                .add(jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING, false)
                     .add(jRadioButton2)
+                    .add(jRadioButton3, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .add(jRadioButton1)
-                    .add(jButton6, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 230, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(328, Short.MAX_VALUE))
+                    .add(jButton6, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(260, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel3Layout.createSequentialGroup()
-                .addContainerGap(124, Short.MAX_VALUE)
+                .add(78, 78, 78)
                 .add(jRadioButton3)
-                .add(30, 30, 30)
+                .add(34, 34, 34)
                 .add(jRadioButton2)
-                .add(29, 29, 29)
+                .add(38, 38, 38)
                 .add(jRadioButton1)
-                .add(29, 29, 29)
+                .add(36, 36, 36)
                 .add(jButton6)
-                .add(57, 57, 57))
+                .addContainerGap(95, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab(bundle.getString("MainMenu.jPanel3.TabConstraints.tabTitle"), jPanel3); // NOI18N
@@ -226,8 +229,10 @@ public class MainMenu extends javax.swing.JFrame {
             }
         });
 
+        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel1.setText(bundle.getString("MainMenu.jLabel1.text")); // NOI18N
 
+        jLabel2.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel2.setText(bundle.getString("MainMenu.jLabel2.text")); // NOI18N
 
         jPasswordField1.addActionListener(new java.awt.event.ActionListener() {
@@ -241,32 +246,35 @@ public class MainMenu extends javax.swing.JFrame {
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(jPanel2Layout.createSequentialGroup()
-                .add(64, 64, 64)
-                .add(jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING, false)
-                    .add(jButton1)
-                    .add(jLabel1)
-                    .add(jLabel2)
-                    .add(jPasswordField1)
-                    .add(jCheckBox2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .add(jTextField1))
-                .addContainerGap(502, Short.MAX_VALUE))
+                .add(191, 191, 191)
+                .add(jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(jButton1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 160, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                    .add(jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
+                        .add(jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                            .add(jLabel2)
+                            .add(jPasswordField1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 160, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                            .add(jCheckBox2))
+                        .add(jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                            .add(jLabel1)
+                            .add(jTextField1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 160, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(280, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel2Layout.createSequentialGroup()
-                .add(22, 22, 22)
+                .add(65, 65, 65)
                 .add(jLabel1)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
+                .add(18, 18, 18)
                 .add(jTextField1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .add(33, 33, 33)
+                .add(27, 27, 27)
                 .add(jLabel2)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jPasswordField1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .add(18, 18, 18)
                 .add(jCheckBox2)
                 .add(18, 18, 18)
                 .add(jButton1)
-                .addContainerGap(114, Short.MAX_VALUE))
+                .addContainerGap(107, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab(bundle.getString("MainMenu.jPanel2.TabConstraints.tabTitle"), jPanel2); // NOI18N
@@ -433,11 +441,12 @@ public class MainMenu extends javax.swing.JFrame {
 
         jLabel4.setText(bundle.getString("MainMenu.jLabel4.text")); // NOI18N
 
-        jSeparator1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-
         jLabel5.setText(bundle.getString("MainMenu.jLabel5.text")); // NOI18N
 
         jLabel6.setText(bundle.getString("MainMenu.jLabel6.text")); // NOI18N
+
+        jSeparator2.setOrientation(javax.swing.SwingConstants.VERTICAL);
+        jSeparator2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
         org.jdesktop.layout.GroupLayout jPanel4Layout = new org.jdesktop.layout.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
@@ -451,9 +460,9 @@ public class MainMenu extends javax.swing.JFrame {
                         .add(jButton2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .add(jLabel3, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .add(jButton3))
-                .add(28, 28, 28)
-                .add(jSeparator1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 293, Short.MAX_VALUE)
+                .add(155, 155, 155)
+                .add(jSeparator2, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 2, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 165, Short.MAX_VALUE)
                 .add(jPanel4Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                     .add(jLabel4)
                     .add(jButton4)
@@ -468,7 +477,7 @@ public class MainMenu extends javax.swing.JFrame {
                 .add(jPanel4Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
                     .add(jPanel4Layout.createSequentialGroup()
                         .add(jLabel5)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 75, Short.MAX_VALUE)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 90, Short.MAX_VALUE)
                         .add(jButton2)
                         .add(23, 23, 23))
                     .add(jPanel4Layout.createSequentialGroup()
@@ -486,8 +495,8 @@ public class MainMenu extends javax.swing.JFrame {
                     .add(jPanel4Layout.createSequentialGroup()
                         .add(29, 29, 29)
                         .add(jButton3)))
-                .addContainerGap(104, Short.MAX_VALUE))
-            .add(org.jdesktop.layout.GroupLayout.TRAILING, jSeparator1)
+                .addContainerGap(120, Short.MAX_VALUE))
+            .add(jSeparator2)
         );
 
         jTabbedPane1.addTab(bundle.getString("MainMenu.jPanel4.TabConstraints.tabTitle"), jPanel4); // NOI18N
@@ -509,22 +518,22 @@ public class MainMenu extends javax.swing.JFrame {
             jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(jPanel5Layout.createSequentialGroup()
                 .add(41, 41, 41)
-                .add(jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(jButton5)
+                .add(jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING, false)
                     .add(jLabel8)
-                    .add(jComboBox2, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 180, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                    .add(jComboBox2, 0, 180, Short.MAX_VALUE)
+                    .add(jButton5, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap(410, Short.MAX_VALUE))
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(jPanel5Layout.createSequentialGroup()
-                .add(114, 114, 114)
+                .addContainerGap()
                 .add(jLabel8)
                 .add(18, 18, 18)
                 .add(jComboBox2, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .add(33, 33, 33)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 256, Short.MAX_VALUE)
                 .add(jButton5)
-                .addContainerGap(157, Short.MAX_VALUE))
+                .add(37, 37, 37))
         );
 
         jTabbedPane1.addTab(bundle.getString("MainMenu.jPanel5.TabConstraints.tabTitle"), jPanel5); // NOI18N
@@ -731,7 +740,7 @@ public class MainMenu extends javax.swing.JFrame {
     private javax.swing.JRadioButton jRadioButton3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JSeparator jSeparator2;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTabbedPane jTabbedPane2;
     private javax.swing.JTextArea jTextArea1;
