@@ -117,7 +117,7 @@ public class King extends Chessman {
                 if (kx < posx) {
                     for (int b = posx; b > kx; b--) {
                         gsneu = game.getGameSituation().doMove(this, b, posy);
-                        schläge = gsneu.getAllCaptures(!black);
+                        schläge = gsneu.computeAllCaptures(!black);
                         for (Move schläge1 : schläge) {
                             if (schläge1 != null && schläge1.targetX != b && schläge1.targetY != posy) {
                                 castlings.remove(a);
@@ -128,7 +128,7 @@ public class King extends Chessman {
                 } else {
                     for (int b = posx; b < kx; b++) {
                         gsneu = game.getGameSituation().doMove(this, b, posy);
-                        schläge = gsneu.getAllCaptures(!black);
+                        schläge = gsneu.computeAllCaptures(!black);
                         for (Move schläge1 : schläge) {
                             if (schläge1 != null && schläge1.targetX != b && schläge1.targetY != posy) {
                                 castlings.remove(a);
@@ -172,7 +172,9 @@ public class King extends Chessman {
      */
     public boolean doCastling(CastlingMove move, GameSituation situation) {
         CastlingMove[] rochaden = computeCastlings(true, situation);
-        if(rochaden.length == 0) return false;
+        if (rochaden.length == 0) {
+            return false;
+        }
         if (game.getTurn() == black) {
             if (rochaden[0] != null && rochaden[0].equals(move)) {
                 //könig ziehen

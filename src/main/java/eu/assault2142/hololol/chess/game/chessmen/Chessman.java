@@ -1,8 +1,8 @@
 package eu.assault2142.hololol.chess.game.chessmen;
 
-import eu.assault2142.hololol.chess.game.Square;
 import eu.assault2142.hololol.chess.game.Game;
 import eu.assault2142.hololol.chess.game.GameSituation;
+import eu.assault2142.hololol.chess.game.Square;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
@@ -227,7 +227,7 @@ public abstract class Chessman {
         LinkedList<Move> ret = new LinkedList();
         for (int c = 0; c < moves.size(); c++) {
             gsneu = situation.doMove(this, moves.get(c).targetX, moves.get(c).targetY);
-            if (gsneu.dangerForKing(black, gsneu.getAllCaptures(!black))) {
+            if (gsneu.dangerForKing(black, gsneu.computeAllCaptures(!black))) {
                 //moves.remove(c);
             } else {
                 ret.add(moves.get(c));
@@ -236,28 +236,28 @@ public abstract class Chessman {
         return ret;
     }
 
-    protected boolean addIfMovePossible(List<Move> moves, int posx, int posy,GameSituation situation) {
-        Square square = situation.getSquare(posx , posy );
+    protected boolean addIfMovePossible(List<Move> moves, int posx, int posy, GameSituation situation) {
+        Square square = situation.getSquare(posx, posy);
         if (square != null && !square.isOccupied()) {
-            moves.add(new Move(posx , posy , this));
+            moves.add(new Move(posx, posy, this));
             return true;
         }
         return false;
     }
-    
-    protected boolean addIfCapturePossible(List<Move> captures, int posx, int posy,GameSituation situation) {
-        Square square = situation.getSquare(posx , posy );
+
+    protected boolean addIfCapturePossible(List<Move> captures, int posx, int posy, GameSituation situation) {
+        Square square = situation.getSquare(posx, posy);
         if (square != null) {
-            if(square.isOccupiedByColor(!black)){
-                captures.add(new Move(posx , posy , this));
+            if (square.isOccupiedByColor(!black)) {
+                captures.add(new Move(posx, posy, this));
                 return false;
             }
             return !square.isOccupied();
         }
         return false;
     }
-    
-    private void moveToEdgeZone(){
+
+    private void moveToEdgeZone() {
         int xpos;
         int ypos;
         if (black) {
