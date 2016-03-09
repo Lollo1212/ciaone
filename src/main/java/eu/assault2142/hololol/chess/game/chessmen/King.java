@@ -15,20 +15,6 @@ public class King extends Chessman {
      * Creates a new King
      *
      * @param black whether this chessman is black or not
-     * @param posx the x-coordinate
-     * @param posy the y-coordinate
-     * @param game the gamesituation
-     */
-    private King(boolean black, int posx, int posy, GameState game) {
-        super(black, posx, posy, game);
-        image = game.getGame().getImage(NAMES.KING, black);
-        value = 500;
-    }
-
-    /**
-     * Creates a new King
-     *
-     * @param black whether this chessman is black or not
      * @param game the gamesituation
      * @param numberinarray the number in the chessmen-array
      * @return the king
@@ -48,20 +34,27 @@ public class King extends Chessman {
         return k;
     }
 
-    @Override
-    public List<Move> computeMoves(boolean checkForCheck, GameState situation) {
-        LinkedList<Move> moves = new LinkedList();
-        for (int k = -1; k <= 1; k++) {
-            for (int j = -1; j <= 1; j++) {
-                addIfMovePossible(moves, posx + k, posy + j, situation);
-            }
-        }
-        //Überprüfen auf Schach-Position
-        if (checkForCheck) {
-            moves = removeCheckMoves(moves, situation);
+    /**
+     * Creates a new King
+     *
+     * @param black whether this chessman is black or not
+     * @param posx the x-coordinate
+     * @param posy the y-coordinate
+     * @param game the gamesituation
+     */
+    private King(boolean black, int posx, int posy, GameState game) {
+        super(black, posx, posy, game);
+        image = game.getGame().getImage(NAMES.KING, black);
+        value = 500;
+    }
 
-        }
-        return moves;
+    @Override
+    public King clone() {
+        King k = new King(black, posx, posy, gamesituation);
+        k.captured = captured;
+        k.moved = moved;
+        k.positioninarray = positioninarray;
+        return k;
     }
 
     @Override
@@ -140,13 +133,19 @@ public class King extends Chessman {
     }
 
     @Override
-    public boolean doMove(int targetX, int targetY) {
-        boolean b;
-        b = super.doMove(targetX, targetY);
-        if (b == true) {
-            moved = true;
+    public List<Move> computeMoves(boolean checkForCheck, GameState situation) {
+        LinkedList<Move> moves = new LinkedList();
+        for (int k = -1; k <= 1; k++) {
+            for (int j = -1; j <= 1; j++) {
+                addIfMovePossible(moves, posx + k, posy + j, situation);
+            }
         }
-        return b;
+        //Überprüfen auf Schach-Position
+        if (checkForCheck) {
+            moves = removeCheckMoves(moves, situation);
+
+        }
+        return moves;
     }
 
     @Override
@@ -178,6 +177,16 @@ public class King extends Chessman {
         return ret;
     }
 
+    @Override
+    public boolean doMove(int targetX, int targetY) {
+        boolean b;
+        b = super.doMove(targetX, targetY);
+        if (b == true) {
+            moved = true;
+        }
+        return b;
+    }
+
     private void executeCastling(CastlingMove move, GameState situation) {
         //könig ziehen
         situation.getSquare(posx, posy).occupier = null;
@@ -192,12 +201,4 @@ public class King extends Chessman {
         gamesituation.nextTurn(this);
     }
 
-    @Override
-    public King clone() {
-        King k = new King(black, posx, posy, gamesituation);
-        k.captured = captured;
-        k.moved = moved;
-        k.positioninarray = positioninarray;
-        return k;
-    }
 }

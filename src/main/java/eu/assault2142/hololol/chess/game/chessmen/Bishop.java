@@ -42,7 +42,7 @@ public class Bishop extends Chessman {
         } else {
             a = 7;
         }
-        Bishop l = null;
+        Bishop l;
         switch (number) {
             case 0:
                 b = 2;
