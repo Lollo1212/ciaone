@@ -9,14 +9,14 @@ import eu.assault2142.hololol.chess.game.MovementUpdater;
  *
  * @author hololol2
  */
-public class ClientMovementUpdater extends MovementUpdater {
+public class LocalMovementUpdater extends MovementUpdater {
 
     /**
      * Create a new Instance
      *
      * @param g the game to update
      */
-    public ClientMovementUpdater(GameState g) {
+    public LocalMovementUpdater(GameState g) {
         super(g);
     }
 

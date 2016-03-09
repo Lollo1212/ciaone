@@ -1,10 +1,10 @@
 package eu.assault2142.hololol.chess.client.game;
 
-import eu.assault2142.hololol.chess.game.Settings;
 import eu.assault2142.hololol.chess.client.game.ui.GameFrame;
 import eu.assault2142.hololol.chess.client.networking.ServerConnection;
 import eu.assault2142.hololol.chess.client.translator.Translator;
 import eu.assault2142.hololol.chess.game.Game;
+import eu.assault2142.hololol.chess.game.Settings;
 import eu.assault2142.hololol.chess.game.chessmen.Bishop;
 import eu.assault2142.hololol.chess.game.chessmen.Chessman;
 import eu.assault2142.hololol.chess.game.chessmen.Knight;
@@ -80,22 +80,22 @@ public class ClientGame extends Game {
             //bei lokalem Spiel wird der Bauer direkt gesetzt,
             //bei Serverbasiertem senden der Daten an den Server
             case "ROOK":
-                man = Rook.promotion(pawn, this);
+                man = Rook.promotion(pawn, getGameSituation());
                 break;
             case "KNIGHT":
-                man = Knight.promotion(pawn, this);
+                man = Knight.promotion(pawn, getGameSituation());
                 break;
             case "BISHOP":
-                man = Bishop.promotion(pawn, this);
+                man = Bishop.promotion(pawn, getGameSituation());
                 break;
             default:
-                man = Queen.promotion(pawn, this);
+                man = Queen.promotion(pawn, getGameSituation());
                 break;
         }
-        getFiguren(pawn.isBlack())[pawn.getPositionInArray()] = man;
-        getSquare(man.getX(), man.getY()).occupier = man;
+        getGameSituation().getChessmen(pawn.isBlack())[pawn.getPositionInArray()] = man;
+        getGameSituation().getSquare(man.getX(), man.getY()).occupier = man;
 
-        new ClientMovementUpdater(this).start();
+        new ClientMovementUpdater(getGameSituation()).start();
     }
 
     @Override

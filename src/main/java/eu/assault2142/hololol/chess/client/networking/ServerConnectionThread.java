@@ -3,6 +3,7 @@ package eu.assault2142.hololol.chess.client.networking;
 import eu.assault2142.hololol.chess.client.game.ClientGame;
 import eu.assault2142.hololol.chess.client.menus.MainMenu;
 import eu.assault2142.hololol.chess.client.translator.Translator;
+import eu.assault2142.hololol.chess.game.GameState;
 import eu.assault2142.hololol.chess.game.chessmen.Bishop;
 import eu.assault2142.hololol.chess.game.chessmen.Knight;
 import eu.assault2142.hololol.chess.game.chessmen.Move;
@@ -24,6 +25,7 @@ public class ServerConnectionThread extends ConnectionThread {
 
     private final ServerConnection client;
     private ClientGame game;
+    private GameState gamestate;
 
     /**
      * Create a new ServerConnectionThread
@@ -45,6 +47,7 @@ public class ServerConnectionThread extends ConnectionThread {
         consumers.add(this::consumePromotion);
         consumers.add(this::consumeResignation);
         consumers.add(this::consumeStartGame);
+        gamestate = game.getGameSituation();
     }
 
     /**
@@ -198,7 +201,7 @@ public class ServerConnectionThread extends ConnectionThread {
                         String fn = str[a].substring(2);
                         int f = Integer.parseInt(fn);
 
-                        game.getGameSituation().getAbstractChessmen(color)[f].addMove(new Move(posx, posy, game.getFiguren(color)[f]));
+                        game.getGameSituation().getChessmen(color)[f].addMove(new Move(posx, posy, gamestate.getChessmen(color)[f]));
                     }
                 }
             } else {
@@ -212,12 +215,12 @@ public class ServerConnectionThread extends ConnectionThread {
                         int posy = Integer.parseInt(y);
                         String fn = str[a].substring(2);
                         int f = Integer.parseInt(fn);
-                        game.getGameSituation().getAbstractChessmen(color)[f].addCapture(new Move(posx, posy, game.getFiguren(color)[f]));
+                        game.getGameSituation().getChessmen(color)[f].addCapture(new Move(posx, posy, gamestate.getChessmen(color)[f]));
                     }
                 }
             }
             game.getGameFrame().getGameBoard().movementsupdating = false;
-            game.resetFields();
+            gamestate.resetFields();
         }
     }
 
@@ -254,19 +257,19 @@ public class ServerConnectionThread extends ConnectionThread {
             String co = message[1];
             boolean color;
             color = co.equals("0");
-            game.promotion((Pawn) game.getFiguren(color)[nummerinarray]);
+            game.promotion((Pawn) gamestate.getChessmen(color)[nummerinarray]);
             switch (Integer.parseInt(message[2])) {
                 case 0:
-                    game.getFiguren(color)[nummerinarray] = Rook.promotion((Pawn) game.getFiguren(color)[nummerinarray], game);
+                    gamestate.getChessmen(color)[nummerinarray] = Rook.promotion((Pawn) gamestate.getChessmen(color)[nummerinarray], gamestate);
                     break;
                 case 1:
-                    game.getFiguren(color)[nummerinarray] = Knight.promotion((Pawn) game.getFiguren(color)[nummerinarray], game);
+                    gamestate.getChessmen(color)[nummerinarray] = Knight.promotion((Pawn) gamestate.getChessmen(color)[nummerinarray], gamestate);
                     break;
                 case 2:
-                    game.getFiguren(color)[nummerinarray] = Bishop.promotion((Pawn) game.getFiguren(color)[nummerinarray], game);
+                    gamestate.getChessmen(color)[nummerinarray] = Bishop.promotion((Pawn) gamestate.getChessmen(color)[nummerinarray], gamestate);
                     break;
                 case 3:
-                    game.getFiguren(color)[nummerinarray] = Queen.promotion((Pawn) game.getFiguren(color)[nummerinarray], game);
+                    gamestate.getChessmen(color)[nummerinarray] = Queen.promotion((Pawn) gamestate.getChessmen(color)[nummerinarray], gamestate);
                     break;
             }
         }

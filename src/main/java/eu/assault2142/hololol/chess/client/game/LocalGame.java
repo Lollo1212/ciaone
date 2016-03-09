@@ -35,7 +35,7 @@ public class LocalGame extends Game {
     public LocalGame() {
         super(TYPE.LOCAL);
         gameframe = new GameFrame(this);
-        new ClientMovementUpdater(this).start();
+        new ClientMovementUpdater(getGameSituation()).start();
     }
 
     /**
@@ -58,7 +58,8 @@ public class LocalGame extends Game {
 
     @Override
     public void updateMovements() {
-        new ClientMovementUpdater(this).start();
+        getGameFrame().getGameBoard().movementsupdating = true;
+        new ClientMovementUpdater(getGameSituation()).start();
     }
 
     @Override
@@ -69,27 +70,27 @@ public class LocalGame extends Game {
             //bei lokalem Spiel wird der Bauer direkt gesetzt,
             //bei Serverbasiertem senden der Daten an den Server
             case "ROOK":
-                man = Rook.promotion(pawn, this);
+                man = Rook.promotion(pawn, getGameSituation());
                 break;
             case "KNIGHT":
-                man = Knight.promotion(pawn, this);
+                man = Knight.promotion(pawn, getGameSituation());
                 break;
             case "BISHOP":
-                man = Bishop.promotion(pawn, this);
+                man = Bishop.promotion(pawn, getGameSituation());
                 break;
             default:
-                man = Queen.promotion(pawn, this);
+                man = Queen.promotion(pawn, getGameSituation());
                 break;
         }
-        getFiguren(pawn.isBlack())[pawn.getPositionInArray()] = man;
-        getSquare(man.getX(), man.getY()).occupier = man;
+        getGameSituation().getChessmen(pawn.isBlack())[pawn.getPositionInArray()] = man;
+        getGameSituation().getSquare(man.getX(), man.getY()).occupier = man;
 
-        new ClientMovementUpdater(this).start();
+        new ClientMovementUpdater(getGameSituation()).start();
     }
 
     @Override
     public void finishedCalcs() {
-        resetFields();
+        getGameSituation().resetFields();
         gameframe.getGameBoard().movementsupdating = false;
     }
 
@@ -100,7 +101,7 @@ public class LocalGame extends Game {
 
     @Override
     public void clickAt(int feldx, int feldy) {
-        selected = getSquare(feldx, feldy);
+        selected = getGameSituation().getSquare(feldx, feldy);
         doMoveIfPossible();
         showPossibleMoves();
     }
@@ -115,10 +116,10 @@ public class LocalGame extends Game {
         int tx;
         int ty;
         if (picked.getX() < selected.getX()) {
-            t = (Rook) getFiguren(picked.isBlack())[9];
+            t = (Rook) getGameSituation().getChessmen(picked.isBlack())[9];
             tx = 5;
         } else {
-            t = (Rook) getFiguren(picked.isBlack())[8];
+            t = (Rook) getGameSituation().getChessmen(picked.isBlack())[8];
             tx = 3;
         }
         ty = picked.isBlack() ? 0 : 7;
@@ -135,9 +136,9 @@ public class LocalGame extends Game {
                 picked.doMove(selected.getX(), selected.getY());
                 picked.doCapture(selected.getX(), selected.getY());
 
-                if (picked.getClass() == King.class) {
+                /*if (picked.getClass() == King.class) {
                     ((King) picked).doCastling(getCastlingMove(), getGameSituation());
-                }
+                }*/
             }
             picked = null;
         }
@@ -149,20 +150,20 @@ public class LocalGame extends Game {
     private void showPossibleMoves() {
         if (selected.occupier != null) {
             picked = selected.occupier;
-            Move[] bewegungen = getGameSituation().getAbstractChessmen(picked.isBlack())[picked.getPositionInArray()].getMoves();
-            Move[] schläge = getGameSituation().getAbstractChessmen(picked.isBlack())[picked.getPositionInArray()].getCaptures();
-            if (picked.getClass() == King.class) {
+            Move[] bewegungen = getGameSituation().getChessmen(picked.isBlack())[picked.getPositionInArray()].getMoves();
+            Move[] schläge = getGameSituation().getChessmen(picked.isBlack())[picked.getPositionInArray()].getCaptures();
+            /*if (picked.getClass() == King.class) {
                 CastlingMove[] rochaden = ((King) picked).computeCastlings(true, getGameSituation());
                 Arrays.stream(rochaden).forEach((CastlingMove c) -> {
                     getSquare(c.getTargetX(), c.getTargetY()).highlight(Square.HIGHLIGHT.CASTLING);
                 });
 
-            }
+            }*/
             Arrays.stream(bewegungen).forEach((Move m) -> {
-                getSquare(m.getTargetX(), m.getTargetY()).highlight(Square.HIGHLIGHT.MOVETARGET);
+                getGameSituation().getSquare(m.getTargetX(), m.getTargetY()).highlight(Square.HIGHLIGHT.MOVETARGET);
             });
             Arrays.stream(schläge).forEach((Move m) -> {
-                getSquare(m.getTargetX(), m.getTargetY()).highlight(Square.HIGHLIGHT.CAPTURETARGET);
+                getGameSituation().getSquare(m.getTargetX(), m.getTargetY()).highlight(Square.HIGHLIGHT.CAPTURETARGET);
             });
 
         }

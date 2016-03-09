@@ -7,19 +7,22 @@
  */
 package eu.assault2142.hololol.chess.game;
 
-import eu.assault2142.hololol.chess.game.chessmen.AbstractChessman;
+import eu.assault2142.hololol.chess.game.chessmen.Chessman;
 
 /**
  *
  * @author Jojo
  */
-public class MovementUpdaterThread extends Thread{
-    AbstractChessman f;
-    public MovementUpdaterThread(AbstractChessman f){
-        this.f=f;
+public class MovementUpdaterThread extends Thread {
+
+    Chessman f;
+
+    public MovementUpdaterThread(Chessman f) {
+        this.f = f;
     }
+
     @Override
-    public void run(){
+    public void run() {
         f.updateMovements();
     }
 }

@@ -1,7 +1,7 @@
 package eu.assault2142.hololol.chess.client.game.ui;
 
+import eu.assault2142.hololol.chess.game.GameState;
 import eu.assault2142.hololol.chess.game.Settings;
-import eu.assault2142.hololol.chess.game.Game;
 import eu.assault2142.hololol.chess.game.chessmen.Chessman;
 import java.awt.Color;
 import java.awt.Graphics;
@@ -22,7 +22,7 @@ public class GameBoard extends JPanel {
     private final int squarelength;
     public boolean movementsupdating = false;
     public boolean check = false;
-    private final Game game;
+    private final GameState game;
 
     private ImageIcon ibackschwarz;
     private ImageIcon ibackweiß;
@@ -41,7 +41,7 @@ public class GameBoard extends JPanel {
      * @param gf the frame this GameField belongs to
      * @param g the game to display
      */
-    public GameBoard(GameFrame gf, Game g) {
+    public GameBoard(GameFrame gf, GameState g) {
         game = g;
         this.gameframe = gf;
         squarelength = gameframe.getSquareLength();
@@ -114,11 +114,11 @@ public class GameBoard extends JPanel {
      */
     private void drawChessman() {
         for (int i = 0; i <= 15; i++) {
-            Chessman f = game.getFiguren(true)[i];
+            Chessman f = game.getChessmen(true)[i];
             drawImage(f.getImage(), f.getX(), f.getY(), 1, 1);
         }
         for (int i = 0; i <= 15; i++) {
-            Chessman f = game.getFiguren(false)[i];
+            Chessman f = game.getChessmen(false)[i];
             drawImage(f.getImage(), f.getX(), f.getY(), 1, 1);
         }
     }

@@ -1,7 +1,6 @@
 package eu.assault2142.hololol.chess.game.chessmen;
 
-import eu.assault2142.hololol.chess.game.Game;
-import eu.assault2142.hololol.chess.game.GameSituation;
+import eu.assault2142.hololol.chess.game.GameState;
 import java.util.LinkedList;
 
 /**
@@ -17,11 +16,11 @@ public class Rook extends Chessman {
      * @param black whether this chessman is black or not
      * @param posx the x-coordinate
      * @param posy the y-coordinate
-     * @param game the game
+     * @param game the gamesituation
      */
-    private Rook(boolean black, int posx, int posy, Game game) {
+    private Rook(boolean black, int posx, int posy, GameState game) {
         super(black, posx, posy, game);
-        image = game.getImage(NAMES.ROOK, black);
+        image = game.getGame().getImage(NAMES.ROOK, black);
         value = 5;
     }
 
@@ -30,11 +29,11 @@ public class Rook extends Chessman {
      *
      * @param black whether this chessman is black or not
      * @param number the number of the bishop (0 for the left, 1 for the right)
-     * @param game the game
+     * @param game the gamesituation
      * @param numberinarray the number in the chessmen-array
      * @return the rook
      */
-    public static Rook createTurm(boolean black, int number, Game game, int numberinarray) {
+    public static Rook createTurm(boolean black, int number, GameState game, int numberinarray) {
         int a;
         int b;
         if (black == true) {
@@ -53,19 +52,27 @@ public class Rook extends Chessman {
     }
 
     @Override
-    public Move[] computeMoves(boolean checkForCheck, GameSituation situation) {
+    public Move[] computeMoves(boolean checkForCheck, GameState situation) {
         LinkedList<Move> moves = new LinkedList();
         for (int u = posx - 1; u >= 0; u--) {
-            if(!addIfMovePossible(moves,u,posy,situation)) break;
+            if (!addIfMovePossible(moves, u, posy, situation)) {
+                break;
+            }
         }
         for (int u = posx + 1; u <= 7; u++) {
-            if(!addIfMovePossible(moves,u,posy,situation)) break;
+            if (!addIfMovePossible(moves, u, posy, situation)) {
+                break;
+            }
         }
         for (int u = posy - 1; u >= 0; u--) {
-            if(!addIfMovePossible(moves,posx,u,situation)) break;
+            if (!addIfMovePossible(moves, posx, u, situation)) {
+                break;
+            }
         }
         for (int u = posy + 1; u <= 7; u++) {
-            if(!addIfMovePossible(moves,posx,u,situation)) break;
+            if (!addIfMovePossible(moves, posx, u, situation)) {
+                break;
+            }
         }
         //Überprüfen auf Schach-Position
         if (checkForCheck) {
@@ -77,19 +84,27 @@ public class Rook extends Chessman {
     }
 
     @Override
-    public Move[] computeCaptures(boolean checkForCheck, GameSituation situation) {
+    public Move[] computeCaptures(boolean checkForCheck, GameState situation) {
         LinkedList<Move> captures = new LinkedList();
         for (int u = posx - 1; u >= 0; u--) {
-            if(!addIfCapturePossible(captures,u,posy,situation)) break;
+            if (!addIfCapturePossible(captures, u, posy, situation)) {
+                break;
+            }
         }
         for (int u = posx + 1; u <= 7; u++) {
-            if(!addIfCapturePossible(captures,u,posy,situation)) break;
+            if (!addIfCapturePossible(captures, u, posy, situation)) {
+                break;
+            }
         }
         for (int u = posy - 1; u >= 0; u--) {
-            if(!addIfCapturePossible(captures,posx,u,situation)) break;
+            if (!addIfCapturePossible(captures, posx, u, situation)) {
+                break;
+            }
         }
         for (int u = posy + 1; u <= 7; u++) {
-            if(!addIfCapturePossible(captures,posx,u,situation)) break;
+            if (!addIfCapturePossible(captures, posx, u, situation)) {
+                break;
+            }
         }
         //Überprüfen auf Schach-Position
         if (checkForCheck) {
@@ -104,10 +119,10 @@ public class Rook extends Chessman {
      * Create a new Rook by promotion
      *
      * @param pawn the pawn to promote
-     * @param game the game
+     * @param game the gamesituation
      * @return a new rook
      */
-    public static Rook promotion(Pawn pawn, Game game) {
+    public static Rook promotion(Pawn pawn, GameState game) {
         Rook l = null;
         if ((pawn.posy == 0 && !pawn.black) || (pawn.posy == 7 && pawn.black)) {
             l = new Rook(pawn.black, pawn.posx, pawn.posy, game);
@@ -140,7 +155,7 @@ public class Rook extends Chessman {
 
     @Override
     public Rook clone() {
-        Rook t = new Rook(black, posx, posy, game);
+        Rook t = new Rook(black, posx, posy, gamesituation);
         t.captured = captured;
         t.moved = moved;
         t.positioninarray = positioninarray;

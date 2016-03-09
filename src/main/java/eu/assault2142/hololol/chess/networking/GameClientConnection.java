@@ -1,6 +1,6 @@
 package eu.assault2142.hololol.chess.networking;
 
-import eu.assault2142.hololol.chess.game.GameSituation;
+import eu.assault2142.hololol.chess.game.GameState;
 import eu.assault2142.hololol.chess.game.ServerGame;
 import eu.assault2142.hololol.chess.game.chessmen.Move;
 import java.io.IOException;
@@ -41,31 +41,31 @@ public class GameClientConnection {
     }
 
     public void writeMovements() {
-        GameSituation gs = game.getGameSituation();
+        GameState gs = game.getGameSituation();
         String str1 = "moves:black:move:";
         String str2 = "moves:white:move:";
         String str3 = "moves:black:capture:";
         String str4 = "move:white:capture:";
         for (int a = 0; a < 16; a++) {
-            Move[] m = gs.getAbstractChessmen(true)[a].getMoves();
+            Move[] m = gs.getChessmen(true)[a].getMoves();
             for (Move m1 : m) {
                 if (m1 != null) {
                     str1 += m1.getTargetX() + "" + m1.getTargetY() + "" + m1.getChessman().getPositionInArray() + ";";
                 }
             }
-            m = gs.getAbstractChessmen(true)[a].getCaptures();
+            m = gs.getChessmen(true)[a].getCaptures();
             for (Move m1 : m) {
                 if (m1 != null) {
                     str3 += m1.getTargetX() + "" + m1.getTargetY() + "" + m1.getChessman().getPositionInArray() + ";";
                 }
             }
-            m = gs.getAbstractChessmen(false)[a].getMoves();
+            m = gs.getChessmen(false)[a].getMoves();
             for (Move m1 : m) {
                 if (m1 != null) {
                     str2 += m1.getTargetX() + "" + m1.getTargetY() + "" + m1.getChessman().getPositionInArray() + ";";
                 }
             }
-            m = gs.getAbstractChessmen(false)[a].getCaptures();
+            m = gs.getChessmen(false)[a].getCaptures();
             for (Move m1 : m) {
                 if (m1 != null) {
                     str4 += m1.getTargetX() + "" + m1.getTargetY() + "" + m1.getChessman().getPositionInArray() + ";";

@@ -14,14 +14,16 @@ import javax.swing.ImageIcon;
  *
  * @author jojo
  */
-public class ServerGame extends Game{
+public class ServerGame extends Game {
+
     public ClientConnection client1 = null;
     public ClientConnection client2 = null;
-    public ServerGame(ClientConnection a,ClientConnection b){//Spiel eines Lan-Servers
+
+    public ServerGame(ClientConnection a, ClientConnection b) {//Spiel eines Lan-Servers
         super(TYPE.SERVER);
-        client1=a;
-        client2=b;
-        new ServerMovementUpdater(this).start();
+        client1 = a;
+        client2 = b;
+        new ServerMovementUpdater(getGameSituation()).start();
     }
 
     @Override
@@ -31,7 +33,7 @@ public class ServerGame extends Game{
 
     @Override
     public void updateMovements() {
-        new ServerMovementUpdater(this).start();
+        new ServerMovementUpdater(getGameSituation()).start();
     }
 
     @Override

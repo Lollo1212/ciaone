@@ -1,9 +1,13 @@
 package eu.assault2142.hololol.chess.game;
 
-import eu.assault2142.hololol.chess.game.chessmen.AbstractChessman;
+import eu.assault2142.hololol.chess.game.chessmen.Bishop;
 import eu.assault2142.hololol.chess.game.chessmen.Chessman;
 import eu.assault2142.hololol.chess.game.chessmen.King;
+import eu.assault2142.hololol.chess.game.chessmen.Knight;
 import eu.assault2142.hololol.chess.game.chessmen.Move;
+import eu.assault2142.hololol.chess.game.chessmen.Pawn;
+import eu.assault2142.hololol.chess.game.chessmen.Queen;
+import eu.assault2142.hololol.chess.game.chessmen.Rook;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -12,12 +16,8 @@ import java.util.Arrays;
  *
  * @author hololol2
  */
-public class GameSituation {
+public class GameState {
 
-    //abstractchessmen of the black player
-    private final AbstractChessman[] chessmenBlackAbstract;
-    //abstractchessmen of the white player
-    private final AbstractChessman[] chessmenWhiteAbstract;
     //the squares of the game-board
     private final Square[] squares;
     //true if it's the black player's turn
@@ -30,12 +30,14 @@ public class GameSituation {
     private Chessman[] chessmenBlack = new Chessman[16];
     private Chessman[] chessmenWhite = new Chessman[16];
 
+    private Chessman lastmoved;
+
     /**
      * Create a copy of the current game-state
      *
      * @param game the game
      */
-    public GameSituation(Game game) {
+    public GameState(Game game) {
 
         squares = new Square[78];
         int o;
@@ -46,19 +48,11 @@ public class GameSituation {
                 squares[o] = new Square(q, y);
             }
         }
-        chessmenBlackAbstract = new AbstractChessman[16];
-        chessmenWhiteAbstract = new AbstractChessman[16];
         blackturn = false;
         this.game = game;
 
-        chessmenBlack = game.buildChessmen(true, squares);
-        chessmenWhite = game.buildChessmen(false, squares);
-        for (int a = 0; a < chessmenBlack.length; a++) {
-            chessmenBlackAbstract[a] = new AbstractChessman(chessmenBlack[a], game);
-        }
-        for (int a = 0; a < chessmenWhite.length; a++) {
-            chessmenWhiteAbstract[a] = new AbstractChessman(chessmenWhite[a], game);
-        }
+        chessmenBlack = buildChessmen(true, squares);
+        chessmenWhite = buildChessmen(false, squares);
     }
 
     /**
@@ -66,15 +60,15 @@ public class GameSituation {
      *
      * @param gs the game-situation
      */
-    public GameSituation(GameSituation gs) {
-        chessmenBlackAbstract = new AbstractChessman[16];
-        chessmenWhiteAbstract = new AbstractChessman[16];
+    public GameState(GameState gs) {
+        chessmenBlack = new Chessman[16];
+        chessmenWhite = new Chessman[16];
         squares = new Square[78];
-        for (int a = 0; a < gs.chessmenBlackAbstract.length; a++) {
-            chessmenBlackAbstract[a] = gs.chessmenBlackAbstract[a].clone();
+        for (int a = 0; a < gs.chessmenBlack.length; a++) {
+            chessmenBlack[a] = gs.chessmenBlack[a].clone();
         }
-        for (int a = 0; a < gs.chessmenWhiteAbstract.length; a++) {
-            chessmenWhiteAbstract[a] = gs.chessmenWhiteAbstract[a].clone();
+        for (int a = 0; a < gs.chessmenWhite.length; a++) {
+            chessmenWhite[a] = gs.chessmenWhite[a].clone();
         }
         for (int a = 0; a < gs.getSquares().length; a++) {
             if (gs.getSquares()[a] != null) {
@@ -92,24 +86,24 @@ public class GameSituation {
      */
     public Move[] getAllMoves(boolean black) {
         ArrayList<Move> m = new ArrayList();
-        if (black == true) {
+        if (black) {
             for (int a = 0; a < 16; a++) {
-                if (!chessmenBlackAbstract[a].isCaptured()) {
-                    Move[] z = chessmenBlackAbstract[a].getMoves();
+                if (!chessmenBlack[a].isCaptured()) {
+                    Move[] z = chessmenBlack[a].getMoves();
                     m.addAll(Arrays.asList(z));
                     if (a == 15) {
-                        Move[] x = ((King) chessmenBlackAbstract[a].getClone()).computeCastlings(false, this);
+                        Move[] x = ((King) chessmenBlack[a]).computeCastlings(false, this);
                         m.addAll(Arrays.asList(x));
                     }
                 }
             }
         } else {
             for (int a = 0; a < 16; a++) {
-                if (!chessmenBlackAbstract[a].isCaptured()) {
-                    Move[] z = chessmenWhiteAbstract[a].getMoves();
+                if (!chessmenBlack[a].isCaptured()) {
+                    Move[] z = chessmenWhite[a].getMoves();
                     m.addAll(Arrays.asList(z));
                     if (a == 15) {
-                        Move[] x = ((King) chessmenWhiteAbstract[a].getClone()).computeCastlings(false, this);
+                        Move[] x = ((King) chessmenWhite[a]).computeCastlings(false, this);
                         m.addAll(Arrays.asList(x));
                     }
                 }
@@ -131,15 +125,15 @@ public class GameSituation {
         ArrayList<Move> m = new ArrayList();
         if (black) {
             for (int a = 0; a < 16; a++) {
-                if (!chessmenBlackAbstract[a].isCaptured()) {
-                    Move[] z = chessmenBlackAbstract[a].getCaptures();
+                if (!chessmenBlack[a].isCaptured()) {
+                    Move[] z = chessmenBlack[a].getCaptures();
                     m.addAll(Arrays.asList(z));
                 }
             }
         } else {
             for (int a = 0; a < 16; a++) {
-                if (!chessmenWhiteAbstract[a].isCaptured()) {
-                    Move[] z = chessmenWhiteAbstract[a].getCaptures();
+                if (!chessmenWhite[a].isCaptured()) {
+                    Move[] z = chessmenWhite[a].getCaptures();
                     m.addAll(Arrays.asList(z));
                 }
             }
@@ -164,15 +158,15 @@ public class GameSituation {
         ArrayList<Move> m = new ArrayList();
         if (black) {
             for (int a = 0; a < 16; a++) {
-                if (!chessmenBlackAbstract[a].isCaptured()) {
-                    Move[] z = chessmenBlackAbstract[a].getClone().computeCaptures(false, this);
+                if (!chessmenBlack[a].isCaptured()) {
+                    Move[] z = chessmenBlack[a].computeCaptures(false, this);
                     m.addAll(Arrays.asList(z));
                 }
             }
         } else {
             for (int a = 0; a < 16; a++) {
-                if (!chessmenWhiteAbstract[a].isCaptured()) {
-                    Move[] z = chessmenWhiteAbstract[a].getClone().computeCaptures(false, this);
+                if (!chessmenWhite[a].isCaptured()) {
+                    Move[] z = chessmenWhite[a].computeCaptures(false, this);
                     m.addAll(Arrays.asList(z));
                 }
             }
@@ -217,18 +211,18 @@ public class GameSituation {
      * @param targety the targetY
      * @return a new instance representing the situation after the move
      */
-    public GameSituation doMove(Chessman chessman, int targetx, int targety) {
-        GameSituation gsneu = clone();
+    public GameState doMove(Chessman chessman, int targetx, int targety) {
+        GameState gsneu = clone();
         boolean b = true;
-        AbstractChessman f1;
+        Chessman f1;
         if (chessman.isBlack()) {
-            f1 = gsneu.chessmenBlackAbstract[chessman.getPositionInArray()];
+            f1 = gsneu.chessmenBlack[chessman.getPositionInArray()];
             if (f1.isCaptured()) {
                 b = false;
 
             }
         } else {
-            f1 = gsneu.chessmenWhiteAbstract[chessman.getPositionInArray()];
+            f1 = gsneu.chessmenWhite[chessman.getPositionInArray()];
             if (f1.isCaptured()) {
                 b = false;
 
@@ -238,16 +232,16 @@ public class GameSituation {
             if (gsneu.getSquares()[10 * targetx + targety].occupier != null) {
                 Chessman r = gsneu.getSquares()[10 * targetx + targety].occupier;
                 if (r.isBlack()) {
-                    gsneu.chessmenBlackAbstract[r.getPositionInArray()].setCaptured();
+                    gsneu.chessmenBlack[r.getPositionInArray()].setCaptured();
                 } else {
-                    gsneu.chessmenWhiteAbstract[r.getPositionInArray()].setCaptured();
+                    gsneu.chessmenWhite[r.getPositionInArray()].setCaptured();
                 }
             }
-            gsneu.getSquares()[10 * f1.getClone().getX() + f1.getClone().getY()].occupier = null;
+            gsneu.getSquares()[10 * f1.getX() + f1.getY()].occupier = null;
 
             f1.doMove(targetx, targety);
 
-            gsneu.getSquares()[10 * targetx + targety].occupier = f1.getClone();
+            gsneu.getSquares()[10 * targetx + targety].occupier = f1;
             gsneu.blackturn = !gsneu.blackturn;
             return gsneu;
 
@@ -258,8 +252,8 @@ public class GameSituation {
     }
 
     @Override
-    public GameSituation clone() {
-        return new GameSituation(this);
+    public GameState clone() {
+        return new GameState(this);
     }
 
     /**
@@ -268,19 +262,6 @@ public class GameSituation {
      */
     protected Square[] getSquares() {
         return squares;
-    }
-
-    /**
-     *
-     * @param color the color of the chessmen
-     * @return an array with all chessmen of the given color
-     */
-    public AbstractChessman[] getAbstractChessmen(boolean color) {
-        if (color) {
-            return chessmenBlackAbstract;
-        } else {
-            return chessmenWhiteAbstract;
-        }
     }
 
     public Chessman[] getChessmen(boolean color) {
@@ -297,7 +278,7 @@ public class GameSituation {
      * @param m the move
      * @return a new instance representing the situation after the move
      */
-    public GameSituation doMove(Move m) {
+    public GameState doMove(Move m) {
         return doMove(m.getChessman(), m.getTargetX(), m.getTargetY());
     }
 
@@ -322,8 +303,16 @@ public class GameSituation {
         return blackturn;
     }
 
-    protected void nextTurn() {
+    public Chessman getLastMoved() {
+        return lastmoved;
+    }
+
+    public void nextTurn(Chessman moved) {
+
+        resetFields();
+        lastmoved = moved;
         blackturn = !blackturn;
+
     }
 
     public int getCaptured(boolean color) {
@@ -340,5 +329,70 @@ public class GameSituation {
         } else {
             capturedWhite++;
         }
+    }
+
+    protected Chessman[] buildChessmen(boolean black, Square[] squares) {
+
+        Chessman[] figuren = new Chessman[16];
+        for (int a = 0; a < 8; a++) {
+            figuren[a] = Pawn.createPawn(black, a, this, a);
+        }
+        figuren[8] = Rook.createTurm(black, 0, this, 8);
+        figuren[9] = Rook.createTurm(black, 1, this, 9);
+        figuren[10] = Knight.createKnight(black, 0, this, 10);
+        figuren[11] = Knight.createKnight(black, 1, this, 11);
+        figuren[12] = Bishop.createBishop(black, 0, this, 12);
+        figuren[13] = Bishop.createBishop(black, 1, this, 13);
+        figuren[14] = Queen.createQueen(black, this, 14);
+        figuren[15] = King.createKing(black, this, 15);
+        if (black == true) {
+            squares[1].occupier = figuren[0];
+            squares[11].occupier = figuren[1];
+            squares[21].occupier = figuren[2];
+            squares[31].occupier = figuren[3];
+            squares[41].occupier = figuren[4];
+            squares[51].occupier = figuren[5];
+            squares[61].occupier = figuren[6];
+            squares[71].occupier = figuren[7];
+            squares[0].occupier = figuren[8];
+            squares[70].occupier = figuren[9];
+            squares[10].occupier = figuren[10];
+            squares[60].occupier = figuren[11];
+            squares[20].occupier = figuren[12];
+            squares[50].occupier = figuren[13];
+            squares[40].occupier = figuren[15];
+            squares[30].occupier = figuren[14];
+        }
+        if (black == false) {
+            squares[6].occupier = figuren[0];
+            squares[16].occupier = figuren[1];
+            squares[26].occupier = figuren[2];
+            squares[36].occupier = figuren[3];
+            squares[46].occupier = figuren[4];
+            squares[56].occupier = figuren[5];
+            squares[66].occupier = figuren[6];
+            squares[76].occupier = figuren[7];
+            squares[7].occupier = figuren[8];
+            squares[77].occupier = figuren[9];
+            squares[17].occupier = figuren[10];
+            squares[67].occupier = figuren[11];
+            squares[27].occupier = figuren[12];
+            squares[57].occupier = figuren[13];
+            squares[47].occupier = figuren[15];
+            squares[37].occupier = figuren[14];
+        }
+        return figuren;
+    }
+
+    public Move[] getPossibleMoves(int positioninarray, boolean black) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public Move[] getPossibleCaptures(int positioninarray, boolean black) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public Game getGame() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

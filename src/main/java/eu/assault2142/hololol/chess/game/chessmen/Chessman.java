@@ -1,7 +1,6 @@
 package eu.assault2142.hololol.chess.game.chessmen;
 
-import eu.assault2142.hololol.chess.game.Game;
-import eu.assault2142.hololol.chess.game.GameSituation;
+import eu.assault2142.hololol.chess.game.GameState;
 import eu.assault2142.hololol.chess.game.Square;
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -10,11 +9,30 @@ import java.util.Optional;
 import javax.swing.ImageIcon;
 
 /**
- * Represents a chessman in the game
+ * Represents a chessman in the gamesituation
  *
  * @author hololol2
  */
 public abstract class Chessman {
+
+    public void setCaptured() {
+        captured = true;
+        posx = 9;
+        posy = 9;
+    }
+
+    public void addCapture(Move move) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public void addMove(Move move) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public void updateMovements() {
+        moves = computeMoves(true, gamesituation);
+        captures = computeCaptures(true, gamesituation);
+    }
 
     public static enum NAMES {
         BISHOP, KING, KNIGHT, PAWN, QUEEN, ROOK
@@ -22,8 +40,8 @@ public abstract class Chessman {
 
     //Image of the chessman
     ImageIcon image;
-    //the game
-    Game game;
+    //the gamesituation
+    GameState gamesituation;
     //true if this chessman is black
     boolean black;
     //true if it is captured
@@ -38,16 +56,18 @@ public abstract class Chessman {
     int positioninarray;
     //the value of this chessman
     int value;
+    Move[] moves;
+    Move[] captures;
 
     /**
      *
      * @param black whether this chessman is black
      * @param posx the x-coordinate
      * @param posy the y-coordinate
-     * @param game the game
+     * @param gamesituation the gamesituation
      */
-    protected Chessman(boolean black, int posx, int posy, Game game) {
-        this.game = game;
+    protected Chessman(boolean black, int posx, int posy, GameState gamesituation) {
+        this.gamesituation = gamesituation;
         if (posx <= 7 && posx >= 0 && posy <= 7 && posy >= 0) {
             this.black = black;
             this.posx = posx;
@@ -64,10 +84,10 @@ public abstract class Chessman {
      */
     public boolean doMove(int targetX, int targetY) {
         Move move = new Move(targetX, targetY, this);
-        Square square = game.getSquare(targetX, targetY);
+        Square square = gamesituation.getSquare(targetX, targetY);
         boolean r = false;
-        if (game.getTurn() == black) {
-            Move[] bewegungen = game.getPossibleMoves(positioninarray, black);
+        if (gamesituation.getTurn() == black) {
+            Move[] bewegungen = gamesituation.getPossibleMoves(positioninarray, black);
             if (bewegungen != null && !square.isOccupied()) {
                 Optional<Move> findFirst = Arrays.stream(bewegungen).filter((Move m) -> {
                     return move.equals(m);
@@ -90,10 +110,10 @@ public abstract class Chessman {
      */
     public boolean doCapture(int targetX, int targetY) {
         Move capture = new Move(targetX, targetY, this);
-        Square square = game.getSquare(targetX, targetY);
+        Square square = gamesituation.getSquare(targetX, targetY);
         boolean r = false;
-        if (game.getTurn() == black) {
-            Move[] bewegungen = game.getPossibleCaptures(positioninarray, black);
+        if (gamesituation.getTurn() == black) {
+            Move[] bewegungen = gamesituation.getPossibleCaptures(positioninarray, black);
             if (bewegungen != null && square.isOccupiedByColor(!black)) {
                 Optional<Move> findFirst = Arrays.stream(bewegungen).filter((Move m) -> {
                     return capture.equals(m);
@@ -115,7 +135,7 @@ public abstract class Chessman {
      * @param situation
      * @return an array of possible moves
      */
-    public abstract Move[] computeMoves(boolean checkForCheck, GameSituation situation);
+    public abstract Move[] computeMoves(boolean checkForCheck, GameState situation);
 
     /**
      * Return the captures this chessman is allowed to do
@@ -125,7 +145,7 @@ public abstract class Chessman {
      * @param situation
      * @return an array of possible captures
      */
-    public abstract Move[] computeCaptures(boolean checkForCheck, GameSituation situation);
+    public abstract Move[] computeCaptures(boolean checkForCheck, GameState situation);
 
     @Override
     public abstract Chessman clone();
@@ -184,13 +204,13 @@ public abstract class Chessman {
     public void printState() {
         /*
         String n;
-        if (!game.isServer()) {
+        if (!gamesituation.isServer()) {
             if (black == true) {
                 n = Translator.TRANSLATOR.getTranslation("game_color_black");
             } else {
                 n = Translator.TRANSLATOR.getTranslation("game_color_white");
             }
-            ((ClientGame)game).getGameFrame().write(Translator.TRANSLATOR.getTranslation("game_player_turn", new Object[]{n}));
+            ((ClientGame)gamesituation).getGameFrame().write(Translator.TRANSLATOR.getTranslation("game_player_turn", new Object[]{n}));
         }*/
     }
 
@@ -203,27 +223,27 @@ public abstract class Chessman {
     }
 
     private void executeMove(Move move) {
-        game.getSquare(posx, posy).occupier = null;
+        gamesituation.getSquare(posx, posy).occupier = null;
         posx = move.targetX;
         posy = move.targetY;
-        game.getSquare(posx, posy).occupier = this;
-        game.nextTurn(this);
+        gamesituation.getSquare(posx, posy).occupier = this;
+        gamesituation.nextTurn(this);
     }
 
     private void executeCapture(Move m) {
         //Figur schlagen
-        Chessman f = game.getSquare(m.targetX, m.targetY).occupier;
+        Chessman f = gamesituation.getSquare(m.targetX, m.targetY).occupier;
         f.captured = true;
         f.moveToEdgeZone();
-        game.getSquare(posx, posy).occupier = null;
+        gamesituation.getSquare(posx, posy).occupier = null;
         posx = m.targetX;
         posy = m.targetY;
-        game.getSquare(m.targetX, m.targetY).occupier = this;
-        game.nextTurn(this);
+        gamesituation.getSquare(m.targetX, m.targetY).occupier = this;
+        gamesituation.nextTurn(this);
     }
 
-    protected LinkedList<Move> removeCheckMoves(List<Move> moves, GameSituation situation) {
-        GameSituation gsneu;
+    protected LinkedList<Move> removeCheckMoves(List<Move> moves, GameState situation) {
+        GameState gsneu;
         LinkedList<Move> ret = new LinkedList();
         for (int c = 0; c < moves.size(); c++) {
             gsneu = situation.doMove(this, moves.get(c).targetX, moves.get(c).targetY);
@@ -236,7 +256,7 @@ public abstract class Chessman {
         return ret;
     }
 
-    protected boolean addIfMovePossible(List<Move> moves, int posx, int posy, GameSituation situation) {
+    protected boolean addIfMovePossible(List<Move> moves, int posx, int posy, GameState situation) {
         Square square = situation.getSquare(posx, posy);
         if (square != null && !square.isOccupied()) {
             moves.add(new Move(posx, posy, this));
@@ -245,7 +265,7 @@ public abstract class Chessman {
         return false;
     }
 
-    protected boolean addIfCapturePossible(List<Move> captures, int posx, int posy, GameSituation situation) {
+    protected boolean addIfCapturePossible(List<Move> captures, int posx, int posy, GameState situation) {
         Square square = situation.getSquare(posx, posy);
         if (square != null) {
             if (square.isOccupiedByColor(!black)) {
@@ -261,25 +281,33 @@ public abstract class Chessman {
         int xpos;
         int ypos;
         if (black) {
-            if (game.getCaptured(true) > 7) {
+            if (gamesituation.getCaptured(true) > 7) {
                 xpos = 9;
-                ypos = game.getCaptured(true) - 8;
+                ypos = gamesituation.getCaptured(true) - 8;
             } else {
                 xpos = 8;
-                ypos = game.getCaptured(true);
+                ypos = gamesituation.getCaptured(true);
             }
-            game.incCaptured(true);
+            gamesituation.incCaptured(true);
         } else {
-            if (game.getCaptured(false) > 7) {
+            if (gamesituation.getCaptured(false) > 7) {
                 xpos = 11;
-                ypos = game.getCaptured(false) - 8;
+                ypos = gamesituation.getCaptured(false) - 8;
             } else {
                 xpos = 10;
-                ypos = game.getCaptured(false);
+                ypos = gamesituation.getCaptured(false);
             }
-            game.incCaptured(false);
+            gamesituation.incCaptured(false);
         }
         posx = xpos;
         posy = ypos;
+    }
+
+    public Move[] getMoves() {
+        return moves;
+    }
+
+    public Move[] getCaptures() {
+        return captures;
     }
 }

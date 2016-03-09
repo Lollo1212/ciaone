@@ -1,5 +1,6 @@
 package eu.assault2142.hololol.chess.networking;
 
+import eu.assault2142.hololol.chess.game.GameState;
 import eu.assault2142.hololol.chess.game.chessmen.Bishop;
 import eu.assault2142.hololol.chess.game.chessmen.Chessman;
 import eu.assault2142.hololol.chess.game.chessmen.Knight;
@@ -14,6 +15,7 @@ import eu.assault2142.hololol.chess.game.chessmen.Rook;
 public class GameConnectionThread extends ConnectionThread {
 
     private final GameClientConnection connection;
+    private final GameState gamestate;
 
     public GameConnectionThread(GameClientConnection serverclient) {
         super(serverclient.getScanner());
@@ -22,6 +24,7 @@ public class GameConnectionThread extends ConnectionThread {
         consumers.add(this::consumeDraw);
         consumers.add(this::consumePromotion);
         consumers.add(this::consumeResignation);
+        gamestate = serverclient.getGame().getGameSituation();
     }
 
     private void consumeMove(String[] message) {
@@ -31,12 +34,12 @@ public class GameConnectionThread extends ConnectionThread {
             int x = Integer.parseInt(message[2]);
             int y = Integer.parseInt(message[3]);
             if (a < 78) {
-                Chessman f = connection.getGame().getSquare(a / 10, a % 10).occupier;
-                if (f != null && !f.isBlack() == connection.isWhite() && f.isBlack() == connection.getGame().getTurn() && (f.doMove(x, y))) {
+                Chessman f = gamestate.getSquare(a / 10, a % 10).occupier;
+                if (f != null && !f.isBlack() == connection.isWhite() && f.isBlack() == gamestate.getTurn() && (f.doMove(x, y))) {
                     connection.getGame().getClient1().write("move:" + a + ":" + x + ":" + y);
                     connection.getGame().getClient2().write("move:" + a + ":" + x + ":" + y);
                 }
-                if (f != null && !f.isBlack() == connection.isWhite() && f.isBlack() == connection.getGame().getTurn() && (f.doCapture(x, y))) {
+                if (f != null && !f.isBlack() == connection.isWhite() && f.isBlack() == gamestate.getTurn() && (f.doCapture(x, y))) {
                     connection.getGame().getClient1().write("capture:" + a + ":" + x + ":" + y);
                     connection.getGame().getClient2().write("capture:" + a + ":" + x + ":" + y);
                 }
@@ -57,33 +60,33 @@ public class GameConnectionThread extends ConnectionThread {
             int nummerinarray = Integer.parseInt(nia);
             switch (n) {
                 case "rook":
-                    Chessman f = Rook.promotion((Pawn) connection.getGame().getFiguren(color)[nummerinarray], connection.getGame());
+                    Chessman f = Rook.promotion((Pawn) gamestate.getChessmen(color)[nummerinarray], gamestate);
                     if (f != null) {
-                        connection.getGame().getFiguren(color)[nummerinarray] = f;
+                        gamestate.getChessmen(color)[nummerinarray] = f;
                         connection.getGame().getClient1().write(input);
                         connection.getGame().getClient2().write(input);
                     }
                     break;
                 case "knight":
-                    f = Knight.promotion((Pawn) connection.getGame().getFiguren(color)[nummerinarray], connection.getGame());
+                    f = Knight.promotion((Pawn) gamestate.getChessmen(color)[nummerinarray], gamestate);
                     if (f != null) {
-                        connection.getGame().getFiguren(color)[nummerinarray] = f;
+                        gamestate.getChessmen(color)[nummerinarray] = f;
                         connection.getGame().getClient1().write(input);
                         connection.getGame().getClient2().write(input);
                     }
                     break;
                 case "bishop":
-                    f = Bishop.promotion((Pawn) connection.getGame().getFiguren(color)[nummerinarray], connection.getGame());
+                    f = Bishop.promotion((Pawn) gamestate.getChessmen(color)[nummerinarray], gamestate);
                     if (f != null) {
-                        connection.getGame().getFiguren(color)[nummerinarray] = f;
+                        gamestate.getChessmen(color)[nummerinarray] = f;
                         connection.getGame().getClient1().write(input);
                         connection.getGame().getClient2().write(input);
                     }
                     break;
                 case "queen":
-                    f = Queen.promotion((Pawn) connection.getGame().getFiguren(color)[nummerinarray], connection.getGame());
+                    f = Queen.promotion((Pawn) gamestate.getChessmen(color)[nummerinarray], gamestate);
                     if (f != null) {
-                        connection.getGame().getFiguren(color)[nummerinarray] = f;
+                        gamestate.getChessmen(color)[nummerinarray] = f;
                         connection.getGame().getClient1().write(input);
                         connection.getGame().getClient2().write(input);
                     }

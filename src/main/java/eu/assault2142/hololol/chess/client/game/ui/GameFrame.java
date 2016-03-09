@@ -105,7 +105,7 @@ public class GameFrame extends JFrame implements MouseListener {
      */
     private void initComponents() {
         constraints.fill = GridBagConstraints.BOTH;
-        gamefield = new GameBoard(this, game);
+        gamefield = new GameBoard(this, game.getGameSituation());
         addComponent(gamefield, 0, 0, 10, 10, 8, GridBagConstraints.REMAINDER);
         JLabel turn = new JLabel("");
         addComponent(turn, 0, 9, 10, 1, 8, 1);
@@ -137,7 +137,7 @@ public class GameFrame extends JFrame implements MouseListener {
     @Override
     public void mousePressed(MouseEvent e) {
         if (e.getClickCount() == 1 && !gamefield.movementsupdating && focus) {//Abfangen von Mehrfachklicks
-            game.resetFields();
+            game.getGameSituation().resetFields();
 
             game.clickAt(e.getX() / squarelength, e.getY() / squarelength);
 
