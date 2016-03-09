@@ -6,10 +6,10 @@
 package eu.assault2142.hololol.chess.client.menus;
 
 import eu.assault2142.hololol.chess.client.game.LocalGame;
-import eu.assault2142.hololol.chess.client.game.Settings;
 import eu.assault2142.hololol.chess.client.networking.ServerConnection;
 import eu.assault2142.hololol.chess.client.networking.ServerMessages;
 import eu.assault2142.hololol.chess.client.translator.Translator;
+import eu.assault2142.hololol.chess.game.Settings;
 import java.awt.event.ActionEvent;
 import java.awt.event.FocusEvent;
 import java.awt.event.MouseAdapter;
