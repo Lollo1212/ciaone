@@ -168,6 +168,7 @@ public class King extends Chessman {
      * Execute a castling with this chessman
      *
      * @param move the castling-move to execute
+     * @param situation
      * @return true if the capture was successful, false otherwise
      */
     public boolean doCastling(CastlingMove move, GameSituation situation) {
@@ -187,7 +188,7 @@ public class King extends Chessman {
                 posy = move.targetY;
                 move.rook.posx = move.rookX;
                 move.rook.posy = move.rookY;
-                game.nextTurn();
+                game.nextTurn(this);
                 return true;
             } else if (rochaden[1] != null && rochaden[1].equals(move)) {
                 situation.getSquare(posx, posy).occupier = null;
@@ -198,7 +199,7 @@ public class King extends Chessman {
                 posy = move.targetY;
                 move.rook.posx = move.rookX;
                 move.rook.posy = move.rookY;
-                game.nextTurn();
+                game.nextTurn(this);
                 return true;
             }
         }

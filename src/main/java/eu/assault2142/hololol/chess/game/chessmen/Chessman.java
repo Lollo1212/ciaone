@@ -207,7 +207,7 @@ public abstract class Chessman {
         posx = move.targetX;
         posy = move.targetY;
         game.getSquare(posx, posy).occupier = this;
-        game.nextTurn();
+        game.nextTurn(this);
     }
 
     private void executeCapture(Move m) {
@@ -219,7 +219,7 @@ public abstract class Chessman {
         posx = m.targetX;
         posy = m.targetY;
         game.getSquare(m.targetX, m.targetY).occupier = this;
-        game.nextTurn();
+        game.nextTurn(this);
     }
 
     protected LinkedList<Move> removeCheckMoves(List<Move> moves, GameSituation situation) {
@@ -257,7 +257,7 @@ public abstract class Chessman {
         return false;
     }
 
-    private void moveToEdgeZone() {
+    protected void moveToEdgeZone() {
         int xpos;
         int ypos;
         if (black) {

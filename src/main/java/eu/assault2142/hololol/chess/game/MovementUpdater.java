@@ -60,7 +60,7 @@ public abstract class MovementUpdater extends Thread {//Berechnet nach jedem Zug
         for (Move schläge1 : schläge) {
             if (schläge1 != null) {
                 Square f = game.getSquare(schläge1.getTargetX(), schläge1.getTargetY());
-                if (f.occupier.getClass() == King.class) {
+                if (f.isOccupied() && f.occupier.getClass() == King.class) {
                     schach = true;
                     break;
                 }
