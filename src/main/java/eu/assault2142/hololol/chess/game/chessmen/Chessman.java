@@ -2,7 +2,6 @@ package eu.assault2142.hololol.chess.game.chessmen;
 
 import eu.assault2142.hololol.chess.game.GameState;
 import eu.assault2142.hololol.chess.game.Square;
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
@@ -56,8 +55,8 @@ public abstract class Chessman {
     int positioninarray;
     //the value of this chessman
     int value;
-    Move[] moves;
-    Move[] captures;
+    List<Move> moves;
+    List<Move> captures;
 
     /**
      *
@@ -87,9 +86,9 @@ public abstract class Chessman {
         Square square = gamesituation.getSquare(targetX, targetY);
         boolean r = false;
         if (gamesituation.getTurn() == black) {
-            Move[] bewegungen = gamesituation.getPossibleMoves(positioninarray, black);
+            List<Move> bewegungen = gamesituation.getPossibleMoves(positioninarray, black);
             if (bewegungen != null && !square.isOccupied()) {
-                Optional<Move> findFirst = Arrays.stream(bewegungen).filter((Move m) -> {
+                Optional<Move> findFirst = bewegungen.stream().filter((Move m) -> {
                     return move.equals(m);
                 }).findFirst();
                 r = findFirst.isPresent();
@@ -113,9 +112,9 @@ public abstract class Chessman {
         Square square = gamesituation.getSquare(targetX, targetY);
         boolean r = false;
         if (gamesituation.getTurn() == black) {
-            Move[] bewegungen = gamesituation.getPossibleCaptures(positioninarray, black);
+            List<Move> bewegungen = gamesituation.getPossibleCaptures(positioninarray, black);
             if (bewegungen != null && square.isOccupiedByColor(!black)) {
-                Optional<Move> findFirst = Arrays.stream(bewegungen).filter((Move m) -> {
+                Optional<Move> findFirst = bewegungen.stream().filter((Move m) -> {
                     return capture.equals(m);
                 }).findFirst();
                 r = findFirst.isPresent();
@@ -135,7 +134,7 @@ public abstract class Chessman {
      * @param situation
      * @return an array of possible moves
      */
-    public abstract Move[] computeMoves(boolean checkForCheck, GameState situation);
+    public abstract List<Move> computeMoves(boolean checkForCheck, GameState situation);
 
     /**
      * Return the captures this chessman is allowed to do
@@ -145,7 +144,7 @@ public abstract class Chessman {
      * @param situation
      * @return an array of possible captures
      */
-    public abstract Move[] computeCaptures(boolean checkForCheck, GameState situation);
+    public abstract List<Move> computeCaptures(boolean checkForCheck, GameState situation);
 
     @Override
     public abstract Chessman clone();
@@ -303,11 +302,11 @@ public abstract class Chessman {
         posy = ypos;
     }
 
-    public Move[] getMoves() {
+    public List<Move> getMoves() {
         return moves;
     }
 
-    public Move[] getCaptures() {
+    public List<Move> getCaptures() {
         return captures;
     }
 }

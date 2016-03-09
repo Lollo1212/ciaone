@@ -2,6 +2,8 @@ package eu.assault2142.hololol.chess.game.chessmen;
 
 import eu.assault2142.hololol.chess.game.GameState;
 import java.util.LinkedList;
+import java.util.List;
+import java.util.Optional;
 
 /**
  *
@@ -47,7 +49,7 @@ public class King extends Chessman {
     }
 
     @Override
-    public Move[] computeMoves(boolean checkForCheck, GameState situation) {
+    public List<Move> computeMoves(boolean checkForCheck, GameState situation) {
         LinkedList<Move> moves = new LinkedList();
         for (int k = -1; k <= 1; k++) {
             for (int j = -1; j <= 1; j++) {
@@ -59,13 +61,11 @@ public class King extends Chessman {
             moves = removeCheckMoves(moves, situation);
 
         }
-        Move[] ret = new Move[moves.size()];
-        ret = moves.toArray(ret);
-        return ret;
+        return moves;
     }
 
     @Override
-    public Move[] computeCaptures(boolean checkForChecks, GameState situation) {
+    public List<Move> computeCaptures(boolean checkForChecks, GameState situation) {
         LinkedList<Move> captures = new LinkedList();
         for (int k = -1; k <= 1; k++) {
             for (int j = -1; j <= 1; j++) {
@@ -76,9 +76,7 @@ public class King extends Chessman {
         if (checkForChecks) {
             captures = removeCheckMoves(captures, situation);
         }
-        Move[] ret = new Move[captures.size()];
-        ret = captures.toArray(ret);
-        return ret;
+        return captures;
     }
 
     /**
@@ -88,7 +86,7 @@ public class King extends Chessman {
      * check-situation
      * @return an array of possible castlings
      */
-    public CastlingMove[] computeCastlings(boolean checkForCheck, GameState situation) {
+    public List<CastlingMove> computeCastlings(boolean checkForCheck, GameState situation) {
         LinkedList<CastlingMove> castlings = new LinkedList();
         if (black == true) {
             if (!moved && !gamesituation.getChessmen(true)[8].captured && !gamesituation.getChessmen(true)[8].moved && !situation.getSquare(1, 0).isOccupied() && !situation.getSquare(2, 0).isOccupied() && !situation.getSquare(3, 0).isOccupied()) {
@@ -108,7 +106,7 @@ public class King extends Chessman {
         //Überprüfen ob legal
         if (checkForCheck) {
             GameState gsneu;
-            Move schläge[];
+            List<Move> schläge;
             for (int a = 0; a < castlings.size(); a++) {
                 CastlingMove move = castlings.get(a);
                 int kx = move.targetX;
@@ -138,9 +136,7 @@ public class King extends Chessman {
                 }
             }
         }
-        CastlingMove[] ret = new CastlingMove[castlings.size()];
-        ret = castlings.toArray(ret);
-        return ret;
+        return castlings;
     }
 
     @Override
@@ -171,38 +167,29 @@ public class King extends Chessman {
      * @return true if the capture was successful, false otherwise
      */
     public boolean doCastling(CastlingMove move, GameState situation) {
-        CastlingMove[] rochaden = computeCastlings(true, situation);
-        if (rochaden.length == 0) {
-            return false;
-        }
-        if (gamesituation.getTurn() == black) {
-            if (rochaden[0] != null && rochaden[0].equals(move)) {
-                //könig ziehen
-                situation.getSquare(posx, posy).occupier = null;
-                situation.getSquare(move.targetX, move.targetY).occupier = this;
-                situation.getSquare(move.rook.posx, move.rook.posy).occupier = null;
-                situation.getSquare(move.rookX, move.rookY).occupier = move.rook;
-                //Turm ziehen
-                posx = move.targetX;
-                posy = move.targetY;
-                move.rook.posx = move.rookX;
-                move.rook.posy = move.rookY;
-                gamesituation.nextTurn(this);
-                return true;
-            } else if (rochaden[1] != null && rochaden[1].equals(move)) {
-                situation.getSquare(posx, posy).occupier = null;
-                situation.getSquare(move.targetX, move.targetY).occupier = this;
-                situation.getSquare(move.rook.posx, move.rook.posy).occupier = null;
-                situation.getSquare(move.rookX, move.rookY).occupier = move.rook;
-                posx = move.targetX;
-                posy = move.targetY;
-                move.rook.posx = move.rookX;
-                move.rook.posy = move.rookY;
-                gamesituation.nextTurn(this);
-                return true;
-            }
-        }
-        return false;
+        List<CastlingMove> rochaden = computeCastlings(true, situation);
+        Optional<CastlingMove> opt = rochaden.stream().filter((CastlingMove castl) -> {
+            return castl.equals(move);
+        }).findFirst();
+        boolean ret = opt.isPresent();
+        opt.ifPresent((CastlingMove castl) -> {
+            executeCastling(castl, situation);
+        });
+        return ret;
+    }
+
+    private void executeCastling(CastlingMove move, GameState situation) {
+        //könig ziehen
+        situation.getSquare(posx, posy).occupier = null;
+        situation.getSquare(move.targetX, move.targetY).occupier = this;
+        situation.getSquare(move.rook.posx, move.rook.posy).occupier = null;
+        situation.getSquare(move.rookX, move.rookY).occupier = move.rook;
+        //Turm ziehen
+        posx = move.targetX;
+        posy = move.targetY;
+        move.rook.posx = move.rookX;
+        move.rook.posy = move.rookY;
+        gamesituation.nextTurn(this);
     }
 
     @Override

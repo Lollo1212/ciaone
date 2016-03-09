@@ -2,8 +2,8 @@ package eu.assault2142.hololol.chess.game.chessmen;
 
 import eu.assault2142.hololol.chess.game.GameState;
 import eu.assault2142.hololol.chess.game.Square;
-import java.util.Arrays;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -50,9 +50,9 @@ public class Pawn extends Chessman {
         if (!r) {
             Square square = gamesituation.getSquare(targetX, targetY + (black ? -1 : +1));
             if (gamesituation.getTurn() == black) {
-                Move[] bewegungen = gamesituation.getPossibleCaptures(positioninarray, black);
+                List<Move> bewegungen = gamesituation.getPossibleCaptures(positioninarray, black);
                 if (square != null && bewegungen != null && square.isOccupiedByColor(!black)) {
-                    Optional<Move> findFirst = Arrays.stream(bewegungen).filter((Move m) -> {
+                    Optional<Move> findFirst = bewegungen.stream().filter((Move m) -> {
                         return m.getClass() == EnPassantMove.class && targetX == m.getTargetX();
                     }).findFirst();
                     r = findFirst.isPresent();
@@ -127,7 +127,7 @@ public class Pawn extends Chessman {
     }
 
     @Override
-    public Move[] computeMoves(boolean checkForCheck, GameState situation) {
+    public List<Move> computeMoves(boolean checkForCheck, GameState situation) {
         LinkedList<Move> moves = new LinkedList();
         Move[] bewegungen = new Move[2];
         int x = 0;
@@ -143,13 +143,11 @@ public class Pawn extends Chessman {
         if (checkForCheck) {
             moves = removeCheckMoves(moves, situation);
         }
-        Move[] ret = new Move[moves.size()];
-        ret = moves.toArray(ret);
-        return ret;
+        return moves;
     }
 
     @Override
-    public Move[] computeCaptures(boolean checkForCheck, GameState situation) {
+    public List<Move> computeCaptures(boolean checkForCheck, GameState situation) {
         LinkedList<Move> captures = new LinkedList();
         if (black == true) {
             addIfCapturePossible(captures, posx + 1, posy + 1, situation);
@@ -170,9 +168,7 @@ public class Pawn extends Chessman {
         if (checkForCheck) {
             captures = removeCheckMoves(captures, situation);
         }
-        Move[] ret = new Move[captures.size()];
-        ret = captures.toArray(ret);
-        return ret;
+        return captures;
     }
 
     @Override

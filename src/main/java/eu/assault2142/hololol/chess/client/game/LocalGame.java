@@ -14,7 +14,7 @@ import eu.assault2142.hololol.chess.game.chessmen.Move;
 import eu.assault2142.hololol.chess.game.chessmen.Pawn;
 import eu.assault2142.hololol.chess.game.chessmen.Queen;
 import eu.assault2142.hololol.chess.game.chessmen.Rook;
-import java.util.Arrays;
+import java.util.List;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 
@@ -23,7 +23,7 @@ import javax.swing.JOptionPane;
  *
  * @author hololol2
  */
-public class LocalGame extends Game {
+public final class LocalGame extends Game {
 
     private final GameFrame gameframe;
     private Chessman picked;
@@ -35,7 +35,7 @@ public class LocalGame extends Game {
     public LocalGame() {
         super(TYPE.LOCAL);
         gameframe = new GameFrame(this);
-        new ClientMovementUpdater(getGameState()).start();
+        updateMovements();
     }
 
     @Override
@@ -80,7 +80,7 @@ public class LocalGame extends Game {
             try {
                 Thread.sleep(100);
                 getGameFrame().getGameBoard().check = true;
-                Thread.sleep(3000);
+                Thread.sleep(2000);
                 getGameFrame().getGameBoard().check = false;
             } catch (InterruptedException ex) {
 
@@ -106,8 +106,6 @@ public class LocalGame extends Game {
         Chessman man;
         String promotion = (String) JOptionPane.showInputDialog(gameframe, Translator.getBundle().getString("PROMOTION_HEAD"), Translator.getBundle().getString("PROMOTION_TEXT"), JOptionPane.QUESTION_MESSAGE, null, new String[]{Translator.getBundle().getString("CHESSMAN_QUEEN"), Translator.getBundle().getString("CHESSMAN_ROOK"), Translator.getBundle().getString("CHESSMAN_KNIGHT"), Translator.getBundle().getString("CHESSMAN_BISHOP")}, Translator.getBundle().getString("CHESSMAN_QUEEN"));
         switch (promotion) {
-            //bei lokalem Spiel wird der Bauer direkt gesetzt,
-            //bei Serverbasiertem senden der Daten an den Server
             case "ROOK":
                 man = Rook.promotion(pawn, getGameState());
                 break;
@@ -177,8 +175,8 @@ public class LocalGame extends Game {
     private void showPossibleMoves() {
         if (selected.occupier != null) {
             picked = selected.occupier;
-            Move[] bewegungen = getGameState().getChessmen(picked.isBlack())[picked.getPositionInArray()].getMoves();
-            Move[] schläge = getGameState().getChessmen(picked.isBlack())[picked.getPositionInArray()].getCaptures();
+            List<Move> bewegungen = getGameState().getChessmen(picked.isBlack())[picked.getPositionInArray()].getMoves();
+            List<Move> schläge = getGameState().getChessmen(picked.isBlack())[picked.getPositionInArray()].getCaptures();
             /*if (picked.getClass() == King.class) {
                 CastlingMove[] rochaden = ((King) picked).computeCastlings(true, getGameState());
                 Arrays.stream(rochaden).forEach((CastlingMove c) -> {
@@ -186,10 +184,10 @@ public class LocalGame extends Game {
                 });
 
             }*/
-            Arrays.stream(bewegungen).forEach((Move m) -> {
+            bewegungen.stream().forEach((Move m) -> {
                 getGameState().getSquare(m.getTargetX(), m.getTargetY()).highlight(Square.HIGHLIGHT.MOVETARGET);
             });
-            Arrays.stream(schläge).forEach((Move m) -> {
+            schläge.stream().forEach((Move m) -> {
                 getGameState().getSquare(m.getTargetX(), m.getTargetY()).highlight(Square.HIGHLIGHT.CAPTURETARGET);
             });
 

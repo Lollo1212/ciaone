@@ -6,6 +6,7 @@ import eu.assault2142.hololol.chess.game.chessmen.Move;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.List;
 import java.util.Scanner;
 
 /**
@@ -47,7 +48,7 @@ public class GameClientConnection {
         String str3 = "moves:black:capture:";
         String str4 = "move:white:capture:";
         for (int a = 0; a < 16; a++) {
-            Move[] m = gs.getChessmen(true)[a].getMoves();
+            List<Move> m = gs.getChessmen(true)[a].getMoves();
             for (Move m1 : m) {
                 if (m1 != null) {
                     str1 += m1.getTargetX() + "" + m1.getTargetY() + "" + m1.getChessman().getPositionInArray() + ";";

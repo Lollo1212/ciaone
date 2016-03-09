@@ -120,8 +120,6 @@ public class ClientGame extends Game {
         }
         getGameState().getChessmen(pawn.isBlack())[pawn.getPositionInArray()] = man;
         getGameState().getSquare(man.getX(), man.getY()).occupier = man;
-
-        new ClientMovementUpdater(getGameState()).start();
     }
 
     @Override

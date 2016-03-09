@@ -2,6 +2,7 @@ package eu.assault2142.hololol.chess.game.chessmen;
 
 import eu.assault2142.hololol.chess.game.GameState;
 import java.util.LinkedList;
+import java.util.List;
 
 /**
  *
@@ -65,7 +66,7 @@ public class Queen extends Chessman {
     }
 
     @Override
-    public Move[] computeMoves(boolean checkForCheck, GameState situation) {
+    public List<Move> computeMoves(boolean checkForCheck, GameState situation) {
         LinkedList<Move> moves = new LinkedList();
         for (int c = 1; c <= 6; c++) {
             if (!addIfMovePossible(moves, posx + c, posy + c, situation)) {
@@ -111,13 +112,11 @@ public class Queen extends Chessman {
         if (checkForCheck) {
             moves = removeCheckMoves(moves, situation);
         }
-        Move[] ret = new Move[moves.size()];
-        ret = moves.toArray(ret);
-        return ret;
+        return moves;
     }
 
     @Override
-    public Move[] computeCaptures(boolean checkForCheck, GameState situation) {
+    public List<Move> computeCaptures(boolean checkForCheck, GameState situation) {
         LinkedList<Move> captures = new LinkedList();
         for (int c = 1; c <= 6; c++) {
             if (!addIfCapturePossible(captures, posx + c, posy + c, situation)) {
@@ -163,9 +162,7 @@ public class Queen extends Chessman {
         if (checkForCheck) {
             captures = removeCheckMoves(captures, situation);
         }
-        Move[] ret = new Move[captures.size()];
-        ret = captures.toArray(ret);
-        return ret;
+        return captures;
     }
 
     @Override

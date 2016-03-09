@@ -2,6 +2,7 @@ package eu.assault2142.hololol.chess.game.chessmen;
 
 import eu.assault2142.hololol.chess.game.GameState;
 import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Represents a Rook
@@ -52,7 +53,7 @@ public class Rook extends Chessman {
     }
 
     @Override
-    public Move[] computeMoves(boolean checkForCheck, GameState situation) {
+    public List<Move> computeMoves(boolean checkForCheck, GameState situation) {
         LinkedList<Move> moves = new LinkedList();
         for (int u = posx - 1; u >= 0; u--) {
             if (!addIfMovePossible(moves, u, posy, situation)) {
@@ -78,13 +79,11 @@ public class Rook extends Chessman {
         if (checkForCheck) {
             moves = removeCheckMoves(moves, situation);
         }
-        Move[] ret = new Move[moves.size()];
-        ret = moves.toArray(ret);
-        return ret;
+        return moves;
     }
 
     @Override
-    public Move[] computeCaptures(boolean checkForCheck, GameState situation) {
+    public List<Move> computeCaptures(boolean checkForCheck, GameState situation) {
         LinkedList<Move> captures = new LinkedList();
         for (int u = posx - 1; u >= 0; u--) {
             if (!addIfCapturePossible(captures, u, posy, situation)) {
@@ -110,9 +109,7 @@ public class Rook extends Chessman {
         if (checkForCheck) {
             captures = removeCheckMoves(captures, situation);
         }
-        Move[] ret = new Move[captures.size()];
-        ret = captures.toArray(ret);
-        return ret;
+        return captures;
     }
 
     /**

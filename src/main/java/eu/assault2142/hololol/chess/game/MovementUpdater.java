@@ -6,10 +6,9 @@ package eu.assault2142.hololol.chess.game;
 
 import eu.assault2142.hololol.chess.game.chessmen.King;
 import eu.assault2142.hololol.chess.game.chessmen.Move;
-import java.util.Arrays;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.stream.Stream;
 
 /**
  *
@@ -25,7 +24,7 @@ public abstract class MovementUpdater extends Thread {//Berechnet nach jedem Zug
     }
 
     public void testCheck() {
-        Move[] schläge = gamesituation.getAllCaptures(!gamesituation.getTurn());
+        List<Move> schläge = gamesituation.getAllCaptures(!gamesituation.getTurn());
         //wenn ziel König ist, dann Schach
         for (Move schläge1 : schläge) {
             if (schläge1 != null) {
@@ -37,13 +36,12 @@ public abstract class MovementUpdater extends Thread {//Berechnet nach jedem Zug
             }
         }
 
-        Move[] zü = gamesituation.getAllMoves(gamesituation.getTurn());
-        Move[] schl = gamesituation.getAllCaptures(gamesituation.getTurn());
-        Move[] bewegungen = Stream.concat(Arrays.stream(zü), Arrays.stream(schl))
-                .toArray(Move[]::new);
+        List<Move> zü = gamesituation.getAllMoves(gamesituation.getTurn());
+        List<Move> schl = gamesituation.getAllCaptures(gamesituation.getTurn());
+        zü.addAll(schläge);
         schachmatt = true;
         //wenn irgendein Zug möglich ist, dann kein schachmatt
-        for (Move bewegungen1 : bewegungen) {
+        for (Move bewegungen1 : zü) {
             if (bewegungen1 != null) {
                 schachmatt = false;
                 break;
