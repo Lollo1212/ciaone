@@ -71,12 +71,10 @@ public abstract class MovementUpdater extends Thread {//Berechnet nach jedem Zug
         Move[] schl = game.getGameSituation().getAllCaptures(game.getTurn());
         Move[] bewegungen = Stream.concat(Arrays.stream(zü), Arrays.stream(schl))
                 .toArray(Move[]::new);
-        System.out.println(bewegungen.length);
         schachmatt = true;
         //wenn irgendein Zug möglich ist, dann kein schachmatt
         for (Move bewegungen1 : bewegungen) {
             if (bewegungen1 != null) {
-                System.out.println(bewegungen1.getChessman().getClass());
                 schachmatt = false;
                 break;
             }

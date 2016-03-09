@@ -18,7 +18,6 @@ public class ClientConnection extends GameClientConnection {
 
     private Socket socket;
     private Server server;
-    private final ClientConnectionThread reader;
     private Scanner scanner;
     private PrintWriter printwriter;
     private boolean white;
@@ -51,11 +50,6 @@ public class ClientConnection extends GameClientConnection {
         Server.SERVER.logoutUser(user.getID());
         printwriter.close();
         scanner.close();
-        try {
-            socket.close();
-        } catch (IOException ex) {
-            Log.MAINLOG.log(ex.getMessage());
-        }
         Log.MAINLOG.log(user.getUsername() + " logged out");
     }
 

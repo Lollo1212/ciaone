@@ -48,16 +48,18 @@ public class ServerConnection {
     private ServerConnection(InetAddress address) {
         try {
             KeyStore ks = KeyStore.getInstance("JKS");
-            ks.load(new FileInputStream("TRUSTSTORE"), "assault".toCharArray());
+            ks.load(new FileInputStream(getClass().getResource("/trustStore").getPath()), "assault".toCharArray());
             TrustManagerFactory tmf = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
             tmf.init(ks);
 
             SSLContext sslcon = SSLContext.getInstance("TLS");
+
             TrustManager[] trustManagers = tmf.getTrustManagers();
             sslcon.init(null, trustManagers, null);
 
             SSLSocketFactory ssf = sslcon.getSocketFactory();
             SSLSocket socket = (SSLSocket) ssf.createSocket(address, 1024);
+
             socket.startHandshake();
             this.socket = socket;
             scanner = new Scanner(this.socket.getInputStream());
@@ -129,8 +131,7 @@ public class ServerConnection {
                 c = new ServerConnection(c.socket, c.scanner, c.writer);
                 MainMenu.MAINMENU.loggedIn(c);//neues Fenster öffnen
             } else//Server verweigert Anmeldung
-            {
-                if (create) {
+             if (create) {
                     JOptionPane.showMessageDialog(MainMenu.MAINMENU, Translator.getBundle().getString("ACCOUNT EXISTIERT BEREITS"), Translator.getBundle().getString("LOGIN ERROR"), JOptionPane.ERROR_MESSAGE);
                     MainMenu.MAINMENU.enableLoginButton();
                     //InfoFrame f=new InfoFrame("Account existiert bereits",300,100,true);
@@ -141,7 +142,6 @@ public class ServerConnection {
                     JOptionPane.showMessageDialog(MainMenu.MAINMENU, Translator.getBundle().getString("ACCOUNT EXISTIERT NICHT"), Translator.getBundle().getString("LOGIN ERROR"), JOptionPane.ERROR_MESSAGE);
                     MainMenu.MAINMENU.enableLoginButton();
                 }//InfoFrame f=new InfoFrame("Benutzername oder Passwort falsch",300,100,true);
-            }
         }
     }
 

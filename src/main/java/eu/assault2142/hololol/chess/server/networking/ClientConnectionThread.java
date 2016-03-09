@@ -31,8 +31,7 @@ public class ClientConnectionThread extends GameConnectionThread {
         if (message[0].equals("msg") && length == 3) {
             try {
                 server.sendMessage(server.getUserID(message[1]), connection.getUser().getUsername() + ":" + message[2]);
-            }
-            catch (UnknownUserException ex) {
+            } catch (UnknownUserException ex) {
                 Log.MAINLOG.log(ex.getMessage());
             }
         }
@@ -63,8 +62,7 @@ public class ClientConnectionThread extends GameConnectionThread {
 
                 }
             }
-        }
-        catch (UnknownUserException ex) {
+        } catch (UnknownUserException ex) {
             Log.MAINLOG.log(ex.getMessage());
         }
     }
@@ -84,8 +82,7 @@ public class ClientConnectionThread extends GameConnectionThread {
                     if (server.challengeExists(connection.getUser().getID(), server.getUserID(message[2]))) {
                         server.startGame(connection.getUser(), server.getUser(message[2]));
                     }
-                }
-                catch (UnknownUserException ex) {
+                } catch (UnknownUserException ex) {
                     Log.MAINLOG.log(ex.getMessage());
                 }
             } else if (str.equals("decline")) {
@@ -107,8 +104,7 @@ public class ClientConnectionThread extends GameConnectionThread {
                     } else {
                         connection.write("newgame:enemyoffline");
                     }
-                }
-                catch (UnknownUserException ex) {
+                } catch (UnknownUserException ex) {
                     Log.MAINLOG.log(ex.getMessage());
                 }
             }
@@ -122,11 +118,9 @@ public class ClientConnectionThread extends GameConnectionThread {
                 try {
                     server.setUsername(connection.getUser().getID(), message[2]);
                     connection.write("change:username:accept:" + message[2]);
-                }
-                catch (UsernameNotFreeException ex) {
+                } catch (UsernameNotFreeException ex) {
                     connection.write("change:username:decline");
-                }
-                catch (UnknownUserException ex) {
+                } catch (UnknownUserException ex) {
                     Log.MAINLOG.log(ex.getMessage());
                 }
             }
@@ -134,8 +128,7 @@ public class ClientConnectionThread extends GameConnectionThread {
                 try {
                     server.setPassword(connection.getUser().getID(), message[2]);
                     connection.write("change:password:accept");
-                }
-                catch (UnknownUserException ex) {
+                } catch (UnknownUserException ex) {
                     Log.MAINLOG.log(ex.getMessage());
                 }
             }

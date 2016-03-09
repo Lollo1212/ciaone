@@ -1,8 +1,8 @@
 package eu.assault2142.hololol.chess.networking;
 
 import eu.assault2142.hololol.chess.game.GameSituation;
-import eu.assault2142.hololol.chess.game.chessmen.Move;
 import eu.assault2142.hololol.chess.game.ServerGame;
+import eu.assault2142.hololol.chess.game.chessmen.Move;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
@@ -12,10 +12,10 @@ import java.util.Scanner;
  *
  * @author hololol2
  */
-public class GameClientConnection{
+public class GameClientConnection {
 
     private Socket socket;
-    private final GameConnectionThread reader;
+    protected ConnectionThread reader;
     private Scanner scanner;
     private PrintWriter printwriter;
     private boolean white;

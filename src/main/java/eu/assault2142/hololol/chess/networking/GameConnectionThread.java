@@ -45,9 +45,10 @@ public class GameConnectionThread extends ConnectionThread {
     }
 
     private void consumePromotion(String[] message) {
-        String input = message[0] + ":" + message[1] + ":" + message[2] + ":" + message[3];
         int length = message.length;
         if (message[0].equals("promotion") && length == 4) {
+
+            String input = message[0] + ":" + message[1] + ":" + message[2] + ":" + message[3];
             String n = message[1];
             String c = message[2];
             boolean color;
