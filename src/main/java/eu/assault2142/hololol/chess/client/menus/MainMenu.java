@@ -792,12 +792,13 @@ public class MainMenu extends javax.swing.JFrame {
 
     private void saveSettings() {
         if (jComboBox2.getSelectedIndex() == 1) {
-            Translator.setLanguage(Locale.GERMANY);
             locale = Locale.GERMANY;
+            Locale.setDefault(locale);
         } else {
-            Translator.setLanguage(Locale.ENGLISH);
             locale = Locale.ENGLISH;
         }
+        Locale.setDefault(locale);
+        Translator.setLanguage(locale);
         ResourceBundle.clearCache();
         setVisible(false);
         MainMenu main = new MainMenu();
