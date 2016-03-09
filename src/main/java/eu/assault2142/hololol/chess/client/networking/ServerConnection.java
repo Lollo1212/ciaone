@@ -124,14 +124,14 @@ public class ServerConnection {
             str += username + ":" + password;
             c.write(str);
             String input = c.scanner.next();
-            System.err.println(input);
             if (input.equals("loggedin")) {
                 //Der Server bestätigt Anmeldung
 
                 c = new ServerConnection(c.socket, c.scanner, c.writer);
                 MainMenu.MAINMENU.loggedIn(c);//neues Fenster öffnen
             } else//Server verweigert Anmeldung
-             if (create) {
+            {
+                if (create) {
                     JOptionPane.showMessageDialog(MainMenu.MAINMENU, Translator.getBundle().getString("ACCOUNT EXISTIERT BEREITS"), Translator.getBundle().getString("LOGIN ERROR"), JOptionPane.ERROR_MESSAGE);
                     MainMenu.MAINMENU.enableLoginButton();
                     //InfoFrame f=new InfoFrame("Account existiert bereits",300,100,true);
@@ -142,6 +142,7 @@ public class ServerConnection {
                     JOptionPane.showMessageDialog(MainMenu.MAINMENU, Translator.getBundle().getString("ACCOUNT EXISTIERT NICHT"), Translator.getBundle().getString("LOGIN ERROR"), JOptionPane.ERROR_MESSAGE);
                     MainMenu.MAINMENU.enableLoginButton();
                 }//InfoFrame f=new InfoFrame("Benutzername oder Passwort falsch",300,100,true);
+            }
         }
     }
 

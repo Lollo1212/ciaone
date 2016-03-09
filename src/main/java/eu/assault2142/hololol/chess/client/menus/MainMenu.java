@@ -787,6 +787,8 @@ public class MainMenu extends javax.swing.JFrame {
         } else {
             jButton1.setEnabled(false);
             ServerConnection.connect(jTextField1.getText(), new String(jPasswordField1.getPassword()), jCheckBox2.isSelected());
+            jPasswordField1.setText("");
+            jCheckBox2.setSelected(false);
         }
     }
 
