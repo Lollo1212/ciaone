@@ -21,10 +21,6 @@ public class LocalMovementUpdater extends MovementUpdater {
     }
 
     @Override
-    public void onStart() {
-    }
-
-    @Override
     public void run() {
         Runnable wait = () -> {
             try {

@@ -24,7 +24,7 @@ public class GameConnectionThread extends ConnectionThread {
         consumers.add(this::consumeDraw);
         consumers.add(this::consumePromotion);
         consumers.add(this::consumeResignation);
-        gamestate = serverclient.getGame().getGameSituation();
+        gamestate = serverclient.getGame().getGameState();
     }
 
     private void consumeMove(String[] message) {

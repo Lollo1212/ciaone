@@ -41,7 +41,7 @@ public class GameClientConnection {
     }
 
     public void writeMovements() {
-        GameState gs = game.getGameSituation();
+        GameState gs = game.getGameState();
         String str1 = "moves:black:move:";
         String str2 = "moves:white:move:";
         String str3 = "moves:black:capture:";

@@ -12,41 +12,101 @@ import javax.swing.JPanel;
 import javax.swing.Timer;
 
 /**
- * Displays the game-board and updates it
+ * Displays the gamestate-board and updates it
  *
  * @author hololol2
  */
 public class GameBoard extends JPanel {
 
-    private final GameFrame gameframe;
-    private final int squarelength;
-    public boolean movementsupdating = false;
     public boolean check = false;
-    private final GameState game;
+    public boolean movementsupdating = false;
+    private final GameState gamestate;
+    private final GameFrame gameframe;
+    private Graphics graphics;
+    private ImageIcon ibackschachb;
+    private ImageIcon ibackschachw;
 
     private ImageIcon ibackschwarz;
     private ImageIcon ibackweiß;
-    private ImageIcon itextweiß;
-    private ImageIcon itextschwarz;
-    private ImageIcon itextschachw;
     private ImageIcon itextschachb;
-    private ImageIcon ibackschachw;
-    private ImageIcon ibackschachb;
-
-    private Graphics graphics;
+    private ImageIcon itextschachw;
+    private ImageIcon itextschwarz;
+    private ImageIcon itextweiß;
+    private final int squarelength;
 
     /**
      * Create a new GameField
      *
      * @param gf the frame this GameField belongs to
-     * @param g the game to display
+     * @param g the gamestate to display
      */
     public GameBoard(GameFrame gf, GameState g) {
-        game = g;
+        gamestate = g;
         this.gameframe = gf;
         squarelength = gameframe.getSquareLength();
         loadImages();
         initTimer();
+    }
+
+    @Override
+    public void paint(Graphics gr) {
+        super.paint(gr);
+        graphics = gr;
+        paintEdgeZone();
+        paintBoard();
+        drawChessman();
+        drawNotification();
+    }
+
+    /**
+     * Paint the chessmen to their positions
+     */
+    private void drawChessman() {
+        for (int i = 0; i <= 15; i++) {
+            Chessman f = gamestate.getChessmen(true)[i];
+            drawImage(f.getImage(), f.getX(), f.getY(), 1, 1);
+        }
+        for (int i = 0; i <= 15; i++) {
+            Chessman f = gamestate.getChessmen(false)[i];
+            drawImage(f.getImage(), f.getX(), f.getY(), 1, 1);
+        }
+    }
+
+    /**
+     * Draws an image to the gamestate-board
+     *
+     * @param image the image to paint
+     * @param posx the x-pos of the image (in gamestate-fields 0-7)
+     * @param posy the y-pos of the image (in gamestate-fields 0-7)
+     * @param widthx the x-width of the image (in gamestate-fields 0-7)
+     * @param widthy the y-width of the image (in gamestate-fields 0-7)
+     */
+    private void drawImage(ImageIcon image, int posx, int posy, int widthx, int widthy) {
+        graphics.drawImage(image.getImage(), posx * squarelength, posy * squarelength, widthx * squarelength, widthy * squarelength, image.getImageObserver());
+    }
+
+    /**
+     * Draw notifications like check and movements-updating
+     */
+    private void drawNotification() {
+        if (movementsupdating) {
+            if (gamestate.getTurn()) {
+                drawImage(ibackschwarz, 0, 0, 8, 8);
+                drawImage(itextschwarz, 0, 0, 8, 8);
+            } else {
+                drawImage(ibackweiß, 0, 0, 8, 8);
+                drawImage(itextweiß, 0, 0, 8, 8);
+            }
+        }
+        if (check) {
+            if (gamestate.getTurn()) {
+                drawImage(ibackschachb, 0, 0, 8, 8);
+                drawImage(itextschachb, 0, 0, 8, 8);
+            } else {
+                drawImage(ibackschachw, 0, 0, 8, 8);
+                drawImage(itextschachw, 0, 0, 8, 8);
+            }
+        }
     }
 
     /**
@@ -75,14 +135,16 @@ public class GameBoard extends JPanel {
         ibackschachw = new ImageIcon(getClass().getResource(Settings.SETTINGS.chessmenFolder + "/bschachw.gif"));
     }
 
-    @Override
-    public void paint(Graphics gr) {
-        super.paint(gr);
-        graphics = gr;
-        paintEdgeZone();
-        paintBoard();
-        drawChessman();
-        drawNotification();
+    /**
+     * Paint the board-background
+     */
+    private void paintBoard() {
+        for (int x = 0; x <= 7; x++) {
+            for (int y = 0; y <= 7; y++) {
+                graphics.setColor(gamestate.getSquare(x, y).currentColor);
+                graphics.fillRect(x * squarelength, y * squarelength, squarelength, squarelength);
+            }
+        }
     }
 
     /**
@@ -95,68 +157,5 @@ public class GameBoard extends JPanel {
 
         graphics.setColor(Color.black);
         graphics.fillRect(10 * squarelength, 0, 5, 8 * squarelength);
-    }
-
-    /**
-     * Paint the board-background
-     */
-    private void paintBoard() {
-        for (int x = 0; x <= 7; x++) {
-            for (int y = 0; y <= 7; y++) {
-                graphics.setColor(game.getSquare(x, y).currentColor);
-                graphics.fillRect(x * squarelength, y * squarelength, squarelength, squarelength);
-            }
-        }
-    }
-
-    /**
-     * Paint the chessmen to their positions
-     */
-    private void drawChessman() {
-        for (int i = 0; i <= 15; i++) {
-            Chessman f = game.getChessmen(true)[i];
-            drawImage(f.getImage(), f.getX(), f.getY(), 1, 1);
-        }
-        for (int i = 0; i <= 15; i++) {
-            Chessman f = game.getChessmen(false)[i];
-            drawImage(f.getImage(), f.getX(), f.getY(), 1, 1);
-        }
-    }
-
-    /**
-     * Draw notifications like check and movements-updating
-     */
-    private void drawNotification() {
-        if (movementsupdating) {
-            if (game.getTurn()) {
-                drawImage(ibackschwarz, 0, 0, 8, 8);
-                drawImage(itextschwarz, 0, 0, 8, 8);
-            } else {
-                drawImage(ibackweiß, 0, 0, 8, 8);
-                drawImage(itextweiß, 0, 0, 8, 8);
-            }
-        }
-        if (check) {
-            if (game.getTurn()) {
-                drawImage(ibackschachb, 0, 0, 8, 8);
-                drawImage(itextschachb, 0, 0, 8, 8);
-            } else {
-                drawImage(ibackschachw, 0, 0, 8, 8);
-                drawImage(itextschachw, 0, 0, 8, 8);
-            }
-        }
-    }
-
-    /**
-     * Draws an image to the game-board
-     *
-     * @param image the image to paint
-     * @param posx the x-pos of the image (in game-fields 0-7)
-     * @param posy the y-pos of the image (in game-fields 0-7)
-     * @param widthx the x-width of the image (in game-fields 0-7)
-     * @param widthy the y-width of the image (in game-fields 0-7)
-     */
-    private void drawImage(ImageIcon image, int posx, int posy, int widthx, int widthy) {
-        graphics.drawImage(image.getImage(), posx * squarelength, posy * squarelength, widthx * squarelength, widthy * squarelength, image.getImageObserver());
     }
 }

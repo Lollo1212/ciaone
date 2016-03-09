@@ -16,11 +16,6 @@ public class ServerMovementUpdater extends MovementUpdater {
     }
 
     @Override
-    protected void onStart() {
-
-    }
-
-    @Override
     public void testCheck() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }

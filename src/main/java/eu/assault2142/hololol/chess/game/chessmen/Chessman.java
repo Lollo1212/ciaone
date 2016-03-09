@@ -246,7 +246,7 @@ public abstract class Chessman {
         GameState gsneu;
         LinkedList<Move> ret = new LinkedList();
         for (int c = 0; c < moves.size(); c++) {
-            gsneu = situation.doMove(this, moves.get(c).targetX, moves.get(c).targetY);
+            gsneu = situation.emulateMove(this, moves.get(c).targetX, moves.get(c).targetY);
             if (gsneu.dangerForKing(black, gsneu.computeAllCaptures(!black))) {
                 //moves.remove(c);
             } else {

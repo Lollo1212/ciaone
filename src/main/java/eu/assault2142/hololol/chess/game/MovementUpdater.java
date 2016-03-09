@@ -24,36 +24,6 @@ public abstract class MovementUpdater extends Thread {//Berechnet nach jedem Zug
         this.gamesituation = g;
     }
 
-    protected abstract void onStart();
-
-    protected GameState getGameSituation() {
-        return gamesituation;
-    }
-
-    public void updateMovements() {
-        Thread[] t = new Thread[32];
-        onStart();
-        for (int a = 0; a < 16; a++) {
-            if (!gamesituation.getChessmen(true)[a].isCaptured()) {
-                t[a] = new MovementUpdaterThread(gamesituation.getChessmen(true)[a]);
-                t[a].start();
-            }
-            if (!gamesituation.getChessmen(false)[a].isCaptured()) {
-                t[a + 16] = new MovementUpdaterThread(gamesituation.getChessmen(false)[a]);
-                t[a + 16].start();
-            }
-        }
-        for (int a = 0; a < 32; a++) {
-            try {
-                if (t[a] != null) {
-                    t[a].join();
-                }
-            } catch (InterruptedException ex) {
-                Logger.getLogger(MovementUpdater.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-    }
-
     public void testCheck() {
         Move[] schläge = gamesituation.getAllCaptures(!gamesituation.getTurn());
         //wenn ziel König ist, dann Schach
@@ -89,68 +59,95 @@ public abstract class MovementUpdater extends Thread {//Berechnet nach jedem Zug
             gamesituation.getGame().onCheck();
         }
         /*if (schach && !gamesituation.isServer()) {
-            ((ClientGame)gamesituation).getGameFrame().write("Schach");
+        ((ClientGame)gamesituation).getGameFrame().write("Schach");
         }
         if (schachmatt) {
-            //nur wenn schachmatt und schach vorliegt, gewinnt der jeweilige
-            if (schach) {
-                String gewinner;
-                if (gamesituation.getTurn()) {
-                    //gewinner=Start.START.texte[Start.START.einstellungen.sprache][0];
-                } else {
-                    //gewinner=Start.START.texte[Start.START.einstellungen.sprache][1];
-                }
-                //InfoFrame f=new InfoFrame(gewinner+Start.START.texte[Start.START.einstellungen.sprache][3],200,100,true);
-                //f.setVisible(true);
-                gamesituation.getGameFrame().setVisible(false);
-            } else {
-                //wenn nur schachmatt vorliegt gibt es Patt
-                //InfoFrame f = new InfoFrame("Unentschieden", 200, 100, true);
-                //f.setVisible(true);
-                gamesituation.getGameFrame().setVisible(false);
-            }
+        //nur wenn schachmatt und schach vorliegt, gewinnt der jeweilige
+        if (schach) {
+        String gewinner;
+        if (gamesituation.getTurn()) {
+        //gewinner=Start.START.texte[Start.START.einstellungen.sprache][0];
+        } else {
+        //gewinner=Start.START.texte[Start.START.einstellungen.sprache][1];
+        }
+        //InfoFrame f=new InfoFrame(gewinner+Start.START.texte[Start.START.einstellungen.sprache][3],200,100,true);
+        //f.setVisible(true);
+        gamesituation.getGameFrame().setVisible(false);
+        } else {
+        //wenn nur schachmatt vorliegt gibt es Patt
+        //InfoFrame f = new InfoFrame("Unentschieden", 200, 100, true);
+        //f.setVisible(true);
+        gamesituation.getGameFrame().setVisible(false);
+        }
         }
 
         System.out.println("Finished CheckMate");
         if (!gamesituation.isServer()) {
-            System.out.println("Reenabling");
-            gamesituation.getGameFrame().getGameField().movementsupdating = false;
+        System.out.println("Reenabling");
+        gamesituation.getGameFrame().getGameField().movementsupdating = false;
         }
         if (schach && !gamesituation.isServer()) {
-            Runnable checkimage = () -> {
-                try {
-                    Thread.sleep(100);
-                    gamesituation.getGameFrame().getGameField().schach = true;
-                    Thread.sleep(3000);
-                    gamesituation.getGameFrame().getGameField().schach = false;
-                } catch (InterruptedException ex) {
-                    Logger.getLogger(TestCheckMate.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            };
-            new Thread(checkimage).start();
+        Runnable checkimage = () -> {
+        try {
+        Thread.sleep(100);
+        gamesituation.getGameFrame().getGameField().schach = true;
+        Thread.sleep(3000);
+        gamesituation.getGameFrame().getGameField().schach = false;
+        } catch (InterruptedException ex) {
+        Logger.getLogger(TestCheckMate.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        };
+        new Thread(checkimage).start();
         }
         if (gamesituation.isServer()) {//eventuell daten an client schicken
-            /*
-            gamesituation.client1.writeMovements();
-            gamesituation.client2.writeMovements();
-            if (schachmatt) {
-                if (schach) {
-                    gamesituation.client1.write("m");
-                    gamesituation.client2.write("m");
-                } else {
-                    gamesituation.client1.write("p");
-                    gamesituation.client2.write("p");
-                }
-            }
-            if (schach) {
-                gamesituation.client1.write("c");
-                gamesituation.client2.write("c");
-            }
+        /*
+        gamesituation.client1.writeMovements();
+        gamesituation.client2.writeMovements();
+        if (schachmatt) {
+        if (schach) {
+        gamesituation.client1.write("m");
+        gamesituation.client2.write("m");
+        } else {
+        gamesituation.client1.write("p");
+        gamesituation.client2.write("p");
+        }
+        }
+        if (schach) {
+        gamesituation.client1.write("c");
+        gamesituation.client2.write("c");
+        }
          */
         //}
         //if (gamesituation.isLocal() && gamesituation.bot && gamesituation.getTurn()) {
-        //Bot.doMove();
+        //Bot.emulateMove();
         //}
         gamesituation.getGame().finishedCalcs();
+    }
+
+    public void updateMovements() {
+        Thread[] t = new Thread[32];
+        for (int a = 0; a < 16; a++) {
+            if (!gamesituation.getChessmen(true)[a].isCaptured()) {
+                t[a] = new MovementUpdaterThread(gamesituation.getChessmen(true)[a]);
+                t[a].start();
+            }
+            if (!gamesituation.getChessmen(false)[a].isCaptured()) {
+                t[a + 16] = new MovementUpdaterThread(gamesituation.getChessmen(false)[a]);
+                t[a + 16].start();
+            }
+        }
+        for (int a = 0; a < 32; a++) {
+            try {
+                if (t[a] != null) {
+                    t[a].join();
+                }
+            } catch (InterruptedException ex) {
+                Logger.getLogger(MovementUpdater.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+
+    protected GameState getGameSituation() {
+        return gamesituation;
     }
 }

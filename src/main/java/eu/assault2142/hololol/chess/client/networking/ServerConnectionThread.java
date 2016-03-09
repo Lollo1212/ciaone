@@ -47,7 +47,7 @@ public class ServerConnectionThread extends ConnectionThread {
         consumers.add(this::consumePromotion);
         consumers.add(this::consumeResignation);
         consumers.add(this::consumeStartGame);
-        gamestate = game.getGameSituation();
+        gamestate = game.getGameState();
     }
 
     /**
@@ -138,8 +138,8 @@ public class ServerConnectionThread extends ConnectionThread {
             int x = Integer.parseInt(message[2]);
             int y = Integer.parseInt(message[3]);
             //Chessman f = client.g.getSquares()[a].occupier;
-            //client.g.getGameSituation().getAbstractChessmen(f.isBlack())[f.getPositionInArray()].addMove(new Move(x, y, f));
-            //f.doMove(x, y);
+            //client.g.getGameState().getAbstractChessmen(f.isBlack())[f.getPositionInArray()].addMove(new Move(x, y, f));
+            //f.emulateMove(x, y);
             game.getGameFrame().getGameBoard().movementsupdating = true;
             //client.g.updateGameSituation();
         } else if (message[0].equals("capture") && length == 4) {
@@ -147,7 +147,7 @@ public class ServerConnectionThread extends ConnectionThread {
             int x = Integer.parseInt(message[2]);
             int y = Integer.parseInt(message[3]);
             //Chessman f = client.g.getSquares()[a].occupier;
-            //client.g.getGameSituation().getAbstractChessmen(f.isBlack())[f.getPositionInArray()].addCapture(new Move(x, y, f));
+            //client.g.getGameState().getAbstractChessmen(f.isBlack())[f.getPositionInArray()].addCapture(new Move(x, y, f));
             //f.doCapture(x, y);
             game.getGameFrame().getGameBoard().movementsupdating = true;
             //client.g.updateGameSituation();
@@ -201,7 +201,7 @@ public class ServerConnectionThread extends ConnectionThread {
                         String fn = str[a].substring(2);
                         int f = Integer.parseInt(fn);
 
-                        game.getGameSituation().getChessmen(color)[f].addMove(new Move(posx, posy, gamestate.getChessmen(color)[f]));
+                        game.getGameState().getChessmen(color)[f].addMove(new Move(posx, posy, gamestate.getChessmen(color)[f]));
                     }
                 }
             } else {
@@ -215,7 +215,7 @@ public class ServerConnectionThread extends ConnectionThread {
                         int posy = Integer.parseInt(y);
                         String fn = str[a].substring(2);
                         int f = Integer.parseInt(fn);
-                        game.getGameSituation().getChessmen(color)[f].addCapture(new Move(posx, posy, gamestate.getChessmen(color)[f]));
+                        game.getGameState().getChessmen(color)[f].addCapture(new Move(posx, posy, gamestate.getChessmen(color)[f]));
                     }
                 }
             }

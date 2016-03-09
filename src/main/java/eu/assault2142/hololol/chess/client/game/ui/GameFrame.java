@@ -22,12 +22,12 @@ import javax.swing.JLabel;
  */
 public class GameFrame extends JFrame implements MouseListener {
 
-    private final GridBagLayout layout;
+    public boolean focus = true;
     private final GridBagConstraints constraints;
     private final Game game;
-    private int squarelength;
     private GameBoard gamefield;
-    public boolean focus = true;
+    private final GridBagLayout layout;
+    private int squarelength;
 
     /**
      * Create a new GameFrame
@@ -40,24 +40,6 @@ public class GameFrame extends JFrame implements MouseListener {
         layout = new GridBagLayout();
         constraints = new GridBagConstraints();
         init();
-    }
-
-    /**
-     * Initializes the GameFrame
-     */
-    private void init() {
-        Dimension screensize = Toolkit.getDefaultToolkit().getScreenSize();
-        double height = screensize.getHeight();
-        double width = screensize.getWidth();
-        int h = (int) height;
-        int w = (int) width;
-        squarelength = Math.min(h / 9, w / 12);
-        this.setExtendedState(MAXIMIZED_BOTH);
-        setUndecorated(true);
-        setLayout(layout);
-        setVisible(true);
-        initComponents();
-        addMouseListener(this);
     }
 
     /**
@@ -76,6 +58,32 @@ public class GameFrame extends JFrame implements MouseListener {
      */
     public int getSquareLength() {
         return squarelength;
+    }
+
+    @Override
+    public void mouseClicked(MouseEvent e) {
+    }
+
+    @Override
+    public void mouseEntered(MouseEvent e) {
+    }
+
+    @Override
+    public void mouseExited(MouseEvent e) {
+    }
+
+    @Override
+    public void mousePressed(MouseEvent e) {
+        if (e.getClickCount() == 1 && !gamefield.movementsupdating && focus) {//Abfangen von Mehrfachklicks
+            game.getGameState().resetFields();
+
+            game.clickAt(e.getX() / squarelength, e.getY() / squarelength);
+
+        }
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent e) {
     }
 
     /**
@@ -101,11 +109,29 @@ public class GameFrame extends JFrame implements MouseListener {
     }
 
     /**
+     * Initializes the GameFrame
+     */
+    private void init() {
+        Dimension screensize = Toolkit.getDefaultToolkit().getScreenSize();
+        double height = screensize.getHeight();
+        double width = screensize.getWidth();
+        int h = (int) height;
+        int w = (int) width;
+        squarelength = Math.min(h / 9, w / 12);
+        this.setExtendedState(MAXIMIZED_BOTH);
+        setUndecorated(true);
+        setLayout(layout);
+        setVisible(true);
+        initComponents();
+        addMouseListener(this);
+    }
+
+    /**
      * Initializes the components like buttons etc.
      */
     private void initComponents() {
         constraints.fill = GridBagConstraints.BOTH;
-        gamefield = new GameBoard(this, game.getGameSituation());
+        gamefield = new GameBoard(this, game.getGameState());
         addComponent(gamefield, 0, 0, 10, 10, 8, GridBagConstraints.REMAINDER);
         JLabel turn = new JLabel("");
         addComponent(turn, 0, 9, 10, 1, 8, 1);
@@ -128,31 +154,5 @@ public class GameFrame extends JFrame implements MouseListener {
             addComponent(jb1, 1, 9, 1, 1, 1, 1);
             addComponent(jb2, 2, 9, 1, 1, 1, 1);
         }
-    }
-
-    @Override
-    public void mouseClicked(MouseEvent e) {
-    }
-
-    @Override
-    public void mousePressed(MouseEvent e) {
-        if (e.getClickCount() == 1 && !gamefield.movementsupdating && focus) {//Abfangen von Mehrfachklicks
-            game.getGameSituation().resetFields();
-
-            game.clickAt(e.getX() / squarelength, e.getY() / squarelength);
-
-        }
-    }
-
-    @Override
-    public void mouseReleased(MouseEvent e) {
-    }
-
-    @Override
-    public void mouseEntered(MouseEvent e) {
-    }
-
-    @Override
-    public void mouseExited(MouseEvent e) {
     }
 }

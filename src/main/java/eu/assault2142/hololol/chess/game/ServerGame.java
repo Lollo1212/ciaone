@@ -23,21 +23,21 @@ public class ServerGame extends Game {
         super(TYPE.SERVER);
         client1 = a;
         client2 = b;
-        new ServerMovementUpdater(getGameSituation()).start();
+        new ServerMovementUpdater(getGameState()).start();
     }
 
     @Override
-    public ImageIcon getImage(Chessman.NAMES name, boolean black) {
-        return null;
+    public void clickAt(int feldx, int feldy) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void updateMovements() {
-        new ServerMovementUpdater(getGameSituation()).start();
+    public void endGame() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void promotion(Pawn pawn) {
+    public void finishedCalcs() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
@@ -50,17 +50,12 @@ public class ServerGame extends Game {
     }
 
     @Override
-    public void finishedCalcs() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public ImageIcon getImage(Chessman.NAMES name, boolean black) {
+        return null;
     }
 
     @Override
-    public void endGame() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void clickAt(int feldx, int feldy) {
+    public void onCheck() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
@@ -75,7 +70,12 @@ public class ServerGame extends Game {
     }
 
     @Override
-    public void onCheck() {
+    public void promotion(Pawn pawn) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void updateMovements() {
+        new ServerMovementUpdater(getGameState()).start();
     }
 }

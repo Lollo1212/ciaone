@@ -18,19 +18,19 @@ import java.util.Arrays;
  */
 public class GameState {
 
-    //the squares of the game-board
-    private final Square[] squares;
     //true if it's the black player's turn
     private boolean blackturn;
-    //the game
-    private final Game game;
     private int capturedBlack = 0;
     private int capturedWhite = 0;
 
     private Chessman[] chessmenBlack = new Chessman[16];
     private Chessman[] chessmenWhite = new Chessman[16];
+    //the game
+    private final Game game;
 
     private Chessman lastmoved;
+    //the squares of the game-board
+    private final Square[] squares;
 
     /**
      * Create a copy of the current game-state
@@ -79,74 +79,9 @@ public class GameState {
         this.game = gs.game;
     }
 
-    /**
-     *
-     * @param black true for black player, false for white
-     * @return all Moves the given player can currently do
-     */
-    public Move[] getAllMoves(boolean black) {
-        ArrayList<Move> m = new ArrayList();
-        if (black) {
-            for (int a = 0; a < 16; a++) {
-                if (!chessmenBlack[a].isCaptured()) {
-                    Move[] z = chessmenBlack[a].getMoves();
-                    m.addAll(Arrays.asList(z));
-                    if (a == 15) {
-                        Move[] x = ((King) chessmenBlack[a]).computeCastlings(false, this);
-                        m.addAll(Arrays.asList(x));
-                    }
-                }
-            }
-        } else {
-            for (int a = 0; a < 16; a++) {
-                if (!chessmenBlack[a].isCaptured()) {
-                    Move[] z = chessmenWhite[a].getMoves();
-                    m.addAll(Arrays.asList(z));
-                    if (a == 15) {
-                        Move[] x = ((King) chessmenWhite[a]).computeCastlings(false, this);
-                        m.addAll(Arrays.asList(x));
-                    }
-                }
-            }
-        }
-        Move[] mo = new Move[m.size()];
-        for (int x = 0; x < mo.length; x++) {
-            mo[x] = (Move) m.get(x);
-        }
-        return mo;
-    }
-
-    /**
-     *
-     * @param black true for black player, false for white
-     * @return all captures the given player can currently do
-     */
-    public Move[] getAllCaptures(boolean black) {
-        ArrayList<Move> m = new ArrayList();
-        if (black) {
-            for (int a = 0; a < 16; a++) {
-                if (!chessmenBlack[a].isCaptured()) {
-                    Move[] z = chessmenBlack[a].getCaptures();
-                    m.addAll(Arrays.asList(z));
-                }
-            }
-        } else {
-            for (int a = 0; a < 16; a++) {
-                if (!chessmenWhite[a].isCaptured()) {
-                    Move[] z = chessmenWhite[a].getCaptures();
-                    m.addAll(Arrays.asList(z));
-                }
-            }
-        }
-        ArrayList nichts = new ArrayList();
-        nichts.add(null);
-        m.removeAll(nichts);
-        Move[] mo = new Move[m.size()];
-        for (int x = 0; x < m.size(); x++) {
-            mo[x] = m.get(x);
-            //System.out.println(mo[x].f.getClass()+""+mo[x].x+""+mo[x].y+mo[x].f.schwarz);
-        }
-        return mo;
+    @Override
+    public GameState clone() {
+        return new GameState(this);
     }
 
     /**
@@ -211,7 +146,7 @@ public class GameState {
      * @param targety the targetY
      * @return a new instance representing the situation after the move
      */
-    public GameState doMove(Chessman chessman, int targetx, int targety) {
+    public GameState emulateMove(Chessman chessman, int targetx, int targety) {
         GameState gsneu = clone();
         boolean b = true;
         Chessman f1;
@@ -251,68 +186,84 @@ public class GameState {
         }
     }
 
-    @Override
-    public GameState clone() {
-        return new GameState(this);
-    }
-
-    /**
-     *
-     * @return the squares of the game-board
-     */
-    protected Square[] getSquares() {
-        return squares;
-    }
-
-    public Chessman[] getChessmen(boolean color) {
-        if (color) {
-            return chessmenBlack;
-        } else {
-            return chessmenWhite;
-        }
-    }
-
     /**
      * Execute the given move
      *
      * @param m the move
      * @return a new instance representing the situation after the move
      */
-    public GameState doMove(Move m) {
-        return doMove(m.getChessman(), m.getTargetX(), m.getTargetY());
+    public GameState emulateMove(Move m) {
+        return GameState.this.emulateMove(m.getChessman(), m.getTargetX(), m.getTargetY());
     }
 
-    public Square getSquare(int targetX, int targetY) {
-        if (targetX < 0 || targetY < 0 || targetX > 7 || targetY > 7) {
-            return null;
-        }
-        return squares[10 * targetX + targetY];
-    }
-
-    public void resetFields() {
-        for (int x = 0; x < 8; x++) {
-            for (int y = 0; y < 8; y++) {
-                if (squares[10 * x + y] != null) {
-                    squares[10 * x + y].resetHighlighting();
+    /**
+     *
+     * @param black true for black player, false for white
+     * @return all captures the given player can currently do
+     */
+    public Move[] getAllCaptures(boolean black) {
+        ArrayList<Move> m = new ArrayList();
+        if (black) {
+            for (int a = 0; a < 16; a++) {
+                if (!chessmenBlack[a].isCaptured()) {
+                    Move[] z = chessmenBlack[a].getCaptures();
+                    m.addAll(Arrays.asList(z));
+                }
+            }
+        } else {
+            for (int a = 0; a < 16; a++) {
+                if (!chessmenWhite[a].isCaptured()) {
+                    Move[] z = chessmenWhite[a].getCaptures();
+                    m.addAll(Arrays.asList(z));
                 }
             }
         }
+        ArrayList nichts = new ArrayList();
+        nichts.add(null);
+        m.removeAll(nichts);
+        Move[] mo = new Move[m.size()];
+        for (int x = 0; x < m.size(); x++) {
+            mo[x] = m.get(x);
+            //System.out.println(mo[x].f.getClass()+""+mo[x].x+""+mo[x].y+mo[x].f.schwarz);
+        }
+        return mo;
     }
 
-    public boolean getTurn() {
-        return blackturn;
-    }
-
-    public Chessman getLastMoved() {
-        return lastmoved;
-    }
-
-    public void nextTurn(Chessman moved) {
-
-        resetFields();
-        lastmoved = moved;
-        blackturn = !blackturn;
-
+    /**
+     *
+     * @param black true for black player, false for white
+     * @return all Moves the given player can currently do
+     */
+    public Move[] getAllMoves(boolean black) {
+        ArrayList<Move> m = new ArrayList();
+        if (black) {
+            for (int a = 0; a < 16; a++) {
+                if (!chessmenBlack[a].isCaptured()) {
+                    Move[] z = chessmenBlack[a].getMoves();
+                    m.addAll(Arrays.asList(z));
+                    if (a == 15) {
+                        Move[] x = ((King) chessmenBlack[a]).computeCastlings(false, this);
+                        m.addAll(Arrays.asList(x));
+                    }
+                }
+            }
+        } else {
+            for (int a = 0; a < 16; a++) {
+                if (!chessmenBlack[a].isCaptured()) {
+                    Move[] z = chessmenWhite[a].getMoves();
+                    m.addAll(Arrays.asList(z));
+                    if (a == 15) {
+                        Move[] x = ((King) chessmenWhite[a]).computeCastlings(false, this);
+                        m.addAll(Arrays.asList(x));
+                    }
+                }
+            }
+        }
+        Move[] mo = new Move[m.size()];
+        for (int x = 0; x < mo.length; x++) {
+            mo[x] = (Move) m.get(x);
+        }
+        return mo;
     }
 
     public int getCaptured(boolean color) {
@@ -323,11 +274,64 @@ public class GameState {
         }
     }
 
+    public Chessman[] getChessmen(boolean color) {
+        if (color) {
+            return chessmenBlack;
+        } else {
+            return chessmenWhite;
+        }
+    }
+
+    public Game getGame() {
+        return game;
+    }
+
+    public Chessman getLastMoved() {
+        return lastmoved;
+    }
+
+    public Move[] getPossibleCaptures(int positioninarray, boolean black) {
+        return getChessmen(black)[positioninarray].getCaptures();
+    }
+
+    public Move[] getPossibleMoves(int positioninarray, boolean black) {
+        return getChessmen(black)[positioninarray].getMoves();
+    }
+
+    public Square getSquare(int targetX, int targetY) {
+        if (targetX < 0 || targetY < 0 || targetX > 7 || targetY > 7) {
+            return null;
+        }
+        return squares[10 * targetX + targetY];
+    }
+
+    public boolean getTurn() {
+        return blackturn;
+    }
+
     public void incCaptured(boolean color) {
         if (color) {
             capturedBlack++;
         } else {
             capturedWhite++;
+        }
+    }
+
+    public void nextTurn(Chessman moved) {
+
+        resetFields();
+        lastmoved = moved;
+        blackturn = !blackturn;
+        game.updateMovements();
+    }
+
+    public void resetFields() {
+        for (int x = 0; x < 8; x++) {
+            for (int y = 0; y < 8; y++) {
+                if (squares[10 * x + y] != null) {
+                    squares[10 * x + y].resetHighlighting();
+                }
+            }
         }
     }
 
@@ -384,15 +388,12 @@ public class GameState {
         return figuren;
     }
 
-    public Move[] getPossibleMoves(int positioninarray, boolean black) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    /**
+     *
+     * @return the squares of the game-board
+     */
+    protected Square[] getSquares() {
+        return squares;
     }
 
-    public Move[] getPossibleCaptures(int positioninarray, boolean black) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    public Game getGame() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
 }

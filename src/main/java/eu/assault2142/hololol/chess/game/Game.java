@@ -10,49 +10,41 @@ import javax.swing.ImageIcon;
  */
 public abstract class Game {
 
-    public static enum TYPE {
-        LOCAL, SERVER, CLIENT
-    };
-
     public final TYPE type;
-    private GameState gamesituation;
+    private final GameState gamestate;
 
     protected Game(TYPE t) {
         type = t;
-        gamesituation = new GameState(this);
+        gamestate = new GameState(this);
     }
 
-    public GameState getGameSituation() {
-        return gamesituation;
+    public abstract void clickAt(int feldx, int feldy);
+
+    public abstract void endGame();
+
+    public abstract void finishedCalcs();
+
+    public GameState getGameState() {
+        return gamestate;
     }
 
-    private void nextTurn(Chessman moved) {
-
-        //Bildschirmausgabe "... ist dran"
-        gamesituation.nextTurn(moved);
-
-        updateMovements();
-    }
+    public abstract ImageIcon getImage(Chessman.NAMES name, boolean black);
 
     public TYPE getType() {
         return type;
     }
 
-    public abstract ImageIcon getImage(Chessman.NAMES name, boolean black);
-
-    protected abstract void updateMovements();
-
-    public abstract void promotion(Pawn pawn);
-
-    public abstract void finishedCalcs();
-
-    public abstract void endGame();
-
-    public abstract void clickAt(int feldx, int feldy);
+    public abstract void onCheck();
 
     public abstract void onCheckMate();
 
     public abstract void onStaleMate();
 
-    public abstract void onCheck();
+    public abstract void promotion(Pawn pawn);
+
+    protected abstract void updateMovements();
+
+    public static enum TYPE {
+        LOCAL, SERVER, CLIENT
+    }
 }

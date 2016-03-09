@@ -115,7 +115,7 @@ public class King extends Chessman {
                 int ky = move.targetY;
                 if (kx < posx) {
                     for (int b = posx; b > kx; b--) {
-                        gsneu = gamesituation.doMove(this, b, posy);
+                        gsneu = gamesituation.emulateMove(this, b, posy);
                         schläge = gsneu.computeAllCaptures(!black);
                         for (Move schläge1 : schläge) {
                             if (schläge1 != null && schläge1.targetX != b && schläge1.targetY != posy) {
@@ -126,7 +126,7 @@ public class King extends Chessman {
                     }
                 } else {
                     for (int b = posx; b < kx; b++) {
-                        gsneu = gamesituation.doMove(this, b, posy);
+                        gsneu = gamesituation.emulateMove(this, b, posy);
                         schläge = gsneu.computeAllCaptures(!black);
                         for (Move schläge1 : schläge) {
                             if (schläge1 != null && schläge1.targetX != b && schläge1.targetY != posy) {
