@@ -33,12 +33,76 @@ import javax.swing.JOptionPane;
  */
 public class ServerConnection {
 
-    private ClientGame game;
-    private Scanner scanner;
-    private PrintWriter writer;
-    private Socket socket;
+    /**
+     * Connects to the official, central server
+     *
+     * @param username the username
+     * @param password the password
+     * @param create wether to create an account
+     */
+    public static void connect(String username, String password, boolean create) {
+        ServerConnection c = null;
+        try {
+            InetAddress i = InetAddress.getByName("assault2142.eu");
+            c = new ServerConnection(i);
+        } catch (UnknownHostException ex) {
+            System.out.println(ex.getMessage());
+        }
+        if (c.scanner != null) {
+            c.scanner.next();
+            //Der Server ist online
+            //Anmeldedaten an Server schicken
+            String str = "";
+            if (create) {
+                str += "r:";
+            }
+            str += username + ":" + password;
+            c.write(str);
+            String input = c.scanner.next();
+            if (input.equals("loggedin")) {
+                //Der Server bestätigt Anmeldung
+
+                c = new ServerConnection(c.socket, c.scanner, c.writer);
+                MainMenu.MAINMENU.loggedIn(c);//neues Fenster öffnen
+            } else//Server verweigert Anmeldung
+             if (create) {
+                    JOptionPane.showMessageDialog(MainMenu.MAINMENU, Translator.getBundle().getString("ACCOUNT EXISTIERT BEREITS"), Translator.getBundle().getString("LOGIN ERROR"), JOptionPane.ERROR_MESSAGE);
+                    MainMenu.MAINMENU.enableLoginButton();
+                    //InfoFrame f=new InfoFrame("Account existiert bereits",300,100,true);
+                } else if (input.equals("loginerror:password")) {
+                    JOptionPane.showMessageDialog(MainMenu.MAINMENU, Translator.getBundle().getString("PASSWORT FALSCH"), Translator.getBundle().getString("LOGIN ERROR"), JOptionPane.ERROR_MESSAGE);
+                    MainMenu.MAINMENU.enableLoginButton();
+                } else {
+                    JOptionPane.showMessageDialog(MainMenu.MAINMENU, Translator.getBundle().getString("ACCOUNT EXISTIERT NICHT"), Translator.getBundle().getString("LOGIN ERROR"), JOptionPane.ERROR_MESSAGE);
+                    MainMenu.MAINMENU.enableLoginButton();
+                }//InfoFrame f=new InfoFrame("Benutzername oder Passwort falsch",300,100,true);
+        }
+    }
+
     private ServerConnectionThread connectionThread;
+
+    private ClientGame game;
     private String name;
+    private Scanner scanner;
+    private Socket socket;
+    private PrintWriter writer;
+
+    /**
+     * Create a new ServerConnection with the given params
+     *
+     * @param so the socket of the connection
+     * @param sca the scanner
+     * @param pwr the writer
+     */
+    private ServerConnection(Socket so, Scanner sca, PrintWriter pwr) {
+        socket = so;
+        scanner = sca;
+        writer = pwr;
+        write("n");
+        connectionThread = new ServerConnectionThread(this, sca);
+        Thread t = new Thread(connectionThread);
+        t.start();
+    }
 
     /**
      * Connect to the official, central server at the given address
@@ -73,77 +137,21 @@ public class ServerConnection {
     }
 
     /**
-     * Create a new ServerConnection with the given params
+     * Return the nam of the client
      *
-     * @param so the socket of the connection
-     * @param sca the scanner
-     * @param pwr the writer
+     * @return the name of the client
      */
-    public ServerConnection(Socket so, Scanner sca, PrintWriter pwr) {
-        socket = so;
-        scanner = sca;
-        writer = pwr;
-        write("n");
-        connectionThread = new ServerConnectionThread(this, sca);
-        Thread t = new Thread(connectionThread);
-        t.start();
+    public String getName() {
+        return name;
     }
 
     /**
-     * Writes a message to the server
+     * Sets the name of the client
      *
-     * @param str the message to send
+     * @param string the name of the client
      */
-    private void write(String str) {
-        writer.println(str);
-    }
-
-    /**
-     * Connects to the official, central server
-     *
-     * @param username the username
-     * @param password the password
-     * @param create wether to create an account
-     */
-    public static void connect(String username, String password, boolean create) {
-        ServerConnection c = null;
-        try {
-            InetAddress i = InetAddress.getByName("assault2142.eu");
-            c = new ServerConnection(i);
-        } catch (UnknownHostException ex) {
-            System.out.println(ex.getMessage());
-        }
-        if (c.scanner != null) {
-            c.scanner.next();
-            //Der Server ist online
-            //Anmeldedaten an Server schicken
-            String str = "";
-            if (create) {
-                str += "r:";
-            }
-            str += username + ":" + password;
-            c.write(str);
-            String input = c.scanner.next();
-            if (input.equals("loggedin")) {
-                //Der Server bestätigt Anmeldung
-
-                c = new ServerConnection(c.socket, c.scanner, c.writer);
-                MainMenu.MAINMENU.loggedIn(c);//neues Fenster öffnen
-            } else//Server verweigert Anmeldung
-            {
-                if (create) {
-                    JOptionPane.showMessageDialog(MainMenu.MAINMENU, Translator.getBundle().getString("ACCOUNT EXISTIERT BEREITS"), Translator.getBundle().getString("LOGIN ERROR"), JOptionPane.ERROR_MESSAGE);
-                    MainMenu.MAINMENU.enableLoginButton();
-                    //InfoFrame f=new InfoFrame("Account existiert bereits",300,100,true);
-                } else if (input.equals("loginerror:password")) {
-                    JOptionPane.showMessageDialog(MainMenu.MAINMENU, Translator.getBundle().getString("PASSWORT FALSCH"), Translator.getBundle().getString("LOGIN ERROR"), JOptionPane.ERROR_MESSAGE);
-                    MainMenu.MAINMENU.enableLoginButton();
-                } else {
-                    JOptionPane.showMessageDialog(MainMenu.MAINMENU, Translator.getBundle().getString("ACCOUNT EXISTIERT NICHT"), Translator.getBundle().getString("LOGIN ERROR"), JOptionPane.ERROR_MESSAGE);
-                    MainMenu.MAINMENU.enableLoginButton();
-                }//InfoFrame f=new InfoFrame("Benutzername oder Passwort falsch",300,100,true);
-            }
-        }
+    public void setName(String string) {
+        name = string;
     }
 
     /**
@@ -157,24 +165,6 @@ public class ServerConnection {
     }
 
     /**
-     * Sets the name of the client
-     *
-     * @param string the name of the client
-     */
-    public void setName(String string) {
-        name = string;
-    }
-
-    /**
-     * Return the nam of the client
-     *
-     * @return the name of the client
-     */
-    public String getName() {
-        return name;
-    }
-
-    /**
      * Start a new ClientGame
      *
      * @param color the color you play (0 = white, 1 = black)
@@ -182,6 +172,15 @@ public class ServerConnection {
     void startGame(String color) {
         game = new ClientGame(this, !color.equals("0"));
         connectionThread.setGame(game);
+    }
+
+    /**
+     * Writes a message to the server
+     *
+     * @param str the message to send
+     */
+    private void write(String str) {
+        writer.println(str);
     }
 
 }
