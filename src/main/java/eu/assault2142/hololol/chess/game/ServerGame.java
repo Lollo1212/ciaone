@@ -37,7 +37,6 @@ public class ServerGame extends Game {
 
     @Override
     public void finishedCalcs() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     public ClientConnection getClient1() {
@@ -55,7 +54,7 @@ public class ServerGame extends Game {
 
     @Override
     public void onCheck() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+
     }
 
     @Override

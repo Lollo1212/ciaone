@@ -45,7 +45,7 @@ public class ClientConnectionThread extends GameConnectionThread {
                     String str = message[2];
                     Server.SERVER.addFriendRequest(connection.getUser().getID(), server.getUser(str).getID());
 
-                } else if (length >= 2 && message[1].equals("remove")) {
+                } else if (length == 3 && message[1].equals("remove")) {
 
                     String str = message[2];
                     Server.SERVER.removeFriend(connection.getUser().getID(), server.getUser(str).getID());

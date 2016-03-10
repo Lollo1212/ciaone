@@ -92,8 +92,8 @@ public class ServerConnectionThread extends ConnectionThread {
 
     private void consumeDraw(String[] message) {
         int length = message.length;
-        if (message[0].equals("draw") && length == 2) {
-            if (message[1].equals("0")) {
+        if (message[0].equals("draw")) {
+            if (length == 2 && message[1].equals("offer")) {
                 JOptionPane.showConfirmDialog(MainMenu.MAINMENU, Translator.getBundle().getString("DRAWOFFER_TEXT"), Translator.getBundle().getString("DRAWOFFER_HEAD"), JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
 
             } else {
@@ -187,8 +187,6 @@ public class ServerConnectionThread extends ConnectionThread {
                     }
                 }
             }
-            game.getGameView().setMovementsUpdating(false);
-            gamestate.resetFields();
         }
     }
 

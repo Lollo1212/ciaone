@@ -1,0 +1,31 @@
+Server -> Client
+name:$name
+change:(username/password):(accept/decline)
+check
+checkmate
+stalemate
+draw[:offer]
+friends:$friends
+request:$name
+msg:(Info/$sender):$msg
+move:$chessmanposition:$targetX:$targetY
+capture:$chessmanposition:$targetX:$targetY
+promote:$color:$pawn
+promotion:$target:$color:$numberinarray
+resignation:$color
+newgame:($enemyoffline/$name)
+gamestart:$color
+
+Client -> GameServer
+move:$chessmanposition:$targetX:$targetY
+promotion:$target:$color:$numberinarray
+resignation
+draw
+
+Client -> Server
+msg:$recipient:$msg
+friends:(add/remove/accept/decline)[:$name]
+logout
+game:(accept/decline):$name
+newgame:(random/friend):$name
+change:(username/password):$new
