@@ -1,6 +1,7 @@
 package eu.assault2142.hololol.chess.client.game;
 
 import eu.assault2142.hololol.chess.client.game.ui.GameFrame;
+import eu.assault2142.hololol.chess.client.menus.MainMenu;
 import eu.assault2142.hololol.chess.client.translator.Translator;
 import eu.assault2142.hololol.chess.game.Game;
 import eu.assault2142.hololol.chess.game.Settings;
@@ -48,6 +49,7 @@ public final class LocalGame extends Game {
     @Override
     public void endGame() {
         gameframe.setVisible(false);
+        MainMenu.MAINMENU.setVisible(true);
     }
 
     @Override
@@ -141,9 +143,9 @@ public final class LocalGame extends Game {
                 picked.doMove(selected.getX(), selected.getY());
                 picked.doCapture(selected.getX(), selected.getY());
 
-                /*if (picked.getClass() == King.class) {
-                ((King) picked).doCastling(getCastlingMove(), getGameState());
-                }*/
+                if (picked.getClass() == King.class) {
+                    ((King) picked).doCastling(getCastlingMove(), getGameState());
+                }
             }
             picked = null;
         }
@@ -177,13 +179,13 @@ public final class LocalGame extends Game {
             picked = selected.occupier;
             List<Move> bewegungen = getGameState().getChessmen(picked.isBlack())[picked.getPositionInArray()].getMoves();
             List<Move> schläge = getGameState().getChessmen(picked.isBlack())[picked.getPositionInArray()].getCaptures();
-            /*if (picked.getClass() == King.class) {
-                CastlingMove[] rochaden = ((King) picked).computeCastlings(true, getGameState());
-                Arrays.stream(rochaden).forEach((CastlingMove c) -> {
-                    getSquare(c.getTargetX(), c.getTargetY()).highlight(Square.HIGHLIGHT.CASTLING);
+            if (picked.getClass() == King.class) {
+                List<CastlingMove> rochaden = ((King) picked).getCastlings(true, getGameState());
+                rochaden.stream().forEach((CastlingMove c) -> {
+                    getGameState().getSquare(c.getTargetX(), c.getTargetY()).highlight(Square.HIGHLIGHT.CASTLING);
                 });
 
-            }*/
+            }
             bewegungen.stream().forEach((Move m) -> {
                 getGameState().getSquare(m.getTargetX(), m.getTargetY()).highlight(Square.HIGHLIGHT.MOVETARGET);
             });
@@ -193,5 +195,4 @@ public final class LocalGame extends Game {
 
         }
     }
-
 }

@@ -276,7 +276,7 @@ public abstract class Chessman {
         LinkedList<Move> ret = new LinkedList();
         moves.stream().filter((Move move) -> {
             GameState gsnew = situation.emulateMove(this, move.targetX, move.targetY);
-            return gsnew.dangerForKing(black, gsnew.computeAllCaptures(!black));
+            return !gsnew.dangerForKing(black);
         }).forEach(ret::add);
         return ret;
     }

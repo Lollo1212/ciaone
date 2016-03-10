@@ -8,6 +8,7 @@ import eu.assault2142.hololol.chess.game.chessmen.Move;
 import eu.assault2142.hololol.chess.game.chessmen.Pawn;
 import eu.assault2142.hololol.chess.game.chessmen.Queen;
 import eu.assault2142.hololol.chess.game.chessmen.Rook;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.IntStream;
@@ -76,6 +77,12 @@ public class GameState {
                 squares[a] = gs.getSquares()[a].clone();
             }
         }
+        Arrays.stream(chessmenBlack).forEach((Chessman man) -> {
+            getSquare(man.getX(), man.getY()).occupier = man;
+        });
+        Arrays.stream(chessmenWhite).forEach((Chessman man) -> {
+            getSquare(man.getX(), man.getY()).occupier = man;
+        });
         blackturn = gs.blackturn;
         this.game = gs.game;
     }
@@ -108,11 +115,10 @@ public class GameState {
      * Checks if the king is currently in danger
      *
      * @param black the color to check for
-     * @param captures all captures currently possible
      * @return true if king is in danger, false otherwise
      */
-    public boolean dangerForKing(boolean black, List<Move> captures) {
-        List<Move> m = captures;
+    public boolean dangerForKing(boolean black) {
+        List<Move> m = computeAllCaptures(!black);
         boolean b = false;
         for (Move m1 : m) {
             if (m1 != null) {
@@ -150,16 +156,15 @@ public class GameState {
 
             }
         }
-        if (b && targety <= 7 && targety >= 0 && targetx <= 7 && targetx >= 0) {
-            if (gsneu.getSquares()[10 * targetx + targety].occupier != null) {
-                Chessman r = gsneu.getSquares()[10 * targetx + targety].occupier;
-                if (r.isBlack()) {
-                    gsneu.chessmenBlack[r.getPositionInArray()].setCaptured();
-                } else {
-                    gsneu.chessmenWhite[r.getPositionInArray()].setCaptured();
+        Square square = getSquare(targetx, targety);
+        if (b && square != null) {
+            if (square.isOccupied()) {
+                Chessman r = square.occupier;
+                if (f1.isBlack() != r.isBlack()) {
+                    gsneu.getChessmen(r.isBlack())[r.getPositionInArray()].setCaptured();
                 }
             }
-            gsneu.getSquares()[10 * f1.getX() + f1.getY()].occupier = null;
+            gsneu.getSquare(f1.getX(), f1.getY()).occupier = null;
 
             f1.doMove(targetx, targety);
 
@@ -219,6 +224,7 @@ public class GameState {
         }).forEach((List<Move> captures) -> {
             ret.addAll(captures);
         });
+
         return ret;
     }
 
@@ -291,7 +297,7 @@ public class GameState {
         }
     }
 
-    protected Chessman[] buildChessmen(boolean black, Square[] squares) {
+    protected final Chessman[] buildChessmen(boolean black, Square[] squares) {
 
         Chessman[] figuren = new Chessman[16];
         for (int a = 0; a < 8; a++) {
@@ -351,5 +357,4 @@ public class GameState {
     protected Square[] getSquares() {
         return squares;
     }
-
 }

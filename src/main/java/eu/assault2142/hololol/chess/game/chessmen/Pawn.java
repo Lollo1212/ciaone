@@ -129,9 +129,6 @@ public class Pawn extends Chessman {
     @Override
     public List<Move> computeMoves(boolean checkForCheck, GameState situation) {
         LinkedList<Move> moves = new LinkedList();
-        Move[] bewegungen = new Move[2];
-        int x = 0;
-        int j = 0;
         if (black) {
             if (addIfMovePossible(moves, posx, posy + 1, situation) && posy == 1) {
                 addIfMovePossible(moves, posx, posy + 2, situation);
