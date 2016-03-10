@@ -55,11 +55,11 @@ public class GameConnectionThread extends ConnectionThread {
             String n = message[1];
             String c = message[2];
             boolean color;
-            color = c.equals("0");
+            color = c.equals("true");
             String nia = message[3];
             int nummerinarray = Integer.parseInt(nia);
             switch (n) {
-                case "rook":
+                case "ROOK":
                     Chessman f = Rook.promotion((Pawn) gamestate.getChessmen(color)[nummerinarray], gamestate);
                     if (f != null) {
                         gamestate.getChessmen(color)[nummerinarray] = f;
@@ -67,7 +67,7 @@ public class GameConnectionThread extends ConnectionThread {
                         connection.getGame().getClient2().write(input);
                     }
                     break;
-                case "knight":
+                case "KNIGHT":
                     f = Knight.promotion((Pawn) gamestate.getChessmen(color)[nummerinarray], gamestate);
                     if (f != null) {
                         gamestate.getChessmen(color)[nummerinarray] = f;
@@ -75,7 +75,7 @@ public class GameConnectionThread extends ConnectionThread {
                         connection.getGame().getClient2().write(input);
                     }
                     break;
-                case "bishop":
+                case "BISHOP":
                     f = Bishop.promotion((Pawn) gamestate.getChessmen(color)[nummerinarray], gamestate);
                     if (f != null) {
                         gamestate.getChessmen(color)[nummerinarray] = f;
@@ -83,7 +83,7 @@ public class GameConnectionThread extends ConnectionThread {
                         connection.getGame().getClient2().write(input);
                     }
                     break;
-                case "queen":
+                case "QUEEN":
                     f = Queen.promotion((Pawn) gamestate.getChessmen(color)[nummerinarray], gamestate);
                     if (f != null) {
                         gamestate.getChessmen(color)[nummerinarray] = f;

@@ -2,17 +2,16 @@ package eu.assault2142.hololol.chess.client.game;
 
 import eu.assault2142.hololol.chess.client.game.ui.GameFrame;
 import eu.assault2142.hololol.chess.client.networking.ServerConnection;
+import eu.assault2142.hololol.chess.client.networking.ServerMessages;
 import eu.assault2142.hololol.chess.client.translator.Translator;
-import eu.assault2142.hololol.chess.game.Game;
-import eu.assault2142.hololol.chess.game.Settings;
 import eu.assault2142.hololol.chess.game.chessmen.Bishop;
 import eu.assault2142.hololol.chess.game.chessmen.Chessman;
 import eu.assault2142.hololol.chess.game.chessmen.Knight;
+import eu.assault2142.hololol.chess.game.chessmen.Move;
 import eu.assault2142.hololol.chess.game.chessmen.Pawn;
 import eu.assault2142.hololol.chess.game.chessmen.Queen;
 import eu.assault2142.hololol.chess.game.chessmen.Rook;
 import java.awt.EventQueue;
-import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 
 /**
@@ -22,8 +21,7 @@ import javax.swing.JOptionPane;
  */
 public class ClientGame extends Game {
 
-    private ServerConnection connection;
-    private GameFrame gameframe;
+    private final ServerConnection connection;
 
     /**
      * Create a new ClientGame
@@ -31,7 +29,7 @@ public class ClientGame extends Game {
      * @param connection the connection to the server
      * @param color the color you play (true -> black)
      */
-    public ClientGame(ServerConnection connection, boolean color) {//Spiel eines Clienten
+    public ClientGame(ServerConnection connection, boolean color) {
         super(TYPE.CLIENT);
         this.connection = connection;
         final ClientGame g = this;
@@ -39,21 +37,28 @@ public class ClientGame extends Game {
             gameframe = new GameFrame(g);
             JOptionPane.showConfirmDialog(gameframe, "Your color is ", "Info", JOptionPane.OK_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE);
         });
+        updateMovements();
     }
 
     @Override
     public void clickAt(int feldx, int feldy) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        selected = getGameState().getSquare(feldx, feldy);
+        if (picked != null) {
+            connection.write(ServerMessages.DoMove, new Object[]{picked.getX() * 10 + picked.getY(), feldx, feldy});
+        }
+        showPossibleMoves();
     }
 
-    @Override
-    public void endGame() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void doCapture(int a, int x, int y) {
+        Chessman f = getGameState().getSquare(10 / a, 10 % a).occupier;
+        f.addCapture(new Move(x, y, f));
+        f.doCapture(x, y);
     }
 
-    @Override
-    public void finishedCalcs() {
-        gameframe.getGameBoard().movementsupdating = false;
+    public void doMove(int a, int x, int y) {
+        Chessman f = getGameState().getSquare(10 / a, 10 % a).occupier;
+        f.addMove(new Move(x, y, f));
+        f.doMove(x, y);
     }
 
     /**
@@ -63,39 +68,6 @@ public class ClientGame extends Game {
      */
     public ServerConnection getConnection() {
         return connection;
-    }
-
-    /**
-     * Return the frame of the game
-     *
-     * @return the frame the game is played in
-     */
-    public GameFrame getGameFrame() {
-        return gameframe;
-    }
-
-    @Override
-    public ImageIcon getImage(Chessman.NAMES name, boolean black) {
-        String color = "white";
-        if (black) {
-            color = "black";
-        }
-        return new ImageIcon(getClass().getResource(Settings.SETTINGS.chessmenFolder + "/" + name + "_" + color + ".gif"));
-    }
-
-    @Override
-    public void onCheck() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void onCheckMate() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void onStaleMate() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
@@ -120,10 +92,14 @@ public class ClientGame extends Game {
         }
         getGameState().getChessmen(pawn.isBlack())[pawn.getPositionInArray()] = man;
         getGameState().getSquare(man.getX(), man.getY()).occupier = man;
+        connection.write(ServerMessages.Promotion, new Object[]{promotion, man.isBlack(), man.getPositionInArray()});
+        updateMovements();
     }
 
     @Override
     public void updateMovements() {
+        getGameFrame().getGameBoard().movementsupdating = true;
+        new ClientMovementUpdater(getGameState()).start();
     }
 
 }
