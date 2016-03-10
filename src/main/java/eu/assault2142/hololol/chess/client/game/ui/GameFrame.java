@@ -13,6 +13,7 @@ import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 
 /**
  * The Frame in which the game is played. Contains the GameBoard and some
@@ -20,7 +21,7 @@ import javax.swing.JLabel;
  *
  * @author hololol2
  */
-public class GameFrame extends JFrame implements MouseListener {
+public class GameFrame extends JFrame implements MouseListener, IGameView {
 
     public boolean focus = true;
     private final GridBagConstraints constraints;
@@ -49,6 +50,16 @@ public class GameFrame extends JFrame implements MouseListener {
      */
     public GameBoard getGameBoard() {
         return gamefield;
+    }
+
+    @Override
+    public void setMovementsUpdating(boolean b) {
+        gamefield.movementsupdating = b;
+    }
+
+    @Override
+    public void setShowCheck(boolean b) {
+        gamefield.movementsupdating = b;
     }
 
     /**
@@ -84,6 +95,22 @@ public class GameFrame extends JFrame implements MouseListener {
 
     @Override
     public void mouseReleased(MouseEvent e) {
+    }
+
+    @Override
+    public void onCheckMate() {
+        JOptionPane.showMessageDialog(this, "Checkmate!", "Checkmate", JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    @Override
+    public void onStaleMate() {
+
+        JOptionPane.showMessageDialog(this, "Stalemate!", "Stalemate", JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    @Override
+    public String showPromotionChoice() {
+        return (String) JOptionPane.showInputDialog(this, Translator.getBundle().getString("PROMOTION_HEAD"), Translator.getBundle().getString("PROMOTION_TEXT"), JOptionPane.QUESTION_MESSAGE, null, new String[]{Translator.getBundle().getString("CHESSMAN_QUEEN"), Translator.getBundle().getString("CHESSMAN_ROOK"), Translator.getBundle().getString("CHESSMAN_KNIGHT"), Translator.getBundle().getString("CHESSMAN_BISHOP")}, Translator.getBundle().getString("CHESSMAN_QUEEN"));
     }
 
     /**

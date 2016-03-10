@@ -20,10 +20,8 @@ public class ClientConnection extends GameClientConnection {
     private Server server;
     private Scanner scanner;
     private PrintWriter printwriter;
-    private boolean white;
     private User user;
     private ServerGame game;
-    private boolean draw;
 
     public ClientConnection(Socket socket, Server server) {
         super(socket);

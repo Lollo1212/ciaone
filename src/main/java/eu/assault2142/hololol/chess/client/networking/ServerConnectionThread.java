@@ -187,7 +187,7 @@ public class ServerConnectionThread extends ConnectionThread {
                     }
                 }
             }
-            game.getGameFrame().getGameBoard().movementsupdating = false;
+            game.getGameView().setMovementsUpdating(false);
             gamestate.resetFields();
         }
     }
@@ -201,7 +201,7 @@ public class ServerConnectionThread extends ConnectionThread {
             } else {
                 color = false;
             }
-            JOptionPane.showInputDialog(game.getGameFrame(), Translator.getBundle().getString("PROMOTION_TEXT"), Translator.getBundle().getString("PROMOTION_HEAD"), JOptionPane.QUESTION_MESSAGE, null, new String[]{Translator.getBundle().getString("CHESSMAN_QUEEN"), Translator.getBundle().getString("CHESSMAN_ROOK"), Translator.getBundle().getString("CHESSMAN_KNIGHT"), Translator.getBundle().getString("CHESSMAN_BISHOP")}, Translator.getBundle().getString("CHESSMAN_QUEEN"));
+            game.getGameView().showPromotionChoice();
         }
     }
 
@@ -239,7 +239,7 @@ public class ServerConnectionThread extends ConnectionThread {
             } else {
                 JOptionPane.showMessageDialog(null, Translator.getBundle().getString("RESIGNATION_SELF_TEXT"), Translator.getBundle().getString("RESIGNATION_SELF_HEAD"), JOptionPane.INFORMATION_MESSAGE);
             }
-            game.getGameFrame().setVisible(false);
+            game.getGameView().hide();
         }
     }
 

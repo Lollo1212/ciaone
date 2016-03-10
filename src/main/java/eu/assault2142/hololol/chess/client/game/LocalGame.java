@@ -1,7 +1,6 @@
 package eu.assault2142.hololol.chess.client.game;
 
 import eu.assault2142.hololol.chess.client.game.ui.GameFrame;
-import eu.assault2142.hololol.chess.client.translator.Translator;
 import eu.assault2142.hololol.chess.game.Square;
 import eu.assault2142.hololol.chess.game.chessmen.Bishop;
 import eu.assault2142.hololol.chess.game.chessmen.CastlingMove;
@@ -11,7 +10,6 @@ import eu.assault2142.hololol.chess.game.chessmen.Knight;
 import eu.assault2142.hololol.chess.game.chessmen.Pawn;
 import eu.assault2142.hololol.chess.game.chessmen.Queen;
 import eu.assault2142.hololol.chess.game.chessmen.Rook;
-import javax.swing.JOptionPane;
 
 /**
  * A Game which is completely played locally
@@ -38,8 +36,9 @@ public final class LocalGame extends Game {
 
     @Override
     public void promotion(Pawn pawn) {
+        String promotion = gameframe.showPromotionChoice();
         Chessman man;
-        String promotion = (String) JOptionPane.showInputDialog(gameframe, Translator.getBundle().getString("PROMOTION_HEAD"), Translator.getBundle().getString("PROMOTION_TEXT"), JOptionPane.QUESTION_MESSAGE, null, new String[]{Translator.getBundle().getString("CHESSMAN_QUEEN"), Translator.getBundle().getString("CHESSMAN_ROOK"), Translator.getBundle().getString("CHESSMAN_KNIGHT"), Translator.getBundle().getString("CHESSMAN_BISHOP")}, Translator.getBundle().getString("CHESSMAN_QUEEN"));
+
         switch (promotion) {
             case "ROOK":
                 man = Rook.promotion(pawn, getGameState());
@@ -62,7 +61,7 @@ public final class LocalGame extends Game {
 
     @Override
     public void updateMovements() {
-        getGameFrame().getGameBoard().movementsupdating = true;
+        getGameView().setMovementsUpdating(true);
         new ClientMovementUpdater(getGameState()).start();
     }
 

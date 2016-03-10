@@ -23,7 +23,6 @@ public class ServerGame extends Game {
         super(TYPE.SERVER);
         client1 = a;
         client2 = b;
-        new ServerMovementUpdater(getGameState()).start();
     }
 
     @Override
@@ -76,6 +75,5 @@ public class ServerGame extends Game {
 
     @Override
     public void updateMovements() {
-        new ServerMovementUpdater(getGameState()).start();
     }
 }

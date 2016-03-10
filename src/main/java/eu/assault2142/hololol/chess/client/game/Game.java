@@ -5,7 +5,7 @@
  */
 package eu.assault2142.hololol.chess.client.game;
 
-import eu.assault2142.hololol.chess.client.game.ui.GameFrame;
+import eu.assault2142.hololol.chess.client.game.ui.IGameView;
 import eu.assault2142.hololol.chess.client.menus.MainMenu;
 import eu.assault2142.hololol.chess.game.Settings;
 import eu.assault2142.hololol.chess.game.Square;
@@ -15,7 +15,6 @@ import eu.assault2142.hololol.chess.game.chessmen.King;
 import eu.assault2142.hololol.chess.game.chessmen.Move;
 import java.util.List;
 import javax.swing.ImageIcon;
-import javax.swing.JOptionPane;
 
 /**
  *
@@ -23,7 +22,7 @@ import javax.swing.JOptionPane;
  */
 public abstract class Game extends eu.assault2142.hololol.chess.game.Game {
 
-    protected GameFrame gameframe;
+    protected IGameView gameframe;
     protected Chessman picked;
     protected Square selected;
 
@@ -33,14 +32,14 @@ public abstract class Game extends eu.assault2142.hololol.chess.game.Game {
 
     @Override
     public void endGame() {
-        gameframe.setVisible(false);
+        gameframe.hide();
         MainMenu.MAINMENU.setVisible(true);
     }
 
     @Override
     public void finishedCalcs() {
         getGameState().resetFields();
-        gameframe.getGameBoard().movementsupdating = false;
+        gameframe.setMovementsUpdating(false);
     }
 
     /**
@@ -48,7 +47,7 @@ public abstract class Game extends eu.assault2142.hololol.chess.game.Game {
      *
      * @return the frame the game is played in
      */
-    public GameFrame getGameFrame() {
+    public IGameView getGameView() {
         return gameframe;
     }
 
@@ -66,9 +65,9 @@ public abstract class Game extends eu.assault2142.hololol.chess.game.Game {
         Runnable checkimage = () -> {
             try {
                 Thread.sleep(100);
-                getGameFrame().getGameBoard().check = true;
+                getGameView().setShowCheck(true);
                 Thread.sleep(2000);
-                getGameFrame().getGameBoard().check = false;
+                getGameView().setShowCheck(false);
             } catch (InterruptedException ex) {
 
             }
@@ -78,13 +77,14 @@ public abstract class Game extends eu.assault2142.hololol.chess.game.Game {
 
     @Override
     public void onCheckMate() {
-        JOptionPane.showMessageDialog(gameframe, "Checkmate!", "Checkmate", JOptionPane.INFORMATION_MESSAGE);
+        gameframe.onCheckMate();
+
         this.endGame();
     }
 
     @Override
     public void onStaleMate() {
-        JOptionPane.showMessageDialog(gameframe, "Stalemate!", "Stalemate", JOptionPane.INFORMATION_MESSAGE);
+        gameframe.onStaleMate();
         this.endGame();
     }
 

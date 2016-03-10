@@ -3,7 +3,6 @@ package eu.assault2142.hololol.chess.client.game;
 import eu.assault2142.hololol.chess.client.game.ui.GameFrame;
 import eu.assault2142.hololol.chess.client.networking.ServerConnection;
 import eu.assault2142.hololol.chess.client.networking.ServerMessages;
-import eu.assault2142.hololol.chess.client.translator.Translator;
 import eu.assault2142.hololol.chess.game.chessmen.Bishop;
 import eu.assault2142.hololol.chess.game.chessmen.Chessman;
 import eu.assault2142.hololol.chess.game.chessmen.Knight;
@@ -12,7 +11,6 @@ import eu.assault2142.hololol.chess.game.chessmen.Pawn;
 import eu.assault2142.hololol.chess.game.chessmen.Queen;
 import eu.assault2142.hololol.chess.game.chessmen.Rook;
 import java.awt.EventQueue;
-import javax.swing.JOptionPane;
 
 /**
  * A connection-game for a game played on a server
@@ -35,7 +33,6 @@ public class ClientGame extends Game {
         final ClientGame g = this;
         EventQueue.invokeLater(() -> {
             gameframe = new GameFrame(g);
-            JOptionPane.showConfirmDialog(gameframe, "Your color is ", "Info", JOptionPane.OK_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE);
         });
         updateMovements();
     }
@@ -72,8 +69,8 @@ public class ClientGame extends Game {
 
     @Override
     public void promotion(Pawn pawn) {
+        String promotion = gameframe.showPromotionChoice();
         Chessman man;
-        String promotion = (String) JOptionPane.showInputDialog(gameframe, Translator.getBundle().getString("PROMOTION_HEAD"), Translator.getBundle().getString("PROMOTION_TEXT"), JOptionPane.QUESTION_MESSAGE, null, new String[]{Translator.getBundle().getString("CHESSMAN_QUEEN"), Translator.getBundle().getString("CHESSMAN_ROOK"), Translator.getBundle().getString("CHESSMAN_KNIGHT"), Translator.getBundle().getString("CHESSMAN_BISHOP")}, Translator.getBundle().getString("CHESSMAN_QUEEN"));
         switch (promotion) {
             //bei lokalem Spiel wird der Bauer direkt gesetzt,
             //bei Serverbasiertem senden der Daten an den Server
@@ -98,7 +95,7 @@ public class ClientGame extends Game {
 
     @Override
     public void updateMovements() {
-        getGameFrame().getGameBoard().movementsupdating = true;
+        getGameView().setMovementsUpdating(true);
         new ClientMovementUpdater(getGameState()).start();
     }
 
