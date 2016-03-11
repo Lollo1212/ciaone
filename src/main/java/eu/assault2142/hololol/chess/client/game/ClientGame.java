@@ -3,13 +3,9 @@ package eu.assault2142.hololol.chess.client.game;
 import eu.assault2142.hololol.chess.client.game.ui.GameFrame;
 import eu.assault2142.hololol.chess.client.networking.ServerConnection;
 import eu.assault2142.hololol.chess.client.networking.ServerMessages;
-import eu.assault2142.hololol.chess.game.chessmen.Bishop;
 import eu.assault2142.hololol.chess.game.chessmen.Chessman;
-import eu.assault2142.hololol.chess.game.chessmen.Knight;
 import eu.assault2142.hololol.chess.game.chessmen.Move;
 import eu.assault2142.hololol.chess.game.chessmen.Pawn;
-import eu.assault2142.hololol.chess.game.chessmen.Queen;
-import eu.assault2142.hololol.chess.game.chessmen.Rook;
 import java.awt.EventQueue;
 
 /**
@@ -46,12 +42,26 @@ public final class ClientGame extends Game {
         showPossibleMoves();
     }
 
+    /**
+     * Executes a capture send from the server
+     *
+     * @param a the coordinates of the chessman
+     * @param x the target x-coordinate
+     * @param y the target y-coordinate
+     */
     public void doCapture(int a, int x, int y) {
         Chessman f = getGameState().getSquare(10 / a, 10 % a).occupier;
         f.addCapture(new Move(x, y, f));
         f.doCapture(x, y);
     }
 
+    /**
+     * Executes a move send from the server
+     *
+     * @param a the coordinates of the chessman
+     * @param x the target x-coordinate
+     * @param y the target y-coordinate
+     */
     public void doMove(int a, int x, int y) {
         Chessman f = getGameState().getSquare(10 / a, 10 % a).occupier;
         f.addMove(new Move(x, y, f));
