@@ -1,5 +1,6 @@
 package eu.assault2142.hololol.chess.client.game;
 
+import eu.assault2142.hololol.chess.client.util.ErrorMessage;
 import eu.assault2142.hololol.chess.game.GameState;
 import eu.assault2142.hololol.chess.game.MovementUpdater;
 
@@ -22,10 +23,12 @@ public class ClientMovementUpdater extends MovementUpdater {
 
     @Override
     public void run() {
+
         Runnable wait = () -> {
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException ex) {
+                ErrorMessage.showErrorMessage("Unexpected Critical Error!", true);
             }
         };
         Thread waitthread = new Thread(wait);
@@ -34,6 +37,7 @@ public class ClientMovementUpdater extends MovementUpdater {
         try {
             waitthread.join();
         } catch (InterruptedException ex) {
+            ErrorMessage.showErrorMessage("Unexpected Critical Error!", true);
         }
         testCheck();
     }

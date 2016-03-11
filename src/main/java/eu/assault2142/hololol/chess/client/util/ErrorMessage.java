@@ -9,7 +9,10 @@ import javax.swing.JOptionPane;
  */
 public class ErrorMessage {
 
-    public static void showErrorMessage(String message) {
+    public static void showErrorMessage(String message, boolean exit) {
         JOptionPane.showMessageDialog(MainMenu.MAINMENU, message, "Error", JOptionPane.ERROR_MESSAGE);
+        if (exit) {
+            System.exit(1);
+        }
     }
 }
