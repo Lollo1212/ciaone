@@ -69,13 +69,13 @@ public class ServerConnectionThread extends ConnectionThread {
         } else if (message[0].equals("change") && length >= 3) {
             if (message[1].equals("username")) {
                 if (message[2].equals("accept") && length == 4) {
-                    JOptionPane.showMessageDialog(MainMenu.MAINMENU, java.text.MessageFormat.format(Translator.getBundle().getString("NAMECHANGED_TEXT"), new Object[]{message[3]}), Translator.getBundle().getString("NAMECHANGED_HEAD"), JOptionPane.INFORMATION_MESSAGE);
+                    JOptionPane.showMessageDialog(MainMenu.MAINMENU, java.text.MessageFormat.format(Translator.getString("NAMECHANGED_TEXT"), new Object[]{message[3]}), Translator.getString("NAMECHANGED_HEAD"), JOptionPane.INFORMATION_MESSAGE);
                 } else {
-                    JOptionPane.showMessageDialog(MainMenu.MAINMENU, Translator.getBundle().getString("NAMECHANGE_TAKEN_TEXT"), Translator.getBundle().getString("NAMECHANGE_TAKEN_HEAD"), JOptionPane.WARNING_MESSAGE);
+                    JOptionPane.showMessageDialog(MainMenu.MAINMENU, Translator.getString("NAMECHANGE_TAKEN_TEXT"), Translator.getString("NAMECHANGE_TAKEN_HEAD"), JOptionPane.WARNING_MESSAGE);
                 }
             }
             if (message[1].equals("password") && message[2].equals("accept")) {
-                JOptionPane.showMessageDialog(MainMenu.MAINMENU, Translator.getBundle().getString("PASSCHANGED_TEXT"), Translator.getBundle().getString("PASSCHANGED_HEAD"), JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(MainMenu.MAINMENU, Translator.getString("PASSCHANGED_TEXT"), Translator.getString("PASSCHANGED_HEAD"), JOptionPane.INFORMATION_MESSAGE);
             }
         }
     }
@@ -94,10 +94,10 @@ public class ServerConnectionThread extends ConnectionThread {
         int length = message.length;
         if (message[0].equals("draw")) {
             if (length == 2 && message[1].equals("offer")) {
-                JOptionPane.showConfirmDialog(MainMenu.MAINMENU, Translator.getBundle().getString("DRAWOFFER_TEXT"), Translator.getBundle().getString("DRAWOFFER_HEAD"), JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+                JOptionPane.showConfirmDialog(MainMenu.MAINMENU, Translator.getString("DRAWOFFER_TEXT"), Translator.getString("DRAWOFFER_HEAD"), JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
 
             } else {
-                JOptionPane.showMessageDialog(MainMenu.MAINMENU, Translator.getBundle().getString("DRAW_TEXT"), Translator.getBundle().getString("DRAW_HEAD"), JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(MainMenu.MAINMENU, Translator.getString("DRAW_TEXT"), Translator.getString("DRAW_HEAD"), JOptionPane.INFORMATION_MESSAGE);
                 game.endGame();
             }
         }
@@ -113,7 +113,7 @@ public class ServerConnectionThread extends ConnectionThread {
                 MainMenu.MAINMENU.updateFriends(new String[0]);
             }
         } else if (message[0].equals("request") && length == 2) {
-            int addfriend = JOptionPane.showConfirmDialog(null, message[1] + Translator.getBundle().getString("FRIENDREQ_ADD_TEXT"), Translator.getBundle().getString("FRIENDREQ_ADD_HEAD"), JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
+            int addfriend = JOptionPane.showConfirmDialog(null, message[1] + Translator.getString("FRIENDREQ_ADD_TEXT"), Translator.getString("FRIENDREQ_ADD_HEAD"), JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
             if (addfriend == JOptionPane.NO_OPTION) {
                 client.write(ServerMessages.FriendsReject, new Object[]{message[1]});
             } else {
@@ -126,7 +126,7 @@ public class ServerConnectionThread extends ConnectionThread {
         int length = message.length;
         if (message[0].equals("msg") && length == 3) {
             if (message[1].equals("Info")) {
-                JOptionPane.showMessageDialog(MainMenu.MAINMENU, message[2].replace("_", " "), Translator.getBundle().getString("DIALOG_INFO_HEAD"), JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(MainMenu.MAINMENU, message[2].replace("_", " "), Translator.getString("DIALOG_INFO_HEAD"), JOptionPane.INFORMATION_MESSAGE);
             } else {
                 MainMenu.MAINMENU.newMessage(message[1], message[2].replace("_", " "));
             }
@@ -233,9 +233,9 @@ public class ServerConnectionThread extends ConnectionThread {
         int length = message.length;
         if (message[0].equals("resignation") && length == 2) {
             if (message[1].equals("1")) {
-                JOptionPane.showMessageDialog(null, Translator.getBundle().getString("RESIGNATION_ENEMY_TEXT"), Translator.getBundle().getString("RESIGNATION_ENEMY_HEAD"), JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(null, Translator.getString("RESIGNATION_ENEMY_TEXT"), Translator.getString("RESIGNATION_ENEMY_HEAD"), JOptionPane.INFORMATION_MESSAGE);
             } else {
-                JOptionPane.showMessageDialog(null, Translator.getBundle().getString("RESIGNATION_SELF_TEXT"), Translator.getBundle().getString("RESIGNATION_SELF_HEAD"), JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(null, Translator.getString("RESIGNATION_SELF_TEXT"), Translator.getString("RESIGNATION_SELF_HEAD"), JOptionPane.INFORMATION_MESSAGE);
             }
             game.getGameView().hide();
         }
@@ -245,10 +245,10 @@ public class ServerConnectionThread extends ConnectionThread {
         int length = message.length;
         if (message[0].equals("newgame") && length == 2) {
             if (message[1].equals("enemyoffline")) {
-                JOptionPane.showMessageDialog(MainMenu.MAINMENU, Translator.getBundle().getString("GAME_ENEMYOFF_TEXT"), Translator.getBundle().getString("GAME_ENEMYOFF_HEAD"), JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(MainMenu.MAINMENU, Translator.getString("GAME_ENEMYOFF_TEXT"), Translator.getString("GAME_ENEMYOFF_HEAD"), JOptionPane.INFORMATION_MESSAGE);
             } else {
                 String str = message[1];
-                int selected = JOptionPane.showConfirmDialog(MainMenu.MAINMENU, java.text.MessageFormat.format(Translator.getBundle().getString("GAME_START?_TEXT"), new Object[]{str}), Translator.getBundle().getString("GAME_START?_HEAD"), JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+                int selected = JOptionPane.showConfirmDialog(MainMenu.MAINMENU, java.text.MessageFormat.format(Translator.getString("GAME_START?_TEXT"), new Object[]{str}), Translator.getString("GAME_START?_HEAD"), JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
                 if (selected == JOptionPane.YES_OPTION) {
                     client.write(ServerMessages.AcceptChallenge, new Object[]{str});
                 } else {

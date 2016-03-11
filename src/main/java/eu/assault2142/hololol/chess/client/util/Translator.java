@@ -11,8 +11,8 @@ public class Translator {
 
     private static ResourceBundle bundle;
 
-    public static ResourceBundle getBundle() {
-        return bundle;
+    public static String getString(String key) {
+        return bundle.getString(key);
     }
 
     public static void setLanguage(Locale locale) {

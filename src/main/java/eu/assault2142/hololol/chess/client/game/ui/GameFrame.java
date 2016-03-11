@@ -107,7 +107,7 @@ public class GameFrame extends JFrame implements MouseListener, IGameView {
 
     @Override
     public String showPromotionChoice() {
-        return (String) JOptionPane.showInputDialog(this, Translator.getBundle().getString("PROMOTION_HEAD"), Translator.getBundle().getString("PROMOTION_TEXT"), JOptionPane.QUESTION_MESSAGE, null, new String[]{Translator.getBundle().getString("CHESSMAN_QUEEN"), Translator.getBundle().getString("CHESSMAN_ROOK"), Translator.getBundle().getString("CHESSMAN_KNIGHT"), Translator.getBundle().getString("CHESSMAN_BISHOP")}, Translator.getBundle().getString("CHESSMAN_QUEEN"));
+        return (String) JOptionPane.showInputDialog(this, Translator.getString("PROMOTION_HEAD"), Translator.getString("PROMOTION_TEXT"), JOptionPane.QUESTION_MESSAGE, null, new String[]{Translator.getString("CHESSMAN_QUEEN"), Translator.getString("CHESSMAN_ROOK"), Translator.getString("CHESSMAN_KNIGHT"), Translator.getString("CHESSMAN_BISHOP")}, Translator.getString("CHESSMAN_QUEEN"));
     }
 
     /**
@@ -160,15 +160,15 @@ public class GameFrame extends JFrame implements MouseListener, IGameView {
         JLabel turn = new JLabel("");
         addComponent(turn, 0, 9, 10, 1, 8, 1);
         if (game.getType() == Game.TYPE.LOCAL) {//Überprüfen auf lokales Spiel
-            JButton b = new JButton(Translator.getBundle().getString("GAME_BUTTON_END"));
+            JButton b = new JButton(Translator.getString("GAME_BUTTON_END"));
             b.addActionListener((ActionEvent e) -> {
                 setVisible(false);
                 MainMenu.MAINMENU.setVisible(true);
             });
             addComponent(b, 1, 9, 2, 1, 1, 1);
         } else if (game.getType() != Game.TYPE.LOCAL) {
-            JButton jb1 = new JButton(Translator.getBundle().getString("GAME_BUTTON_DRAW"));
-            JButton jb2 = new JButton(Translator.getBundle().getString("GAME_BUTTON_RESIGNATION"));
+            JButton jb1 = new JButton(Translator.getString("GAME_BUTTON_DRAW"));
+            JButton jb2 = new JButton(Translator.getString("GAME_BUTTON_RESIGNATION"));
             jb1.addActionListener((ActionEvent e) -> {
                 ((ClientGame) game).getConnection().write(ServerMessages.OfferDraw, null);
             });
