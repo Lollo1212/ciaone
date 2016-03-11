@@ -1,26 +1,46 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package eu.assault2142.hololol.chess.client.game.ui;
 
 /**
+ * Interface for a GameView which displays the Game
  *
  * @author hololol2
  */
 public interface IGameView {
 
-    public void setMovementsUpdating(boolean b);
+    /**
+     * Sets whether the movements are currently updating
+     *
+     * @param updating if true the movements are updating, otherwise not
+     */
+    public void setMovementsUpdating(boolean updating);
 
-    public void setShowCheck(boolean b);
+    /**
+     * Sets whether to display check-message
+     *
+     * @param check whether to show check-message
+     */
+    public void setShowCheck(boolean check);
 
+    /**
+     * Close the GameView
+     */
     public void hide();
 
+    /**
+     * Show a CheckMate-Message
+     */
     public void onCheckMate();
 
+    /**
+     * Show a StaleMate-Message
+     */
     public void onStaleMate();
 
+    /**
+     * Show the promotion-choice
+     *
+     * @return the chessman-type selected (QUEEN,ROOK,KNIGHT,BISHOP)
+     */
     public String showPromotionChoice();
 
 }

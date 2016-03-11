@@ -23,7 +23,6 @@ import javax.swing.JOptionPane;
  */
 public class GameFrame extends JFrame implements MouseListener, IGameView {
 
-    public boolean focus = true;
     private final GridBagConstraints constraints;
     private final Game game;
     private GameBoard gamefield;
@@ -85,11 +84,9 @@ public class GameFrame extends JFrame implements MouseListener, IGameView {
 
     @Override
     public void mousePressed(MouseEvent e) {
-        if (e.getClickCount() == 1 && !gamefield.movementsupdating && focus) {//Abfangen von Mehrfachklicks
+        if (e.getClickCount() == 1 && !gamefield.movementsupdating) {//Abfangen von Mehrfachklicks
             game.getGameState().resetFields();
-
             game.clickAt(e.getX() / squarelength, e.getY() / squarelength);
-
         }
     }
 
