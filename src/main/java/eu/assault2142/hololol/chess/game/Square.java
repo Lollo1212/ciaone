@@ -43,6 +43,7 @@ public class Square {
     }
 
     /**
+     * Get the x-coordinate
      *
      * @return the x-coordinate
      */
@@ -51,6 +52,7 @@ public class Square {
     }
 
     /**
+     * Get the y-coordinate
      *
      * @return the y-coordinate
      */
@@ -70,14 +72,30 @@ public class Square {
         currentColor = baseColor;
     }
 
+    /**
+     * Check whether the square is occupied
+     *
+     * @return true if the square is occupied, false otherwise
+     */
     public boolean isOccupied() {
         return occupier != null;
     }
 
+    /**
+     * Check whether the square is occupied by a given player
+     *
+     * @param black the color of the player
+     * @return true if the square is occupied by the player, false otherwise
+     */
     public boolean isOccupiedByColor(boolean black) {
         return isOccupied() && occupier.isBlack() == black;
     }
 
+    /**
+     * Highlights the square with the given color
+     *
+     * @param color the color to highlight with
+     */
     public void highlight(HIGHLIGHT color) {
         switch (color) {
             case MOVETARGET:
@@ -94,8 +112,11 @@ public class Square {
                 break;
         }
     }
-    
-    public void resetHighlighting(){
+
+    /**
+     * Resets the hightlighting
+     */
+    public void resetHighlighting() {
         currentColor = baseColor;
     }
 }
