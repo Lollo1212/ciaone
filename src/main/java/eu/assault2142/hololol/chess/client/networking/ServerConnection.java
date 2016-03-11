@@ -2,6 +2,7 @@ package eu.assault2142.hololol.chess.client.networking;
 
 import eu.assault2142.hololol.chess.client.game.ClientGame;
 import eu.assault2142.hololol.chess.client.menus.MainMenu;
+import eu.assault2142.hololol.chess.client.util.ErrorMessage;
 import eu.assault2142.hololol.chess.client.util.Translator;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -17,8 +18,6 @@ import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
 import java.text.MessageFormat;
 import java.util.Scanner;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSocket;
 import javax.net.ssl.SSLSocketFactory;
@@ -46,7 +45,7 @@ public class ServerConnection {
             InetAddress i = InetAddress.getByName("assault2142.eu");
             c = new ServerConnection(i);
         } catch (UnknownHostException ex) {
-            System.out.println(ex.getMessage());
+            ErrorMessage.showErrorMessage("Couldn't find Server's IP!", false);
         }
         if (c.scanner != null) {
             c.scanner.next();
@@ -132,7 +131,7 @@ public class ServerConnection {
             JOptionPane.showMessageDialog(MainMenu.MAINMENU, Translator.getBundle().getString("COULDN'T CONNECT TO SERVER"), Translator.getBundle().getString("CONNECTION ERROR"), JOptionPane.WARNING_MESSAGE);
             MainMenu.MAINMENU.enableLoginButton();
         } catch (IOException | KeyStoreException | NoSuchAlgorithmException | CertificateException | KeyManagementException ex) {
-            Logger.getLogger(ServerConnection.class.getName()).log(Level.SEVERE, null, ex);
+            ErrorMessage.showErrorMessage("Unexpected Error while connecting to the Server!", false);
         }
     }
 
@@ -150,7 +149,7 @@ public class ServerConnection {
      *
      * @param string the name of the client
      */
-    public void setName(String string) {
+    protected void setName(String string) {
         name = string;
     }
 
@@ -169,7 +168,7 @@ public class ServerConnection {
      *
      * @param color the color you play (0 = white, 1 = black)
      */
-    void startGame(String color) {
+    protected void startGame(String color) {
         game = new ClientGame(this, !color.equals("0"));
         connectionThread.setGame(game);
     }
