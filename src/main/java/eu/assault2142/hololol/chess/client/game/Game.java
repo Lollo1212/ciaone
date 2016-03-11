@@ -1,12 +1,8 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package eu.assault2142.hololol.chess.client.game;
 
 import eu.assault2142.hololol.chess.client.game.ui.IGameView;
 import eu.assault2142.hololol.chess.client.menus.MainMenu;
+import eu.assault2142.hololol.chess.client.util.ErrorMessage;
 import eu.assault2142.hololol.chess.game.Settings;
 import eu.assault2142.hololol.chess.game.Square;
 import eu.assault2142.hololol.chess.game.chessmen.CastlingMove;
@@ -17,6 +13,8 @@ import java.util.List;
 import javax.swing.ImageIcon;
 
 /**
+ * A Game which is played on the Client. Either as LocalGame or as a ClientGame
+ * to a ServerGame
  *
  * @author hololol2
  */
@@ -26,6 +24,11 @@ public abstract class Game extends eu.assault2142.hololol.chess.game.Game {
     protected Chessman picked;
     protected Square selected;
 
+    /**
+     * Create a new Game
+     *
+     * @param type the type of the game
+     */
     public Game(TYPE type) {
         super(type);
     }
@@ -43,9 +46,9 @@ public abstract class Game extends eu.assault2142.hololol.chess.game.Game {
     }
 
     /**
-     * Return the frame of the game
+     * Return the GameView
      *
-     * @return the frame the game is played in
+     * @return the view the game is played in
      */
     public IGameView getGameView() {
         return gameframe;
@@ -53,10 +56,7 @@ public abstract class Game extends eu.assault2142.hololol.chess.game.Game {
 
     @Override
     public ImageIcon getImage(Chessman.NAMES name, boolean black) {
-        String color = "white";
-        if (black) {
-            color = "black";
-        }
+        String color = black ? "black" : "white";
         return new ImageIcon(getClass().getResource(Settings.SETTINGS.chessmenFolder + "/" + name + "_" + color + ".gif"));
     }
 
@@ -69,7 +69,7 @@ public abstract class Game extends eu.assault2142.hololol.chess.game.Game {
                 Thread.sleep(2000);
                 getGameView().setShowCheck(false);
             } catch (InterruptedException ex) {
-
+                ErrorMessage.showErrorMessage("Unexpected Critical Error!", true);
             }
         };
         new Thread(checkimage).start();
@@ -78,7 +78,6 @@ public abstract class Game extends eu.assault2142.hololol.chess.game.Game {
     @Override
     public void onCheckMate() {
         gameframe.onCheckMate();
-
         this.endGame();
     }
 
