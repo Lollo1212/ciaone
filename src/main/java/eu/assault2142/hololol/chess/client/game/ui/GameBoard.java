@@ -18,8 +18,8 @@ import javax.swing.Timer;
  */
 public class GameBoard extends JPanel {
 
-    public boolean check = false;
-    public boolean movementsupdating = false;
+    protected boolean check = false;
+    protected boolean movementsupdating = false;
     private final GameState gamestate;
     private final GameFrame gameframe;
     private Graphics graphics;
