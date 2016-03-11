@@ -298,6 +298,13 @@ public class GameState {
         return getChessmen(black)[positioninarray].getMoves();
     }
 
+    /**
+     * Returns the square at the given position
+     *
+     * @param targetX the x-coordinate
+     * @param targetY the y-coordinate
+     * @return the square
+     */
     public Square getSquare(int targetX, int targetY) {
         if (targetX < 0 || targetY < 0 || targetX > 7 || targetY > 7) {
             return null;
@@ -305,10 +312,20 @@ public class GameState {
         return squares[10 * targetX + targetY];
     }
 
+    /**
+     * Check which player's turn it is
+     *
+     * @return true if it's black's turn, false otherwise
+     */
     public boolean getTurn() {
         return blackturn;
     }
 
+    /**
+     * Increase the number of captured chessmen
+     *
+     * @param color the color of the captured chessman
+     */
     public void incCaptured(boolean color) {
         if (color) {
             capturedBlack++;
@@ -317,6 +334,11 @@ public class GameState {
         }
     }
 
+    /**
+     * Prepare game for next move
+     *
+     * @param moved the chessman which was moved
+     */
     public void nextTurn(Chessman moved) {
 
         resetFields();
@@ -325,6 +347,9 @@ public class GameState {
         game.updateMovements();
     }
 
+    /**
+     * Reset markings on all fields
+     */
     public void resetFields() {
         for (int x = 0; x < 8; x++) {
             for (int y = 0; y < 8; y++) {
@@ -335,6 +360,13 @@ public class GameState {
         }
     }
 
+    /**
+     * Initialize the chessman for a player
+     *
+     * @param black the color of the player
+     * @param squares the squares of the game
+     * @return an array of the chessmen
+     */
     protected final Chessman[] buildChessmen(boolean black, Square[] squares) {
 
         Chessman[] figuren = new Chessman[16];
@@ -389,10 +421,11 @@ public class GameState {
     }
 
     /**
+     * Return the squares
      *
      * @return the squares of the game-board
      */
-    protected Square[] getSquares() {
+    private Square[] getSquares() {
         return squares;
     }
 }
