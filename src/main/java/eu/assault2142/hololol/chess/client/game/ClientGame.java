@@ -17,7 +17,7 @@ import java.awt.EventQueue;
  *
  * @author hololol2
  */
-public class ClientGame extends Game {
+public final class ClientGame extends Game {
 
     private final ServerConnection connection;
 
@@ -70,26 +70,7 @@ public class ClientGame extends Game {
     @Override
     public void promotion(Pawn pawn) {
         String promotion = gameframe.showPromotionChoice();
-        Chessman man;
-        switch (promotion) {
-            //bei lokalem Spiel wird der Bauer direkt gesetzt,
-            //bei Serverbasiertem senden der Daten an den Server
-            case "ROOK":
-                man = Rook.promotion(pawn, getGameState());
-                break;
-            case "KNIGHT":
-                man = Knight.promotion(pawn, getGameState());
-                break;
-            case "BISHOP":
-                man = Bishop.promotion(pawn, getGameState());
-                break;
-            default:
-                man = Queen.promotion(pawn, getGameState());
-                break;
-        }
-        getGameState().getChessmen(pawn.isBlack())[pawn.getPositionInArray()] = man;
-        getGameState().getSquare(man.getX(), man.getY()).occupier = man;
-        connection.write(ServerMessages.Promotion, new Object[]{promotion, man.isBlack(), man.getPositionInArray()});
+        connection.write(ServerMessages.Promotion, new Object[]{promotion, pawn.isBlack(), pawn.getPositionInArray()});
         updateMovements();
     }
 
