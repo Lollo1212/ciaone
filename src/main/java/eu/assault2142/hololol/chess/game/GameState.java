@@ -132,7 +132,7 @@ public class GameState {
     }
 
     /**
-     * Execute the given move
+     * Emulate the given move
      *
      * @param chessman the chessman to do the move
      * @param targetx the targetX
@@ -179,7 +179,7 @@ public class GameState {
     }
 
     /**
-     * Execute the given move
+     * Emulate the given move
      *
      * @param m the move
      * @return a new instance representing the situation after the move
@@ -189,6 +189,7 @@ public class GameState {
     }
 
     /**
+     * Get all captures for the given player
      *
      * @param black true for black player, false for white
      * @return all captures the given player can currently do
@@ -209,6 +210,7 @@ public class GameState {
     }
 
     /**
+     * Get all Moves for the given player
      *
      * @param black true for black player, false for white
      * @return all Moves the given player can currently do
@@ -228,6 +230,12 @@ public class GameState {
         return ret;
     }
 
+    /**
+     * Get the number of captured chessman of the given color
+     *
+     * @param color the color
+     * @return the number of captured chessman of the color
+     */
     public int getCaptured(boolean color) {
         if (color) {
             return capturedBlack;
@@ -236,6 +244,12 @@ public class GameState {
         }
     }
 
+    /**
+     * Get all chessmen of the given color
+     *
+     * @param color the color
+     * @return an array of the 16 chessmen (also the captured ones!)
+     */
     public Chessman[] getChessmen(boolean color) {
         if (color) {
             return chessmenBlack;
@@ -244,18 +258,42 @@ public class GameState {
         }
     }
 
+    /**
+     * Get the Game
+     *
+     * @return the Game this state belongs to
+     */
     public Game getGame() {
         return game;
     }
 
+    /**
+     * Get the Chessman which was moved recently
+     *
+     * @return the last recently moved chessman
+     */
     public Chessman getLastMoved() {
         return lastmoved;
     }
 
+    /**
+     * Get all possible Captures for the given chessman
+     *
+     * @param positioninarray the number of the chessman
+     * @param black the color of the chessman
+     * @return a list of all captures
+     */
     public List<Move> getPossibleCaptures(int positioninarray, boolean black) {
         return getChessmen(black)[positioninarray].getCaptures();
     }
 
+    /**
+     * Get all possible Moves for the given chessman
+     *
+     * @param positioninarray the number of the chessman
+     * @param black the color of the chessman
+     * @return a list of all moves
+     */
     public List<Move> getPossibleMoves(int positioninarray, boolean black) {
         return getChessmen(black)[positioninarray].getMoves();
     }
