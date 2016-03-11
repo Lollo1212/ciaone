@@ -3,7 +3,7 @@ package eu.assault2142.hololol.chess.client.game;
 import eu.assault2142.hololol.chess.game.Settings;
 import com.alee.laf.WebLookAndFeel;
 import eu.assault2142.hololol.chess.client.menus.MainMenu;
-import eu.assault2142.hololol.chess.client.translator.Translator;
+import eu.assault2142.hololol.chess.client.util.Translator;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URISyntaxException;

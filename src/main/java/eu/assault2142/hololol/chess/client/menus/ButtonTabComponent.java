@@ -5,7 +5,7 @@
  */
 package eu.assault2142.hololol.chess.client.menus;
 
-import eu.assault2142.hololol.chess.client.translator.Translator;
+import eu.assault2142.hololol.chess.client.util.Translator;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Component;

@@ -3,7 +3,7 @@ package eu.assault2142.hololol.chess.client.game.ui;
 import eu.assault2142.hololol.chess.client.game.ClientGame;
 import eu.assault2142.hololol.chess.client.menus.MainMenu;
 import eu.assault2142.hololol.chess.client.networking.ServerMessages;
-import eu.assault2142.hololol.chess.client.translator.Translator;
+import eu.assault2142.hololol.chess.client.util.Translator;
 import eu.assault2142.hololol.chess.game.Game;
 import java.awt.*;
 import java.awt.event.ActionEvent;

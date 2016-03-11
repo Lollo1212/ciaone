@@ -2,7 +2,7 @@ package eu.assault2142.hololol.chess.client.networking;
 
 import eu.assault2142.hololol.chess.client.game.ClientGame;
 import eu.assault2142.hololol.chess.client.menus.MainMenu;
-import eu.assault2142.hololol.chess.client.translator.Translator;
+import eu.assault2142.hololol.chess.client.util.Translator;
 import eu.assault2142.hololol.chess.game.GameState;
 import eu.assault2142.hololol.chess.game.chessmen.Bishop;
 import eu.assault2142.hololol.chess.game.chessmen.Knight;

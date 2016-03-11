@@ -2,7 +2,7 @@ package eu.assault2142.hololol.chess.client.networking;
 
 import eu.assault2142.hololol.chess.client.game.ClientGame;
 import eu.assault2142.hololol.chess.client.menus.MainMenu;
-import eu.assault2142.hololol.chess.client.translator.Translator;
+import eu.assault2142.hololol.chess.client.util.Translator;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.PrintWriter;

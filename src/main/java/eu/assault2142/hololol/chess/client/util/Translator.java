@@ -1,4 +1,4 @@
-package eu.assault2142.hololol.chess.client.translator;
+package eu.assault2142.hololol.chess.client.util;
 
 import java.util.Locale;
 import java.util.ResourceBundle;
