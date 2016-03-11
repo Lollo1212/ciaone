@@ -12,18 +12,26 @@ import java.util.logging.Logger;
 
 /**
  *
- * @author jojo
+ * @author hololol2
  */
-public abstract class MovementUpdater extends Thread {//Berechnet nach jedem Zug die Zugmöglichkeiten neu
+public abstract class MovementUpdater extends Thread {
 
     private final GameState gamestate;
     private boolean schach, schachmatt;
 
+    /**
+     * Create a new MovementUpdate
+     *
+     * @param g the gamestate to update
+     */
     public MovementUpdater(GameState g) {
         this.gamestate = g;
     }
 
-    public void testCheck() {
+    /**
+     * Check for check, checkmate and stalemate
+     */
+    protected void testCheck() {
         List<Move> schläge = gamestate.getAllCaptures(!gamestate.getTurn());
         //wenn ziel König ist, dann Schach
         for (Move schläge1 : schläge) {
@@ -56,73 +64,13 @@ public abstract class MovementUpdater extends Thread {//Berechnet nach jedem Zug
         } else if (schach) {
             gamestate.getGame().onCheck();
         }
-        /*if (schach && !gamestate.isServer()) {
-        ((ClientGame)gamestate).getGameFrame().write("Schach");
-        }
-        if (schachmatt) {
-        //nur wenn schachmatt und schach vorliegt, gewinnt der jeweilige
-        if (schach) {
-        String gewinner;
-        if (gamestate.getTurn()) {
-        //gewinner=Start.START.texte[Start.START.einstellungen.sprache][0];
-        } else {
-        //gewinner=Start.START.texte[Start.START.einstellungen.sprache][1];
-        }
-        //InfoFrame f=new InfoFrame(gewinner+Start.START.texte[Start.START.einstellungen.sprache][3],200,100,true);
-        //f.setVisible(true);
-        gamestate.getGameFrame().setVisible(false);
-        } else {
-        //wenn nur schachmatt vorliegt gibt es Patt
-        //InfoFrame f = new InfoFrame("Unentschieden", 200, 100, true);
-        //f.setVisible(true);
-        gamestate.getGameFrame().setVisible(false);
-        }
-        }
-
-        System.out.println("Finished CheckMate");
-        if (!gamestate.isServer()) {
-        System.out.println("Reenabling");
-        gamestate.getGameFrame().getGameField().movementsupdating = false;
-        }
-        if (schach && !gamestate.isServer()) {
-        Runnable checkimage = () -> {
-        try {
-        Thread.sleep(100);
-        gamestate.getGameFrame().getGameField().schach = true;
-        Thread.sleep(3000);
-        gamestate.getGameFrame().getGameField().schach = false;
-        } catch (InterruptedException ex) {
-        Logger.getLogger(TestCheckMate.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        };
-        new Thread(checkimage).start();
-        }
-        if (gamestate.isServer()) {//eventuell daten an client schicken
-        /*
-        gamestate.client1.writeMovements();
-        gamestate.client2.writeMovements();
-        if (schachmatt) {
-        if (schach) {
-        gamestate.client1.write("m");
-        gamestate.client2.write("m");
-        } else {
-        gamestate.client1.write("p");
-        gamestate.client2.write("p");
-        }
-        }
-        if (schach) {
-        gamestate.client1.write("c");
-        gamestate.client2.write("c");
-        }
-         */
-        //}
-        //if (gamestate.isLocal() && gamestate.bot && gamestate.getTurn()) {
-        //Bot.emulateMove();
-        //}
         gamestate.getGame().finishedCalcs();
     }
 
-    public void updateMovements() {
+    /**
+     * Update the movements
+     */
+    protected void updateMovements() {
         Thread[] t = new Thread[32];
         for (int a = 0; a < 16; a++) {
             if (!gamestate.getChessmen(true)[a].isCaptured()) {
@@ -143,9 +91,5 @@ public abstract class MovementUpdater extends Thread {//Berechnet nach jedem Zug
                 Logger.getLogger(MovementUpdater.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-    }
-
-    protected GameState getGameSituation() {
-        return gamestate;
     }
 }
