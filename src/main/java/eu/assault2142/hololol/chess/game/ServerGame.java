@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package eu.assault2142.hololol.chess.game;
 
 import eu.assault2142.hololol.chess.game.chessmen.Chessman;
@@ -12,14 +7,14 @@ import javax.swing.ImageIcon;
 
 /**
  *
- * @author jojo
+ * @author hololol2
  */
 public class ServerGame extends Game {
 
-    public ClientConnection client1 = null;
-    public ClientConnection client2 = null;
+    public ClientConnection client1;
+    public ClientConnection client2;
 
-    public ServerGame(ClientConnection a, ClientConnection b) {//Spiel eines Lan-Servers
+    public ServerGame(ClientConnection a, ClientConnection b) {
         super(TYPE.SERVER);
         client1 = a;
         client2 = b;
@@ -32,17 +27,28 @@ public class ServerGame extends Game {
 
     @Override
     public void endGame() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        //send end game
     }
 
     @Override
     public void finishedCalcs() {
+        //send moves
     }
 
+    /**
+     * Get the first player
+     *
+     * @return the connection to the player
+     */
     public ClientConnection getClient1() {
         return client1;
     }
 
+    /**
+     * Get the second player
+     *
+     * @return the connection to the player
+     */
     public ClientConnection getClient2() {
         return client2;
     }
@@ -54,25 +60,26 @@ public class ServerGame extends Game {
 
     @Override
     public void onCheck() {
-
+        //send check
     }
 
     @Override
     public void onCheckMate() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        //send checkmate
     }
 
     @Override
     public void onStaleMate() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        //send stalemate
     }
 
     @Override
     public void promotion(Pawn pawn) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        //send promotion
     }
 
     @Override
     public void updateMovements() {
+        new ServerMovementUpdater(getGameState()).start();
     }
 }
