@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package eu.assault2142.hololol.chess.game.chessmen;
 
 /**
@@ -9,7 +5,7 @@ package eu.assault2142.hololol.chess.game.chessmen;
  *
  * @author hololol2
  */
-public class CastlingMove extends Move {
+public class CastlingMove extends Movement {
 
     //The rook involved
     Rook rook;
@@ -42,6 +38,6 @@ public class CastlingMove extends Move {
      * @return true if equal, false otherwise
      */
     public boolean equals(CastlingMove rm) {
-        return rm.rook == rook && rm.rookX == rookX && rm.rookY == rookY && rm.targetX == targetX && rm.targetY == targetY;
+        return rm.rook == rook && rm.rookX == rookX && rm.rookY == rookY && super.equals(rm);
     }
 }

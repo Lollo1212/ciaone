@@ -6,7 +6,7 @@ import eu.assault2142.hololol.chess.client.util.Translator;
 import eu.assault2142.hololol.chess.game.GameState;
 import eu.assault2142.hololol.chess.game.chessmen.Bishop;
 import eu.assault2142.hololol.chess.game.chessmen.Knight;
-import eu.assault2142.hololol.chess.game.chessmen.Move;
+import eu.assault2142.hololol.chess.game.chessmen.Movement;
 import eu.assault2142.hololol.chess.game.chessmen.Pawn;
 import eu.assault2142.hololol.chess.game.chessmen.Queen;
 import eu.assault2142.hololol.chess.game.chessmen.Rook;
@@ -169,7 +169,7 @@ public class ServerConnectionThread extends ConnectionThread {
                         String fn = str[a].substring(2);
                         int f = Integer.parseInt(fn);
 
-                        game.getGameState().getChessmen(color)[f].addMove(new Move(posx, posy, gamestate.getChessmen(color)[f]));
+                        game.getGameState().getChessmen(color)[f].addMove(new Movement(posx, posy, gamestate.getChessmen(color)[f]));
                     }
                 }
             } else {
@@ -183,7 +183,7 @@ public class ServerConnectionThread extends ConnectionThread {
                         int posy = Integer.parseInt(y);
                         String fn = str[a].substring(2);
                         int f = Integer.parseInt(fn);
-                        game.getGameState().getChessmen(color)[f].addCapture(new Move(posx, posy, gamestate.getChessmen(color)[f]));
+                        game.getGameState().getChessmen(color)[f].addCapture(new Movement(posx, posy, gamestate.getChessmen(color)[f]));
                     }
                 }
             }

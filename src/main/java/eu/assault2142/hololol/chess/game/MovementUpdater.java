@@ -5,7 +5,7 @@
 package eu.assault2142.hololol.chess.game;
 
 import eu.assault2142.hololol.chess.game.chessmen.King;
-import eu.assault2142.hololol.chess.game.chessmen.Move;
+import eu.assault2142.hololol.chess.game.chessmen.Movement;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -24,9 +24,9 @@ public abstract class MovementUpdater extends Thread {//Berechnet nach jedem Zug
     }
 
     public void testCheck() {
-        List<Move> schläge = gamestate.getAllCaptures(!gamestate.getTurn());
+        List<Movement> schläge = gamestate.getAllCaptures(!gamestate.getTurn());
         //wenn ziel König ist, dann Schach
-        for (Move schläge1 : schläge) {
+        for (Movement schläge1 : schläge) {
             if (schläge1 != null) {
                 Square f = gamestate.getSquare(schläge1.getTargetX(), schläge1.getTargetY());
                 if (f.isOccupied() && f.occupier.getClass() == King.class) {
@@ -36,12 +36,12 @@ public abstract class MovementUpdater extends Thread {//Berechnet nach jedem Zug
             }
         }
 
-        List<Move> zü = gamestate.getAllMoves(gamestate.getTurn());
-        List<Move> schl = gamestate.getAllCaptures(gamestate.getTurn());
+        List<Movement> zü = gamestate.getAllMoves(gamestate.getTurn());
+        List<Movement> schl = gamestate.getAllCaptures(gamestate.getTurn());
         zü.addAll(schl);
         schachmatt = true;
         //wenn irgendein Zug möglich ist, dann kein schachmatt
-        for (Move bewegungen1 : zü) {
+        for (Movement bewegungen1 : zü) {
             if (bewegungen1 != null) {
                 schachmatt = false;
                 break;

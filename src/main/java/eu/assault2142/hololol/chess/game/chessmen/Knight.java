@@ -59,8 +59,8 @@ public class Knight extends Chessman {
     }
 
     @Override
-    public List<Move> computeMoves(boolean checkForCheck, GameState situation) {
-        LinkedList<Move> moves = new LinkedList();
+    public List<Movement> computeMoves(boolean checkForCheck, GameState situation) {
+        LinkedList<Movement> moves = new LinkedList();
         addIfMovePossible(moves, posx - 2, posy + 1, situation);
         addIfMovePossible(moves, posx - 2, posy - 1, situation);
         addIfMovePossible(moves, posx + 2, posy + 1, situation);
@@ -76,8 +76,8 @@ public class Knight extends Chessman {
     }
 
     @Override
-    public List<Move> computeCaptures(boolean checkForChecks, GameState situation) {
-        LinkedList<Move> captures = new LinkedList();
+    public List<Movement> computeCaptures(boolean checkForChecks, GameState situation) {
+        LinkedList<Movement> captures = new LinkedList();
         addIfCapturePossible(captures, posx - 2, posy + 1, situation);
         addIfCapturePossible(captures, posx - 2, posy - 1, situation);
         addIfCapturePossible(captures, posx + 2, posy + 1, situation);

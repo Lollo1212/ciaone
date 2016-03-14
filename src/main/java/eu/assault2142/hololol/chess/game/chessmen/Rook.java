@@ -53,8 +53,8 @@ public class Rook extends Chessman {
     }
 
     @Override
-    public List<Move> computeMoves(boolean checkForCheck, GameState situation) {
-        LinkedList<Move> moves = new LinkedList();
+    public List<Movement> computeMoves(boolean checkForCheck, GameState situation) {
+        LinkedList<Movement> moves = new LinkedList();
         for (int u = posx - 1; u >= 0; u--) {
             if (!addIfMovePossible(moves, u, posy, situation)) {
                 break;
@@ -83,8 +83,8 @@ public class Rook extends Chessman {
     }
 
     @Override
-    public List<Move> computeCaptures(boolean checkForCheck, GameState situation) {
-        LinkedList<Move> captures = new LinkedList();
+    public List<Movement> computeCaptures(boolean checkForCheck, GameState situation) {
+        LinkedList<Movement> captures = new LinkedList();
         for (int u = posx - 1; u >= 0; u--) {
             if (!addIfCapturePossible(captures, u, posy, situation)) {
                 break;

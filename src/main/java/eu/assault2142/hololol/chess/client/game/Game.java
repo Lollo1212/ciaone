@@ -8,7 +8,7 @@ import eu.assault2142.hololol.chess.game.Square;
 import eu.assault2142.hololol.chess.game.chessmen.CastlingMove;
 import eu.assault2142.hololol.chess.game.chessmen.Chessman;
 import eu.assault2142.hololol.chess.game.chessmen.King;
-import eu.assault2142.hololol.chess.game.chessmen.Move;
+import eu.assault2142.hololol.chess.game.chessmen.Movement;
 import java.util.List;
 import javax.swing.ImageIcon;
 
@@ -93,19 +93,19 @@ public abstract class Game extends eu.assault2142.hololol.chess.game.Game {
     protected void showPossibleMoves() {
         if (selected.occupier != null) {
             picked = selected.occupier;
-            List<Move> bewegungen = getGameState().getChessmen(picked.isBlack())[picked.getPositionInArray()].getMoves();
-            List<Move> schläge = getGameState().getChessmen(picked.isBlack())[picked.getPositionInArray()].getCaptures();
+            List<Movement> bewegungen = getGameState().getChessmen(picked.isBlack())[picked.getPositionInArray()].getMoves();
+            List<Movement> schläge = getGameState().getChessmen(picked.isBlack())[picked.getPositionInArray()].getCaptures();
             if (picked.getClass() == King.class) {
-                List<CastlingMove> rochaden = ((King) picked).getCastlings(true, getGameState());
+                List<CastlingMove> rochaden = ((King) picked).getCastlings();
                 rochaden.stream().forEach((CastlingMove c) -> {
                     getGameState().getSquare(c.getTargetX(), c.getTargetY()).highlight(Square.HIGHLIGHT.CASTLING);
                 });
 
             }
-            bewegungen.stream().forEach((Move m) -> {
+            bewegungen.stream().forEach((Movement m) -> {
                 getGameState().getSquare(m.getTargetX(), m.getTargetY()).highlight(Square.HIGHLIGHT.MOVETARGET);
             });
-            schläge.stream().forEach((Move m) -> {
+            schläge.stream().forEach((Movement m) -> {
                 getGameState().getSquare(m.getTargetX(), m.getTargetY()).highlight(Square.HIGHLIGHT.CAPTURETARGET);
             });
 

@@ -5,7 +5,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * Represents a Bishop in the chess-gamesituation
+ * Represents a Bishop in the chess-game
  *
  * @author hololol2
  */
@@ -60,8 +60,8 @@ public class Bishop extends Chessman {
     }
 
     @Override
-    public List<Move> computeMoves(boolean checkForCheck, GameState situation) {
-        LinkedList<Move> moves = new LinkedList();
+    public List<Movement> computeMoves(boolean checkForCheck, GameState situation) {
+        LinkedList<Movement> moves = new LinkedList();
         for (int c = 1; c <= 6; c++) {
             if (!addIfMovePossible(moves, posx + c, posy + c, situation)) {
                 break;
@@ -90,8 +90,8 @@ public class Bishop extends Chessman {
     }
 
     @Override
-    public List<Move> computeCaptures(boolean checkForChecks, GameState situation) {
-        LinkedList<Move> captures = new LinkedList();
+    public List<Movement> computeCaptures(boolean checkForChecks, GameState situation) {
+        LinkedList<Movement> captures = new LinkedList();
         for (int c = 1; c <= 6; c++) {
             if (!addIfCapturePossible(captures, posx + c, posy + c, situation)) {
                 break;

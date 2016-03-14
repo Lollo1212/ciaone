@@ -4,7 +4,7 @@ import eu.assault2142.hololol.chess.game.chessmen.Bishop;
 import eu.assault2142.hololol.chess.game.chessmen.Chessman;
 import eu.assault2142.hololol.chess.game.chessmen.King;
 import eu.assault2142.hololol.chess.game.chessmen.Knight;
-import eu.assault2142.hololol.chess.game.chessmen.Move;
+import eu.assault2142.hololol.chess.game.chessmen.Movement;
 import eu.assault2142.hololol.chess.game.chessmen.Pawn;
 import eu.assault2142.hololol.chess.game.chessmen.Queen;
 import eu.assault2142.hololol.chess.game.chessmen.Rook;
@@ -97,15 +97,15 @@ public class GameState {
      * @param black true for black player, false for white
      * @return all captures the given player can currently do
      */
-    public List<Move> computeAllCaptures(boolean black) {
-        LinkedList<Move> ret = new LinkedList();
+    public List<Movement> computeAllCaptures(boolean black) {
+        LinkedList<Movement> ret = new LinkedList();
         IntStream.range(0, 16).mapToObj((int num) -> {
             return getChessmen(black)[num];
         }).filter((Chessman man) -> {
             return !man.isCaptured();
         }).map((Chessman man) -> {
             return man.computeCaptures(false, this);
-        }).forEach((List<Move> captures) -> {
+        }).forEach((List<Movement> captures) -> {
             ret.addAll(captures);
         });
         return ret;
@@ -118,9 +118,9 @@ public class GameState {
      * @return true if king is in danger, false otherwise
      */
     public boolean dangerForKing(boolean black) {
-        List<Move> m = computeAllCaptures(!black);
+        List<Movement> m = computeAllCaptures(!black);
         boolean b = false;
-        for (Move m1 : m) {
+        for (Movement m1 : m) {
             if (m1 != null) {
                 Square f = squares[10 * m1.getTargetX() + m1.getTargetY()];
                 if (f.occupier != null && f.occupier.getClass() == King.class && f.occupier.isBlack() == black) {
@@ -184,7 +184,7 @@ public class GameState {
      * @param m the move
      * @return a new instance representing the situation after the move
      */
-    public GameState emulateMove(Move m) {
+    public GameState emulateMove(Movement m) {
         return GameState.this.emulateMove(m.getChessman(), m.getTargetX(), m.getTargetY());
     }
 
@@ -194,15 +194,15 @@ public class GameState {
      * @param black true for black player, false for white
      * @return all captures the given player can currently do
      */
-    public List<Move> getAllCaptures(boolean black) {
-        LinkedList<Move> ret = new LinkedList();
+    public List<Movement> getAllCaptures(boolean black) {
+        LinkedList<Movement> ret = new LinkedList();
         IntStream.range(0, 16).mapToObj((int num) -> {
             return getChessmen(black)[num];
         }).filter((Chessman man) -> {
             return !man.isCaptured();
         }).map((Chessman man) -> {
             return man.getCaptures();
-        }).forEach((List<Move> captures) -> {
+        }).forEach((List<Movement> captures) -> {
             ret.addAll(captures);
         });
         return ret;
@@ -215,15 +215,15 @@ public class GameState {
      * @param black true for black player, false for white
      * @return all Moves the given player can currently do
      */
-    public List<Move> getAllMoves(boolean black) {
-        LinkedList<Move> ret = new LinkedList();
+    public List<Movement> getAllMoves(boolean black) {
+        LinkedList<Movement> ret = new LinkedList();
         IntStream.range(0, 16).mapToObj((int num) -> {
             return getChessmen(black)[num];
         }).filter((Chessman man) -> {
             return !man.isCaptured();
         }).map((Chessman man) -> {
             return man.getMoves();
-        }).forEach((List<Move> captures) -> {
+        }).forEach((List<Movement> captures) -> {
             ret.addAll(captures);
         });
 
@@ -283,7 +283,7 @@ public class GameState {
      * @param black the color of the chessman
      * @return a list of all captures
      */
-    public List<Move> getPossibleCaptures(int positioninarray, boolean black) {
+    public List<Movement> getPossibleCaptures(int positioninarray, boolean black) {
         return getChessmen(black)[positioninarray].getCaptures();
     }
 
@@ -294,7 +294,7 @@ public class GameState {
      * @param black the color of the chessman
      * @return a list of all moves
      */
-    public List<Move> getPossibleMoves(int positioninarray, boolean black) {
+    public List<Movement> getPossibleMoves(int positioninarray, boolean black) {
         return getChessmen(black)[positioninarray].getMoves();
     }
 
