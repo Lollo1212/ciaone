@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package eu.assault2142.hololol.chess.game.chessmen;
 
 /**
@@ -9,7 +5,7 @@ package eu.assault2142.hololol.chess.game.chessmen;
  *
  * @author hololol2
  */
-public class Move{
+public class Movement {
 
     //the x-coordinate of the target-square
     int targetX;
@@ -24,7 +20,7 @@ public class Move{
      * @param targetY the target y-coordinate
      * @param chessman the chessman
      */
-    public Move(int targetX, int targetY, Chessman chessman) {
+    public Movement(int targetX, int targetY, Chessman chessman) {
         this.targetX = targetX;
         this.targetY = targetY;
         this.chessman = chessman;
@@ -53,13 +49,13 @@ public class Move{
     public Chessman getChessman() {
         return chessman;
     }
-    
+
     @Override
-    public boolean equals(Object o){
-        if(o!=null &&o.getClass() == Move.class){
-            Move other = (Move)o;
+    public boolean equals(Object o) {
+        if (o != null && o.getClass() == Movement.class) {
+            Movement other = (Movement) o;
             return other.targetX == targetX && other.targetY == targetY && other.chessman.equals(chessman);
-        }else{
+        } else {
             return super.equals(o);
         }
     }

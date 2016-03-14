@@ -50,13 +50,13 @@ public class Pawn extends Chessman {
         if (!r) {
             Square square = gamesituation.getSquare(targetX, targetY + (black ? -1 : +1));
             if (gamesituation.getTurn() == black) {
-                List<Move> bewegungen = gamesituation.getPossibleCaptures(positioninarray, black);
+                List<Movement> bewegungen = gamesituation.getPossibleCaptures(positioninarray, black);
                 if (square != null && bewegungen != null && square.isOccupiedByColor(!black)) {
-                    Optional<Move> findFirst = bewegungen.stream().filter((Move m) -> {
+                    Optional<Movement> findFirst = bewegungen.stream().filter((Movement m) -> {
                         return m.getClass() == EnPassantMove.class && targetX == m.getTargetX();
                     }).findFirst();
                     r = findFirst.isPresent();
-                    findFirst.ifPresent((Move m) -> {
+                    findFirst.ifPresent((Movement m) -> {
                         executeEnPassant((EnPassantMove) m);
                     });
                 }
@@ -127,8 +127,8 @@ public class Pawn extends Chessman {
     }
 
     @Override
-    public List<Move> computeMoves(boolean checkForCheck, GameState situation) {
-        LinkedList<Move> moves = new LinkedList();
+    public List<Movement> computeMoves(boolean checkForCheck, GameState situation) {
+        LinkedList<Movement> moves = new LinkedList();
         if (black) {
             if (addIfMovePossible(moves, posx, posy + 1, situation) && posy == 1) {
                 addIfMovePossible(moves, posx, posy + 2, situation);
@@ -144,8 +144,8 @@ public class Pawn extends Chessman {
     }
 
     @Override
-    public List<Move> computeCaptures(boolean checkForCheck, GameState situation) {
-        LinkedList<Move> captures = new LinkedList();
+    public List<Movement> computeCaptures(boolean checkForCheck, GameState situation) {
+        LinkedList<Movement> captures = new LinkedList();
         if (black == true) {
             addIfCapturePossible(captures, posx + 1, posy + 1, situation);
             addIfCapturePossible(captures, posx - 1, posy + 1, situation);
@@ -177,6 +177,11 @@ public class Pawn extends Chessman {
         return b;
     }
 
+    /**
+     * Execute the given EnPassantMove
+     *
+     * @param m the move to execute
+     */
     private void executeEnPassant(EnPassantMove m) {
         //Figur schlagen
         Pawn p = m.getEnemyPawn();

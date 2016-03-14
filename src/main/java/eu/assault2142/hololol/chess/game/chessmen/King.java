@@ -60,8 +60,8 @@ public class King extends Chessman {
     }
 
     @Override
-    public List<Move> computeCaptures(boolean checkForChecks, GameState situation) {
-        LinkedList<Move> captures = new LinkedList();
+    public List<Movement> computeCaptures(boolean checkForChecks, GameState situation) {
+        LinkedList<Movement> captures = new LinkedList();
         for (int k = -1; k <= 1; k++) {
             for (int j = -1; j <= 1; j++) {
                 addIfCapturePossible(captures, posx + k, posy + j, situation);
@@ -75,7 +75,7 @@ public class King extends Chessman {
     }
 
     /**
-     * Return the castlings this king is allowed to do
+     * Compute the castlings this king is allowed to do
      *
      * @param checkForCheck whether to remove castlings which lead to a
      * check-situation
@@ -104,7 +104,7 @@ public class King extends Chessman {
         //Überprüfen ob legal
         if (checkForCheck) {
             GameState gsneu;
-            List<Move> schläge;
+            List<Movement> schläge;
             for (int a = 0; a < castlings.size(); a++) {
                 CastlingMove move = castlings.get(a);
                 int kx = move.targetX;
@@ -131,8 +131,8 @@ public class King extends Chessman {
     }
 
     @Override
-    public List<Move> computeMoves(boolean checkForCheck, GameState situation) {
-        LinkedList<Move> moves = new LinkedList();
+    public List<Movement> computeMoves(boolean checkForCheck, GameState situation) {
+        LinkedList<Movement> moves = new LinkedList();
         for (int k = -1; k <= 1; k++) {
             for (int j = -1; j <= 1; j++) {
                 addIfMovePossible(moves, posx + k, posy + j, situation);
@@ -157,7 +157,7 @@ public class King extends Chessman {
     }
 
     /**
-     * Execute a castling with this chessman
+     * Do a castling with this chessman
      *
      * @param move the castling-move to execute
      * @param situation
@@ -188,10 +188,21 @@ public class King extends Chessman {
         return b;
     }
 
-    public List<CastlingMove> getCastlings(boolean b, GameState gameState) {
+    /**
+     * Get all allowed castlings
+     *
+     * @return a list of the allowed castlings
+     */
+    public List<CastlingMove> getCastlings() {
         return castlings;
     }
 
+    /**
+     * Execute the given castling-move. Does not perform any checks if possible
+     *
+     * @param move the castling to execute
+     * @param situation the current gamestate
+     */
     private void executeCastling(CastlingMove move, GameState situation) {
         //könig ziehen
         situation.getSquare(posx, posy).occupier = null;
