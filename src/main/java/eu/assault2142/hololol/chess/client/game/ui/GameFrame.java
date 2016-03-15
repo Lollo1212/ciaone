@@ -170,7 +170,7 @@ public class GameFrame extends JFrame implements MouseListener, IGameView {
             JButton jb1 = new JButton(Translator.getString("GAME_BUTTON_DRAW"));
             JButton jb2 = new JButton(Translator.getString("GAME_BUTTON_RESIGNATION"));
             jb1.addActionListener((ActionEvent e) -> {
-                ((ClientGame) game).getConnection().write(ServerMessages.OfferDraw, null);
+                ((ClientGame) game).getConnection().write(ServerMessages.Draw, null);
             });
             jb2.addActionListener((ActionEvent e) -> {
                 ((ClientGame) game).getConnection().write(ServerMessages.Resignation, null);

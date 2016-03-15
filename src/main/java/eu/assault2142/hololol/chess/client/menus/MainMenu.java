@@ -67,7 +67,7 @@ public class MainMenu extends javax.swing.JFrame {
         popup = new JPopupMenu();
         menuItem = new JMenuItem(Translator.getString("MENU_CHALLENGE"));
         menuItem.addActionListener((ActionEvent e) -> {
-            client.write(ServerMessages.Challenge, new Object[]{jList1.getSelectedValue()});
+            client.write(ServerMessages.FriendGame, new Object[]{jList1.getSelectedValue()});
         });
         popup.add(menuItem);
         menuItem = new JMenuItem(Translator.getString("MENU_MESSAGE"));
@@ -84,7 +84,7 @@ public class MainMenu extends javax.swing.JFrame {
         popup.add(menuItem);
         menuItem = new JMenuItem(Translator.getString("MENU_REMOVE"));
         menuItem.addActionListener((ActionEvent e) -> {
-            client.write(ServerMessages.FriendsRemove, new Object[]{jList1.getSelectedValue()});
+            client.write(ServerMessages.RemoveFriend, new Object[]{jList1.getSelectedValue()});
         });
         popup.add(menuItem);
 
@@ -599,12 +599,12 @@ public class MainMenu extends javax.swing.JFrame {
     private void jButton8ActionPerformed(ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
         String input = JOptionPane.showInputDialog(this, Translator.getString("ADDFRIENDDIALOG_TEXT"), Translator.getString("ADDFRIENDDIALOG_HEAD"), JOptionPane.PLAIN_MESSAGE);
         if (input != null) {
-            client.write(ServerMessages.FriendsAdd, new Object[]{input});
+            client.write(ServerMessages.AddFriend, new Object[]{input});
         }
     }//GEN-LAST:event_jButton8ActionPerformed
 
     private void jButton7ActionPerformed(ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
-        client.write(ServerMessages.Challenge, new Object[]{jList1.getSelectedValue()});
+        client.write(ServerMessages.FriendGame, new Object[]{jList1.getSelectedValue()});
     }//GEN-LAST:event_jButton7ActionPerformed
 
     private void jTextArea1FocusGained(FocusEvent evt) {//GEN-FIRST:event_jTextArea1FocusGained
@@ -647,7 +647,7 @@ public class MainMenu extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton11ActionPerformed
 
     private void jButton13ActionPerformed(ActionEvent evt) {//GEN-FIRST:event_jButton13ActionPerformed
-        client.write(ServerMessages.PlayRandom, null);
+        client.write(ServerMessages.RandomGame, null);
     }//GEN-LAST:event_jButton13ActionPerformed
 
     private void jCheckBox2ActionPerformed(ActionEvent evt) {//GEN-FIRST:event_jCheckBox2ActionPerformed

@@ -36,9 +36,7 @@ public final class ClientGame extends Game {
     @Override
     public void clickAt(int feldx, int feldy) {
         selected = getGameState().getSquare(feldx, feldy);
-        if (picked != null) {
-            connection.write(ServerMessages.DoMove, new Object[]{picked.getX() * 10 + picked.getY(), feldx, feldy});
-        }
+        connection.write(ServerMessages.Click, new Object[]{feldx, feldy});
         showPossibleMoves();
     }
 

@@ -7,21 +7,21 @@ package eu.assault2142.hololol.chess.client.networking;
  */
 public enum ServerMessages {
     Message("msg:{0}:{1}"),
-    FriendsAdd("friends:add:{0}"),
-    FriendsRemove("friends:remove:{0}"),
-    FriendsAccept("friends:accept:{0}"),
-    FriendsReject("friends:decline:{0}"),
+    AddFriend("friends:add:{0}"),
+    RemoveFriend("friends:remove:{0}"),
+    AcceptFriend("friends:accept:{0}"),
+    DeclineFriend("friends:decline:{0}"),
     Logout("logout"),
-    ChangeUsername("change:username:{0}"),
     ChangePassword("change:password:{0}"),
-    AcceptChallenge("game:accept:{0}"),
-    DeclineChallenge("game:decline:{0}"),
-    Challenge("newgame:friend:{0}"),
-    PlayRandom("newgame:random"),
-    DoMove("move:{0}:{1}:{2}"),
+    ChangeUsername("change:username:{0}"),
+    AcceptGame("game:accept:{0}"),
+    DeclineGame("game:decline:{0}"),
+    RandomGame("newgame:random"),
+    FriendGame("newgame:friend:{0}"),
+    Click("click:{0}:{1}"),
+    Promotion("promotion:{0},{1},{2}"),
     Resignation("resignation"),
-    OfferDraw("draw"),
-    Promotion("promotion:{0}:{1}:{2}");
+    Draw("draw");
 
     private final String value;
 

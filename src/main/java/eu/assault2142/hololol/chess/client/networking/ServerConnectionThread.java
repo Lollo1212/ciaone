@@ -115,9 +115,9 @@ public class ServerConnectionThread extends ConnectionThread {
         } else if (message[0].equals("request") && length == 2) {
             int addfriend = JOptionPane.showConfirmDialog(null, message[1] + Translator.getString("FRIENDREQ_ADD_TEXT"), Translator.getString("FRIENDREQ_ADD_HEAD"), JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
             if (addfriend == JOptionPane.NO_OPTION) {
-                client.write(ServerMessages.FriendsReject, new Object[]{message[1]});
+                client.write(ServerMessages.DeclineFriend, new Object[]{message[1]});
             } else {
-                client.write(ServerMessages.FriendsAccept, new Object[]{message[1]});
+                client.write(ServerMessages.AcceptFriend, new Object[]{message[1]});
             }
         }
     }
@@ -250,9 +250,9 @@ public class ServerConnectionThread extends ConnectionThread {
                 String str = message[1];
                 int selected = JOptionPane.showConfirmDialog(MainMenu.MAINMENU, java.text.MessageFormat.format(Translator.getString("GAME_START?_TEXT"), new Object[]{str}), Translator.getString("GAME_START?_HEAD"), JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
                 if (selected == JOptionPane.YES_OPTION) {
-                    client.write(ServerMessages.AcceptChallenge, new Object[]{str});
+                    client.write(ServerMessages.AcceptGame, new Object[]{str});
                 } else {
-                    client.write(ServerMessages.DeclineChallenge, new Object[]{str});
+                    client.write(ServerMessages.DeclineGame, new Object[]{str});
                 }
             }
         } else if (message[0].equals("gamestart") && length == 2) {
