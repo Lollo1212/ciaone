@@ -1,10 +1,10 @@
 package eu.assault2142.hololol.chess.client.networking;
 
-import eu.assault2142.hololol.chess.networking.ServerMessages;
 import eu.assault2142.hololol.chess.client.game.ClientGame;
 import eu.assault2142.hololol.chess.client.menus.MainMenu;
 import eu.assault2142.hololol.chess.client.util.ErrorMessage;
 import eu.assault2142.hololol.chess.client.util.Translator;
+import eu.assault2142.hololol.chess.networking.ServerMessages;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -65,8 +65,7 @@ public class ServerConnection {
                 c = new ServerConnection(c.socket, c.scanner, c.writer);
                 MainMenu.MAINMENU.loggedIn(c);//neues Fenster öffnen
             } else//Server verweigert Anmeldung
-            {
-                if (create) {
+             if (create) {
                     JOptionPane.showMessageDialog(MainMenu.MAINMENU, Translator.getString("ACCOUNT EXISTIERT BEREITS"), Translator.getString("LOGIN ERROR"), JOptionPane.ERROR_MESSAGE);
                     MainMenu.MAINMENU.enableLoginButton();
                     //InfoFrame f=new InfoFrame("Account existiert bereits",300,100,true);
@@ -77,7 +76,6 @@ public class ServerConnection {
                     JOptionPane.showMessageDialog(MainMenu.MAINMENU, Translator.getString("ACCOUNT EXISTIERT NICHT"), Translator.getString("LOGIN ERROR"), JOptionPane.ERROR_MESSAGE);
                     MainMenu.MAINMENU.enableLoginButton();
                 }//InfoFrame f=new InfoFrame("Benutzername oder Passwort falsch",300,100,true);
-            }
         }
     }
 

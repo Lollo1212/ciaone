@@ -15,7 +15,7 @@ import eu.assault2142.hololol.chess.game.chessmen.Rook;
 public class GameConnectionThread extends ConnectionThread {
 
     private final GameClientConnection connection;
-    private final GameState gamestate;
+    private GameState gamestate;
 
     public GameConnectionThread(GameClientConnection serverclient) {
         super(serverclient.getScanner());
@@ -24,7 +24,7 @@ public class GameConnectionThread extends ConnectionThread {
         consumers.add(this::consumeDraw);
         consumers.add(this::consumePromotion);
         consumers.add(this::consumeResignation);
-        gamestate = serverclient.getGame().getGameState();
+        //gamestate = serverclient.getGame().getGameState();
     }
 
     private void consumeMove(String[] message) {

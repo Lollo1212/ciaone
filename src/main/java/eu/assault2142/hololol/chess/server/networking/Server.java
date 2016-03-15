@@ -44,6 +44,10 @@ public class Server {
     private final HashMap<Integer, Integer> gamechallenges = new HashMap();
     private final ArrayList<Pair<Integer, Integer>> challenges = new ArrayList();
 
+    public boolean checkPassword(int id, String password) throws UnknownUserException {
+        return store.checkPassword(id, password);
+    }
+
     /**
      * Initializes the Server
      */

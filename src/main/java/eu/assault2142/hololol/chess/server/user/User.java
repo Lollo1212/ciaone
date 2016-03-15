@@ -10,7 +10,6 @@ import java.util.List;
 public class User {
 
     private final String username;
-    private final String password;
     private final List<Integer> friends;
     private final int id;
 
@@ -18,13 +17,11 @@ public class User {
      * Create a new User
      *
      * @param name the username
-     * @param pass the password
      * @param friends a list of friends
      * @param id an id
      */
-    public User(String name, String pass, List<Integer> friends, int id) {
+    public User(String name, List<Integer> friends, int id) {
         username = name;
-        password = pass;
         this.friends = friends;
         this.id = id;
     }
@@ -36,15 +33,6 @@ public class User {
      */
     public String getUsername() {
         return username;
-    }
-
-    /**
-     * Retrieve the Password
-     *
-     * @return the password
-     */
-    public String getPassword() {
-        return password;
     }
 
     /**

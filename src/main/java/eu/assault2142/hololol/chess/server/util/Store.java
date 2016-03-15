@@ -22,6 +22,7 @@ import oracle.kv.Key;
 import oracle.kv.KeyRange;
 import oracle.kv.Value;
 import oracle.kv.ValueVersion;
+import org.mindrot.jbcrypt.BCrypt;
 
 /**
  * The connection to the K-V-Store
@@ -115,14 +116,18 @@ public class Store {
      * @param name the username
      * @param pass the password
      * @return the id of the user
-     * @throws eu.assault2142.hololol.chess.server.exceptions.UsernameNotFreeException
+     * @throws
+     * eu.assault2142.hololol.chess.server.exceptions.UsernameNotFreeException
      */
-    public int createNewUser(String name, String pass) throws UsernameNotFreeException{
+    public int createNewUser(String name, String pass) throws UsernameNotFreeException {
         String id = get("server", "nextid");
-        if(!nameFree(name)) throw new UsernameNotFreeException(name);
+        if (!nameFree(name)) {
+            throw new UsernameNotFreeException(name);
+        }
         put(id, "username", name);
         put("server/names", name, id);
-        put(id, "password", pass);
+        String hashed = BCrypt.hashpw(pass, BCrypt.gensalt(12));
+        put(id, "password", hashed);
         id = id.trim();
         int i = Integer.parseInt(id);
         i++;
@@ -135,9 +140,10 @@ public class Store {
      *
      * @param uid the first friend's id
      * @param fid the second friend's id
-     * @throws eu.assault2142.hololol.chess.server.exceptions.UnknownUserException
+     * @throws
+     * eu.assault2142.hololol.chess.server.exceptions.UnknownUserException
      */
-    public void addFriend(int uid, int fid) throws UnknownUserException{
+    public void addFriend(int uid, int fid) throws UnknownUserException {
         checkID(uid);
         checkID(fid);
         put(uid + "/friends", "" + fid, "" + fid);
@@ -149,9 +155,10 @@ public class Store {
      *
      * @param uid the recipient's id
      * @param msg the message
-     * @throws eu.assault2142.hololol.chess.server.exceptions.UnknownUserException
+     * @throws
+     * eu.assault2142.hololol.chess.server.exceptions.UnknownUserException
      */
-    public void addMessage(int uid, String msg) throws UnknownUserException{
+    public void addMessage(int uid, String msg) throws UnknownUserException {
         checkID(uid);
         put(uid + "/pendingmsgs", msg, msg);
     }
@@ -161,9 +168,10 @@ public class Store {
      *
      * @param uid the sender's id
      * @param fid the recipient's id
-     * @throws eu.assault2142.hololol.chess.server.exceptions.UnknownUserException
+     * @throws
+     * eu.assault2142.hololol.chess.server.exceptions.UnknownUserException
      */
-    public void addFriendRequest(int uid, int fid) throws UnknownUserException{
+    public void addFriendRequest(int uid, int fid) throws UnknownUserException {
         checkID(uid);
         checkID(fid);
         put(fid + "/pendingrequests", uid + "", uid + "");
@@ -174,13 +182,13 @@ public class Store {
      *
      * @param id the user's id
      * @return the user or null if it does not exist
-     * @throws eu.assault2142.hololol.chess.server.exceptions.UnknownUserException
+     * @throws
+     * eu.assault2142.hololol.chess.server.exceptions.UnknownUserException
      */
-    public User getUser(int id) throws UnknownUserException{
+    public User getUser(int id) throws UnknownUserException {
         checkID(id);
         String name = getName(id);
-        String pass = getPass(id);
-        return new User(name, pass, getFriends(id), id);
+        return new User(name, getFriends(id), id);
     }
 
     /**
@@ -188,30 +196,37 @@ public class Store {
      *
      * @param id the user's id
      * @return the username or null if it does not exist
-     * @throws eu.assault2142.hololol.chess.server.exceptions.UnknownUserException
+     * @throws
+     * eu.assault2142.hololol.chess.server.exceptions.UnknownUserException
      */
-    public String getName(int id) throws UnknownUserException{
+    public String getName(int id) throws UnknownUserException {
         checkID(id);
         return get(id + "", "username");
     }
 
     /**
-     * 
+     *
      * @param id
-     * @throws eu.assault2142.hololol.chess.server.exceptions.UnknownUserException
+     * @throws
+     * eu.assault2142.hololol.chess.server.exceptions.UnknownUserException
      */
-    public void checkID(int id) throws UnknownUserException{
-        if(get(id+"","username")==null) throw new UnknownUserException(id);
+    public void checkID(int id) throws UnknownUserException {
+        if (get(id + "", "username") == null) {
+            throw new UnknownUserException(id);
+        }
     }
+
     /**
      * Retrieve a password from the store
      *
      * @param id the user's id
+     * @param pass
      * @return the password or null if it does not exist
-     * @throws eu.assault2142.hololol.chess.server.exceptions.UnknownUserException
+     * @throws
+     * eu.assault2142.hololol.chess.server.exceptions.UnknownUserException
      */
-    private String getPass(int id) throws UnknownUserException{
-        return get(id + "", "password");
+    public boolean checkPassword(int id, String pass) throws UnknownUserException {
+        return BCrypt.checkpw(pass, get(id + "", "password"));
     }
 
     /**
@@ -219,9 +234,10 @@ public class Store {
      *
      * @param uid the user's id
      * @return a list with unread messages
-     * @throws eu.assault2142.hololol.chess.server.exceptions.UnknownUserException
+     * @throws
+     * eu.assault2142.hololol.chess.server.exceptions.UnknownUserException
      */
-    public List<String> getMessages(int uid) throws UnknownUserException{
+    public List<String> getMessages(int uid) throws UnknownUserException {
         checkID(uid);
         return multiGet(uid + "/pendingmsgs", "0", null);
     }
@@ -231,9 +247,10 @@ public class Store {
      *
      * @param uid the user's id
      * @return a list with pending requests
-     * @throws eu.assault2142.hololol.chess.server.exceptions.UnknownUserException
+     * @throws
+     * eu.assault2142.hololol.chess.server.exceptions.UnknownUserException
      */
-    public List<Integer> getRequests(int uid) throws UnknownUserException{
+    public List<Integer> getRequests(int uid) throws UnknownUserException {
         checkID(uid);
         List<String> requests = multiGet(uid + "/pendingrequests", "0", null);
         List<Integer> req = new LinkedList();
@@ -248,11 +265,14 @@ public class Store {
      *
      * @param name the name of the user
      * @return the ID
-     * @throws eu.assault2142.hololol.chess.server.exceptions.UnknownUserException
+     * @throws
+     * eu.assault2142.hololol.chess.server.exceptions.UnknownUserException
      */
-    public int getID(String name) throws UnknownUserException{
+    public int getID(String name) throws UnknownUserException {
         String id = get("server/names", name);
-        if(id == null) throw new UnknownUserException(name);
+        if (id == null) {
+            throw new UnknownUserException(name);
+        }
         return Integer.parseInt(id);
     }
 
@@ -261,9 +281,10 @@ public class Store {
      *
      * @param id the user's id
      * @return a list of the user's friend
-     * @throws eu.assault2142.hololol.chess.server.exceptions.UnknownUserException
+     * @throws
+     * eu.assault2142.hololol.chess.server.exceptions.UnknownUserException
      */
-    public List<Integer> getFriends(int id) throws UnknownUserException{
+    public List<Integer> getFriends(int id) throws UnknownUserException {
         checkID(id);
         List<String> friends = multiGet(id + "/friends", "0", null);
         List<Integer> fri = new LinkedList();
@@ -290,12 +311,16 @@ public class Store {
      *
      * @param id the user's id
      * @param name the new username
-     * @throws eu.assault2142.hololol.chess.server.exceptions.UnknownUserException
-     * @throws eu.assault2142.hololol.chess.server.exceptions.UsernameNotFreeException
+     * @throws
+     * eu.assault2142.hololol.chess.server.exceptions.UnknownUserException
+     * @throws
+     * eu.assault2142.hololol.chess.server.exceptions.UsernameNotFreeException
      */
-    public void setUsername(int id, String name) throws UnknownUserException,UsernameNotFreeException{
+    public void setUsername(int id, String name) throws UnknownUserException, UsernameNotFreeException {
         checkID(id);
-        if(!nameFree(name)) throw new UsernameNotFreeException(name);
+        if (!nameFree(name)) {
+            throw new UsernameNotFreeException(name);
+        }
         String oldname = getName(id);
         put(id + "", "username", name);
         put("server/names", name, id + "");
@@ -307,11 +332,13 @@ public class Store {
      *
      * @param id the user's id
      * @param pass the new password
-     * @throws eu.assault2142.hololol.chess.server.exceptions.UnknownUserException
+     * @throws
+     * eu.assault2142.hololol.chess.server.exceptions.UnknownUserException
      */
-    public void setPassword(int id, String pass) throws UnknownUserException{
+    public void setPassword(int id, String pass) throws UnknownUserException {
         checkID(id);
-        put(id + "", "password", pass);
+        String hashed = BCrypt.hashpw(pass, BCrypt.gensalt(12));
+        put(id + "", "password", hashed);
     }
 
     /**
@@ -319,9 +346,10 @@ public class Store {
      *
      * @param uid the remover
      * @param fid the removed friend
-     * @throws eu.assault2142.hololol.chess.server.exceptions.UnknownUserException
+     * @throws
+     * eu.assault2142.hololol.chess.server.exceptions.UnknownUserException
      */
-    public void removeFriend(int uid, int fid) throws UnknownUserException{
+    public void removeFriend(int uid, int fid) throws UnknownUserException {
         checkID(uid);
         checkID(fid);
         remove(uid + "/friends", fid + "");
@@ -330,11 +358,13 @@ public class Store {
 
     /**
      * Removes a friend-request
+     *
      * @param id the original offerer
      * @param id0 the target of the request
-     * @throws eu.assault2142.hololol.chess.server.exceptions.UnknownUserException
+     * @throws
+     * eu.assault2142.hololol.chess.server.exceptions.UnknownUserException
      */
-    public void removeRequest(int id, int id0) throws UnknownUserException{
+    public void removeRequest(int id, int id0) throws UnknownUserException {
         checkID(id);
         checkID(id0);
         remove(id0 + "/pendingrequests", id + "");
@@ -342,32 +372,35 @@ public class Store {
 
     /**
      * Check whether a request exists
+     *
      * @param id the original offerer
      * @param id0 the target of the request
      * @return true if the request exists, false otherwise
-     * @throws eu.assault2142.hololol.chess.server.exceptions.UnknownUserException
+     * @throws
+     * eu.assault2142.hololol.chess.server.exceptions.UnknownUserException
      */
-    public boolean requestExists(int id, int id0) throws UnknownUserException{
+    public boolean requestExists(int id, int id0) throws UnknownUserException {
         checkID(id);
         checkID(id0);
         return get(id0 + "/pendingrequests", id + "") != null;
     }
 
-    public static void main(String[]args){
+    public static void main(String[] args) {
         Store store = new Store();
         store.put("server", "nextid", "0");
         System.out.println(store.get("server", "nextid"));
     }
-    
+
     /**
      * Remove a pending message
+     *
      * @param id the id of the recipient
      * @param msg the message
-     * @throws eu.assault2142.hololol.chess.server.exceptions.UnknownUserException
+     * @throws
+     * eu.assault2142.hololol.chess.server.exceptions.UnknownUserException
      */
-    public void deleteMessage(int id,String msg)throws UnknownUserException{
+    public void deleteMessage(int id, String msg) throws UnknownUserException {
         checkID(id);
-        remove(id+"/pendingmsgs",msg);
+        remove(id + "/pendingmsgs", msg);
     }
 }
-

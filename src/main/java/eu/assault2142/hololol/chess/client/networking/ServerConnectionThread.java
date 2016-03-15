@@ -1,6 +1,5 @@
 package eu.assault2142.hololol.chess.client.networking;
 
-import eu.assault2142.hololol.chess.networking.ServerMessages;
 import eu.assault2142.hololol.chess.client.game.ClientGame;
 import eu.assault2142.hololol.chess.client.menus.MainMenu;
 import eu.assault2142.hololol.chess.client.util.Translator;
@@ -12,6 +11,7 @@ import eu.assault2142.hololol.chess.game.chessmen.Pawn;
 import eu.assault2142.hololol.chess.game.chessmen.Queen;
 import eu.assault2142.hololol.chess.game.chessmen.Rook;
 import eu.assault2142.hololol.chess.networking.ConnectionThread;
+import eu.assault2142.hololol.chess.networking.ServerMessages;
 import java.util.Scanner;
 import javax.swing.JOptionPane;
 
@@ -46,7 +46,7 @@ public class ServerConnectionThread extends ConnectionThread {
         consumers.add(this::consumePromotion);
         consumers.add(this::consumeResignation);
         consumers.add(this::consumeStartGame);
-        gamestate = game.getGameState();
+        //gamestate = game.getGameState();
     }
 
     @Override
