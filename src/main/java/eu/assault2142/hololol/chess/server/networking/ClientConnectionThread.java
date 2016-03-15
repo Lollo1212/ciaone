@@ -1,5 +1,6 @@
 package eu.assault2142.hololol.chess.server.networking;
 
+import eu.assault2142.hololol.chess.networking.ClientMessages;
 import eu.assault2142.hololol.chess.networking.GameConnectionThread;
 import eu.assault2142.hololol.chess.server.exceptions.UnknownUserException;
 import eu.assault2142.hololol.chess.server.exceptions.UsernameNotFreeException;
@@ -99,10 +100,10 @@ public class ClientConnectionThread extends GameConnectionThread {
             } else {
                 try {
                     if (length == 3 && server.isOnline(server.getUserID(message[2]))) {
-                        server.getConnection(server.getUserID(message[2])).write("newgame:" + connection.getUser().getUsername());
+                        server.getConnection(server.getUserID(message[2])).write(ClientMessages.Newgame, new Object[]{connection.getUser().getUsername()});
                         server.challenge(connection.getUser().getID(), server.getUserID(message[2]));
                     } else {
-                        connection.write("newgame:enemyoffline");
+                        connection.write(ClientMessages.Newgame, new Object[]{"enemyoffline"});
                     }
                 } catch (UnknownUserException ex) {
                     Log.MAINLOG.log(ex.getMessage());
@@ -117,9 +118,9 @@ public class ClientConnectionThread extends GameConnectionThread {
             if (message[1].equals("username")) {
                 try {
                     server.setUsername(connection.getUser().getID(), message[2]);
-                    connection.write("change:username:accept:" + message[2]);
+                    connection.write(ClientMessages.AcceptUsernameChange, new Object[]{message[2]});
                 } catch (UsernameNotFreeException ex) {
-                    connection.write("change:username:decline");
+                    connection.write(ClientMessages.DeclineUsernameChange, new Object[]{});
                 } catch (UnknownUserException ex) {
                     Log.MAINLOG.log(ex.getMessage());
                 }
@@ -127,7 +128,7 @@ public class ClientConnectionThread extends GameConnectionThread {
             if (message[1].equals("password")) {
                 try {
                     server.setPassword(connection.getUser().getID(), message[2]);
-                    connection.write("change:password:accept");
+                    connection.write(ClientMessages.AcceptPasswordChange, new Object[]{});
                 } catch (UnknownUserException ex) {
                     Log.MAINLOG.log(ex.getMessage());
                 }

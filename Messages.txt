@@ -10,11 +10,11 @@ move:$numberinarray:$targetX:$targetY
 check
 checkmate
 stalemate
-moves{:$color:(move/capture):$numberinarray:$targetX:$targetY}
+moves:{$color:(move/capture):$numberinarray:$targetX:$targetY}
 resignation:$color
 draw[:offer]
 promotion:$target:$color:$numberinarray
-promote:$color:$pawn
+promote:$numberinarray
 
 
 Client -> GameServer

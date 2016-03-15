@@ -6,6 +6,7 @@ import eu.assault2142.hololol.chess.game.chessmen.Movement;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.text.MessageFormat;
 import java.util.List;
 import java.util.Scanner;
 
@@ -33,12 +34,16 @@ public class GameClientConnection {
         reader = new GameConnectionThread(this);
     }
 
-    public void write(String str) {
+    private void write(String str) {
         printwriter.println(str);
     }
 
     public void startReading() {
         reader.start();
+    }
+
+    public void write(ClientMessages message, Object[] replace) {
+        write(MessageFormat.format(message.getValue(), replace));
     }
 
     public void writeMovements() {

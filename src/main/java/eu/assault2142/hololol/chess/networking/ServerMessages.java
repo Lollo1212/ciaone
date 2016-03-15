@@ -1,4 +1,4 @@
-package eu.assault2142.hololol.chess.client.networking;
+package eu.assault2142.hololol.chess.networking;
 
 /**
  * An Enum with all possible Messages to the Server

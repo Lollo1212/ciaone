@@ -1,5 +1,6 @@
 package eu.assault2142.hololol.chess.client.networking;
 
+import eu.assault2142.hololol.chess.networking.ServerMessages;
 import eu.assault2142.hololol.chess.client.game.ClientGame;
 import eu.assault2142.hololol.chess.client.menus.MainMenu;
 import eu.assault2142.hololol.chess.client.util.ErrorMessage;

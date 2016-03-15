@@ -2,7 +2,6 @@ package eu.assault2142.hololol.chess.server.networking;
 
 import eu.assault2142.hololol.chess.game.ServerGame;
 import eu.assault2142.hololol.chess.networking.GameClientConnection;
-import eu.assault2142.hololol.chess.server.exceptions.UnknownUserException;
 import eu.assault2142.hololol.chess.server.user.User;
 import eu.assault2142.hololol.chess.server.util.Log;
 import java.io.IOException;
@@ -59,47 +58,7 @@ public class ClientConnection extends GameClientConnection {
         this.game = game;
     }
 
-    public void wrongUsername() {
-        write("loginerror:username");
-    }
-
-    public void loggedin() {
-        write("loggedin");
-    }
-
     public void writeFriendList() {
-        try {
-            write(server.getFriendsAsString(getUser().getID()));
-        } catch (UnknownUserException ex) {
-
-        }
-    }
-
-    public void writeName() {
-        write("name:" + getUser().getUsername());
-    }
-
-    public void wrongPassword() {
-        write("loginerror:password");
-    }
-
-    void hello() {
-        write("hello");
-    }
-
-    void usernameTaken() {
-        write("usernametaken");
-    }
-
-    void startGame(int i) {
-        write("gamestart:" + i);
-    }
-
-    void writeMessage(String msg) {
-        write("msg:" + msg);
-    }
-
-    void friendRequest(String name) {
-        write("request:" + name);
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

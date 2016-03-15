@@ -36,12 +36,12 @@ public class GameConnectionThread extends ConnectionThread {
             if (a < 78) {
                 Chessman f = gamestate.getSquare(a / 10, a % 10).occupier;
                 if (f != null && !f.isBlack() == connection.isWhite() && f.isBlack() == gamestate.getTurn() && (f.doMove(x, y))) {
-                    connection.getGame().getClient1().write("move:" + a + ":" + x + ":" + y);
-                    connection.getGame().getClient2().write("move:" + a + ":" + x + ":" + y);
+                    connection.getGame().getClient1().write(ClientMessages.Move, new Object[]{a, x, y});
+                    connection.getGame().getClient2().write(ClientMessages.Move, new Object[]{a, x, y});
                 }
                 if (f != null && !f.isBlack() == connection.isWhite() && f.isBlack() == gamestate.getTurn() && (f.doCapture(x, y))) {
-                    connection.getGame().getClient1().write("capture:" + a + ":" + x + ":" + y);
-                    connection.getGame().getClient2().write("capture:" + a + ":" + x + ":" + y);
+                    connection.getGame().getClient1().write(ClientMessages.Move, new Object[]{a, x, y});
+                    connection.getGame().getClient2().write(ClientMessages.Move, new Object[]{a, x, y});
                 }
             }
         }
@@ -63,32 +63,32 @@ public class GameConnectionThread extends ConnectionThread {
                     Chessman f = Rook.promotion((Pawn) gamestate.getChessmen(color)[nummerinarray], gamestate);
                     if (f != null) {
                         gamestate.getChessmen(color)[nummerinarray] = f;
-                        connection.getGame().getClient1().write(input);
-                        connection.getGame().getClient2().write(input);
+                        connection.getGame().getClient1().write(ClientMessages.Promotion, new Object[]{n, c, nia});
+                        connection.getGame().getClient2().write(ClientMessages.Promotion, new Object[]{n, c, nia});
                     }
                     break;
                 case "KNIGHT":
                     f = Knight.promotion((Pawn) gamestate.getChessmen(color)[nummerinarray], gamestate);
                     if (f != null) {
                         gamestate.getChessmen(color)[nummerinarray] = f;
-                        connection.getGame().getClient1().write(input);
-                        connection.getGame().getClient2().write(input);
+                        connection.getGame().getClient1().write(ClientMessages.Promotion, new Object[]{n, c, nia});
+                        connection.getGame().getClient2().write(ClientMessages.Promotion, new Object[]{n, c, nia});
                     }
                     break;
                 case "BISHOP":
                     f = Bishop.promotion((Pawn) gamestate.getChessmen(color)[nummerinarray], gamestate);
                     if (f != null) {
                         gamestate.getChessmen(color)[nummerinarray] = f;
-                        connection.getGame().getClient1().write(input);
-                        connection.getGame().getClient2().write(input);
+                        connection.getGame().getClient1().write(ClientMessages.Promotion, new Object[]{n, c, nia});
+                        connection.getGame().getClient2().write(ClientMessages.Promotion, new Object[]{n, c, nia});
                     }
                     break;
                 case "QUEEN":
                     f = Queen.promotion((Pawn) gamestate.getChessmen(color)[nummerinarray], gamestate);
                     if (f != null) {
                         gamestate.getChessmen(color)[nummerinarray] = f;
-                        connection.getGame().getClient1().write(input);
-                        connection.getGame().getClient2().write(input);
+                        connection.getGame().getClient1().write(ClientMessages.Promotion, new Object[]{n, c, nia});
+                        connection.getGame().getClient2().write(ClientMessages.Promotion, new Object[]{n, c, nia});
                     }
                     break;
             }
@@ -98,11 +98,11 @@ public class GameConnectionThread extends ConnectionThread {
     private void consumeResignation(String[] message) {
         if (message[0].equals("resignation")) {
             if (connection == connection.getGame().getClient1()) {
-                connection.getGame().getClient1().write("resignation:0");
-                connection.getGame().getClient2().write("resignation:1");
+                connection.getGame().getClient1().write(ClientMessages.Resignation, new Object[]{0});
+                connection.getGame().getClient2().write(ClientMessages.Resignation, new Object[]{1});
             } else {
-                connection.getGame().getClient1().write("resignation:1");
-                connection.getGame().getClient2().write("resignation:0");
+                connection.getGame().getClient1().write(ClientMessages.Resignation, new Object[]{1});
+                connection.getGame().getClient2().write(ClientMessages.Resignation, new Object[]{0});
             }
         }
     }
@@ -111,14 +111,14 @@ public class GameConnectionThread extends ConnectionThread {
         if (message[0].equals("draw")) {
             connection.setDraw(true);
             if (connection.getGame().getClient1().isDrawSet() && connection.getGame().getClient2().isDrawSet()) {
-                connection.getGame().getClient1().write("draw:1");
-                connection.getGame().getClient2().write("draw:1");
+                connection.getGame().getClient1().write(ClientMessages.Draw, new Object[]{1});
+                connection.getGame().getClient2().write(ClientMessages.Resignation, new Object[]{1});
             }
 
             if (connection == connection.getGame().getClient1()) {
-                connection.getGame().getClient2().write("draw:0");
+                connection.getGame().getClient2().write(ClientMessages.Resignation, new Object[]{0});
             } else {
-                connection.getGame().getClient1().write("draw:0");
+                connection.getGame().getClient1().write(ClientMessages.Resignation, new Object[]{0});
             }
 
         }

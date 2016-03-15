@@ -1,5 +1,6 @@
 package eu.assault2142.hololol.chess.server.networking;
 
+import eu.assault2142.hololol.chess.networking.ClientMessages;
 import eu.assault2142.hololol.chess.server.exceptions.UsernameNotFreeException;
 import eu.assault2142.hololol.chess.server.user.LoginRequest;
 import eu.assault2142.hololol.chess.server.util.Log;
@@ -25,7 +26,7 @@ public class WaitForPlayers extends Thread {
             try {
                 socket = server.getServerSocket().accept();
                 ClientConnection serverclient = new ClientConnection(socket, server);
-                serverclient.hello();
+                serverclient.write(ClientMessages.Hello, new Object[]{});
                 String input = serverclient.getScanner().next();
                 String username;
                 String pass;
@@ -41,7 +42,7 @@ public class WaitForPlayers extends Thread {
                         server.createNewUser(str[1], str[2]);
                         server.getLoginQueue().addLast(new LoginRequest(str[1], str[2], serverclient));
                     } catch (UsernameNotFreeException ex) {
-                        serverclient.usernameTaken();
+                        serverclient.write(ClientMessages.UsernameWrong, new Object[]{});
                     }
                 }
             } catch (IOException ex) {
