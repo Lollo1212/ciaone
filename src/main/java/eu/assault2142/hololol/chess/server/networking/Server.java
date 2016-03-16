@@ -323,7 +323,7 @@ public class Server {
      */
     public String getFriendsAsString(int uid) throws UnknownUserException {
         String[] string = getFriends(uid);
-        String s = "friends:";
+        String s = "";
         for (String string1 : string) {
             s += string1 + ";";
         }
