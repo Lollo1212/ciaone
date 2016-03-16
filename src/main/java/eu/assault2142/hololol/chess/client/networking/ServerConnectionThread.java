@@ -10,9 +10,15 @@ import eu.assault2142.hololol.chess.game.chessmen.Movement;
 import eu.assault2142.hololol.chess.game.chessmen.Pawn;
 import eu.assault2142.hololol.chess.game.chessmen.Queen;
 import eu.assault2142.hololol.chess.game.chessmen.Rook;
+import eu.assault2142.hololol.chess.networking.ClientMessages;
 import eu.assault2142.hololol.chess.networking.ConnectionThread;
 import eu.assault2142.hololol.chess.networking.ServerMessages;
+import java.text.MessageFormat;
+import java.text.ParseException;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Scanner;
+import java.util.function.Consumer;
 import javax.swing.JOptionPane;
 
 /**
@@ -25,6 +31,7 @@ public class ServerConnectionThread extends ConnectionThread {
     private final ServerConnection client;
     private ClientGame game;
     private GameState gamestate;
+    private HashMap<ClientMessages, Consumer<String[]>> consumer;
 
     /**
      * Create a new ServerConnectionThread
@@ -62,12 +69,31 @@ public class ServerConnectionThread extends ConnectionThread {
         this.game = game;
     }
 
-    private void consumeAccount(String[] message) {
-        int length = message.length;
-        if (message[0].equals("name") && length == 2) {
-            client.setName(message[1]);
-            MainMenu.MAINMENU.setPlayerName(message[1]);
-        } else if (message[0].equals("change") && length >= 3) {
+    private void consume(String message) {
+        Arrays.stream(ClientMessages.values()).forEach((ClientMessages m) -> {
+            try {
+                String[] parts = parse(message, m.getFormat());
+                consumer.getOrDefault(m, this::consumeUnknown).accept(parts);
+            } catch (ParseException ex) {
+            }
+        });
+    }
+
+    private String[] parse(String message, MessageFormat format) throws ParseException {
+        return Arrays.stream(format.parse(message)).toArray(String[]::new);
+    }
+
+    private void consumeUnknown(String[] parts) {
+
+    }
+
+    private void consumeName(String[] parts) {
+        client.setName(parts[0].toString());
+        MainMenu.MAINMENU.setPlayerName(parts[0].toString());
+    }
+
+    private void consumeAccount(String message) {
+        if (message[0].equals("change") && length >= 3) {
             if (message[1].equals("username")) {
                 if (message[2].equals("accept") && length == 4) {
                     JOptionPane.showMessageDialog(MainMenu.MAINMENU, java.text.MessageFormat.format(Translator.getString("NAMECHANGED_TEXT"), new Object[]{message[3]}), Translator.getString("NAMECHANGED_HEAD"), JOptionPane.INFORMATION_MESSAGE);

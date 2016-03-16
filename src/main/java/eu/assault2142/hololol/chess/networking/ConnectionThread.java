@@ -16,7 +16,7 @@ import java.util.function.Consumer;
  */
 public abstract class ConnectionThread extends Thread {
 
-    protected final LinkedList<Consumer<String[]>> consumers;
+    protected final LinkedList<Consumer<String>> consumers;
     protected Scanner scanner;
 
     public ConnectionThread(Scanner sc) {
@@ -30,9 +30,9 @@ public abstract class ConnectionThread extends Thread {
         while (true) {
             try {
                 input = scanner.next();
-                String[] message = input.split(":");
-                consumers.forEach((Consumer<String[]> consumer) -> {
-                    consumer.accept(message);
+                String text = input;
+                consumers.forEach((Consumer<String> consumer) -> {
+                    consumer.accept(text);
                 });
             } catch (NoSuchElementException nsee) {
                 closeConnection();
