@@ -42,17 +42,7 @@ public class ServerConnectionThread extends ConnectionThread {
     public ServerConnectionThread(ServerConnection c, Scanner scanner) {
         super(scanner);
         this.client = c;
-        consumers.add(this::consumeAccount);
-        consumers.add(this::consumeCheckStaleMate);
-        consumers.add(this::consumeDraw);
-        consumers.add(this::consumeFriends);
-        consumers.add(this::consumeMessage);
-        consumers.add(this::consumeMoveCapture);
-        consumers.add(this::consumeMoves);
-        consumers.add(this::consumePromote);
-        consumers.add(this::consumePromotion);
-        consumers.add(this::consumeResignation);
-        consumers.add(this::consumeStartGame);
+        consumer.put(ClientMessages.Name, this::consumeName);
         //gamestate = game.getGameState();
     }
 
