@@ -1,7 +1,6 @@
 package eu.assault2142.hololol.chess.networking;
 
 import java.text.MessageFormat;
-import java.util.function.Consumer;
 
 /**
  * An Enum with all possible Messages to a Client
@@ -36,12 +35,10 @@ public enum ClientMessages {
 
     private final String value;
     private final MessageFormat format;
-    private final Consumer<String[]> consumer;
 
-    private ClientMessages(String value, Consumer<String[]> consumer) {
+    private ClientMessages(String value) {
         this.value = value;
         format = new MessageFormat(getValue());
-        this.consumer = consumer;
     }
 
     public String getValue() {

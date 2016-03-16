@@ -16,9 +16,7 @@ import eu.assault2142.hololol.chess.networking.ServerMessages;
 import java.text.MessageFormat;
 import java.text.ParseException;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.Scanner;
-import java.util.function.Consumer;
 import javax.swing.JOptionPane;
 
 /**
@@ -31,7 +29,6 @@ public class ServerConnectionThread extends ConnectionThread {
     private final ServerConnection client;
     private ClientGame game;
     private GameState gamestate;
-    private HashMap<ClientMessages, Consumer<String[]>> consumer;
 
     /**
      * Create a new ServerConnectionThread
@@ -42,7 +39,26 @@ public class ServerConnectionThread extends ConnectionThread {
     public ServerConnectionThread(ServerConnection c, Scanner scanner) {
         super(scanner);
         this.client = c;
-        consumer.put(ClientMessages.Name, this::consumeName);
+        consumers.put(ClientMessages.AcceptPasswordChange, this::consumeAcceptPassChange);
+        consumers.put(ClientMessages.AcceptUsernameChange, this::consumeAcceptUserChange);
+        consumers.put(ClientMessages.Check, this::consumeCheck);
+        consumers.put(ClientMessages.Checkmate, this::consumeCheckMate);
+        consumers.put(ClientMessages.DeclinePasswordChange, this::consumeDeclinePassChange);
+        consumers.put(ClientMessages.DeclineUsernameChange, this::consumeDeclineUserChange);
+        consumers.put(ClientMessages.Draw, this::consumeDraw);
+        consumers.put(ClientMessages.DrawOffer, this::consumeDrawOffer);
+        consumers.put(ClientMessages.Friends, this::consumeFriends);
+        consumers.put(ClientMessages.Gamestart, this::consumeStartGame);
+        consumers.put(ClientMessages.Message, this::consumeMessage);
+        consumers.put(ClientMessages.Move, this::consumeMove);
+        consumers.put(ClientMessages.Moves, this::consumeMoves);
+        consumers.put(ClientMessages.Name, this::consumeName);
+        consumers.put(ClientMessages.Newgame, this::consumeNewGame);
+        consumers.put(ClientMessages.Promote, this::consumePromote);
+        consumers.put(ClientMessages.Promotion, this::consumePromotion);
+        consumers.put(ClientMessages.Request, this::consumeRequest);
+        consumers.put(ClientMessages.Resignation, this::consumeResignation);
+        consumers.put(ClientMessages.Stalemate, this::consumeStaleMate);
         //gamestate = game.getGameState();
     }
 
@@ -59,11 +75,12 @@ public class ServerConnectionThread extends ConnectionThread {
         this.game = game;
     }
 
-    private void consume(String message) {
+    @Override
+    protected void consume(String message) {
         Arrays.stream(ClientMessages.values()).forEach((ClientMessages m) -> {
             try {
                 String[] parts = parse(message, m.getFormat());
-                consumer.getOrDefault(m, this::consumeUnknown).accept(parts);
+                consumers.getOrDefault(m, this::consumeUnknown).accept(parts);
             } catch (ParseException ex) {
             }
         });
@@ -74,95 +91,80 @@ public class ServerConnectionThread extends ConnectionThread {
     }
 
     private void consumeUnknown(String[] parts) {
-
+        System.out.println("Unexpected Message from Server.");
     }
 
     private void consumeName(String[] parts) {
-        client.setName(parts[0].toString());
-        MainMenu.MAINMENU.setPlayerName(parts[0].toString());
+        client.setName(parts[0]);
+        MainMenu.MAINMENU.setPlayerName(parts[0]);
     }
 
-    private void consumeAccount(String message) {
-        if (message[0].equals("change") && length >= 3) {
-            if (message[1].equals("username")) {
-                if (message[2].equals("accept") && length == 4) {
-                    JOptionPane.showMessageDialog(MainMenu.MAINMENU, java.text.MessageFormat.format(Translator.getString("NAMECHANGED_TEXT"), new Object[]{message[3]}), Translator.getString("NAMECHANGED_HEAD"), JOptionPane.INFORMATION_MESSAGE);
-                } else {
-                    JOptionPane.showMessageDialog(MainMenu.MAINMENU, Translator.getString("NAMECHANGE_TAKEN_TEXT"), Translator.getString("NAMECHANGE_TAKEN_HEAD"), JOptionPane.WARNING_MESSAGE);
-                }
-            }
-            if (message[1].equals("password") && message[2].equals("accept")) {
-                JOptionPane.showMessageDialog(MainMenu.MAINMENU, Translator.getString("PASSCHANGED_TEXT"), Translator.getString("PASSCHANGED_HEAD"), JOptionPane.INFORMATION_MESSAGE);
-            }
+    private void consumeAcceptUserChange(String[] parts) {
+        JOptionPane.showMessageDialog(MainMenu.MAINMENU, java.text.MessageFormat.format(Translator.getString("NAMECHANGED_TEXT"), new Object[]{parts[0]}), Translator.getString("NAMECHANGED_HEAD"), JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    private void consumeDeclineUserChange(String[] parts) {
+        JOptionPane.showMessageDialog(MainMenu.MAINMENU, Translator.getString("NAMECHANGE_TAKEN_TEXT"), Translator.getString("NAMECHANGE_TAKEN_HEAD"), JOptionPane.WARNING_MESSAGE);
+    }
+
+    private void consumeAcceptPassChange(String[] parts) {
+        JOptionPane.showMessageDialog(MainMenu.MAINMENU, Translator.getString("PASSCHANGED_TEXT"), Translator.getString("PASSCHANGED_HEAD"), JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    private void consumeDeclinePassChange(String[] parts) {
+
+    }
+
+    private void consumeCheck(String[] parts) {
+        game.onCheck();
+    }
+
+    private void consumeCheckMate(String[] parts) {
+        game.onCheckMate();
+    }
+
+    private void consumeStaleMate(String[] parts) {
+        game.onStaleMate();
+    }
+
+    private void consumeDraw(String[] parts) {
+        JOptionPane.showMessageDialog(MainMenu.MAINMENU, Translator.getString("DRAW_TEXT"), Translator.getString("DRAW_HEAD"), JOptionPane.INFORMATION_MESSAGE);
+        game.endGame();
+    }
+
+    private void consumeDrawOffer(String[] parts) {
+        JOptionPane.showConfirmDialog(MainMenu.MAINMENU, Translator.getString("DRAWOFFER_TEXT"), Translator.getString("DRAWOFFER_HEAD"), JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+    }
+
+    private void consumeFriends(String[] parts) {
+        String[] str = parts[0].split(";");
+        MainMenu.MAINMENU.updateFriends(str);
+    }
+
+    private void consumeRequest(String[] parts) {
+        int addfriend = JOptionPane.showConfirmDialog(null, parts[0] + Translator.getString("FRIENDREQ_ADD_TEXT"), Translator.getString("FRIENDREQ_ADD_HEAD"), JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
+        if (addfriend == JOptionPane.NO_OPTION) {
+            client.write(ServerMessages.DeclineFriend, new Object[]{parts[0]});
+        } else {
+            client.write(ServerMessages.AcceptFriend, new Object[]{parts[0]});
         }
     }
 
-    private void consumeCheckStaleMate(String[] message) {
-        if (message[0].equals("check")) {
-            game.onCheck();
-        } else if (message[0].equals("checkmate")) {
-            game.onCheckMate();
-        } else if (message[0].equals("stalemate")) {
-            game.onStaleMate();
+    private void consumeMessage(String[] parts) {
+        String[] message = parts[0].split(":");
+        if (message[0].equals("Info")) {
+            JOptionPane.showMessageDialog(MainMenu.MAINMENU, message[1].replace("_", " "), Translator.getString("DIALOG_INFO_HEAD"), JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            MainMenu.MAINMENU.newMessage(message[0], message[1].replace("_", " "));
+
         }
     }
 
-    private void consumeDraw(String[] message) {
-        int length = message.length;
-        if (message[0].equals("draw")) {
-            if (length == 2 && message[1].equals("offer")) {
-                JOptionPane.showConfirmDialog(MainMenu.MAINMENU, Translator.getString("DRAWOFFER_TEXT"), Translator.getString("DRAWOFFER_HEAD"), JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
-
-            } else {
-                JOptionPane.showMessageDialog(MainMenu.MAINMENU, Translator.getString("DRAW_TEXT"), Translator.getString("DRAW_HEAD"), JOptionPane.INFORMATION_MESSAGE);
-                game.endGame();
-            }
-        }
-    }
-
-    private void consumeFriends(String[] message) {
-        int length = message.length;
-        if (message[0].equals("friends")) {
-            if (length == 2) {
-                String[] str = message[1].split(";");
-                MainMenu.MAINMENU.updateFriends(str);
-            } else {
-                MainMenu.MAINMENU.updateFriends(new String[0]);
-            }
-        } else if (message[0].equals("request") && length == 2) {
-            int addfriend = JOptionPane.showConfirmDialog(null, message[1] + Translator.getString("FRIENDREQ_ADD_TEXT"), Translator.getString("FRIENDREQ_ADD_HEAD"), JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
-            if (addfriend == JOptionPane.NO_OPTION) {
-                client.write(ServerMessages.DeclineFriend, new Object[]{message[1]});
-            } else {
-                client.write(ServerMessages.AcceptFriend, new Object[]{message[1]});
-            }
-        }
-    }
-
-    private void consumeMessage(String[] message) {
-        int length = message.length;
-        if (message[0].equals("msg") && length == 3) {
-            if (message[1].equals("Info")) {
-                JOptionPane.showMessageDialog(MainMenu.MAINMENU, message[2].replace("_", " "), Translator.getString("DIALOG_INFO_HEAD"), JOptionPane.INFORMATION_MESSAGE);
-            } else {
-                MainMenu.MAINMENU.newMessage(message[1], message[2].replace("_", " "));
-            }
-        }
-    }
-
-    private void consumeMoveCapture(String[] message) {
-        int length = message.length;
-        if (message[0].equals("move") && length == 4) {
-            int a = Integer.parseInt(message[1]);
-            int x = Integer.parseInt(message[2]);
-            int y = Integer.parseInt(message[3]);
-            game.doMove(a, x, y);
-        } else if (message[0].equals("capture") && length == 4) {
-            int a = Integer.parseInt(message[1]);
-            int x = Integer.parseInt(message[2]);
-            int y = Integer.parseInt(message[3]);
-            game.doCapture(a, x, y);
-        }
+    private void consumeMove(String[] parts) {
+        int a = Integer.parseInt(parts[0]);
+        int x = Integer.parseInt(parts[1]);
+        int y = Integer.parseInt(parts[2]);
+        game.doMove(a, x, y);
     }
 
     private void consumeMoves(String[] message) {
@@ -207,73 +209,55 @@ public class ServerConnectionThread extends ConnectionThread {
         }
     }
 
-    private void consumePromote(String[] message) {
-        int length = message.length;
-        if (message[0].equals("promote") && length == 3) {
-            boolean color;
-            if (message[1].equals("0")) {
-                color = true;
-            } else {
-                color = false;
-            }
-            game.getGameView().showPromotionChoice();
+    private void consumePromote(String[] parts) {
+        game.getGameView().showPromotionChoice();
+    }
+
+    private void consumePromotion(String[] parts) {
+        int nummerinarray = Integer.parseInt(parts[2]);
+        String co = parts[1];
+        boolean color;
+        color = co.equals("0");
+        game.promotion((Pawn) gamestate.getChessmen(color)[nummerinarray]);
+        switch (parts[0]) {
+            case "ROOK":
+                gamestate.getChessmen(color)[nummerinarray] = Rook.promotion((Pawn) gamestate.getChessmen(color)[nummerinarray], gamestate);
+                break;
+            case "KNIGHT":
+                gamestate.getChessmen(color)[nummerinarray] = Knight.promotion((Pawn) gamestate.getChessmen(color)[nummerinarray], gamestate);
+                break;
+            case "BISHOP":
+                gamestate.getChessmen(color)[nummerinarray] = Bishop.promotion((Pawn) gamestate.getChessmen(color)[nummerinarray], gamestate);
+                break;
+            case "QUEEN":
+                gamestate.getChessmen(color)[nummerinarray] = Queen.promotion((Pawn) gamestate.getChessmen(color)[nummerinarray], gamestate);
+                break;
         }
     }
 
-    private void consumePromotion(String[] message) {
-        int length = message.length;
-        if (message[0].equals("promotion") && length == 3) {
-
-            int nummerinarray = Integer.parseInt(message[2]);
-            String co = message[1];
-            boolean color;
-            color = co.equals("0");
-            game.promotion((Pawn) gamestate.getChessmen(color)[nummerinarray]);
-            switch (Integer.parseInt(message[2])) {
-                case 0:
-                    gamestate.getChessmen(color)[nummerinarray] = Rook.promotion((Pawn) gamestate.getChessmen(color)[nummerinarray], gamestate);
-                    break;
-                case 1:
-                    gamestate.getChessmen(color)[nummerinarray] = Knight.promotion((Pawn) gamestate.getChessmen(color)[nummerinarray], gamestate);
-                    break;
-                case 2:
-                    gamestate.getChessmen(color)[nummerinarray] = Bishop.promotion((Pawn) gamestate.getChessmen(color)[nummerinarray], gamestate);
-                    break;
-                case 3:
-                    gamestate.getChessmen(color)[nummerinarray] = Queen.promotion((Pawn) gamestate.getChessmen(color)[nummerinarray], gamestate);
-                    break;
-            }
+    private void consumeResignation(String[] parts) {
+        if (parts[0].equals("1")) {
+            JOptionPane.showMessageDialog(null, Translator.getString("RESIGNATION_ENEMY_TEXT"), Translator.getString("RESIGNATION_ENEMY_HEAD"), JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            JOptionPane.showMessageDialog(null, Translator.getString("RESIGNATION_SELF_TEXT"), Translator.getString("RESIGNATION_SELF_HEAD"), JOptionPane.INFORMATION_MESSAGE);
         }
     }
 
-    private void consumeResignation(String[] message) {
-        int length = message.length;
-        if (message[0].equals("resignation") && length == 2) {
-            if (message[1].equals("1")) {
-                JOptionPane.showMessageDialog(null, Translator.getString("RESIGNATION_ENEMY_TEXT"), Translator.getString("RESIGNATION_ENEMY_HEAD"), JOptionPane.INFORMATION_MESSAGE);
-            } else {
-                JOptionPane.showMessageDialog(null, Translator.getString("RESIGNATION_SELF_TEXT"), Translator.getString("RESIGNATION_SELF_HEAD"), JOptionPane.INFORMATION_MESSAGE);
-            }
-            game.getGameView().hide();
-        }
+    private void consumeStartGame(String[] parts) {
+        client.startGame(parts[0]);
     }
 
-    private void consumeStartGame(String[] message) {
-        int length = message.length;
-        if (message[0].equals("newgame") && length == 2) {
-            if (message[1].equals("enemyoffline")) {
-                JOptionPane.showMessageDialog(MainMenu.MAINMENU, Translator.getString("GAME_ENEMYOFF_TEXT"), Translator.getString("GAME_ENEMYOFF_HEAD"), JOptionPane.INFORMATION_MESSAGE);
+    private void consumeNewGame(String[] parts) {
+        if (parts[0].equals("enemyoffline")) {
+            JOptionPane.showMessageDialog(MainMenu.MAINMENU, Translator.getString("GAME_ENEMYOFF_TEXT"), Translator.getString("GAME_ENEMYOFF_HEAD"), JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            String str = parts[0];
+            int selected = JOptionPane.showConfirmDialog(MainMenu.MAINMENU, java.text.MessageFormat.format(Translator.getString("GAME_START?_TEXT"), new Object[]{str}), Translator.getString("GAME_START?_HEAD"), JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+            if (selected == JOptionPane.YES_OPTION) {
+                client.write(ServerMessages.AcceptGame, new Object[]{str});
             } else {
-                String str = message[1];
-                int selected = JOptionPane.showConfirmDialog(MainMenu.MAINMENU, java.text.MessageFormat.format(Translator.getString("GAME_START?_TEXT"), new Object[]{str}), Translator.getString("GAME_START?_HEAD"), JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
-                if (selected == JOptionPane.YES_OPTION) {
-                    client.write(ServerMessages.AcceptGame, new Object[]{str});
-                } else {
-                    client.write(ServerMessages.DeclineGame, new Object[]{str});
-                }
+                client.write(ServerMessages.DeclineGame, new Object[]{str});
             }
-        } else if (message[0].equals("gamestart") && length == 2) {
-            client.startGame(message[1]);
         }
     }
 }

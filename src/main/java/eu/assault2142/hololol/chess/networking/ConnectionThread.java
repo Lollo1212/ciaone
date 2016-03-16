@@ -5,7 +5,7 @@
  */
 package eu.assault2142.hololol.chess.networking;
 
-import java.util.LinkedList;
+import java.util.HashMap;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 import java.util.function.Consumer;
@@ -16,12 +16,12 @@ import java.util.function.Consumer;
  */
 public abstract class ConnectionThread extends Thread {
 
-    protected final LinkedList<Consumer<String>> consumers;
+    protected HashMap<ClientMessages, Consumer<String[]>> consumers;
     protected Scanner scanner;
 
     public ConnectionThread(Scanner sc) {
         scanner = sc;
-        consumers = new LinkedList();
+        consumers = new HashMap();
     }
 
     @Override
@@ -30,16 +30,15 @@ public abstract class ConnectionThread extends Thread {
         while (true) {
             try {
                 input = scanner.next();
-                String text = input;
-                consumers.forEach((Consumer<String> consumer) -> {
-                    consumer.accept(text);
-                });
+                consume(input);
             } catch (NoSuchElementException nsee) {
                 closeConnection();
                 break;
             }
         }
     }
+
+    protected abstract void consume(String message);
 
     protected abstract void closeConnection();
 }

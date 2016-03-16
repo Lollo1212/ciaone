@@ -4,7 +4,7 @@ name:$name
 friends:$friends
 change:(username/password):(accept/decline)[:$name]
 request:$name
-newgame:($enemyoffline/$name)
+newgame:(enemyoffline/$name)
 gamestart:$color
 move:$numberinarray:$targetX:$targetY
 check
