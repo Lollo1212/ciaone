@@ -13,10 +13,11 @@ import eu.assault2142.hololol.chess.game.chessmen.Rook;
 import eu.assault2142.hololol.chess.networking.ClientMessages;
 import eu.assault2142.hololol.chess.networking.ConnectionThread;
 import eu.assault2142.hololol.chess.networking.ServerMessages;
-import java.text.MessageFormat;
 import java.text.ParseException;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Scanner;
+import java.util.function.Consumer;
 import javax.swing.JOptionPane;
 
 /**
@@ -29,6 +30,7 @@ public class ServerConnectionThread extends ConnectionThread {
     private final ServerConnection client;
     private ClientGame game;
     private GameState gamestate;
+    private HashMap<ClientMessages, Consumer<String[]>> consumers;
 
     /**
      * Create a new ServerConnectionThread
@@ -39,6 +41,7 @@ public class ServerConnectionThread extends ConnectionThread {
     public ServerConnectionThread(ServerConnection c, Scanner scanner) {
         super(scanner);
         this.client = c;
+        consumers = new HashMap();
         consumers.put(ClientMessages.AcceptPasswordChange, this::consumeAcceptPassChange);
         consumers.put(ClientMessages.AcceptUsernameChange, this::consumeAcceptUserChange);
         consumers.put(ClientMessages.Check, this::consumeCheck);
@@ -84,14 +87,6 @@ public class ServerConnectionThread extends ConnectionThread {
             } catch (ParseException ex) {
             }
         });
-    }
-
-    private String[] parse(String message, MessageFormat format) throws ParseException {
-        return Arrays.stream(format.parse(message)).toArray(String[]::new);
-    }
-
-    private void consumeUnknown(String[] parts) {
-        System.out.println("Unexpected Message from Server.");
     }
 
     private void consumeName(String[] parts) {

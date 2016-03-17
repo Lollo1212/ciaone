@@ -19,59 +19,54 @@ public class ClientConnectionThread extends GameConnectionThread {
         super(serverclient);
         this.connection = serverclient;
         this.server = server;
-        consumers.add(this::consumeChange);
-        consumers.add(this::consumeFriend);
-        consumers.add(this::consumeGame);
-        consumers.add(this::consumeLogout);
-        consumers.add(this::consumeMessage);
-        consumers.add(this::consumeNewGame);
     }
 
-    private void consumeMessage(String[] message) {
-        int length = message.length;
-        if (message[0].equals("msg") && length == 3) {
-            try {
-                server.sendMessage(server.getUserID(message[1]), connection.getUser().getUsername() + ":" + message[2]);
-            } catch (UnknownUserException ex) {
-                Log.MAINLOG.log(ex.getMessage());
-            }
-        }
-    }
-
-    private void consumeFriend(String[] message) {
-        int length = message.length;
+    private void consumeMessage(String[] parts) {
         try {
-            if (message[0].equals("friends") && length == 3) {
-                if (length >= 2 && message[1].equals("add")) {
-                    String str = message[2];
-                    Server.SERVER.addFriendRequest(connection.getUser().getID(), server.getUser(str).getID());
-
-                } else if (length == 3 && message[1].equals("remove")) {
-
-                    String str = message[2];
-                    Server.SERVER.removeFriend(connection.getUser().getID(), server.getUser(str).getID());
-
-                } else if (length >= 2 && message[1].equals("accept")) {
-
-                    String str = message[2];
-                    Server.SERVER.acceptRequest(connection.getUser().getID(), server.getUser(str).getID());
-
-                } else if (length >= 2 && message[1].equals("decline")) {
-
-                    String str = message[2];
-                    Server.SERVER.declineRequest(connection.getUser().getID(), server.getUser(str).getID());
-
-                }
-            }
+            server.sendMessage(server.getUserID(parts[0]), connection.getUser().getUsername() + ":" + parts[1]);
         } catch (UnknownUserException ex) {
             Log.MAINLOG.log(ex.getMessage());
         }
     }
 
-    private void consumeLogout(String[] message) {
-        if (message[0].equals("logout")) {
-            connection.closeConnection();
+    private void consumeAddFriend(String[] parts) {
+        String str = parts[0];
+        try {
+            Server.SERVER.addFriendRequest(connection.getUser().getID(), server.getUser(str).getID());
+        } catch (UnknownUserException ex) {
+            Log.MAINLOG.log(ex.getMessage());
         }
+    }
+
+    private void consumeRemoveFriend(String[] parts) {
+        String str = parts[0];
+        try {
+            Server.SERVER.removeFriend(connection.getUser().getID(), server.getUser(str).getID());
+        } catch (UnknownUserException ex) {
+            Log.MAINLOG.log(ex.getMessage());
+        }
+    }
+
+    private void consumeAcceptRequest(String[] parts) {
+        String str = parts[0];
+        try {
+            Server.SERVER.acceptRequest(connection.getUser().getID(), server.getUser(str).getID());
+        } catch (UnknownUserException ex) {
+            Log.MAINLOG.log(ex.getMessage());
+        }
+    }
+
+    private void consumeDeclineRequest(String[] parts) {
+        String str = parts[0];
+        try {
+            Server.SERVER.declineRequest(connection.getUser().getID(), server.getUser(str).getID());
+        } catch (UnknownUserException ex) {
+            Log.MAINLOG.log(ex.getMessage());
+        }
+    }
+
+    private void consumeLogout(String[] parts) {
+        connection.closeConnection();
     }
 
     private void consumeGame(String[] message) {

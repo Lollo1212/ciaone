@@ -5,10 +5,11 @@
  */
 package eu.assault2142.hololol.chess.networking;
 
-import java.util.HashMap;
+import java.text.MessageFormat;
+import java.text.ParseException;
+import java.util.Arrays;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
-import java.util.function.Consumer;
 
 /**
  *
@@ -16,12 +17,10 @@ import java.util.function.Consumer;
  */
 public abstract class ConnectionThread extends Thread {
 
-    protected HashMap<ClientMessages, Consumer<String[]>> consumers;
     protected Scanner scanner;
 
     public ConnectionThread(Scanner sc) {
         scanner = sc;
-        consumers = new HashMap();
     }
 
     @Override
@@ -36,6 +35,14 @@ public abstract class ConnectionThread extends Thread {
                 break;
             }
         }
+    }
+
+    protected String[] parse(String message, MessageFormat format) throws ParseException {
+        return Arrays.stream(format.parse(message)).toArray(String[]::new);
+    }
+
+    protected void consumeUnknown(String[] parts) {
+        System.out.println("Unexpected Message from Server.");
     }
 
     protected abstract void consume(String message);

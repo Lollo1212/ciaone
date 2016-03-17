@@ -1,5 +1,7 @@
 package eu.assault2142.hololol.chess.networking;
 
+import java.text.MessageFormat;
+
 /**
  * An Enum with all possible Messages to the Server
  *
@@ -24,12 +26,18 @@ public enum ServerMessages {
     Draw("draw");
 
     private final String value;
+    private final MessageFormat format;
 
     private ServerMessages(String value) {
         this.value = value;
+        format = new MessageFormat(value);
     }
 
     public String getValue() {
         return value;
+    }
+
+    public MessageFormat getFormat() {
+        return format;
     }
 }

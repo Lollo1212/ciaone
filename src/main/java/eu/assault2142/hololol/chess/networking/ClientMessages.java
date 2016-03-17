@@ -38,7 +38,7 @@ public enum ClientMessages {
 
     private ClientMessages(String value) {
         this.value = value;
-        format = new MessageFormat(getValue());
+        format = new MessageFormat(value);
     }
 
     public String getValue() {
