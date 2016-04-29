@@ -42,7 +42,7 @@ public abstract class ConnectionThread extends Thread {
     }
 
     protected void consumeUnknown(String[] parts) {
-        System.out.println("Unexpected Message from Server.");
+        System.out.println("Unexpected Message:" + parts[0]);
     }
 
     protected abstract void consume(String message);
