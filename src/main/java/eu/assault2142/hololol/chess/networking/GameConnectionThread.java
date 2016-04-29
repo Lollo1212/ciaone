@@ -25,6 +25,7 @@ public class GameConnectionThread extends ConnectionThread {
     public GameConnectionThread(GameClientConnection serverclient) {
         super(serverclient.getScanner());
         this.connection = serverclient;
+        consumers = new HashMap();
         consumers.put(ServerMessages.Click, this::consumeClick);
         consumers.put(ServerMessages.Draw, this::consumeDraw);
         consumers.put(ServerMessages.Promotion, this::consumePromotion);

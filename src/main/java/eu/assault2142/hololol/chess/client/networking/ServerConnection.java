@@ -61,21 +61,19 @@ public class ServerConnection {
             String input = c.scanner.next();
             if (input.equals("loggedin")) {
                 //Der Server bestätigt Anmeldung
-
                 c = new ServerConnection(c.socket, c.scanner, c.writer);
                 MainMenu.MAINMENU.loggedIn(c);//neues Fenster öffnen
-            } else//Server verweigert Anmeldung
-             if (create) {
-                    JOptionPane.showMessageDialog(MainMenu.MAINMENU, Translator.getString("ACCOUNT EXISTIERT BEREITS"), Translator.getString("LOGIN ERROR"), JOptionPane.ERROR_MESSAGE);
-                    MainMenu.MAINMENU.enableLoginButton();
-                    //InfoFrame f=new InfoFrame("Account existiert bereits",300,100,true);
-                } else if (input.equals("loginerror:password")) {
-                    JOptionPane.showMessageDialog(MainMenu.MAINMENU, Translator.getString("PASSWORT FALSCH"), Translator.getString("LOGIN ERROR"), JOptionPane.ERROR_MESSAGE);
-                    MainMenu.MAINMENU.enableLoginButton();
-                } else {
-                    JOptionPane.showMessageDialog(MainMenu.MAINMENU, Translator.getString("ACCOUNT EXISTIERT NICHT"), Translator.getString("LOGIN ERROR"), JOptionPane.ERROR_MESSAGE);
-                    MainMenu.MAINMENU.enableLoginButton();
-                }//InfoFrame f=new InfoFrame("Benutzername oder Passwort falsch",300,100,true);
+            } else if (create) {
+                JOptionPane.showMessageDialog(MainMenu.MAINMENU, Translator.getString("ACCOUNT EXISTIERT BEREITS"), Translator.getString("LOGIN ERROR"), JOptionPane.ERROR_MESSAGE);
+                MainMenu.MAINMENU.enableLoginButton();
+                //InfoFrame f=new InfoFrame("Account existiert bereits",300,100,true);
+            } else if (input.equals("loginerror:password")) {
+                JOptionPane.showMessageDialog(MainMenu.MAINMENU, Translator.getString("PASSWORT FALSCH"), Translator.getString("LOGIN ERROR"), JOptionPane.ERROR_MESSAGE);
+                MainMenu.MAINMENU.enableLoginButton();
+            } else {
+                JOptionPane.showMessageDialog(MainMenu.MAINMENU, Translator.getString("ACCOUNT EXISTIERT NICHT"), Translator.getString("LOGIN ERROR"), JOptionPane.ERROR_MESSAGE);
+                MainMenu.MAINMENU.enableLoginButton();
+            }//InfoFrame f=new InfoFrame("Benutzername oder Passwort falsch",300,100,true);
         }
     }
 
