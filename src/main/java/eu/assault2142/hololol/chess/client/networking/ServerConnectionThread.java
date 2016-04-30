@@ -42,16 +42,16 @@ public class ServerConnectionThread extends ConnectionThread {
         super(scanner);
         this.client = c;
         consumers = new HashMap();
-        consumers.put(ClientMessages.AcceptPasswordChange, this::consumeAcceptPassChange);
-        consumers.put(ClientMessages.AcceptUsernameChange, this::consumeAcceptUserChange);
+        consumers.put(ClientMessages.AcceptPasswordChange, this::consumeAcceptPasswordChange);
+        consumers.put(ClientMessages.AcceptUsernameChange, this::consumeAcceptUsernameChange);
         consumers.put(ClientMessages.Check, this::consumeCheck);
-        consumers.put(ClientMessages.Checkmate, this::consumeCheckMate);
-        consumers.put(ClientMessages.DeclinePasswordChange, this::consumeDeclinePassChange);
-        consumers.put(ClientMessages.DeclineUsernameChange, this::consumeDeclineUserChange);
+        consumers.put(ClientMessages.Checkmate, this::consumeCheckmate);
+        consumers.put(ClientMessages.DeclinePasswordChange, this::consumeDeclinePasswordChange);
+        consumers.put(ClientMessages.DeclineUsernameChange, this::consumeDeclineUsernameChange);
         consumers.put(ClientMessages.Draw, this::consumeDraw);
         consumers.put(ClientMessages.DrawOffer, this::consumeDrawOffer);
         consumers.put(ClientMessages.Friends, this::consumeFriends);
-        consumers.put(ClientMessages.Gamestart, this::consumeStartGame);
+        consumers.put(ClientMessages.Gamestart, this::consumeGamestart);
         consumers.put(ClientMessages.Message, this::consumeMessage);
         consumers.put(ClientMessages.Move, this::consumeMove);
         consumers.put(ClientMessages.Moves, this::consumeMoves);
@@ -61,7 +61,7 @@ public class ServerConnectionThread extends ConnectionThread {
         consumers.put(ClientMessages.Promotion, this::consumePromotion);
         consumers.put(ClientMessages.Request, this::consumeRequest);
         consumers.put(ClientMessages.Resignation, this::consumeResignation);
-        consumers.put(ClientMessages.Stalemate, this::consumeStaleMate);
+        consumers.put(ClientMessages.Stalemate, this::consumeStalemate);
         //gamestate = game.getGameState();
     }
 
@@ -94,19 +94,19 @@ public class ServerConnectionThread extends ConnectionThread {
         MainMenu.MAINMENU.setPlayerName(parts[0]);
     }
 
-    private void consumeAcceptUserChange(String[] parts) {
+    private void consumeAcceptUsernameChange(String[] parts) {
         JOptionPane.showMessageDialog(MainMenu.MAINMENU, java.text.MessageFormat.format(Translator.getString("NAMECHANGED_TEXT"), new Object[]{parts[0]}), Translator.getString("NAMECHANGED_HEAD"), JOptionPane.INFORMATION_MESSAGE);
     }
 
-    private void consumeDeclineUserChange(String[] parts) {
+    private void consumeDeclineUsernameChange(String[] parts) {
         JOptionPane.showMessageDialog(MainMenu.MAINMENU, Translator.getString("NAMECHANGE_TAKEN_TEXT"), Translator.getString("NAMECHANGE_TAKEN_HEAD"), JOptionPane.WARNING_MESSAGE);
     }
 
-    private void consumeAcceptPassChange(String[] parts) {
+    private void consumeAcceptPasswordChange(String[] parts) {
         JOptionPane.showMessageDialog(MainMenu.MAINMENU, Translator.getString("PASSCHANGED_TEXT"), Translator.getString("PASSCHANGED_HEAD"), JOptionPane.INFORMATION_MESSAGE);
     }
 
-    private void consumeDeclinePassChange(String[] parts) {
+    private void consumeDeclinePasswordChange(String[] parts) {
 
     }
 
@@ -114,11 +114,11 @@ public class ServerConnectionThread extends ConnectionThread {
         game.onCheck();
     }
 
-    private void consumeCheckMate(String[] parts) {
+    private void consumeCheckmate(String[] parts) {
         game.onCheckMate();
     }
 
-    private void consumeStaleMate(String[] parts) {
+    private void consumeStalemate(String[] parts) {
         game.onStaleMate();
     }
 
@@ -238,7 +238,7 @@ public class ServerConnectionThread extends ConnectionThread {
         }
     }
 
-    private void consumeStartGame(String[] parts) {
+    private void consumeGamestart(String[] parts) {
         client.startGame(parts[0]);
     }
 
