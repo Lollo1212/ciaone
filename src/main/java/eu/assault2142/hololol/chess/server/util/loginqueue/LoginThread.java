@@ -40,6 +40,7 @@ public class LoginThread extends Thread {
                     }
                     if (Server.SERVER.isOnline(u2.getID())) {
                         request.getConnection().write(ClientMessages.AlreadyOnline, new Object[]{});
+                        continue;
                     }
                     if (Server.SERVER.checkPassword(u2.getID(), request.getPassword())) {
                         //Passwords match
