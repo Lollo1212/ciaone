@@ -137,10 +137,10 @@ public class ServerConnectionThread extends ConnectionThread {
     }
 
     private void consumeRequest(String[] parts) {
-        int addfriend = JOptionPane.showConfirmDialog(null, parts[0] + Translator.getString("FRIENDREQ_ADD_TEXT"), Translator.getString("FRIENDREQ_ADD_HEAD"), JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
+        int addfriend = JOptionPane.showConfirmDialog(MainMenu.MAINMENU, parts[0] + Translator.getString("FRIENDREQ_ADD_TEXT"), Translator.getString("FRIENDREQ_ADD_HEAD"), JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
         if (addfriend == JOptionPane.NO_OPTION) {
             client.write(ServerMessages.DeclineFriend, new Object[]{parts[0]});
-        } else {
+        } else if (addfriend == JOptionPane.YES_OPTION) {
             client.write(ServerMessages.AcceptFriend, new Object[]{parts[0]});
         }
     }
