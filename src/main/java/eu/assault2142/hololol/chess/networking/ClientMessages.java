@@ -31,7 +31,8 @@ public enum ClientMessages {
     Draw("draw"),
     DrawOffer("draw:offer"),
     Promotion("promotion:{0}:{1}:{2}"),
-    Promote("promote:{1}");
+    Promote("promote:{1}"),
+    AlreadyOnline("loginerror:alreadyonline");
 
     private final String value;
     private final MessageFormat format;

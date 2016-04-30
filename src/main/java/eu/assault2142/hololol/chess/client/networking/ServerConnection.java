@@ -4,6 +4,7 @@ import eu.assault2142.hololol.chess.client.game.ClientGame;
 import eu.assault2142.hololol.chess.client.menus.MainMenu;
 import eu.assault2142.hololol.chess.client.util.ErrorMessage;
 import eu.assault2142.hololol.chess.client.util.Translator;
+import eu.assault2142.hololol.chess.networking.ClientMessages;
 import eu.assault2142.hololol.chess.networking.ServerMessages;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -67,13 +68,19 @@ public class ServerConnection {
                 JOptionPane.showMessageDialog(MainMenu.MAINMENU, Translator.getString("ACCOUNT EXISTIERT BEREITS"), Translator.getString("LOGIN ERROR"), JOptionPane.ERROR_MESSAGE);
                 MainMenu.MAINMENU.enableLoginButton();
                 //InfoFrame f=new InfoFrame("Account existiert bereits",300,100,true);
-            } else if (input.equals("loginerror:password")) {
+            } else if (input.equals(ClientMessages.PasswordWrong)) {
                 JOptionPane.showMessageDialog(MainMenu.MAINMENU, Translator.getString("PASSWORT FALSCH"), Translator.getString("LOGIN ERROR"), JOptionPane.ERROR_MESSAGE);
                 MainMenu.MAINMENU.enableLoginButton();
-            } else {
+            } else if (input.equals(ClientMessages.UsernameWrong)) {
                 JOptionPane.showMessageDialog(MainMenu.MAINMENU, Translator.getString("ACCOUNT EXISTIERT NICHT"), Translator.getString("LOGIN ERROR"), JOptionPane.ERROR_MESSAGE);
                 MainMenu.MAINMENU.enableLoginButton();
-            }//InfoFrame f=new InfoFrame("Benutzername oder Passwort falsch",300,100,true);
+            } else if (input.equals(ClientMessages.AlreadyOnline)) {
+                JOptionPane.showMessageDialog(MainMenu.MAINMENU, "Already Online", Translator.getString("LOGIN ERROR"), JOptionPane.ERROR_MESSAGE);
+                MainMenu.MAINMENU.enableLoginButton();
+            } else {
+                JOptionPane.showMessageDialog(MainMenu.MAINMENU, "Unknown Login Error", Translator.getString("LOGIN ERROR"), JOptionPane.ERROR_MESSAGE);
+                MainMenu.MAINMENU.enableLoginButton();
+            }
         }
     }
 

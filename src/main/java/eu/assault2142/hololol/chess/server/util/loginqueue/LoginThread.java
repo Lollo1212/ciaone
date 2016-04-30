@@ -38,6 +38,9 @@ public class LoginThread extends Thread {
                         request.getConnection().write(ClientMessages.UsernameWrong, new Object[]{});
                         continue;
                     }
+                    if (Server.SERVER.isOnline(u2.getID())) {
+                        request.getConnection().write(ClientMessages.AlreadyOnline, new Object[]{});
+                    }
                     if (Server.SERVER.checkPassword(u2.getID(), request.getPassword())) {
                         //Passwords match
                         Log.MAINLOG.log(request.getUsername() + " logged in successful");
