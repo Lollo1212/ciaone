@@ -60,7 +60,6 @@ public class ServerConnection {
             str += username + ":" + password;
             c.write(str);
             String input = c.scanner.next();
-            System.out.println(input);
             if (input.equals("loggedin")) {
                 //Der Server bestätigt Anmeldung
                 c = new ServerConnection(c.socket, c.scanner, c.writer);
