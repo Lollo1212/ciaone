@@ -27,6 +27,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.event.AncestorEvent;
 import javax.swing.event.ChangeEvent;
+import org.apache.commons.lang3.tuple.Pair;
 
 /**
  *
@@ -36,7 +37,7 @@ public class MainMenu extends javax.swing.JFrame {
 
     public static MainMenu MAINMENU;
     private ServerConnection client;
-    private final HashMap<String, JTextArea> areas = new HashMap();
+    private final HashMap<String, Pair<Integer, JTextArea>> areas = new HashMap();
     private static Locale locale = Locale.ENGLISH;
 
     /**
@@ -77,13 +78,14 @@ public class MainMenu extends javax.swing.JFrame {
                 JTextArea text = new JTextArea();
                 text.setEditable(false);
                 JScrollPane scroll = new JScrollPane(text);
-                areas.put(from, text);
 
                 jTabbedPane2.add(scroll, jList1.getSelectedValue());
                 jTabbedPane2.setSelectedComponent(scroll);
+
+                areas.put(from, Pair.of(jTabbedPane2.getSelectedIndex(), text));
                 jTabbedPane2.setTabComponentAt(jTabbedPane2.getSelectedIndex(), new ButtonTabComponent(jTabbedPane2, this, from));
             } else {
-
+                jTabbedPane2.setSelectedIndex(areas.get(from).getLeft());
             }
         });
         popup.add(menuItem);
@@ -690,16 +692,17 @@ public class MainMenu extends javax.swing.JFrame {
     }
 
     public void newMessage(String from, String msg) {
-        JTextArea area = areas.get(from);
+        JTextArea area = areas.get(from).getRight();
         if (area == null) {
             area = new JTextArea();
             area.setEditable(false);
             JScrollPane scroll = new JScrollPane(area);
-            areas.put(from, area);
             jTabbedPane2.add(scroll, from);
             jTabbedPane2.setSelectedComponent(scroll);
+            areas.put(from, Pair.of(jTabbedPane2.getSelectedIndex(), area));
             jTabbedPane2.setTabComponentAt(jTabbedPane2.getSelectedIndex(), new ButtonTabComponent(jTabbedPane2, this, from));
         }
+        jTabbedPane2.setSelectedIndex(areas.get(from).getLeft());
         area.append("[" + getTime() + "] " + from + ": " + msg + System.lineSeparator());
     }
 
@@ -830,7 +833,7 @@ public class MainMenu extends javax.swing.JFrame {
     private void writeMessage() {
         String msg = jTextField4.getText();
         String name = jTabbedPane2.getTitleAt(jTabbedPane2.getSelectedIndex());
-        areas.get(name).append("[" + getTime() + "] " + client.getName() + ": " + msg + System.lineSeparator());
+        areas.get(name).getRight().append("[" + getTime() + "] " + client.getName() + ": " + msg + System.lineSeparator());
         client.write(ServerMessages.Message, new Object[]{name, msg.replace(" ", "_")});
         jTextField4.setText("");
     }
