@@ -60,6 +60,7 @@ public class ServerConnection {
             str += username + ":" + password;
             c.write(str);
             String input = c.scanner.next();
+            System.out.println(input);
             if (input.equals("loggedin")) {
                 //Der Server bestätigt Anmeldung
                 c = new ServerConnection(c.socket, c.scanner, c.writer);
@@ -68,13 +69,13 @@ public class ServerConnection {
                 JOptionPane.showMessageDialog(MainMenu.MAINMENU, Translator.getString("ACCOUNT EXISTIERT BEREITS"), Translator.getString("LOGIN ERROR"), JOptionPane.ERROR_MESSAGE);
                 MainMenu.MAINMENU.enableLoginButton();
                 //InfoFrame f=new InfoFrame("Account existiert bereits",300,100,true);
-            } else if (input.equals(ClientMessages.PasswordWrong)) {
+            } else if (input.equals(ClientMessages.PasswordWrong.getValue())) {
                 JOptionPane.showMessageDialog(MainMenu.MAINMENU, Translator.getString("PASSWORT FALSCH"), Translator.getString("LOGIN ERROR"), JOptionPane.ERROR_MESSAGE);
                 MainMenu.MAINMENU.enableLoginButton();
-            } else if (input.equals(ClientMessages.UsernameWrong)) {
+            } else if (input.equals(ClientMessages.UsernameWrong.getValue())) {
                 JOptionPane.showMessageDialog(MainMenu.MAINMENU, Translator.getString("ACCOUNT EXISTIERT NICHT"), Translator.getString("LOGIN ERROR"), JOptionPane.ERROR_MESSAGE);
                 MainMenu.MAINMENU.enableLoginButton();
-            } else if (input.equals(ClientMessages.AlreadyOnline)) {
+            } else if (input.equals(ClientMessages.AlreadyOnline.getValue())) {
                 JOptionPane.showMessageDialog(MainMenu.MAINMENU, "Already Online", Translator.getString("LOGIN ERROR"), JOptionPane.ERROR_MESSAGE);
                 MainMenu.MAINMENU.enableLoginButton();
             } else {
