@@ -33,14 +33,18 @@ import javax.swing.plaf.basic.BasicButtonUI;
 public class ButtonTabComponent extends JPanel {
 
     private final JTabbedPane pane;
+    private MainMenu menu;
+    private String name;
 
-    public ButtonTabComponent(final JTabbedPane pane) {
+    public ButtonTabComponent(final JTabbedPane pane, MainMenu m, String n) {
         //unset default FlowLayout' gaps
         super(new FlowLayout(FlowLayout.LEFT, 0, 0));
         if (pane == null) {
             throw new NullPointerException("TabbedPane is null");
         }
         this.pane = pane;
+        menu = m;
+        name = n;
         init();
     }
 
@@ -102,6 +106,7 @@ public class ButtonTabComponent extends JPanel {
             if (i != -1) {
                 pane.remove(i);
             }
+            menu.removeTextArea(name);
         }
 
         //we don't want to update UI for this button

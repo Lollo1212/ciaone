@@ -79,7 +79,7 @@ public class MainMenu extends javax.swing.JFrame {
 
             jTabbedPane2.add(scroll, jList1.getSelectedValue());
             jTabbedPane2.setSelectedComponent(scroll);
-            jTabbedPane2.setTabComponentAt(jTabbedPane2.getSelectedIndex(), new ButtonTabComponent(jTabbedPane2));
+            jTabbedPane2.setTabComponentAt(jTabbedPane2.getSelectedIndex(), new ButtonTabComponent(jTabbedPane2, this, jList1.getSelectedValue()));
         });
         popup.add(menuItem);
         menuItem = new JMenuItem(Translator.getString("MENU_REMOVE"));
@@ -657,7 +657,7 @@ public class MainMenu extends javax.swing.JFrame {
     public void loggedIn(ServerConnection c) {
         jTabbedPane1.remove(jPanel2);
         jTabbedPane1.add(jPanel6, 1);
-        jTabbedPane1.setTitleAt(1, "Online");
+        jTabbedPane1.setTitleAt(1, "Online" + c.getName());
         jTabbedPane1.setSelectedIndex(1);
         jTabbedPane2.removeAll();
         JTextArea text = new JTextArea();
@@ -676,7 +676,7 @@ public class MainMenu extends javax.swing.JFrame {
     }
 
     public void setPlayerName(String name) {
-        jTabbedPane1.setTitleAt(1, "Online");
+        jTabbedPane1.setTitleAt(1, "Online: " + name);
     }
 
     public String getTime() {
@@ -693,9 +693,13 @@ public class MainMenu extends javax.swing.JFrame {
             areas.put(from, area);
             jTabbedPane2.add(scroll, from);
             jTabbedPane2.setSelectedComponent(scroll);
-            jTabbedPane2.setTabComponentAt(jTabbedPane2.getSelectedIndex(), new ButtonTabComponent(jTabbedPane2));
+            jTabbedPane2.setTabComponentAt(jTabbedPane2.getSelectedIndex(), new ButtonTabComponent(jTabbedPane2, this, from));
         }
         area.append("[" + getTime() + "] " + from + ": " + msg + System.lineSeparator());
+    }
+
+    public void removeTextArea(String name) {
+        areas.remove(name);
     }
 
     public void enableLoginButton() {
