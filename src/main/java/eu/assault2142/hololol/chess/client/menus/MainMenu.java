@@ -72,14 +72,19 @@ public class MainMenu extends javax.swing.JFrame {
         popup.add(menuItem);
         menuItem = new JMenuItem(Translator.getString("MENU_MESSAGE"));
         menuItem.addActionListener((ActionEvent e) -> {
-            JTextArea text = new JTextArea();
-            text.setEditable(false);
-            JScrollPane scroll = new JScrollPane(text);
-            areas.put(jList1.getSelectedValue(), text);
+            String from = jList1.getSelectedValue();
+            if (!areas.containsKey(from)) {
+                JTextArea text = new JTextArea();
+                text.setEditable(false);
+                JScrollPane scroll = new JScrollPane(text);
+                areas.put(from, text);
 
-            jTabbedPane2.add(scroll, jList1.getSelectedValue());
-            jTabbedPane2.setSelectedComponent(scroll);
-            jTabbedPane2.setTabComponentAt(jTabbedPane2.getSelectedIndex(), new ButtonTabComponent(jTabbedPane2, this, jList1.getSelectedValue()));
+                jTabbedPane2.add(scroll, jList1.getSelectedValue());
+                jTabbedPane2.setSelectedComponent(scroll);
+                jTabbedPane2.setTabComponentAt(jTabbedPane2.getSelectedIndex(), new ButtonTabComponent(jTabbedPane2, this, from));
+            } else {
+
+            }
         });
         popup.add(menuItem);
         menuItem = new JMenuItem(Translator.getString("MENU_REMOVE"));
