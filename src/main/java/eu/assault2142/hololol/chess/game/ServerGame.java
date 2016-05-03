@@ -48,6 +48,7 @@ public class ServerGame extends Game {
                     ((King) picked).doCastling(getCastlingMove(), getGameState());
                 }
             }
+            client1.write(ClientMessages.Move, new Object[]{picked.getPositionInArray(), selected.getX(), selected.getY()});
             picked = null;
         }
     }
