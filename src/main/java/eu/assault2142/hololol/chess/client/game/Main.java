@@ -8,6 +8,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.Locale;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -17,7 +18,10 @@ public class Main {
 
     public static void main(String[] Args) throws URISyntaxException, FileNotFoundException, IOException, ClassNotFoundException {
         Settings.init("");
-        Translator.setLanguage(Locale.getDefault());
+        Locale locale = Locale.ENGLISH;
+        Locale.setDefault(locale);
+        Translator.setLanguage(locale);
+        JOptionPane.setDefaultLocale(locale);
         WebLookAndFeel.install();
         new MainMenu().setVisible(true);
     }

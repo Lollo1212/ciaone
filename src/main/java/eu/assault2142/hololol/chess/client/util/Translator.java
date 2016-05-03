@@ -10,6 +10,11 @@ import java.util.ResourceBundle;
 public class Translator {
 
     private static ResourceBundle bundle;
+    private static String langString;
+
+    public static String getLanguageString() {
+        return langString;
+    }
 
     public static String getString(String key) {
         return bundle.getString(key);
@@ -17,5 +22,6 @@ public class Translator {
 
     public static void setLanguage(Locale locale) {
         bundle = ResourceBundle.getBundle("translations/translations", locale);
+        langString = locale.getLanguage();
     }
 }

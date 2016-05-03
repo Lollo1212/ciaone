@@ -1,5 +1,6 @@
 package eu.assault2142.hololol.chess.client.game.ui;
 
+import eu.assault2142.hololol.chess.client.util.Translator;
 import eu.assault2142.hololol.chess.game.GameState;
 import eu.assault2142.hololol.chess.game.Settings;
 import eu.assault2142.hololol.chess.game.chessmen.Chessman;
@@ -124,7 +125,7 @@ public class GameBoard extends JPanel {
      * Load the images
      */
     private void loadImages() {
-        String sprache = "de_de";
+        String sprache = Translator.getLanguageString();
         ibackschwarz = new ImageIcon(getClass().getResource(Settings.SETTINGS.chessmenFolder + "/bschwarz.gif"));
         ibackweiß = new ImageIcon(getClass().getResource(Settings.SETTINGS.chessmenFolder + "/bweiß.gif"));
         itextweiß = new ImageIcon(getClass().getResource("/bilder/tweiß" + sprache + ".gif"));
