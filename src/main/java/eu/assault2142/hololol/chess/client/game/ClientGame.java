@@ -2,10 +2,10 @@ package eu.assault2142.hololol.chess.client.game;
 
 import eu.assault2142.hololol.chess.client.game.ui.GameFrame;
 import eu.assault2142.hololol.chess.client.networking.ServerConnection;
-import eu.assault2142.hololol.chess.networking.ServerMessages;
 import eu.assault2142.hololol.chess.game.chessmen.Chessman;
 import eu.assault2142.hololol.chess.game.chessmen.Movement;
 import eu.assault2142.hololol.chess.game.chessmen.Pawn;
+import eu.assault2142.hololol.chess.networking.ServerMessages;
 import java.awt.EventQueue;
 
 /**
@@ -29,8 +29,8 @@ public final class ClientGame extends Game {
         final ClientGame g = this;
         EventQueue.invokeLater(() -> {
             gameframe = new GameFrame(g);
+            updateMovements();
         });
-        updateMovements();
     }
 
     @Override
