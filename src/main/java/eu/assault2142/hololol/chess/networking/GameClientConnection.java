@@ -18,10 +18,10 @@ public class GameClientConnection {
 
     private Socket socket;
     protected ConnectionThread reader;
-    private Scanner scanner;
-    private PrintWriter printwriter;
+    protected Scanner scanner;
+    protected PrintWriter printwriter;
     private boolean white;
-    private ServerGame game;
+    protected ServerGame game;
     private boolean draw;
 
     public GameClientConnection(Socket socket) {

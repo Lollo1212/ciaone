@@ -19,12 +19,8 @@ import java.util.logging.Logger;
  */
 public class ClientConnection extends GameClientConnection {
 
-    private Socket socket;
     private Server server;
-    private Scanner scanner;
-    private PrintWriter printwriter;
     private User user;
-    private ServerGame game;
 
     public ClientConnection(Socket socket, Server server) {
         super(socket);
