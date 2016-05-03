@@ -1,7 +1,11 @@
 package eu.assault2142.hololol.chess.game;
 
+import eu.assault2142.hololol.chess.game.chessmen.CastlingMove;
 import eu.assault2142.hololol.chess.game.chessmen.Chessman;
+import eu.assault2142.hololol.chess.game.chessmen.King;
 import eu.assault2142.hololol.chess.game.chessmen.Pawn;
+import eu.assault2142.hololol.chess.game.chessmen.Rook;
+import eu.assault2142.hololol.chess.networking.ClientMessages;
 import eu.assault2142.hololol.chess.server.networking.ClientConnection;
 import javax.swing.ImageIcon;
 
@@ -13,6 +17,8 @@ public class ServerGame extends Game {
 
     public ClientConnection client1;
     public ClientConnection client2;
+    private Square selected;
+    private Chessman picked;
 
     public ServerGame(ClientConnection a, ClientConnection b) {
         super(TYPE.SERVER);
@@ -22,7 +28,48 @@ public class ServerGame extends Game {
 
     @Override
     public void clickAt(int feldx, int feldy) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        selected = getGameState().getSquare(feldx, feldy);
+        doMoveIfPossible();
+    }
+
+    /**
+     * Execute the selected Move or Capture if it is possible
+     */
+    private void doMoveIfPossible() {
+        if (selected != null) {
+            selected.highlight(Square.HIGHLIGHT.SELECTED);
+            if (picked != null) {
+                if (picked.doMove(selected.getX(), selected.getY())
+                        || picked.doCapture(selected.getX(), selected.getY())) {
+                    client1.write(ClientMessages.Move, new Object[]{picked.getPositionInArray(), selected.getX(), selected.getY()});
+                }
+
+                if (picked.getClass() == King.class) {
+                    ((King) picked).doCastling(getCastlingMove(), getGameState());
+                }
+            }
+            picked = null;
+        }
+    }
+
+    /**
+     * Assemble the CastlingMove which is currently selected
+     *
+     * @return the assembled CastlingMove
+     */
+    private CastlingMove getCastlingMove() {
+        Rook t;
+        int tx;
+        int ty;
+        if (picked.getX() < selected.getX()) {
+            t = (Rook) getGameState().getChessmen(picked.isBlack())[9];
+            tx = 5;
+        } else {
+            t = (Rook) getGameState().getChessmen(picked.isBlack())[8];
+            tx = 3;
+        }
+        ty = picked.isBlack() ? 0 : 7;
+        return new CastlingMove(selected.getX(), selected.getY(), t, tx, ty, (King) picked);
     }
 
     @Override
