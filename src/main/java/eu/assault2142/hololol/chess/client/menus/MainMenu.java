@@ -692,8 +692,9 @@ public class MainMenu extends javax.swing.JFrame {
     }
 
     public void newMessage(String from, String msg) {
-        JTextArea area = areas.get(from).getRight();
-        if (area == null) {
+        Pair<Integer, JTextArea> pair = areas.get(from);
+        JTextArea area;
+        if (pair == null) {
             area = new JTextArea();
             area.setEditable(false);
             JScrollPane scroll = new JScrollPane(area);
@@ -701,6 +702,8 @@ public class MainMenu extends javax.swing.JFrame {
             jTabbedPane2.setSelectedComponent(scroll);
             areas.put(from, Pair.of(jTabbedPane2.getSelectedIndex(), area));
             jTabbedPane2.setTabComponentAt(jTabbedPane2.getSelectedIndex(), new ButtonTabComponent(jTabbedPane2, this, from));
+        } else {
+            area = pair.getRight();
         }
         jTabbedPane2.setSelectedIndex(areas.get(from).getLeft());
         area.append("[" + getTime() + "] " + from + ": " + msg + System.lineSeparator());
