@@ -79,6 +79,7 @@ public class ClientConnectionThread extends GameConnectionThread {
     }
 
     private void consumeLogout(String[] parts) {
+        System.out.println("consLogout");
         connection.closeConnection();
     }
 

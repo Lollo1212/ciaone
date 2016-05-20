@@ -822,7 +822,8 @@ public class MainMenu extends javax.swing.JFrame {
     }
 
     private void logout() {
-        client.write(ServerMessages.Logout, null);
+        client.write(ServerMessages.Logout, new Object[0]);
+
         jTabbedPane1.remove(jPanel6);
         jTabbedPane1.add(jPanel2, 1);
         jTabbedPane1.setTitleAt(1, "Online");

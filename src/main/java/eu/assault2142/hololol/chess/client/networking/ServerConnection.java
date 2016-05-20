@@ -138,6 +138,8 @@ public class ServerConnection {
             MainMenu.MAINMENU.enableLoginButton();
         } catch (IOException | KeyStoreException | NoSuchAlgorithmException | CertificateException | KeyManagementException ex) {
             ErrorMessage.showErrorMessage("Unexpected Error while connecting to the Server!", false);
+            System.out.println(ex.getMessage());
+            MainMenu.MAINMENU.enableLoginButton();
         }
     }
 

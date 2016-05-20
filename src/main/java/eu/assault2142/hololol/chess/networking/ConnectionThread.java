@@ -28,9 +28,12 @@ public abstract class ConnectionThread extends Thread {
         String input;
         while (true) {
             try {
+
                 input = scanner.next();
+                System.out.println(input);
                 consume(input);
-            } catch (NoSuchElementException nsee) {
+            } catch (NoSuchElementException | IllegalStateException nsee) {
+                System.out.println("logout");
                 closeConnection();
                 break;
             }
@@ -42,7 +45,6 @@ public abstract class ConnectionThread extends Thread {
     }
 
     protected void consumeUnknown(String[] parts) {
-        System.out.println("Unexpected Message:" + parts[0]);
     }
 
     protected abstract void consume(String message);

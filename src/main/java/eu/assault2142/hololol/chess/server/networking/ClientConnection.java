@@ -6,10 +6,7 @@ import eu.assault2142.hololol.chess.networking.GameClientConnection;
 import eu.assault2142.hololol.chess.server.exceptions.UnknownUserException;
 import eu.assault2142.hololol.chess.server.user.User;
 import eu.assault2142.hololol.chess.server.util.Log;
-import java.io.IOException;
-import java.io.PrintWriter;
 import java.net.Socket;
-import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -25,13 +22,6 @@ public class ClientConnection extends GameClientConnection {
     public ClientConnection(Socket socket, Server server) {
         super(socket);
         this.server = server;
-        try {
-            printwriter = new PrintWriter(socket.getOutputStream(), true);
-            scanner = new Scanner(socket.getInputStream());
-        } catch (IOException ex) {
-            Log.MAINLOG.log(ex.getMessage());
-        }
-        reader = new ClientConnectionThread(this, server);
     }
 
     public User getUser() {
