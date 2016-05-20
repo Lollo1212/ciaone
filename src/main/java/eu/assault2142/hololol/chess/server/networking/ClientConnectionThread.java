@@ -13,8 +13,8 @@ import eu.assault2142.hololol.chess.server.util.Log;
  */
 public class ClientConnectionThread extends GameConnectionThread {
 
-    private final ClientConnection connection;
-    private final Server server;
+    protected final ClientConnection connection;
+    protected final Server server;
 
     public ClientConnectionThread(ClientConnection serverclient, Server server) {
         super(serverclient);
@@ -34,7 +34,7 @@ public class ClientConnectionThread extends GameConnectionThread {
         consumers.put(ServerMessages.RemoveFriend, this::consumeRemoveFriend);
     }
 
-    private void consumeMessage(String[] parts) {
+    protected void consumeMessage(String[] parts) {
         try {
             server.sendMessage(server.getUserID(parts[0]), connection.getUser().getUsername() + ":" + parts[1]);
         } catch (UnknownUserException ex) {
@@ -42,7 +42,7 @@ public class ClientConnectionThread extends GameConnectionThread {
         }
     }
 
-    private void consumeAddFriend(String[] parts) {
+    protected void consumeAddFriend(String[] parts) {
         String str = parts[0];
         try {
             Server.SERVER.addFriendRequest(connection.getUser().getID(), server.getUser(str).getID());
@@ -51,7 +51,7 @@ public class ClientConnectionThread extends GameConnectionThread {
         }
     }
 
-    private void consumeRemoveFriend(String[] parts) {
+    protected void consumeRemoveFriend(String[] parts) {
         String str = parts[0];
         try {
             Server.SERVER.removeFriend(connection.getUser().getID(), server.getUser(str).getID());
@@ -60,7 +60,7 @@ public class ClientConnectionThread extends GameConnectionThread {
         }
     }
 
-    private void consumeAcceptFriend(String[] parts) {
+    protected void consumeAcceptFriend(String[] parts) {
         String str = parts[0];
         try {
             Server.SERVER.acceptRequest(connection.getUser().getID(), server.getUser(str).getID());
@@ -69,7 +69,7 @@ public class ClientConnectionThread extends GameConnectionThread {
         }
     }
 
-    private void consumeDeclineFriend(String[] parts) {
+    protected void consumeDeclineFriend(String[] parts) {
         String str = parts[0];
         try {
             Server.SERVER.declineRequest(connection.getUser().getID(), server.getUser(str).getID());
@@ -78,12 +78,11 @@ public class ClientConnectionThread extends GameConnectionThread {
         }
     }
 
-    private void consumeLogout(String[] parts) {
-        System.out.println("consLogout");
+    protected void consumeLogout(String[] parts) {
         connection.closeConnection();
     }
 
-    private void consumeAcceptGame(String[] parts) {
+    protected void consumeAcceptGame(String[] parts) {
         try {
             if (server.challengeExists(connection.getUser().getID(), server.getUserID(parts[0]))) {
                 server.startGame(connection.getUser(), server.getUser(parts[0]));
@@ -93,15 +92,15 @@ public class ClientConnectionThread extends GameConnectionThread {
         }
     }
 
-    private void consumeDeclineGame(String[] parts) {
+    protected void consumeDeclineGame(String[] parts) {
 
     }
 
-    private void consumeRandomGame(String[] parts) {
+    protected void consumeRandomGame(String[] parts) {
 
     }
 
-    private void consumeFriendGame(String[] parts) {
+    protected void consumeFriendGame(String[] parts) {
         try {
             if (server.isOnline(server.getUserID(parts[0]))) {
                 server.getConnection(server.getUserID(parts[0])).write(ClientMessages.Newgame, new Object[]{connection.getUser().getUsername()});
@@ -114,7 +113,7 @@ public class ClientConnectionThread extends GameConnectionThread {
         }
     }
 
-    private void consumeChangeUsername(String[] parts) {
+    protected void consumeChangeUsername(String[] parts) {
         try {
             server.setUsername(connection.getUser().getID(), parts[0]);
             connection.write(ClientMessages.AcceptUsernameChange, new Object[]{parts[0]});
@@ -125,7 +124,7 @@ public class ClientConnectionThread extends GameConnectionThread {
         }
     }
 
-    private void consumeChangePassword(String[] parts) {
+    protected void consumeChangePassword(String[] parts) {
         try {
             server.setPassword(connection.getUser().getID(), parts[0]);
             connection.write(ClientMessages.AcceptPasswordChange, new Object[]{});

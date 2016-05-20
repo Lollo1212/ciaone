@@ -35,6 +35,7 @@ public class GameConnectionThread extends ConnectionThread {
 
     @Override
     protected void consume(String message) {
+        System.out.println(consumers.size());
         Arrays.stream(ServerMessages.values()).forEach((ServerMessages m) -> {
             try {
                 String[] parts = parse(message, m.getFormat());

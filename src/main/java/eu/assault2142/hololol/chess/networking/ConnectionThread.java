@@ -30,10 +30,8 @@ public abstract class ConnectionThread extends Thread {
             try {
 
                 input = scanner.next();
-                System.out.println(input);
                 consume(input);
             } catch (NoSuchElementException | IllegalStateException nsee) {
-                System.out.println("logout");
                 closeConnection();
                 break;
             }

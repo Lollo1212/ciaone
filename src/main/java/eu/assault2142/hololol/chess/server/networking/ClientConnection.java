@@ -22,6 +22,7 @@ public class ClientConnection extends GameClientConnection {
     public ClientConnection(Socket socket, Server server) {
         super(socket);
         this.server = server;
+        reader = new ClientConnectionThread(this, server);
     }
 
     public User getUser() {
