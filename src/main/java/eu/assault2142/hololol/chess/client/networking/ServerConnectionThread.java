@@ -62,6 +62,7 @@ public class ServerConnectionThread extends ConnectionThread {
         consumers.put(ClientMessages.Request, this::consumeRequest);
         consumers.put(ClientMessages.Resignation, this::consumeResignation);
         consumers.put(ClientMessages.Stalemate, this::consumeStalemate);
+        consumers.put(ClientMessages.UsernameWrong, this::consumeNoSuchUsername);
         //gamestate = game.getGameState();
     }
 
@@ -254,5 +255,9 @@ public class ServerConnectionThread extends ConnectionThread {
                 client.write(ServerMessages.DeclineGame, new Object[]{str});
             }
         }
+    }
+
+    private void consumeNoSuchUsername(String[] parts) {
+        JOptionPane.showMessageDialog(MainMenu.MAINMENU, "There is no User with this name!", "Unknown Username", JOptionPane.INFORMATION_MESSAGE);
     }
 }
