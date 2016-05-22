@@ -234,8 +234,10 @@ public class ServerConnectionThread extends ConnectionThread {
     private void consumeResignation(String[] parts) {
         if (parts[0].equals("1")) {
             JOptionPane.showMessageDialog(null, Translator.getString("RESIGNATION_ENEMY_TEXT"), Translator.getString("RESIGNATION_ENEMY_HEAD"), JOptionPane.INFORMATION_MESSAGE);
+            game.endGame();
         } else {
             JOptionPane.showMessageDialog(null, Translator.getString("RESIGNATION_SELF_TEXT"), Translator.getString("RESIGNATION_SELF_HEAD"), JOptionPane.INFORMATION_MESSAGE);
+            game.endGame();
         }
     }
 
