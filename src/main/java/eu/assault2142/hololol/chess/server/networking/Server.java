@@ -22,6 +22,8 @@ import java.security.cert.CertificateException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.util.Pair;
 import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLContext;
@@ -343,6 +345,15 @@ public class Server {
      */
     public boolean challengeExists(int uid, int challengerid) {
         return gamechallenges.get(challengerid) == uid;
+    }
+
+    public void declineChallenge(int uid, int challengerid) {
+        try {
+            challenges.remove(challengerid);
+            loggedinaccounts.get(challengerid).write(ClientMessages.ChallengeDeclined, new Object[]{getName(uid)});
+        } catch (UnknownUserException ex) {
+            Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**

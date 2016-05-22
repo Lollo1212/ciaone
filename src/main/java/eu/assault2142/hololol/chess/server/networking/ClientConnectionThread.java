@@ -6,6 +6,8 @@ import eu.assault2142.hololol.chess.networking.ServerMessages;
 import eu.assault2142.hololol.chess.server.exceptions.UnknownUserException;
 import eu.assault2142.hololol.chess.server.exceptions.UsernameNotFreeException;
 import eu.assault2142.hololol.chess.server.util.Log;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -94,7 +96,11 @@ public class ClientConnectionThread extends GameConnectionThread {
     }
 
     protected void consumeDeclineGame(String[] parts) {
-
+        try {
+            server.declineChallenge(connection.getUser().getID(), server.getUserID(parts[0]));
+        } catch (UnknownUserException ex) {
+            Logger.getLogger(ClientConnectionThread.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     protected void consumeRandomGame(String[] parts) {

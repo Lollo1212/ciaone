@@ -262,4 +262,8 @@ public class ServerConnectionThread extends ConnectionThread {
     private void consumeNoSuchUsername(String[] parts) {
         JOptionPane.showMessageDialog(MainMenu.MAINMENU, "There is no User with this name!", "Unknown Username", JOptionPane.INFORMATION_MESSAGE);
     }
+
+    private void consumeChallengeDeclined(String[] parts) {
+        JOptionPane.showMessageDialog(MainMenu.MAINMENU, parts[0] + " declined your Challenge!", "Challenge Declined", JOptionPane.INFORMATION_MESSAGE);
+    }
 }

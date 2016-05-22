@@ -22,6 +22,7 @@ public enum ClientMessages {
     Request("request:{0}"),
     Newgame("newgame:{0}"),
     Gamestart("gamestart:{0}"),
+    ChallengeDeclined("challenge:declined:{0}"),
     Move("move:{0}:{1}:{2}"),
     Check("check"),
     Checkmate("checkmate"),
