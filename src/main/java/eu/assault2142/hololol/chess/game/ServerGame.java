@@ -47,8 +47,9 @@ public class ServerGame extends Game {
                 if (picked.getClass() == King.class) {
                     ((King) picked).doCastling(getCastlingMove(), getGameState());
                 }
+                client1.write(ClientMessages.Move, new Object[]{picked.getPositionInArray(), selected.getX(), selected.getY()});
             }
-            client1.write(ClientMessages.Move, new Object[]{picked.getPositionInArray(), selected.getX(), selected.getY()});
+
             picked = null;
         }
     }
