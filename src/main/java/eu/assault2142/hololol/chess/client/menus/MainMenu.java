@@ -687,7 +687,7 @@ public class MainMenu extends javax.swing.JFrame {
     }//GEN-LAST:event_jTabbedPane1StateChanged
 
     private void jPanel2FocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jPanel2FocusGained
-        
+
     }//GEN-LAST:event_jPanel2FocusGained
 
     public void loggedIn(ServerConnection c) {
@@ -866,6 +866,9 @@ public class MainMenu extends javax.swing.JFrame {
     private void writeMessage() {
         String msg = jTextField4.getText();
         String name = jTabbedPane2.getTitleAt(jTabbedPane2.getSelectedIndex());
+        if (msg.isEmpty()) {
+            return;
+        }
         areas.get(name).getRight().append("[" + getTime() + "] " + client.getName() + ": " + msg + System.lineSeparator());
         client.write(ServerMessages.Message, new Object[]{name, msg.replace(" ", "_")});
         jTextField4.setText("");
