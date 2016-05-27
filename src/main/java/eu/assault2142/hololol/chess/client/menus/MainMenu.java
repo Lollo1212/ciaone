@@ -31,7 +31,7 @@ import org.apache.commons.lang3.tuple.Pair;
  *
  * @author hololol2
  */
-public class MainMenu extends javax.swing.JFrame {
+class MainMenu extends javax.swing.JFrame {
 
     private ServerConnection client;
     private final HashMap<String, Pair<Integer, JTextArea>> areas = new HashMap();

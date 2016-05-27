@@ -30,7 +30,7 @@ import javax.swing.plaf.basic.BasicButtonUI;
  *
  * @author jojo
  */
-public class ButtonTabComponent extends JPanel {
+class ButtonTabComponent extends JPanel {
 
     private final JTabbedPane pane;
     private MainMenu menu;
