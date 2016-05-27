@@ -15,6 +15,7 @@
             <groupId>de.sciss</groupId>
             <artifactId>weblaf-ui</artifactId>
             <version>1.28</version>
+            <type>jar</type>
         </dependency>
         <dependency>
             <groupId>com.oracle.kv</groupId>
