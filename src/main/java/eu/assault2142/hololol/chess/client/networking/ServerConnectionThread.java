@@ -27,7 +27,7 @@ public class ServerConnectionThread extends ConnectionThread {
     private final ServerConnection client;
     private ClientGame game;
     private GameState gamestate;
-    private HashMap<ClientMessages, Consumer<String[]>> consumers;
+    private final HashMap<ClientMessages, Consumer<String[]>> consumers;
 
     /**
      * Create a new ServerConnectionThread
@@ -158,36 +158,31 @@ public class ServerConnectionThread extends ConnectionThread {
         int length = message.length;
         if (message[0].equals("moves") && length == 4) {
             boolean color;
-            if (message[1].equals("black")) {
-                color = true;
-            } else {
-                color = false;
-            }
+            color = message[1].equals("black");
             if (message[2].equals("move")) {
                 String s = message[3];
                 String[] str = s.split(";");
-                for (int a = 0; a < str.length; a++) {
-                    if (str[a].length() == 3 || str[a].length() == 4) {
-                        String x = str[a].substring(0, 1);
+                for (String str1 : str) {
+                    if (str1.length() == 3 || str1.length() == 4) {
+                        String x = str1.substring(0, 1);
                         int posx = Integer.parseInt(x);
-                        String y = str[a].substring(1, 2);
+                        String y = str1.substring(1, 2);
                         int posy = Integer.parseInt(y);
-                        String fn = str[a].substring(2);
+                        String fn = str1.substring(2);
                         int f = Integer.parseInt(fn);
-
                         game.getGameState().getChessmen(color)[f].addMove(new Movement(posx, posy, gamestate.getChessmen(color)[f]));
                     }
                 }
             } else {
                 String s = message[3];
                 String[] str = s.split(";");
-                for (int a = 0; a < str.length; a++) {
-                    if (str[a].length() == 3 || str[a].length() == 4) {
-                        String x = str[a].substring(0, 1);
+                for (String str1 : str) {
+                    if (str1.length() == 3 || str1.length() == 4) {
+                        String x = str1.substring(0, 1);
                         int posx = Integer.parseInt(x);
-                        String y = str[a].substring(1, 2);
+                        String y = str1.substring(1, 2);
                         int posy = Integer.parseInt(y);
-                        String fn = str[a].substring(2);
+                        String fn = str1.substring(2);
                         int f = Integer.parseInt(fn);
                         game.getGameState().getChessmen(color)[f].addCapture(new Movement(posx, posy, gamestate.getChessmen(color)[f]));
                     }
