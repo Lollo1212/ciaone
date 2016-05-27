@@ -7,8 +7,10 @@ package eu.assault2142.hololol.chess.client.menus;
 
 import eu.assault2142.hololol.chess.client.networking.ServerConnection;
 import eu.assault2142.hololol.chess.client.util.Translator;
+import eu.assault2142.hololol.chess.game.Settings;
 import eu.assault2142.hololol.chess.networking.ServerMessages;
 import javax.swing.JOptionPane;
+import javax.swing.JPasswordField;
 
 /**
  *
@@ -20,8 +22,19 @@ public class SwingMenu implements IMenu {
     private MainMenu menu;
 
     public SwingMenu() {
-        menu = new MainMenu();
+        menu = new MainMenu(this);
         menu.setVisible(true);
+    }
+
+    protected void connectToServer(String username, String password, boolean create) {
+        Settings.SETTINGS.username = username;
+        if (username.length() < 4) {
+            JOptionPane.showMessageDialog(menu, Translator.getString("NAMETOOSHORT_TEXT"), Translator.getString("NAMETOOSHORT_HEAD"), JOptionPane.WARNING_MESSAGE);
+        } else if (password.length() < 4) {
+            JOptionPane.showMessageDialog(menu, Translator.getString("PASSTOOSHORT_TEXT"), Translator.getString("PASSTOOSHORT_HEAD"), JOptionPane.WARNING_MESSAGE);
+        } else {
+            ServerConnection.connect(username, password, create);
+        }
     }
 
     @Override
@@ -142,5 +155,22 @@ public class SwingMenu implements IMenu {
             System.exit(1);
         }
         menu.enableLoginButton();
+    }
+
+    protected void changePassword() {
+        JPasswordField passwordField = new JPasswordField();
+        int option = JOptionPane.showConfirmDialog(
+                menu,
+                passwordField,
+                Translator.getString("CHANGEPASS_HEAD"),
+                JOptionPane.OK_CANCEL_OPTION);
+        String input = new String(passwordField.getPassword());
+        if (option == JOptionPane.OK_OPTION) {
+            if (input.length() > 3) {
+                client.write(ServerMessages.ChangePassword, new Object[]{input});
+            } else {
+                JOptionPane.showMessageDialog(menu, Translator.getString("PASSTOOSHORT_TEXT"), Translator.getString("PASSTOOSHORT_HEAD"), JOptionPane.WARNING_MESSAGE);
+            }
+        }
     }
 }

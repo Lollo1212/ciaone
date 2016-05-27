@@ -8,7 +8,6 @@ package eu.assault2142.hololol.chess.client.menus;
 import eu.assault2142.hololol.chess.client.game.LocalGame;
 import eu.assault2142.hololol.chess.client.networking.ServerConnection;
 import eu.assault2142.hololol.chess.client.util.Translator;
-import eu.assault2142.hololol.chess.game.Settings;
 import eu.assault2142.hololol.chess.networking.ServerMessages;
 import java.awt.event.ActionEvent;
 import java.awt.event.FocusEvent;
@@ -21,7 +20,6 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
-import javax.swing.JPasswordField;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
@@ -38,11 +36,13 @@ public class MainMenu extends javax.swing.JFrame {
     private ServerConnection client;
     private final HashMap<String, Pair<Integer, JTextArea>> areas = new HashMap();
     private static Locale locale = Locale.ENGLISH;
+    private SwingMenu menu;
 
     /**
      * Creates new form MainMenu
      */
-    public MainMenu() {
+    public MainMenu(SwingMenu m) {
+        menu = m;
         initComponents();
         init();
     }
@@ -603,7 +603,10 @@ public class MainMenu extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton6ActionPerformed
 
     private void jButton1ActionPerformed(ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        connectToServer();
+        jButton1.setEnabled(false);
+        menu.connectToServer(jTextField1.getText(), new String(jPasswordField1.getPassword()), jCheckBox2.isSelected());
+        jPasswordField1.setText("");
+        jCheckBox2.setSelected(false);
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton5ActionPerformed(ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
@@ -658,7 +661,7 @@ public class MainMenu extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton12ActionPerformed
 
     private void jButton10ActionPerformed(ActionEvent evt) {//GEN-FIRST:event_jButton10ActionPerformed
-        changePassword();
+        menu.changePassword();
     }//GEN-LAST:event_jButton10ActionPerformed
 
     private void jButton11ActionPerformed(ActionEvent evt) {//GEN-FIRST:event_jButton11ActionPerformed
@@ -819,21 +822,6 @@ public class MainMenu extends javax.swing.JFrame {
 
     }
 
-    private void connectToServer() {
-        String text = jTextField1.getText();
-        Settings.SETTINGS.username = text;
-        if (text.length() < 4) {
-            JOptionPane.showMessageDialog(this, Translator.getString("NAMETOOSHORT_TEXT"), Translator.getString("NAMETOOSHORT_HEAD"), JOptionPane.WARNING_MESSAGE);
-        } else if (jPasswordField1.getPassword().length < 4) {
-            JOptionPane.showMessageDialog(this, Translator.getString("PASSTOOSHORT_TEXT"), Translator.getString("PASSTOOSHORT_HEAD"), JOptionPane.WARNING_MESSAGE);
-        } else {
-            jButton1.setEnabled(false);
-            ServerConnection.connect(jTextField1.getText(), new String(jPasswordField1.getPassword()), jCheckBox2.isSelected());
-            jPasswordField1.setText("");
-            jCheckBox2.setSelected(false);
-        }
-    }
-
     private void saveSettings() {
         if (jComboBox2.getSelectedIndex() == 1) {
             locale = new Locale("de", "DE");
@@ -845,7 +833,7 @@ public class MainMenu extends javax.swing.JFrame {
         JOptionPane.setDefaultLocale(locale);
         ResourceBundle.clearCache();
         setVisible(false);
-        MainMenu main = new MainMenu();
+        MainMenu main = new MainMenu(menu);
         main.setVisible(true);
         main.setLocation(this.getLocation());
     }
@@ -871,20 +859,4 @@ public class MainMenu extends javax.swing.JFrame {
         jTextField4.setText("");
     }
 
-    private void changePassword() {
-        JPasswordField passwordField = new JPasswordField();
-        int option = JOptionPane.showConfirmDialog(
-                this,
-                passwordField,
-                Translator.getString("CHANGEPASS_HEAD"),
-                JOptionPane.OK_CANCEL_OPTION);
-        String input = new String(passwordField.getPassword());
-        if (option == JOptionPane.OK_OPTION) {
-            if (input.length() > 3) {
-                client.write(ServerMessages.ChangePassword, new Object[]{input});
-            } else {
-                JOptionPane.showMessageDialog(this, Translator.getString("PASSTOOSHORT_TEXT"), Translator.getString("PASSTOOSHORT_HEAD"), JOptionPane.WARNING_MESSAGE);
-            }
-        }
-    }
 }
