@@ -7,6 +7,8 @@ package eu.assault2142.hololol.chess.client.game.ui;
  */
 public interface IGameView {
 
+    public void drawOffer();
+
     /**
      * Sets whether the movements are currently updating
      *
@@ -30,6 +32,10 @@ public interface IGameView {
      * Show a CheckMate-Message
      */
     public void onCheckMate();
+
+    public void onDraw();
+
+    public void onResignation(boolean enemy);
 
     /**
      * Show a StaleMate-Message

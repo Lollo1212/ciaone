@@ -1,8 +1,8 @@
 package eu.assault2142.hololol.chess.client.networking;
 
 import eu.assault2142.hololol.chess.client.game.ClientGame;
+import eu.assault2142.hololol.chess.client.menus.IMenu;
 import eu.assault2142.hololol.chess.client.menus.MainMenu;
-import eu.assault2142.hololol.chess.client.util.Translator;
 import eu.assault2142.hololol.chess.game.GameState;
 import eu.assault2142.hololol.chess.game.chessmen.Bishop;
 import eu.assault2142.hololol.chess.game.chessmen.Knight;
@@ -12,13 +12,11 @@ import eu.assault2142.hololol.chess.game.chessmen.Queen;
 import eu.assault2142.hololol.chess.game.chessmen.Rook;
 import eu.assault2142.hololol.chess.networking.ClientMessages;
 import eu.assault2142.hololol.chess.networking.ConnectionThread;
-import eu.assault2142.hololol.chess.networking.ServerMessages;
 import java.text.ParseException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Scanner;
 import java.util.function.Consumer;
-import javax.swing.JOptionPane;
 
 /**
  * Consumes inputs from the server
@@ -96,15 +94,15 @@ public class ServerConnectionThread extends ConnectionThread {
     }
 
     private void consumeAcceptUsernameChange(String[] parts) {
-        JOptionPane.showMessageDialog(MainMenu.MAINMENU, java.text.MessageFormat.format(Translator.getString("NAMECHANGED_TEXT"), new Object[]{parts[0]}), Translator.getString("NAMECHANGED_HEAD"), JOptionPane.INFORMATION_MESSAGE);
+        IMenu.MENU.usernameChanged(parts[0]);
     }
 
     private void consumeDeclineUsernameChange(String[] parts) {
-        JOptionPane.showMessageDialog(MainMenu.MAINMENU, Translator.getString("NAMECHANGE_TAKEN_TEXT"), Translator.getString("NAMECHANGE_TAKEN_HEAD"), JOptionPane.WARNING_MESSAGE);
+        IMenu.MENU.usernameTaken();
     }
 
     private void consumeAcceptPasswordChange(String[] parts) {
-        JOptionPane.showMessageDialog(MainMenu.MAINMENU, Translator.getString("PASSCHANGED_TEXT"), Translator.getString("PASSCHANGED_HEAD"), JOptionPane.INFORMATION_MESSAGE);
+        IMenu.MENU.passwordChanged();
     }
 
     private void consumeDeclinePasswordChange(String[] parts) {
@@ -124,12 +122,11 @@ public class ServerConnectionThread extends ConnectionThread {
     }
 
     private void consumeDraw(String[] parts) {
-        JOptionPane.showMessageDialog(MainMenu.MAINMENU, Translator.getString("DRAW_TEXT"), Translator.getString("DRAW_HEAD"), JOptionPane.INFORMATION_MESSAGE);
-        game.endGame();
+        game.onDraw();
     }
 
     private void consumeDrawOffer(String[] parts) {
-        JOptionPane.showConfirmDialog(MainMenu.MAINMENU, Translator.getString("DRAWOFFER_TEXT"), Translator.getString("DRAWOFFER_HEAD"), JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+        game.drawOffer();
     }
 
     private void consumeFriends(String[] parts) {
@@ -138,20 +135,15 @@ public class ServerConnectionThread extends ConnectionThread {
     }
 
     private void consumeRequest(String[] parts) {
-        int addfriend = JOptionPane.showConfirmDialog(MainMenu.MAINMENU, parts[0] + Translator.getString("FRIENDREQ_ADD_TEXT"), Translator.getString("FRIENDREQ_ADD_HEAD"), JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
-        if (addfriend == JOptionPane.NO_OPTION) {
-            client.write(ServerMessages.DeclineFriend, new Object[]{parts[0]});
-        } else if (addfriend == JOptionPane.YES_OPTION) {
-            client.write(ServerMessages.AcceptFriend, new Object[]{parts[0]});
-        }
+        IMenu.MENU.friendRequest(parts[0]);
     }
 
     private void consumeMessage(String[] parts) {
         String[] message = parts[0].split(":");
         if (message[0].equals("Info")) {
-            JOptionPane.showMessageDialog(MainMenu.MAINMENU, message[1].replace("_", " "), Translator.getString("DIALOG_INFO_HEAD"), JOptionPane.INFORMATION_MESSAGE);
+            IMenu.MENU.infoMessage(message[1].replace("_", " "));
         } else {
-            MainMenu.MAINMENU.newMessage(message[0], message[1].replace("_", " "));
+            IMenu.MENU.newMessage(message[0], message[1].replace("_", " "));
 
         }
     }
@@ -232,13 +224,7 @@ public class ServerConnectionThread extends ConnectionThread {
     }
 
     private void consumeResignation(String[] parts) {
-        if (parts[0].equals("1")) {
-            JOptionPane.showMessageDialog(null, Translator.getString("RESIGNATION_ENEMY_TEXT"), Translator.getString("RESIGNATION_ENEMY_HEAD"), JOptionPane.INFORMATION_MESSAGE);
-            game.endGame();
-        } else {
-            JOptionPane.showMessageDialog(null, Translator.getString("RESIGNATION_SELF_TEXT"), Translator.getString("RESIGNATION_SELF_HEAD"), JOptionPane.INFORMATION_MESSAGE);
-            game.endGame();
-        }
+        game.onResignation(parts[0].equals("1"));
     }
 
     private void consumeGamestart(String[] parts) {
@@ -247,23 +233,17 @@ public class ServerConnectionThread extends ConnectionThread {
 
     private void consumeNewGame(String[] parts) {
         if (parts[0].equals("enemyoffline")) {
-            JOptionPane.showMessageDialog(MainMenu.MAINMENU, Translator.getString("GAME_ENEMYOFF_TEXT"), Translator.getString("GAME_ENEMYOFF_HEAD"), JOptionPane.INFORMATION_MESSAGE);
+            IMenu.MENU.enemyOffline();
         } else {
-            String str = parts[0];
-            int selected = JOptionPane.showConfirmDialog(MainMenu.MAINMENU, java.text.MessageFormat.format(Translator.getString("GAME_START?_TEXT"), new Object[]{str}), Translator.getString("GAME_START?_HEAD"), JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
-            if (selected == JOptionPane.YES_OPTION) {
-                client.write(ServerMessages.AcceptGame, new Object[]{str});
-            } else {
-                client.write(ServerMessages.DeclineGame, new Object[]{str});
-            }
+            IMenu.MENU.gameChallenge(parts[0]);
         }
     }
 
     private void consumeNoSuchUsername(String[] parts) {
-        JOptionPane.showMessageDialog(MainMenu.MAINMENU, "There is no User with this name!", "Unknown Username", JOptionPane.INFORMATION_MESSAGE);
+        IMenu.MENU.unknownUsername();
     }
 
     private void consumeChallengeDeclined(String[] parts) {
-        JOptionPane.showMessageDialog(MainMenu.MAINMENU, parts[0] + " declined your Challenge!", "Challenge Declined", JOptionPane.INFORMATION_MESSAGE);
+        IMenu.MENU.challengeDeclined(parts[0]);
     }
 }

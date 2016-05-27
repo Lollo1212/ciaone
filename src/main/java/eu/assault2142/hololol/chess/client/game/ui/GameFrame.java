@@ -2,9 +2,9 @@ package eu.assault2142.hololol.chess.client.game.ui;
 
 import eu.assault2142.hololol.chess.client.game.ClientGame;
 import eu.assault2142.hololol.chess.client.menus.MainMenu;
-import eu.assault2142.hololol.chess.networking.ServerMessages;
 import eu.assault2142.hololol.chess.client.util.Translator;
 import eu.assault2142.hololol.chess.game.Game;
+import eu.assault2142.hololol.chess.networking.ServerMessages;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
@@ -40,6 +40,11 @@ public class GameFrame extends JFrame implements MouseListener, IGameView {
         layout = new GridBagLayout();
         constraints = new GridBagConstraints();
         init();
+    }
+
+    @Override
+    public void drawOffer() {
+        JOptionPane.showConfirmDialog(MainMenu.MAINMENU, Translator.getString("DRAWOFFER_TEXT"), Translator.getString("DRAWOFFER_HEAD"), JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
     }
 
     /**
@@ -97,6 +102,20 @@ public class GameFrame extends JFrame implements MouseListener, IGameView {
     @Override
     public void onCheckMate() {
         JOptionPane.showMessageDialog(this, "Checkmate!", "Checkmate", JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    @Override
+    public void onDraw() {
+        JOptionPane.showMessageDialog(MainMenu.MAINMENU, Translator.getString("DRAW_TEXT"), Translator.getString("DRAW_HEAD"), JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    @Override
+    public void onResignation(boolean enemy) {
+        if (enemy) {
+            JOptionPane.showMessageDialog(null, Translator.getString("RESIGNATION_ENEMY_TEXT"), Translator.getString("RESIGNATION_ENEMY_HEAD"), JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            JOptionPane.showMessageDialog(null, Translator.getString("RESIGNATION_SELF_TEXT"), Translator.getString("RESIGNATION_SELF_HEAD"), JOptionPane.INFORMATION_MESSAGE);
+        }
     }
 
     @Override

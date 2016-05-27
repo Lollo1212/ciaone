@@ -33,7 +33,7 @@ import org.apache.commons.lang3.tuple.Pair;
  *
  * @author hololol2
  */
-public class MainMenu extends javax.swing.JFrame {
+public class MainMenu extends javax.swing.JFrame implements IMenu {
 
     public static MainMenu MAINMENU;
     private ServerConnection client;
@@ -46,6 +46,61 @@ public class MainMenu extends javax.swing.JFrame {
     public MainMenu() {
         initComponents();
         init();
+    }
+
+    @Override
+    public void challengeDeclined(String username) {
+        JOptionPane.showMessageDialog(MainMenu.MAINMENU, username + " declined your Challenge!", "Challenge Declined", JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    @Override
+    public void enemyOffline() {
+        JOptionPane.showMessageDialog(MainMenu.MAINMENU, Translator.getString("GAME_ENEMYOFF_TEXT"), Translator.getString("GAME_ENEMYOFF_HEAD"), JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    @Override
+    public void friendRequest(String username) {
+        int addfriend = JOptionPane.showConfirmDialog(MainMenu.MAINMENU, username + Translator.getString("FRIENDREQ_ADD_TEXT"), Translator.getString("FRIENDREQ_ADD_HEAD"), JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
+        if (addfriend == JOptionPane.NO_OPTION) {
+            client.write(ServerMessages.DeclineFriend, new Object[]{username});
+        } else if (addfriend == JOptionPane.YES_OPTION) {
+            client.write(ServerMessages.AcceptFriend, new Object[]{username});
+        }
+    }
+
+    @Override
+    public void gameChallenge(String username) {
+        int selected = JOptionPane.showConfirmDialog(MainMenu.MAINMENU, java.text.MessageFormat.format(Translator.getString("GAME_START?_TEXT"), new Object[]{username}), Translator.getString("GAME_START?_HEAD"), JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+        if (selected == JOptionPane.YES_OPTION) {
+            client.write(ServerMessages.AcceptGame, new Object[]{username});
+        } else {
+            client.write(ServerMessages.DeclineGame, new Object[]{username});
+        }
+    }
+
+    @Override
+    public void infoMessage(String text) {
+        JOptionPane.showMessageDialog(MainMenu.MAINMENU, text, Translator.getString("DIALOG_INFO_HEAD"), JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    @Override
+    public void passwordChanged() {
+        JOptionPane.showMessageDialog(MainMenu.MAINMENU, Translator.getString("PASSCHANGED_TEXT"), Translator.getString("PASSCHANGED_HEAD"), JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    @Override
+    public void unknownUsername() {
+        JOptionPane.showMessageDialog(MainMenu.MAINMENU, "There is no User with this name!", "Unknown Username", JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    @Override
+    public void usernameChanged(String newname) {
+        JOptionPane.showMessageDialog(MainMenu.MAINMENU, java.text.MessageFormat.format(Translator.getString("NAMECHANGED_TEXT"), new Object[]{newname}), Translator.getString("NAMECHANGED_HEAD"), JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    @Override
+    public void usernameTaken() {
+        JOptionPane.showMessageDialog(MainMenu.MAINMENU, Translator.getString("NAMECHANGE_TAKEN_TEXT"), Translator.getString("NAMECHANGE_TAKEN_HEAD"), JOptionPane.WARNING_MESSAGE);
     }
 
     private void init() {

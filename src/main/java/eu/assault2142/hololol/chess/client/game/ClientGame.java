@@ -66,6 +66,10 @@ public final class ClientGame extends Game {
         f.doMove(x, y);
     }
 
+    public void drawOffer() {
+        gameframe.drawOffer();
+    }
+
     /**
      * Returns the connection to the server
      *
@@ -73,6 +77,16 @@ public final class ClientGame extends Game {
      */
     public ServerConnection getConnection() {
         return connection;
+    }
+
+    public void onDraw() {
+        gameframe.onDraw();
+        endGame();
+    }
+
+    public void onResignation(boolean enemy) {
+        gameframe.onResignation(enemy);
+        endGame();
     }
 
     @Override
