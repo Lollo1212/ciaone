@@ -1,7 +1,7 @@
 package eu.assault2142.hololol.chess.client.game.ui;
 
 import eu.assault2142.hololol.chess.client.game.ClientGame;
-import eu.assault2142.hololol.chess.client.menus.MainMenu;
+import eu.assault2142.hololol.chess.client.game.Main;
 import eu.assault2142.hololol.chess.client.util.Translator;
 import eu.assault2142.hololol.chess.game.Game;
 import eu.assault2142.hololol.chess.networking.ServerMessages;
@@ -44,7 +44,7 @@ public class GameFrame extends JFrame implements MouseListener, IGameView {
 
     @Override
     public void drawOffer() {
-        JOptionPane.showConfirmDialog(MainMenu.MAINMENU, Translator.getString("DRAWOFFER_TEXT"), Translator.getString("DRAWOFFER_HEAD"), JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+        JOptionPane.showConfirmDialog(null, Translator.getString("DRAWOFFER_TEXT"), Translator.getString("DRAWOFFER_HEAD"), JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
     }
 
     /**
@@ -106,7 +106,7 @@ public class GameFrame extends JFrame implements MouseListener, IGameView {
 
     @Override
     public void onDraw() {
-        JOptionPane.showMessageDialog(MainMenu.MAINMENU, Translator.getString("DRAW_TEXT"), Translator.getString("DRAW_HEAD"), JOptionPane.INFORMATION_MESSAGE);
+        JOptionPane.showMessageDialog(null, Translator.getString("DRAW_TEXT"), Translator.getString("DRAW_HEAD"), JOptionPane.INFORMATION_MESSAGE);
     }
 
     @Override
@@ -182,7 +182,7 @@ public class GameFrame extends JFrame implements MouseListener, IGameView {
             JButton b = new JButton(Translator.getString("GAME_BUTTON_END"));
             b.addActionListener((ActionEvent e) -> {
                 setVisible(false);
-                MainMenu.MAINMENU.setVisible(true);
+                Main.MENU.setVisible(true);
             });
             addComponent(b, 1, 9, 2, 1, 1, 1);
         } else if (game.getType() != Game.TYPE.LOCAL) {

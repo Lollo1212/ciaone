@@ -23,7 +23,7 @@ public final class LocalGame extends Game {
      */
     public LocalGame() {
         super(TYPE.LOCAL);
-        gameframe = new GameFrame(this);
+        gameview = new GameFrame(this);
         updateMovements();
     }
 
@@ -36,7 +36,7 @@ public final class LocalGame extends Game {
 
     @Override
     public void promotion(Pawn pawn) {
-        String promotion = gameframe.showPromotionChoice();
+        String promotion = gameview.showPromotionChoice();
         Chessman man;
 
         switch (promotion) {

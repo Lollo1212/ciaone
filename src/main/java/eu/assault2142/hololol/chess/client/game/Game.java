@@ -1,8 +1,6 @@
 package eu.assault2142.hololol.chess.client.game;
 
 import eu.assault2142.hololol.chess.client.game.ui.IGameView;
-import eu.assault2142.hololol.chess.client.menus.MainMenu;
-import eu.assault2142.hololol.chess.client.util.ErrorMessage;
 import eu.assault2142.hololol.chess.game.Settings;
 import eu.assault2142.hololol.chess.game.Square;
 import eu.assault2142.hololol.chess.game.chessmen.CastlingMove;
@@ -20,7 +18,7 @@ import javax.swing.ImageIcon;
  */
 public abstract class Game extends eu.assault2142.hololol.chess.game.Game {
 
-    protected IGameView gameframe;
+    protected IGameView gameview;
     protected Chessman picked;
     protected Square selected;
 
@@ -35,14 +33,14 @@ public abstract class Game extends eu.assault2142.hololol.chess.game.Game {
 
     @Override
     public void endGame() {
-        gameframe.hide();
-        MainMenu.MAINMENU.setVisible(true);
+        gameview.hide();
+        Main.MENU.setVisible(true);
     }
 
     @Override
     public void finishedCalcs() {
         getGameState().resetFields();
-        gameframe.setMovementsUpdating(false);
+        gameview.setMovementsUpdating(false);
     }
 
     /**
@@ -51,7 +49,7 @@ public abstract class Game extends eu.assault2142.hololol.chess.game.Game {
      * @return the view the game is played in
      */
     public IGameView getGameView() {
-        return gameframe;
+        return gameview;
     }
 
     @Override
@@ -69,7 +67,7 @@ public abstract class Game extends eu.assault2142.hololol.chess.game.Game {
                 Thread.sleep(2000);
                 getGameView().setShowCheck(false);
             } catch (InterruptedException ex) {
-                ErrorMessage.showErrorMessage("Unexpected Critical Error!", true);
+                Main.MENU.showErrorMessage("Unexpected Critical Error!", true);
             }
         };
         new Thread(checkimage).start();
@@ -77,13 +75,13 @@ public abstract class Game extends eu.assault2142.hololol.chess.game.Game {
 
     @Override
     public void onCheckMate() {
-        gameframe.onCheckMate();
+        gameview.onCheckMate();
         this.endGame();
     }
 
     @Override
     public void onStaleMate() {
-        gameframe.onStaleMate();
+        gameview.onStaleMate();
         this.endGame();
     }
 

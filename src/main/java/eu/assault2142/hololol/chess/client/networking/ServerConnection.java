@@ -1,9 +1,8 @@
 package eu.assault2142.hololol.chess.client.networking;
 
 import eu.assault2142.hololol.chess.client.game.ClientGame;
-import eu.assault2142.hololol.chess.client.menus.MainMenu;
-import eu.assault2142.hololol.chess.client.util.ErrorMessage;
-import eu.assault2142.hololol.chess.client.util.Translator;
+import eu.assault2142.hololol.chess.client.game.Main;
+import eu.assault2142.hololol.chess.client.menus.IMenu;
 import eu.assault2142.hololol.chess.networking.ClientMessages;
 import eu.assault2142.hololol.chess.networking.ServerMessages;
 import java.io.FileInputStream;
@@ -25,7 +24,6 @@ import javax.net.ssl.SSLSocket;
 import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.TrustManagerFactory;
-import javax.swing.JOptionPane;
 
 /**
  * The Connection to a (game-)server
@@ -47,7 +45,7 @@ public class ServerConnection {
             InetAddress i = InetAddress.getByName("assault2142.eu");
             c = new ServerConnection(i);
         } catch (UnknownHostException ex) {
-            ErrorMessage.showErrorMessage("Couldn't find Server's IP!", false);
+            Main.MENU.showErrorMessage("Couldn't find Server's IP!", false);
         }
         if (c.scanner != null) {
             c.scanner.next();
@@ -63,23 +61,17 @@ public class ServerConnection {
             if (input.equals("loggedin")) {
                 //Der Server bestätigt Anmeldung
                 c = new ServerConnection(c.socket, c.scanner, c.writer);
-                MainMenu.MAINMENU.loggedIn(c);//neues Fenster öffnen
+                Main.MENU.loggedIn(c);//neues Fenster öffnen
             } else if (create) {
-                JOptionPane.showMessageDialog(MainMenu.MAINMENU, Translator.getString("ACCOUNT EXISTIERT BEREITS"), Translator.getString("LOGIN ERROR"), JOptionPane.ERROR_MESSAGE);
-                MainMenu.MAINMENU.enableLoginButton();
-                //InfoFrame f=new InfoFrame("Account existiert bereits",300,100,true);
+                Main.MENU.loginError(IMenu.LOGINERROR.ACCOUNTEXISTS);
             } else if (input.equals(ClientMessages.PasswordWrong.getValue())) {
-                JOptionPane.showMessageDialog(MainMenu.MAINMENU, Translator.getString("PASSWORT FALSCH"), Translator.getString("LOGIN ERROR"), JOptionPane.ERROR_MESSAGE);
-                MainMenu.MAINMENU.enableLoginButton();
+                Main.MENU.loginError(IMenu.LOGINERROR.WRONGPASSWORD);
             } else if (input.equals(ClientMessages.UsernameWrong.getValue())) {
-                JOptionPane.showMessageDialog(MainMenu.MAINMENU, Translator.getString("ACCOUNT EXISTIERT NICHT"), Translator.getString("LOGIN ERROR"), JOptionPane.ERROR_MESSAGE);
-                MainMenu.MAINMENU.enableLoginButton();
+                Main.MENU.loginError(IMenu.LOGINERROR.ACCOUNTNOTEXISTS);
             } else if (input.equals(ClientMessages.AlreadyOnline.getValue())) {
-                JOptionPane.showMessageDialog(MainMenu.MAINMENU, "Already Online", Translator.getString("LOGIN ERROR"), JOptionPane.ERROR_MESSAGE);
-                MainMenu.MAINMENU.enableLoginButton();
+                Main.MENU.loginError(IMenu.LOGINERROR.ALREADYLOGGEDIN);
             } else {
-                JOptionPane.showMessageDialog(MainMenu.MAINMENU, "Unknown Login Error", Translator.getString("LOGIN ERROR"), JOptionPane.ERROR_MESSAGE);
-                MainMenu.MAINMENU.enableLoginButton();
+                Main.MENU.loginError(IMenu.LOGINERROR.UNKNONWNERROR);
             }
         }
     }
@@ -134,12 +126,10 @@ public class ServerConnection {
             scanner = new Scanner(this.socket.getInputStream());
             writer = new PrintWriter(this.socket.getOutputStream(), true);
         } catch (ConnectException ex) {
-            JOptionPane.showMessageDialog(MainMenu.MAINMENU, Translator.getString("COULDN'T CONNECT TO SERVER"), Translator.getString("CONNECTION ERROR"), JOptionPane.WARNING_MESSAGE);
-            MainMenu.MAINMENU.enableLoginButton();
+            Main.MENU.connectionError();
         } catch (IOException | KeyStoreException | NoSuchAlgorithmException | CertificateException | KeyManagementException ex) {
-            ErrorMessage.showErrorMessage("Unexpected Error while connecting to the Server!", false);
+            Main.MENU.showErrorMessage("Unexpected Error while connecting to the Server!", false);
             System.out.println(ex.getMessage());
-            MainMenu.MAINMENU.enableLoginButton();
         }
     }
 

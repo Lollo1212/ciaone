@@ -1,8 +1,7 @@
 package eu.assault2142.hololol.chess.client.networking;
 
 import eu.assault2142.hololol.chess.client.game.ClientGame;
-import eu.assault2142.hololol.chess.client.menus.IMenu;
-import eu.assault2142.hololol.chess.client.menus.MainMenu;
+import eu.assault2142.hololol.chess.client.game.Main;
 import eu.assault2142.hololol.chess.game.GameState;
 import eu.assault2142.hololol.chess.game.chessmen.Bishop;
 import eu.assault2142.hololol.chess.game.chessmen.Knight;
@@ -90,19 +89,19 @@ public class ServerConnectionThread extends ConnectionThread {
 
     private void consumeName(String[] parts) {
         client.setName(parts[0]);
-        MainMenu.MAINMENU.setPlayerName(parts[0]);
+        Main.MENU.setPlayerName(parts[0]);
     }
 
     private void consumeAcceptUsernameChange(String[] parts) {
-        IMenu.MENU.usernameChanged(parts[0]);
+        Main.MENU.usernameChanged(parts[0]);
     }
 
     private void consumeDeclineUsernameChange(String[] parts) {
-        IMenu.MENU.usernameTaken();
+        Main.MENU.usernameTaken();
     }
 
     private void consumeAcceptPasswordChange(String[] parts) {
-        IMenu.MENU.passwordChanged();
+        Main.MENU.passwordChanged();
     }
 
     private void consumeDeclinePasswordChange(String[] parts) {
@@ -131,19 +130,19 @@ public class ServerConnectionThread extends ConnectionThread {
 
     private void consumeFriends(String[] parts) {
         String[] str = parts[0].split(";");
-        MainMenu.MAINMENU.updateFriends(str);
+        Main.MENU.updateFriends(str);
     }
 
     private void consumeRequest(String[] parts) {
-        IMenu.MENU.friendRequest(parts[0]);
+        Main.MENU.friendRequest(parts[0]);
     }
 
     private void consumeMessage(String[] parts) {
         String[] message = parts[0].split(":");
         if (message[0].equals("Info")) {
-            IMenu.MENU.infoMessage(message[1].replace("_", " "));
+            Main.MENU.infoMessage(message[1].replace("_", " "));
         } else {
-            IMenu.MENU.newMessage(message[0], message[1].replace("_", " "));
+            Main.MENU.newMessage(message[0], message[1].replace("_", " "));
 
         }
     }
@@ -233,17 +232,17 @@ public class ServerConnectionThread extends ConnectionThread {
 
     private void consumeNewGame(String[] parts) {
         if (parts[0].equals("enemyoffline")) {
-            IMenu.MENU.enemyOffline();
+            Main.MENU.enemyOffline();
         } else {
-            IMenu.MENU.gameChallenge(parts[0]);
+            Main.MENU.gameChallenge(parts[0]);
         }
     }
 
     private void consumeNoSuchUsername(String[] parts) {
-        IMenu.MENU.unknownUsername();
+        Main.MENU.unknownUsername();
     }
 
     private void consumeChallengeDeclined(String[] parts) {
-        IMenu.MENU.challengeDeclined(parts[0]);
+        Main.MENU.challengeDeclined(parts[0]);
     }
 }

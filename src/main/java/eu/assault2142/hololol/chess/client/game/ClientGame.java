@@ -28,7 +28,7 @@ public final class ClientGame extends Game {
         this.connection = connection;
         final ClientGame g = this;
         EventQueue.invokeLater(() -> {
-            gameframe = new GameFrame(g);
+            gameview = new GameFrame(g);
             updateMovements();
         });
     }
@@ -67,7 +67,7 @@ public final class ClientGame extends Game {
     }
 
     public void drawOffer() {
-        gameframe.drawOffer();
+        gameview.drawOffer();
     }
 
     /**
@@ -80,18 +80,18 @@ public final class ClientGame extends Game {
     }
 
     public void onDraw() {
-        gameframe.onDraw();
+        gameview.onDraw();
         endGame();
     }
 
     public void onResignation(boolean enemy) {
-        gameframe.onResignation(enemy);
+        gameview.onResignation(enemy);
         endGame();
     }
 
     @Override
     public void promotion(Pawn pawn) {
-        String promotion = gameframe.showPromotionChoice();
+        String promotion = gameview.showPromotionChoice();
         connection.write(ServerMessages.Promotion, new Object[]{promotion, pawn.isBlack(), pawn.getPositionInArray()});
         updateMovements();
     }
