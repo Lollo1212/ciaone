@@ -7,6 +7,9 @@ package eu.assault2142.hololol.chess.client.game.ui;
  */
 public interface IGameView {
 
+    /**
+     * Show a Draw-Offer-Message
+     */
     public void drawOffer();
 
     /**
@@ -33,8 +36,16 @@ public interface IGameView {
      */
     public void onCheckMate();
 
+    /**
+     * Show a Draw-Message
+     */
     public void onDraw();
 
+    /**
+     * Show a Resignation-Message
+     *
+     * @param enemy true if the enemy resignated, false otherwise
+     */
     public void onResignation(boolean enemy);
 
     /**
