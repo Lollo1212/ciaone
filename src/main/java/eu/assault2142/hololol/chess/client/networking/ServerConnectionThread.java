@@ -152,6 +152,7 @@ public class ServerConnectionThread extends ConnectionThread {
         int x = Integer.parseInt(parts[1]);
         int y = Integer.parseInt(parts[2]);
         game.doMove(a, x, y);
+        game.doCapture(a, x, y);
     }
 
     private void consumeMoves(String[] message) {
