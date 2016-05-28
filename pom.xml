@@ -58,6 +58,7 @@
                                 <excludes>
                                     <exclude>com.oracle.kv:kvclient_3.0.5</exclude>
                                     <exclude>org.apache.avro:avro-service-archetype</exclude>
+                                    <exclude>de.svenkubiak:jBCrypt</exclude>
                                 </excludes>
                             </artifactSet>
                             <filters>
@@ -95,16 +96,15 @@
                                     <exclude>net.htmlparser.jericho:jericho-html</exclude>
                                     <exclude>com.mortennobel:java-image-scaling</exclude>
                                     <exclude>com.jhlabs:filters</exclude>
+                                    <exclude>org.apache.commons:commons-lang3</exclude>
                                 </excludes>
                             </artifactSet>
                             <filters>
                                 <filter>
                                     <artifact>*:*</artifact>
                                     <excludes>
-                                        <exclude>bilder/</exclude>
-                                        <exclude>schach_figuren_high/</exclude>
-                                        <exclude>schach_figuren_medium/</exclude>
-                                        <exclude>schach_figuren_low/</exclude>
+                                        <exclude>fonts/</exclude>
+                                        <exclude>chessmen_high/</exclude>
                                         <exclude>translations/</exclude>
                                         <exclude>eu/assault2142/hololol/chess/client/</exclude>
                                         <minimizeJar>true</minimizeJar>
