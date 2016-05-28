@@ -36,7 +36,6 @@ public final class ClientGame extends Game {
     @Override
     public void clickAt(int feldx, int feldy) {
         selected = getGameState().getSquare(feldx, feldy);
-        updateMovements();
         connection.write(ServerMessages.Click, new Object[]{feldx, feldy});
         showPossibleMoves();
     }
@@ -52,6 +51,7 @@ public final class ClientGame extends Game {
         Chessman f = getGameState().getSquare(10 / a, 10 % a).occupier;
         f.addCapture(new Movement(x, y, f));
         f.doCapture(x, y);
+        updateMovements();
     }
 
     /**
@@ -65,6 +65,7 @@ public final class ClientGame extends Game {
         Chessman f = getGameState().getSquare(10 / a, 10 % a).occupier;
         f.addMove(new Movement(x, y, f));
         f.doMove(x, y);
+        updateMovements();
     }
 
     public void drawOffer() {
