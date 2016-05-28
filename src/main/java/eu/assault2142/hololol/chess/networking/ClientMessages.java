@@ -24,6 +24,7 @@ public enum ClientMessages {
     Gamestart("gamestart:{0}"),
     ChallengeDeclined("challenge:declined:{0}"),
     Move("move:{0}:{1}:{2}"),
+    Capture("capture:{0}:{1}:{2}"),
     Check("check"),
     Checkmate("checkmate"),
     Stalemate("stalemate"),

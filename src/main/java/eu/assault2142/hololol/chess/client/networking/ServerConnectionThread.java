@@ -60,6 +60,7 @@ public class ServerConnectionThread extends ConnectionThread {
         consumers.put(ClientMessages.Resignation, this::consumeResignation);
         consumers.put(ClientMessages.Stalemate, this::consumeStalemate);
         consumers.put(ClientMessages.UsernameWrong, this::consumeNoSuchUsername);
+        consumers.put(ClientMessages.Capture, this::consumeCapture);
         //gamestate = game.getGameState();
     }
 
@@ -152,6 +153,12 @@ public class ServerConnectionThread extends ConnectionThread {
         int x = Integer.parseInt(parts[1]);
         int y = Integer.parseInt(parts[2]);
         game.doMove(a, x, y);
+    }
+
+    private void consumeCapture(String[] parts) {
+        int a = Integer.parseInt(parts[0]);
+        int x = Integer.parseInt(parts[1]);
+        int y = Integer.parseInt(parts[2]);
         game.doCapture(a, x, y);
     }
 
