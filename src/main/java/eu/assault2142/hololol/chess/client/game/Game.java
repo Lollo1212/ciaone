@@ -101,4 +101,10 @@ public abstract class Game extends eu.assault2142.hololol.chess.game.Game {
 
         }
     }
+
+    @Override
+    public void updateMovements() {
+        getGameView().setMovementsUpdating(true);
+        new ClientMovementUpdater(getGameState()).start();
+    }
 }

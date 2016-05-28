@@ -59,12 +59,6 @@ public final class LocalGame extends Game {
         updateMovements();
     }
 
-    @Override
-    public void updateMovements() {
-        getGameView().setMovementsUpdating(true);
-        new ClientMovementUpdater(getGameState()).start();
-    }
-
     /**
      * Execute the selected Move or Capture if it is possible
      */

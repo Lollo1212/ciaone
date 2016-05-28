@@ -36,6 +36,7 @@ public final class ClientGame extends Game {
     @Override
     public void clickAt(int feldx, int feldy) {
         selected = getGameState().getSquare(feldx, feldy);
+        updateMovements();
         connection.write(ServerMessages.Click, new Object[]{feldx, feldy});
         showPossibleMoves();
     }
@@ -94,12 +95,6 @@ public final class ClientGame extends Game {
         String promotion = gameview.showPromotionChoice();
         connection.write(ServerMessages.Promotion, new Object[]{promotion, pawn.isBlack(), pawn.getPositionInArray()});
         updateMovements();
-    }
-
-    @Override
-    public void updateMovements() {
-        getGameView().setMovementsUpdating(true);
-        new ClientMovementUpdater(getGameState()).start();
     }
 
 }
