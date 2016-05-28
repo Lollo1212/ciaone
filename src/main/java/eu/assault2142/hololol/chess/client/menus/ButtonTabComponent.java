@@ -28,7 +28,7 @@ import javax.swing.plaf.basic.BasicButtonUI;
 
 /**
  *
- * @author jojo
+ * @author hololol2
  */
 class ButtonTabComponent extends JPanel {
 

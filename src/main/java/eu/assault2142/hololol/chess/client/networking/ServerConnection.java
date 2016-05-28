@@ -5,7 +5,6 @@ import eu.assault2142.hololol.chess.client.game.Main;
 import eu.assault2142.hololol.chess.client.menus.IMenu;
 import eu.assault2142.hololol.chess.networking.ClientMessages;
 import eu.assault2142.hololol.chess.networking.ServerMessages;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.ConnectException;
@@ -109,7 +108,7 @@ public class ServerConnection {
     private ServerConnection(InetAddress address) {
         try {
             KeyStore ks = KeyStore.getInstance("JKS");
-            ks.load(new FileInputStream(getClass().getResource("/trustStore").getPath()), "assault".toCharArray());
+            ks.load(getClass().getResourceAsStream("/trustStore.ks"), "assault".toCharArray());
             TrustManagerFactory tmf = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
             tmf.init(ks);
 
@@ -129,6 +128,7 @@ public class ServerConnection {
             Main.MENU.connectionError();
         } catch (IOException | KeyStoreException | NoSuchAlgorithmException | CertificateException | KeyManagementException ex) {
             Main.MENU.showErrorMessage("Unexpected Error while connecting to the Server!", false);
+            //System.out.println(Arrays.toString(ex.getStackTrace()));
             System.out.println(ex.getMessage());
         }
     }

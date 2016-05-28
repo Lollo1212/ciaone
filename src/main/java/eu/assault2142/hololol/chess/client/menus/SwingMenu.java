@@ -90,6 +90,7 @@ public class SwingMenu implements IMenu {
 
     @Override
     public void loggedIn(ServerConnection c) {
+        client = c;
         menu.loggedIn(c);
     }
 
