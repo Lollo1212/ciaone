@@ -111,9 +111,9 @@ public class GameConnectionThread extends ConnectionThread {
         }
 
         if (connection == connection.getGame().getClient1()) {
-            connection.getGame().getClient2().write(ClientMessages.Resignation, new Object[]{0});
+            connection.getGame().getClient2().write(ClientMessages.DrawOffer, new Object[]{0});
         } else {
-            connection.getGame().getClient1().write(ClientMessages.Resignation, new Object[]{0});
+            connection.getGame().getClient1().write(ClientMessages.DrawOffer, new Object[]{0});
         }
     }
 

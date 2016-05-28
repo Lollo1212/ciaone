@@ -36,8 +36,8 @@ public final class ClientGame extends Game {
     @Override
     public void clickAt(int feldx, int feldy) {
         selected = getGameState().getSquare(feldx, feldy);
-        connection.write(ServerMessages.Click, new Object[]{feldx, feldy});
         showPossibleMoves();
+        connection.write(ServerMessages.Click, new Object[]{feldx, feldy});
     }
 
     /**
@@ -62,7 +62,7 @@ public final class ClientGame extends Game {
      * @param y the target y-coordinate
      */
     public void doMove(int a, int x, int y) {
-        Chessman f = getGameState().getSquare(10 / a, 10 % a).occupier;
+        Chessman f = getGameState().getChessmen(getGameState().getTurn())[a];
         f.addMove(new Movement(x, y, f));
         f.doMove(x, y);
         updateMovements();

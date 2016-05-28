@@ -23,12 +23,14 @@ public class ServerGame extends Game {
         super(TYPE.SERVER);
         client1 = a;
         client2 = b;
+        updateMovements();
     }
 
     @Override
     public void clickAt(int feldx, int feldy) {
         selected = getGameState().getSquare(feldx, feldy);
         doMoveIfPossible();
+        picked = selected.occupier;
     }
 
     /**
@@ -36,20 +38,17 @@ public class ServerGame extends Game {
      */
     private void doMoveIfPossible() {
         if (selected != null) {
-            selected.highlight(Square.HIGHLIGHT.SELECTED);
             if (picked != null) {
                 if (picked.doMove(selected.getX(), selected.getY())
                         || picked.doCapture(selected.getX(), selected.getY())) {
                     client1.write(ClientMessages.Move, new Object[]{picked.getPositionInArray(), selected.getX(), selected.getY()});
+                    client2.write(ClientMessages.Move, new Object[]{picked.getPositionInArray(), selected.getX(), selected.getY()});
                 }
 
                 if (picked.getClass() == King.class) {
-                    ((King) picked).doCastling(getCastlingMove(), getGameState());
+                    //((King) picked).doCastling(getCastlingMove(), getGameState());
                 }
-                client1.write(ClientMessages.Move, new Object[]{picked.getPositionInArray(), selected.getX(), selected.getY()});
             }
-
-            picked = null;
         }
     }
 
