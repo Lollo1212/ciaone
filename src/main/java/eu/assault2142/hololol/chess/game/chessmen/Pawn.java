@@ -22,7 +22,7 @@ public class Pawn extends Chessman {
      */
     private Pawn(boolean black, int posx, int posy, GameState game) {
         super(black, posx, posy, game);
-        image = game.getGame().getImage(NAMES.PAWN, black);
+        type = NAMES.PAWN;
         value = 1;
     }
 

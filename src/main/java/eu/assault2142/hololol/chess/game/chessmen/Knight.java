@@ -20,7 +20,7 @@ public class Knight extends Chessman {
      */
     private Knight(boolean black, int posx, int posy, GameState game) {
         super(black, posx, posy, game);
-        image = game.getGame().getImage(NAMES.KNIGHT, black);
+        type = NAMES.KNIGHT;
         value = 8;
     }
 

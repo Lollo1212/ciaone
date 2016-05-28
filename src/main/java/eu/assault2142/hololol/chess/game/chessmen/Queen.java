@@ -20,7 +20,7 @@ public class Queen extends Chessman {
      */
     private Queen(boolean black, int posx, int posy, GameState game) {
         super(black, posx, posy, game);
-        image = game.getGame().getImage(NAMES.QUEEN, black);
+        type = NAMES.QUEEN;
         value = 10;
     }
 

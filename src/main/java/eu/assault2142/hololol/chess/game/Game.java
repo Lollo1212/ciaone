@@ -1,7 +1,6 @@
 package eu.assault2142.hololol.chess.game;
 
 import eu.assault2142.hololol.chess.game.chessmen.*;
-import javax.swing.ImageIcon;
 
 /**
  * Represents a chess game
@@ -44,15 +43,6 @@ public abstract class Game {
     public GameState getGameState() {
         return gamestate;
     }
-
-    /**
-     * Get the image for the given chessman
-     *
-     * @param name the "class" of the chessman
-     * @param black the color of the chessman
-     * @return the corresponding ImageIcon
-     */
-    public abstract ImageIcon getImage(Chessman.NAMES name, boolean black);
 
     /**
      * Get the type of the game

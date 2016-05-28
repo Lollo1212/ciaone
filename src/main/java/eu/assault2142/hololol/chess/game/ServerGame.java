@@ -7,7 +7,6 @@ import eu.assault2142.hololol.chess.game.chessmen.Pawn;
 import eu.assault2142.hololol.chess.game.chessmen.Rook;
 import eu.assault2142.hololol.chess.networking.ClientMessages;
 import eu.assault2142.hololol.chess.server.networking.ClientConnection;
-import javax.swing.ImageIcon;
 
 /**
  *
@@ -100,11 +99,6 @@ public class ServerGame extends Game {
      */
     public ClientConnection getClient2() {
         return client2;
-    }
-
-    @Override
-    public ImageIcon getImage(Chessman.NAMES name, boolean black) {
-        return null;
     }
 
     @Override

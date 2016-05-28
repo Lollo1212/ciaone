@@ -5,7 +5,6 @@ import eu.assault2142.hololol.chess.game.Square;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
-import javax.swing.ImageIcon;
 
 /**
  * Represents a chessman in the gamesituation
@@ -21,8 +20,6 @@ public abstract class Chessman {
     List<Movement> captures;
     //the gamesituation
     GameState gamesituation;
-    //Image of the chessman
-    ImageIcon image;
     //false if not moved till now
     boolean moved = false;
     List<Movement> moves;
@@ -34,6 +31,8 @@ public abstract class Chessman {
     int posy;
     //the value of this chessman
     int value;
+    //the class of the chessman
+    NAMES type;
 
     /**
      *
@@ -151,14 +150,6 @@ public abstract class Chessman {
      */
     public List<Movement> getCaptures() {
         return captures;
-    }
-
-    /**
-     *
-     * @return the image of the chessman
-     */
-    public ImageIcon getImage() {
-        return image;
     }
 
     /**
@@ -354,5 +345,9 @@ public abstract class Chessman {
 
     public static enum NAMES {
         BISHOP, KING, KNIGHT, PAWN, QUEEN, ROOK
+    }
+
+    public NAMES getType() {
+        return type;
     }
 }

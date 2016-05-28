@@ -21,7 +21,7 @@ public class Rook extends Chessman {
      */
     private Rook(boolean black, int posx, int posy, GameState game) {
         super(black, posx, posy, game);
-        image = game.getGame().getImage(NAMES.ROOK, black);
+        type = NAMES.ROOK;
         value = 5;
     }
 

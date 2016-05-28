@@ -1,14 +1,12 @@
 package eu.assault2142.hololol.chess.client.game;
 
 import eu.assault2142.hololol.chess.client.game.ui.IGameView;
-import eu.assault2142.hololol.chess.game.Settings;
 import eu.assault2142.hololol.chess.game.Square;
 import eu.assault2142.hololol.chess.game.chessmen.CastlingMove;
 import eu.assault2142.hololol.chess.game.chessmen.Chessman;
 import eu.assault2142.hololol.chess.game.chessmen.King;
 import eu.assault2142.hololol.chess.game.chessmen.Movement;
 import java.util.List;
-import javax.swing.ImageIcon;
 
 /**
  * A Game which is played on the Client. Either as LocalGame or as a ClientGame
@@ -50,12 +48,6 @@ public abstract class Game extends eu.assault2142.hololol.chess.game.Game {
      */
     public IGameView getGameView() {
         return gameview;
-    }
-
-    @Override
-    public ImageIcon getImage(Chessman.NAMES name, boolean black) {
-        String color = black ? "black" : "white";
-        return new ImageIcon(getClass().getResource(Settings.SETTINGS.chessmenFolder + "/" + name + "_" + color + ".gif"));
     }
 
     @Override

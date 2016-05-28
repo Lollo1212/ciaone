@@ -46,7 +46,7 @@ public class King extends Chessman {
      */
     private King(boolean black, int posx, int posy, GameState game) {
         super(black, posx, posy, game);
-        image = game.getGame().getImage(NAMES.KING, black);
+        type = NAMES.KING;
         value = 500;
     }
 

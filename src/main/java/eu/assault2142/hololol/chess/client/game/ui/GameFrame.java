@@ -4,11 +4,14 @@ import eu.assault2142.hololol.chess.client.game.ClientGame;
 import eu.assault2142.hololol.chess.client.game.Main;
 import eu.assault2142.hololol.chess.client.util.Translator;
 import eu.assault2142.hololol.chess.game.Game;
+import eu.assault2142.hololol.chess.game.Settings;
+import eu.assault2142.hololol.chess.game.chessmen.Chessman;
 import eu.assault2142.hololol.chess.networking.ServerMessages;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
@@ -197,5 +200,16 @@ public class GameFrame extends JFrame implements MouseListener, IGameView {
             addComponent(jb1, 1, 9, 1, 1, 1, 1);
             addComponent(jb2, 2, 9, 1, 1, 1, 1);
         }
+    }
+
+    /**
+     * Get the image for the given chessman
+     *
+     * @param man the chessman
+     * @return the corresponding ImageIcon
+     */
+    protected ImageIcon getImage(Chessman man) {
+        String color = man.isBlack() ? "black" : "white";
+        return new ImageIcon(getClass().getResource(Settings.SETTINGS.chessmenFolder + "/" + man.getType() + "_" + color + ".gif"));
     }
 }

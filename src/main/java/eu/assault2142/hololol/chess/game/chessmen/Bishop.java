@@ -21,7 +21,7 @@ public class Bishop extends Chessman {
      */
     private Bishop(boolean black, int posx, int posy, GameState game) {
         super(black, posx, posy, game);
-        image = game.getGame().getImage(NAMES.BISHOP, black);
+        type = NAMES.BISHOP;
         value = 3;
     }
 
