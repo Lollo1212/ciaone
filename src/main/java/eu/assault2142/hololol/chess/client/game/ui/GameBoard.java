@@ -128,10 +128,10 @@ public class GameBoard extends JPanel {
         String sprache = Translator.getLanguageString();
         ibackschwarz = new ImageIcon(getClass().getResource(Settings.SETTINGS.chessmenFolder + "/bschwarz.gif"));
         ibackweiß = new ImageIcon(getClass().getResource(Settings.SETTINGS.chessmenFolder + "/bweiß.gif"));
-        itextweiß = new ImageIcon(getClass().getResource("/bilder/tweiß" + sprache + ".gif"));
-        itextschwarz = new ImageIcon(getClass().getResource("/bilder/tschwarz" + sprache + ".gif"));
-        itextschachw = new ImageIcon(getClass().getResource("/bilder/tschachw" + sprache + ".gif"));
-        itextschachb = new ImageIcon(getClass().getResource("/bilder/tschachb" + sprache + ".gif"));
+        itextweiß = new ImageIcon(getClass().getResource("/fonts/tweiß" + sprache + ".gif"));
+        itextschwarz = new ImageIcon(getClass().getResource("/fonts/tschwarz" + sprache + ".gif"));
+        itextschachw = new ImageIcon(getClass().getResource("/fonts/tschachw" + sprache + ".gif"));
+        itextschachb = new ImageIcon(getClass().getResource("/fonts/tschachb" + sprache + ".gif"));
         ibackschachb = new ImageIcon(getClass().getResource(Settings.SETTINGS.chessmenFolder + "/bschachb.gif"));
         ibackschachw = new ImageIcon(getClass().getResource(Settings.SETTINGS.chessmenFolder + "/bschachw.gif"));
     }
