@@ -30,6 +30,7 @@ public final class ClientGame extends Game {
         EventQueue.invokeLater(() -> {
             gameview = new GameFrame(g);
             updateMovements();
+            gameview.showColor(color);
         });
     }
 

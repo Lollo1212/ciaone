@@ -128,6 +128,15 @@ public class GameFrame extends JFrame implements MouseListener, IGameView {
     }
 
     @Override
+    public void showColor(boolean color) {
+        if (color) {
+            JOptionPane.showMessageDialog(this, "Color", "Your color is black.", JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            JOptionPane.showMessageDialog(this, "Color", "Your color is white.", JOptionPane.INFORMATION_MESSAGE);
+        }
+    }
+
+    @Override
     public String showPromotionChoice() {
         return (String) JOptionPane.showInputDialog(this, Translator.getString("PROMOTION_HEAD"), Translator.getString("PROMOTION_TEXT"), JOptionPane.QUESTION_MESSAGE, null, new String[]{Translator.getString("CHESSMAN_QUEEN"), Translator.getString("CHESSMAN_ROOK"), Translator.getString("CHESSMAN_KNIGHT"), Translator.getString("CHESSMAN_BISHOP")}, Translator.getString("CHESSMAN_QUEEN"));
     }
