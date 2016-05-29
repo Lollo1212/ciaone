@@ -2,13 +2,9 @@ package eu.assault2142.hololol.chess.client.game;
 
 import eu.assault2142.hololol.chess.client.game.ui.GameFrame;
 import eu.assault2142.hololol.chess.client.networking.ServerConnection;
-import eu.assault2142.hololol.chess.game.chessmen.Bishop;
 import eu.assault2142.hololol.chess.game.chessmen.Chessman;
-import eu.assault2142.hololol.chess.game.chessmen.Knight;
 import eu.assault2142.hololol.chess.game.chessmen.Movement;
 import eu.assault2142.hololol.chess.game.chessmen.Pawn;
-import eu.assault2142.hololol.chess.game.chessmen.Queen;
-import eu.assault2142.hololol.chess.game.chessmen.Rook;
 import eu.assault2142.hololol.chess.networking.ServerMessages;
 import java.awt.EventQueue;
 
@@ -125,26 +121,7 @@ public final class ClientGame extends Game {
     }
 
     public void incomingPromotion(String target, boolean color, int number) {
-        Pawn pawn = (Pawn) getGameState().getChessmen(color)[number];
-        Chessman man;
-        switch (target) {
-            case "ROOK":
-                man = Rook.promotion(pawn, getGameState());
-                break;
-            case "KNIGHT":
-                man = Knight.promotion(pawn, getGameState());
-                break;
-            case "BISHOP":
-                man = Bishop.promotion(pawn, getGameState());
-                break;
-            default:
-                man = Queen.promotion(pawn, getGameState());
-                break;
-        }
-        getGameState().getChessmen(color)[number] = man;
-        getGameState().getSquare(man.getX(), man.getY()).occupier = man;
-
-        updateMovements();
+        execPromotion(target, color, number);
     }
 
     public void incomingCheck() {

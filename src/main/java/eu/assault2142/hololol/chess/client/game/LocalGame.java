@@ -2,13 +2,9 @@ package eu.assault2142.hololol.chess.client.game;
 
 import eu.assault2142.hololol.chess.client.game.ui.GameFrame;
 import eu.assault2142.hololol.chess.game.Square;
-import eu.assault2142.hololol.chess.game.chessmen.Bishop;
 import eu.assault2142.hololol.chess.game.chessmen.CastlingMove;
-import eu.assault2142.hololol.chess.game.chessmen.Chessman;
 import eu.assault2142.hololol.chess.game.chessmen.King;
-import eu.assault2142.hololol.chess.game.chessmen.Knight;
 import eu.assault2142.hololol.chess.game.chessmen.Pawn;
-import eu.assault2142.hololol.chess.game.chessmen.Queen;
 import eu.assault2142.hololol.chess.game.chessmen.Rook;
 
 /**
@@ -36,27 +32,8 @@ public final class LocalGame extends Game {
 
     @Override
     public void promotion(Pawn pawn) {
-        String promotion = gameview.showPromotionChoice();
-        Chessman man;
-
-        switch (promotion) {
-            case "ROOK":
-                man = Rook.promotion(pawn, getGameState());
-                break;
-            case "KNIGHT":
-                man = Knight.promotion(pawn, getGameState());
-                break;
-            case "BISHOP":
-                man = Bishop.promotion(pawn, getGameState());
-                break;
-            default:
-                man = Queen.promotion(pawn, getGameState());
-                break;
-        }
-        getGameState().getChessmen(pawn.isBlack())[pawn.getPositionInArray()] = man;
-        getGameState().getSquare(man.getX(), man.getY()).occupier = man;
-
-        updateMovements();
+        String target = gameview.showPromotionChoice();
+        execPromotion(target, pawn.isBlack(), pawn.getPositionInArray());
     }
 
     /**

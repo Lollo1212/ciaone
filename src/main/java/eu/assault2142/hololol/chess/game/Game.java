@@ -83,4 +83,27 @@ public abstract class Game {
     public static enum TYPE {
         LOCAL, SERVER, CLIENT
     }
+
+    public void execPromotion(String target, boolean color, int number) {
+        Pawn pawn = (Pawn) getGameState().getChessmen(color)[number];
+        Chessman man;
+        switch (target) {
+            case "ROOK":
+                man = Rook.promotion(pawn, getGameState());
+                break;
+            case "KNIGHT":
+                man = Knight.promotion(pawn, getGameState());
+                break;
+            case "BISHOP":
+                man = Bishop.promotion(pawn, getGameState());
+                break;
+            default:
+                man = Queen.promotion(pawn, getGameState());
+                break;
+        }
+        getGameState().getChessmen(color)[number] = man;
+        getGameState().getSquare(man.getX(), man.getY()).occupier = man;
+
+        updateMovements();
+    }
 }

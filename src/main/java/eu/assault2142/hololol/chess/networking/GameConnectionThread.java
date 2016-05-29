@@ -1,12 +1,6 @@
 package eu.assault2142.hololol.chess.networking;
 
 import eu.assault2142.hololol.chess.game.GameState;
-import eu.assault2142.hololol.chess.game.chessmen.Bishop;
-import eu.assault2142.hololol.chess.game.chessmen.Chessman;
-import eu.assault2142.hololol.chess.game.chessmen.Knight;
-import eu.assault2142.hololol.chess.game.chessmen.Pawn;
-import eu.assault2142.hololol.chess.game.chessmen.Queen;
-import eu.assault2142.hololol.chess.game.chessmen.Rook;
 import java.text.ParseException;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -51,46 +45,15 @@ public class GameConnectionThread extends ConnectionThread {
     }
 
     private void consumePromotion(String[] parts) {
-        String n = parts[0];
+        String target = parts[0];
         String c = parts[1];
         boolean color;
         color = c.equals("true");
         String nia = parts[2];
         int nummerinarray = Integer.parseInt(nia);
-        switch (n) {
-            case "ROOK":
-                Chessman f = Rook.promotion((Pawn) gamestate.getChessmen(color)[nummerinarray], gamestate);
-                if (f != null) {
-                    gamestate.getChessmen(color)[nummerinarray] = f;
-                    connection.getGame().getClient1().write(ClientMessages.Promotion, new Object[]{n, c, nia});
-                    connection.getGame().getClient2().write(ClientMessages.Promotion, new Object[]{n, c, nia});
-                }
-                break;
-            case "KNIGHT":
-                f = Knight.promotion((Pawn) gamestate.getChessmen(color)[nummerinarray], gamestate);
-                if (f != null) {
-                    gamestate.getChessmen(color)[nummerinarray] = f;
-                    connection.getGame().getClient1().write(ClientMessages.Promotion, new Object[]{n, c, nia});
-                    connection.getGame().getClient2().write(ClientMessages.Promotion, new Object[]{n, c, nia});
-                }
-                break;
-            case "BISHOP":
-                f = Bishop.promotion((Pawn) gamestate.getChessmen(color)[nummerinarray], gamestate);
-                if (f != null) {
-                    gamestate.getChessmen(color)[nummerinarray] = f;
-                    connection.getGame().getClient1().write(ClientMessages.Promotion, new Object[]{n, c, nia});
-                    connection.getGame().getClient2().write(ClientMessages.Promotion, new Object[]{n, c, nia});
-                }
-                break;
-            case "QUEEN":
-                f = Queen.promotion((Pawn) gamestate.getChessmen(color)[nummerinarray], gamestate);
-                if (f != null) {
-                    gamestate.getChessmen(color)[nummerinarray] = f;
-                    connection.getGame().getClient1().write(ClientMessages.Promotion, new Object[]{n, c, nia});
-                    connection.getGame().getClient2().write(ClientMessages.Promotion, new Object[]{n, c, nia});
-                }
-                break;
-        }
+        connection.game.execPromotion(target, color, nummerinarray);
+        connection.getGame().getClient1().write(ClientMessages.Promotion, new Object[]{target, c, nia});
+        connection.getGame().getClient2().write(ClientMessages.Promotion, new Object[]{target, c, nia});
     }
 
     private void consumeResignation(String[] parts) {
