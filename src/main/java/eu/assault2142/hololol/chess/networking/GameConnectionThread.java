@@ -47,7 +47,7 @@ public class GameConnectionThread extends ConnectionThread {
     private void consumeClick(String[] parts) {
         int x = Integer.parseInt(parts[0]);
         int y = Integer.parseInt(parts[1]);
-        connection.getGame().clickAt(x, y);
+        connection.getGame().incomingClick(x, y, connection);
     }
 
     private void consumePromotion(String[] parts) {

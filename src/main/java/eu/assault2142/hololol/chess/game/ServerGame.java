@@ -6,6 +6,7 @@ import eu.assault2142.hololol.chess.game.chessmen.King;
 import eu.assault2142.hololol.chess.game.chessmen.Pawn;
 import eu.assault2142.hololol.chess.game.chessmen.Rook;
 import eu.assault2142.hololol.chess.networking.ClientMessages;
+import eu.assault2142.hololol.chess.networking.GameClientConnection;
 import eu.assault2142.hololol.chess.server.networking.ClientConnection;
 
 /**
@@ -14,8 +15,8 @@ import eu.assault2142.hololol.chess.server.networking.ClientConnection;
  */
 public class ServerGame extends Game {
 
-    public ClientConnection client1;
-    public ClientConnection client2;
+    public GameClientConnection client1;
+    public GameClientConnection client2;
     private Square selected;
     private Chessman picked;
 
@@ -24,6 +25,12 @@ public class ServerGame extends Game {
         client1 = a;
         client2 = b;
         updateMovements();
+    }
+
+    public void incomingClick(int posx, int posy, GameClientConnection conn) {
+        if (conn.equals(client1) == getGameState().getTurn()) {
+            clickAt(posx, posy);
+        }
     }
 
     @Override
@@ -90,7 +97,7 @@ public class ServerGame extends Game {
      *
      * @return the connection to the player
      */
-    public ClientConnection getClient1() {
+    public GameClientConnection getClient1() {
         return client1;
     }
 
@@ -99,7 +106,7 @@ public class ServerGame extends Game {
      *
      * @return the connection to the player
      */
-    public ClientConnection getClient2() {
+    public GameClientConnection getClient2() {
         return client2;
     }
 
