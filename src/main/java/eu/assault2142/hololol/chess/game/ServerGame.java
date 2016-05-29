@@ -84,7 +84,6 @@ public class ServerGame extends Game {
 
     @Override
     public void endGame() {
-        //send end game
     }
 
     @Override
@@ -112,17 +111,20 @@ public class ServerGame extends Game {
 
     @Override
     public void onCheck() {
-        //send check
+        client1.write(ClientMessages.Check, null);
+        client2.write(ClientMessages.Check, null);
     }
 
     @Override
     public void onCheckMate() {
-        //send checkmate
+        client1.write(ClientMessages.Checkmate, null);
+        client2.write(ClientMessages.Checkmate, null);
     }
 
     @Override
     public void onStaleMate() {
-        //send stalemate
+        client1.write(ClientMessages.Stalemate, null);
+        client2.write(ClientMessages.Stalemate, null);
     }
 
     @Override

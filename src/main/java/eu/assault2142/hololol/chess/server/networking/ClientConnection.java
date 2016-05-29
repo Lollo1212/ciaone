@@ -1,6 +1,5 @@
 package eu.assault2142.hololol.chess.server.networking;
 
-import eu.assault2142.hololol.chess.game.ServerGame;
 import eu.assault2142.hololol.chess.networking.ClientMessages;
 import eu.assault2142.hololol.chess.networking.GameClientConnection;
 import eu.assault2142.hololol.chess.server.exceptions.UnknownUserException;
@@ -39,14 +38,6 @@ public class ClientConnection extends GameClientConnection {
         printwriter.close();
         scanner.close();
         Log.MAINLOG.log(user.getUsername() + " logged out");
-    }
-
-    public ServerGame getGame() {
-        return game;
-    }
-
-    public void setGame(ServerGame game) {
-        this.game = game;
     }
 
     public void writeFriendList() {

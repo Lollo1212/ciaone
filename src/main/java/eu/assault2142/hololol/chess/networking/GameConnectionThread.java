@@ -51,7 +51,7 @@ public class GameConnectionThread extends ConnectionThread {
         color = c.equals("true");
         String nia = parts[2];
         int nummerinarray = Integer.parseInt(nia);
-        connection.game.execPromotion(target, color, nummerinarray);
+        connection.getGame().execPromotion(target, color, nummerinarray);
         connection.getGame().getClient1().write(ClientMessages.Promotion, new Object[]{target, c, nia});
         connection.getGame().getClient2().write(ClientMessages.Promotion, new Object[]{target, c, nia});
     }
@@ -64,6 +64,7 @@ public class GameConnectionThread extends ConnectionThread {
             connection.getGame().getClient1().write(ClientMessages.Resignation, new Object[]{1});
             connection.getGame().getClient2().write(ClientMessages.Resignation, new Object[]{0});
         }
+        connection.getGame().endGame();
     }
 
     private void consumeDraw(String[] parts) {
@@ -71,6 +72,7 @@ public class GameConnectionThread extends ConnectionThread {
         if (connection.getGame().getClient1().isDrawSet() && connection.getGame().getClient2().isDrawSet()) {
             connection.getGame().getClient1().write(ClientMessages.Draw, new Object[]{1});
             connection.getGame().getClient2().write(ClientMessages.Resignation, new Object[]{1});
+            connection.getGame().endGame();
         }
 
         if (connection == connection.getGame().getClient1()) {

@@ -21,7 +21,7 @@ public class GameClientConnection {
     protected Scanner scanner;
     protected PrintWriter printwriter;
     private boolean white;
-    protected ServerGame game;
+    private ServerGame game;
     private boolean draw;
 
     public GameClientConnection(Socket socket) {
@@ -137,7 +137,11 @@ public class GameClientConnection {
         write("promotion:" + i + ":" + positioninarray);
     }
 
-    ServerGame getGame() {
+    public ServerGame getGame() {
         return game;
+    }
+
+    public void setGame(ServerGame g) {
+        game = g;
     }
 }
