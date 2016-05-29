@@ -108,4 +108,9 @@ public final class LocalGame extends Game {
         gameview.onStaleMate();
         this.endGame();
     }
+
+    @Override
+    public void onCheck() {
+        gameview.onCheck();
+    }
 }

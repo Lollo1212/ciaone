@@ -50,21 +50,6 @@ public abstract class Game extends eu.assault2142.hololol.chess.game.Game {
         return gameview;
     }
 
-    @Override
-    public void onCheck() {
-        Runnable checkimage = () -> {
-            try {
-                Thread.sleep(100);
-                getGameView().setShowCheck(true);
-                Thread.sleep(2000);
-                getGameView().setShowCheck(false);
-            } catch (InterruptedException ex) {
-                Main.MENU.showErrorMessage("Unexpected Critical Error!", true);
-            }
-        };
-        new Thread(checkimage).start();
-    }
-
     /**
      * Show all possible Moves for the currently selected chessman
      */

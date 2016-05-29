@@ -103,6 +103,21 @@ public class GameFrame extends JFrame implements MouseListener, IGameView {
     }
 
     @Override
+    public void onCheck() {
+        Runnable checkimage = () -> {
+            try {
+                Thread.sleep(100);
+                setShowCheck(true);
+                Thread.sleep(2000);
+                setShowCheck(false);
+            } catch (InterruptedException ex) {
+                Main.MENU.showErrorMessage("Unexpected Critical Error!", true);
+            }
+        };
+        new Thread(checkimage).start();
+    }
+
+    @Override
     public void onCheckMate() {
         JOptionPane.showMessageDialog(this, "Checkmate!", "Checkmate", JOptionPane.INFORMATION_MESSAGE);
     }

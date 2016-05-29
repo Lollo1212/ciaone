@@ -148,6 +148,11 @@ public final class ClientGame extends Game {
     }
 
     public void incomingCheck() {
+        gameview.onCheck();
+    }
+
+    @Override
+    public void onCheck() {
 
     }
 }

@@ -7,6 +7,8 @@ package eu.assault2142.hololol.chess.client.game.ui;
  */
 public interface IGameView {
 
+    public void onCheck();
+
     public void showColor(boolean color);
 
     /**
