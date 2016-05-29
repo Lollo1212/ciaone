@@ -3,14 +3,10 @@ package eu.assault2142.hololol.chess.client.networking;
 import eu.assault2142.hololol.chess.client.game.ClientGame;
 import eu.assault2142.hololol.chess.client.game.Main;
 import eu.assault2142.hololol.chess.game.GameState;
-import eu.assault2142.hololol.chess.game.chessmen.Bishop;
-import eu.assault2142.hololol.chess.game.chessmen.Knight;
 import eu.assault2142.hololol.chess.game.chessmen.Movement;
-import eu.assault2142.hololol.chess.game.chessmen.Pawn;
-import eu.assault2142.hololol.chess.game.chessmen.Queen;
-import eu.assault2142.hololol.chess.game.chessmen.Rook;
 import eu.assault2142.hololol.chess.networking.ClientMessages;
 import eu.assault2142.hololol.chess.networking.ConnectionThread;
+import eu.assault2142.hololol.chess.networking.ServerMessages;
 import java.text.ParseException;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -110,15 +106,15 @@ public class ServerConnectionThread extends ConnectionThread {
     }
 
     private void consumeCheck(String[] parts) {
-        game.onCheck();
+        game.incomingCheck();
     }
 
     private void consumeCheckmate(String[] parts) {
-        game.onCheckMate();
+        game.incomingCheckMate();
     }
 
     private void consumeStalemate(String[] parts) {
-        game.onStaleMate();
+        game.incomingStaleMate();
     }
 
     private void consumeDraw(String[] parts) {
@@ -200,29 +196,13 @@ public class ServerConnectionThread extends ConnectionThread {
     }
 
     private void consumePromote(String[] parts) {
-        game.getGameView().showPromotionChoice();
+        client.write(ServerMessages.Promotion, new Object[]{game.getGameView().showPromotionChoice(), game.isBlack(), parts[0]});
     }
 
     private void consumePromotion(String[] parts) {
         int nummerinarray = Integer.parseInt(parts[2]);
-        String co = parts[1];
-        boolean color;
-        color = co.equals("0");
-        game.promotion((Pawn) gamestate.getChessmen(color)[nummerinarray]);
-        switch (parts[0]) {
-            case "ROOK":
-                gamestate.getChessmen(color)[nummerinarray] = Rook.promotion((Pawn) gamestate.getChessmen(color)[nummerinarray], gamestate);
-                break;
-            case "KNIGHT":
-                gamestate.getChessmen(color)[nummerinarray] = Knight.promotion((Pawn) gamestate.getChessmen(color)[nummerinarray], gamestate);
-                break;
-            case "BISHOP":
-                gamestate.getChessmen(color)[nummerinarray] = Bishop.promotion((Pawn) gamestate.getChessmen(color)[nummerinarray], gamestate);
-                break;
-            case "QUEEN":
-                gamestate.getChessmen(color)[nummerinarray] = Queen.promotion((Pawn) gamestate.getChessmen(color)[nummerinarray], gamestate);
-                break;
-        }
+        boolean color = parts[1].equals("0");
+        game.incomingPromotion(parts[0], color, nummerinarray);
     }
 
     private void consumeResignation(String[] parts) {

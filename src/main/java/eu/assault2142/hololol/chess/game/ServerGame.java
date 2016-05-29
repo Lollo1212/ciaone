@@ -127,7 +127,11 @@ public class ServerGame extends Game {
 
     @Override
     public void promotion(Pawn pawn) {
-        //send promotion
+        if (pawn.isBlack()) {
+            client1.write(ClientMessages.Promote, new Object[]{pawn.getPositionInArray()});
+        } else {
+            client2.write(ClientMessages.Promote, new Object[]{pawn.getPositionInArray()});
+        }
     }
 
     @Override

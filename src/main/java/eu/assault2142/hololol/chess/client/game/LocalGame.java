@@ -97,4 +97,15 @@ public final class LocalGame extends Game {
         return new CastlingMove(selected.getX(), selected.getY(), t, tx, ty, (King) picked);
     }
 
+    @Override
+    public void onCheckMate() {
+        gameview.onCheckMate();
+        this.endGame();
+    }
+
+    @Override
+    public void onStaleMate() {
+        gameview.onStaleMate();
+        this.endGame();
+    }
 }

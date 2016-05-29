@@ -65,18 +65,6 @@ public abstract class Game extends eu.assault2142.hololol.chess.game.Game {
         new Thread(checkimage).start();
     }
 
-    @Override
-    public void onCheckMate() {
-        gameview.onCheckMate();
-        this.endGame();
-    }
-
-    @Override
-    public void onStaleMate() {
-        gameview.onStaleMate();
-        this.endGame();
-    }
-
     /**
      * Show all possible Moves for the currently selected chessman
      */
