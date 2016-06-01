@@ -118,7 +118,7 @@ public class ServerConnectionThread extends ConnectionThread {
     }
 
     private void consumeDraw(String[] parts) {
-        game.onDraw();
+        game.incomingDraw();
     }
 
     private void consumeDrawOffer(String[] parts) {
@@ -206,7 +206,7 @@ public class ServerConnectionThread extends ConnectionThread {
     }
 
     private void consumeResignation(String[] parts) {
-        game.onResignation(parts[0].equals("1"));
+        game.incomingResignation(parts[0].equals("1"));
     }
 
     private void consumeGamestart(String[] parts) {

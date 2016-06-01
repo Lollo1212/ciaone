@@ -15,24 +15,26 @@ import java.awt.EventQueue;
  */
 public final class ClientGame extends Game {
 
+    // Whether this client's color is black
+    private final boolean black;
+    // The connection to the server
     private final ServerConnection connection;
-    private final boolean color;
 
     /**
      * Create a new ClientGame
      *
      * @param connection the connection to the server
-     * @param color the color you play (true -> black)
+     * @param black whether this client's color is black
      */
-    public ClientGame(ServerConnection connection, boolean color) {
+    public ClientGame(ServerConnection connection, boolean black) {
         super(TYPE.CLIENT);
-        this.color = color;
+        this.black = black;
         this.connection = connection;
         final ClientGame g = this;
         EventQueue.invokeLater(() -> {
             gameview = new GameFrame(g);
             updateMovements();
-            gameview.showColor(color);
+            gameview.showColor(black);
         });
     }
 
@@ -46,31 +48,34 @@ public final class ClientGame extends Game {
     /**
      * Executes a capture send from the server
      *
-     * @param a the coordinates of the chessman
-     * @param x the target x-coordinate
-     * @param y the target y-coordinate
+     * @param number the number of the chessman
+     * @param targetX the target x-coordinate
+     * @param targetY the target y-coordinate
      */
-    public void doCapture(int a, int x, int y) {
-        Chessman f = getGameState().getChessmen(getGameState().getTurn())[a];
-        f.addCapture(new Movement(x, y, f));
-        f.doCapture(x, y);
+    public void doCapture(int number, int targetX, int targetY) {
+        Chessman man = getGameState().getChessmen(getGameState().getTurn())[number];
+        man.addCapture(new Movement(targetX, targetY, man));
+        man.doCapture(targetX, targetY);
         updateMovements();
     }
 
     /**
      * Executes a move send from the server
      *
-     * @param a the coordinates of the chessman
-     * @param x the target x-coordinate
-     * @param y the target y-coordinate
+     * @param number the number of the chessman
+     * @param targetX the target x-coordinate
+     * @param targetY the target y-coordinate
      */
-    public void doMove(int a, int x, int y) {
-        Chessman f = getGameState().getChessmen(getGameState().getTurn())[a];
-        f.addMove(new Movement(x, y, f));
-        f.doMove(x, y);
+    public void doMove(int number, int targetX, int targetY) {
+        Chessman man = getGameState().getChessmen(getGameState().getTurn())[number];
+        man.addMove(new Movement(targetX, targetY, man));
+        man.doMove(targetX, targetY);
         updateMovements();
     }
 
+    /**
+     * Offer the Player a Draw-Offer from the enemy
+     */
     public void drawOffer() {
         gameview.drawOffer();
     }
@@ -84,18 +89,73 @@ public final class ClientGame extends Game {
         return connection;
     }
 
-    @Override
-    public void onCheckMate() {
+    /**
+     * Inform about Check
+     */
+    public void incomingCheck() {
+        gameview.onCheck();
     }
 
-    public void onDraw() {
+    /**
+     * Inform about CheckMate
+     */
+    public void incomingCheckMate() {
+        gameview.onCheckMate();
+        this.endGame();
+    }
+
+    /**
+     * Inform about successfull Draw
+     */
+    public void incomingDraw() {
         gameview.onDraw();
         endGame();
     }
 
-    public void onResignation(boolean enemy) {
+    /**
+     * Execute a Promotion-Command
+     *
+     * @param target the target-type of the promotion
+     * @param black whether the chessman is black
+     * @param number the number of the chessman
+     */
+    public void incomingPromotion(String target, boolean black, int number) {
+        execPromotion(target, black, number);
+    }
+
+    /**
+     * Inform about Resignation of a player
+     *
+     * @param enemy true if the enemy resignated, false if you
+     */
+    public void incomingResignation(boolean enemy) {
         gameview.onResignation(enemy);
         endGame();
+    }
+
+    /**
+     * Inform about Stalemate
+     */
+    public void incomingStaleMate() {
+        gameview.onStaleMate();
+        this.endGame();
+    }
+
+    /**
+     * Return the color of the local player
+     *
+     * @return true if the player's color is black, false otherwise
+     */
+    public boolean isBlack() {
+        return black;
+    }
+
+    @Override
+    public void onCheck() {
+    }
+
+    @Override
+    public void onCheckMate() {
     }
 
     @Override
@@ -106,30 +166,4 @@ public final class ClientGame extends Game {
     public void promotion(Pawn pawn) {
     }
 
-    public boolean isBlack() {
-        return color;
-    }
-
-    public void incomingCheckMate() {
-        gameview.onCheckMate();
-        this.endGame();
-    }
-
-    public void incomingStaleMate() {
-        gameview.onStaleMate();
-        this.endGame();
-    }
-
-    public void incomingPromotion(String target, boolean color, int number) {
-        execPromotion(target, color, number);
-    }
-
-    public void incomingCheck() {
-        gameview.onCheck();
-    }
-
-    @Override
-    public void onCheck() {
-
-    }
 }
