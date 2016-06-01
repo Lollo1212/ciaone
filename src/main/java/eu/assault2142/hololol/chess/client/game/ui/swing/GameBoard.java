@@ -1,4 +1,4 @@
-package eu.assault2142.hololol.chess.client.game.ui;
+package eu.assault2142.hololol.chess.client.game.ui.swing;
 
 import eu.assault2142.hololol.chess.client.util.Translator;
 import eu.assault2142.hololol.chess.game.GameState;
