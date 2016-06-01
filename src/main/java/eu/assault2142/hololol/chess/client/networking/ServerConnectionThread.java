@@ -202,7 +202,7 @@ public class ServerConnectionThread extends ConnectionThread {
     private void consumePromotion(String[] parts) {
         int nummerinarray = Integer.parseInt(parts[2]);
         boolean color = parts[1].equals("0");
-        game.incomingPromotion(parts[0], color, nummerinarray);
+        game.execPromotion(parts[0], color, nummerinarray);
     }
 
     private void consumeResignation(String[] parts) {

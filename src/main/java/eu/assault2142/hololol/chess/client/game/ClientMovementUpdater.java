@@ -25,7 +25,7 @@ public class ClientMovementUpdater extends MovementUpdater {
 
         Runnable wait = () -> {
             try {
-                Thread.sleep(100);
+                Thread.sleep(1000);
             } catch (InterruptedException ex) {
                 Main.MENU.showErrorMessage("Unexpected Critical Error!", true);
             }

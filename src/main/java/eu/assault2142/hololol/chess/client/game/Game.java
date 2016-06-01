@@ -3,7 +3,6 @@ package eu.assault2142.hololol.chess.client.game;
 import eu.assault2142.hololol.chess.client.game.ui.IGameView;
 import eu.assault2142.hololol.chess.game.Square;
 import eu.assault2142.hololol.chess.game.chessmen.CastlingMove;
-import eu.assault2142.hololol.chess.game.chessmen.Chessman;
 import eu.assault2142.hololol.chess.game.chessmen.King;
 import eu.assault2142.hololol.chess.game.chessmen.Movement;
 import java.util.List;
@@ -17,8 +16,6 @@ import java.util.List;
 public abstract class Game extends eu.assault2142.hololol.chess.game.Game {
 
     protected IGameView gameview;
-    protected Chessman picked;
-    protected Square selected;
 
     /**
      * Create a new Game
@@ -56,22 +53,24 @@ public abstract class Game extends eu.assault2142.hololol.chess.game.Game {
     protected void showPossibleMoves() {
         if (selected.occupier != null) {
             picked = selected.occupier;
-            List<Movement> bewegungen = getGameState().getChessmen(picked.isBlack())[picked.getPositionInArray()].getMoves();
-            List<Movement> schläge = getGameState().getChessmen(picked.isBlack())[picked.getPositionInArray()].getCaptures();
+            List<Movement> moves = getGameState().getChessmen(picked.isBlack())[picked.getPositionInArray()].getMoves();
+            List<Movement> captures = getGameState().getChessmen(picked.isBlack())[picked.getPositionInArray()].getCaptures();
+
+            moves.stream().forEach((Movement move) -> {
+                getGameState().getSquare(move.getTargetX(), move.getTargetY()).highlight(Square.HIGHLIGHT.MOVETARGET);
+            });
+
+            captures.stream().forEach((Movement move) -> {
+                getGameState().getSquare(move.getTargetX(), move.getTargetY()).highlight(Square.HIGHLIGHT.CAPTURETARGET);
+            });
+
             if (picked.getClass() == King.class) {
-                List<CastlingMove> rochaden = ((King) picked).getCastlings();
-                rochaden.stream().forEach((CastlingMove c) -> {
-                    getGameState().getSquare(c.getTargetX(), c.getTargetY()).highlight(Square.HIGHLIGHT.CASTLING);
+                List<CastlingMove> castlings = ((King) picked).getCastlings();
+                castlings.stream().forEach((CastlingMove castling) -> {
+                    getGameState().getSquare(castling.getTargetX(), castling.getTargetY()).highlight(Square.HIGHLIGHT.CASTLING);
                 });
 
             }
-            bewegungen.stream().forEach((Movement m) -> {
-                getGameState().getSquare(m.getTargetX(), m.getTargetY()).highlight(Square.HIGHLIGHT.MOVETARGET);
-            });
-            schläge.stream().forEach((Movement m) -> {
-                getGameState().getSquare(m.getTargetX(), m.getTargetY()).highlight(Square.HIGHLIGHT.CAPTURETARGET);
-            });
-
         }
     }
 

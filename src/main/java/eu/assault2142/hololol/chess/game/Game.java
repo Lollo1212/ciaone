@@ -9,26 +9,63 @@ import eu.assault2142.hololol.chess.game.chessmen.*;
  */
 public abstract class Game {
 
-    private final TYPE type;
+    protected Chessman picked;
+    protected Square selected;
     private final GameState gamestate;
+    private final TYPE type;
 
-    protected Game(TYPE t) {
-        type = t;
+    /**
+     * Create a new Game
+     *
+     * @param type the type of the game
+     */
+    protected Game(TYPE type) {
+        this.type = type;
         gamestate = new GameState(this);
     }
 
     /**
      * Consume a click at the given position
      *
-     * @param feldx the x-coordinate (in fields)
-     * @param feldy the y-coordinate (in fields)
+     * @param squareX the x-coordinate (in squares)
+     * @param squareY the y-coordinate (in squares)
      */
-    public abstract void clickAt(int feldx, int feldy);
+    public abstract void clickAt(int squareX, int squareY);
 
     /**
      * End the game
      */
     public abstract void endGame();
+
+    /**
+     * Execute a Promotion-Command
+     *
+     * @param target the target-type of the promotion
+     * @param black whether the chessman is black
+     * @param number the number of the chessman
+     */
+    public void execPromotion(String target, boolean black, int number) {
+        Pawn pawn = (Pawn) getGameState().getChessmen(black)[number];
+        Chessman man;
+        switch (target) {
+            case "ROOK":
+                man = Rook.promotion(pawn, getGameState());
+                break;
+            case "KNIGHT":
+                man = Knight.promotion(pawn, getGameState());
+                break;
+            case "BISHOP":
+                man = Bishop.promotion(pawn, getGameState());
+                break;
+            default:
+                man = Queen.promotion(pawn, getGameState());
+                break;
+        }
+        getGameState().getChessmen(black)[number] = man;
+        getGameState().getSquare(man.getX(), man.getY()).occupier = man;
+
+        updateMovements();
+    }
 
     /**
      * The next-movements-calculations have finished
@@ -84,26 +121,4 @@ public abstract class Game {
         LOCAL, SERVER, CLIENT
     }
 
-    public void execPromotion(String target, boolean color, int number) {
-        Pawn pawn = (Pawn) getGameState().getChessmen(color)[number];
-        Chessman man;
-        switch (target) {
-            case "ROOK":
-                man = Rook.promotion(pawn, getGameState());
-                break;
-            case "KNIGHT":
-                man = Knight.promotion(pawn, getGameState());
-                break;
-            case "BISHOP":
-                man = Bishop.promotion(pawn, getGameState());
-                break;
-            default:
-                man = Queen.promotion(pawn, getGameState());
-                break;
-        }
-        getGameState().getChessmen(color)[number] = man;
-        getGameState().getSquare(man.getX(), man.getY()).occupier = man;
-
-        updateMovements();
-    }
 }

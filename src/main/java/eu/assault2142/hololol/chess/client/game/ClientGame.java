@@ -113,17 +113,6 @@ public final class ClientGame extends Game {
     }
 
     /**
-     * Execute a Promotion-Command
-     *
-     * @param target the target-type of the promotion
-     * @param black whether the chessman is black
-     * @param number the number of the chessman
-     */
-    public void incomingPromotion(String target, boolean black, int number) {
-        execPromotion(target, black, number);
-    }
-
-    /**
      * Inform about Resignation of a player
      *
      * @param enemy true if the enemy resignated, false if you

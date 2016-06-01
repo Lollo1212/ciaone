@@ -1,7 +1,6 @@
 package eu.assault2142.hololol.chess.game;
 
 import eu.assault2142.hololol.chess.game.chessmen.CastlingMove;
-import eu.assault2142.hololol.chess.game.chessmen.Chessman;
 import eu.assault2142.hololol.chess.game.chessmen.King;
 import eu.assault2142.hololol.chess.game.chessmen.Pawn;
 import eu.assault2142.hololol.chess.game.chessmen.Rook;
@@ -17,8 +16,6 @@ public class ServerGame extends Game {
 
     public GameClientConnection client1;
     public GameClientConnection client2;
-    private Square selected;
-    private Chessman picked;
 
     public ServerGame(ClientConnection a, ClientConnection b) {
         super(TYPE.SERVER);
