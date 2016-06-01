@@ -5,7 +5,7 @@ import eu.assault2142.hololol.chess.game.MovementUpdater;
 
 /**
  * Updates the possible moves and captures after each turn. Also checks for
- * check/checkmate/stalemate-situations.
+ * check/checkmate/stalemate-situations. Used in games with a UI
  *
  * @author hololol2
  */
@@ -14,10 +14,10 @@ public class ClientMovementUpdater extends MovementUpdater {
     /**
      * Create a new Instance
      *
-     * @param g the game to update
+     * @param state the game-state to update
      */
-    public ClientMovementUpdater(GameState g) {
-        super(g);
+    public ClientMovementUpdater(GameState state) {
+        super(state);
     }
 
     @Override
@@ -25,7 +25,7 @@ public class ClientMovementUpdater extends MovementUpdater {
 
         Runnable wait = () -> {
             try {
-                Thread.sleep(1000);
+                Thread.sleep(100);
             } catch (InterruptedException ex) {
                 Main.MENU.showErrorMessage("Unexpected Critical Error!", true);
             }
