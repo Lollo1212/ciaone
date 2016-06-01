@@ -1,9 +1,9 @@
 package eu.assault2142.hololol.chess.client.game.ui;
 
 import eu.assault2142.hololol.chess.client.game.ClientGame;
+import eu.assault2142.hololol.chess.client.game.Game;
 import eu.assault2142.hololol.chess.client.game.Main;
 import eu.assault2142.hololol.chess.client.util.Translator;
-import eu.assault2142.hololol.chess.game.Game;
 import eu.assault2142.hololol.chess.game.Settings;
 import eu.assault2142.hololol.chess.game.chessmen.Chessman;
 import eu.assault2142.hololol.chess.networking.ServerMessages;
@@ -35,11 +35,11 @@ public class GameFrame extends JFrame implements MouseListener, IGameView {
     /**
      * Create a new GameFrame
      *
-     * @param g the game to display
+     * @param game the game to display
      */
-    public GameFrame(Game g) {
+    public GameFrame(Game game) {
         super();
-        game = g;
+        this.game = game;
         layout = new GridBagLayout();
         constraints = new GridBagConstraints();
         init();
@@ -60,13 +60,13 @@ public class GameFrame extends JFrame implements MouseListener, IGameView {
     }
 
     @Override
-    public void setMovementsUpdating(boolean b) {
-        gamefield.movementsupdating = b;
+    public void setMovementsUpdating(boolean updating) {
+        gamefield.movementsupdating = updating;
     }
 
     @Override
-    public void setShowCheck(boolean b) {
-        gamefield.movementsupdating = b;
+    public void setShowCheck(boolean show) {
+        gamefield.movementsupdating = show;
     }
 
     /**
@@ -79,27 +79,27 @@ public class GameFrame extends JFrame implements MouseListener, IGameView {
     }
 
     @Override
-    public void mouseClicked(MouseEvent e) {
+    public void mouseClicked(MouseEvent evt) {
     }
 
     @Override
-    public void mouseEntered(MouseEvent e) {
+    public void mouseEntered(MouseEvent evt) {
     }
 
     @Override
-    public void mouseExited(MouseEvent e) {
+    public void mouseExited(MouseEvent evt) {
     }
 
     @Override
-    public void mousePressed(MouseEvent e) {
-        if (e.getClickCount() == 1 && !gamefield.movementsupdating) {//Abfangen von Mehrfachklicks
+    public void mousePressed(MouseEvent evt) {
+        if (evt.getClickCount() == 1 && !gamefield.movementsupdating) {
             game.getGameState().resetFields();
-            game.clickAt(e.getX() / squarelength, e.getY() / squarelength);
+            game.clickAt(evt.getX() / squarelength, evt.getY() / squarelength);
         }
     }
 
     @Override
-    public void mouseReleased(MouseEvent e) {
+    public void mouseReleased(MouseEvent evt) {
     }
 
     @Override
@@ -138,7 +138,6 @@ public class GameFrame extends JFrame implements MouseListener, IGameView {
 
     @Override
     public void onStaleMate() {
-
         JOptionPane.showMessageDialog(this, "Stalemate!", "Stalemate", JOptionPane.INFORMATION_MESSAGE);
     }
 
@@ -157,21 +156,32 @@ public class GameFrame extends JFrame implements MouseListener, IGameView {
     }
 
     /**
+     * Get the image for the given chessman
+     *
+     * @param man the chessman
+     * @return the corresponding ImageIcon
+     */
+    protected ImageIcon getImage(Chessman man) {
+        String color = man.isBlack() ? "black" : "white";
+        return new ImageIcon(getClass().getResource(Settings.SETTINGS.chessmenFolder + "/" + man.getType() + "_" + color + ".gif"));
+    }
+
+    /**
      * Adds a component at the specified position
      *
      * @param component the component to add
-     * @param gridx the x-position
-     * @param gridy the y-positon
-     * @param weightx the weight in x-direction
-     * @param weighty the weight in y-direction
+     * @param gridX the x-position
+     * @param gridY the y-positon
+     * @param weightX the weight in x-direction
+     * @param weightY the weight in y-direction
      * @param gridheight the height in y-direction
      * @param gridwidth the width in x-direction
      */
-    private void addComponent(JComponent component, int gridx, int gridy, int weightx, int weighty, int gridheight, int gridwidth) {
-        constraints.gridx = gridx;
-        constraints.gridy = gridy;
-        constraints.weightx = weightx;
-        constraints.weighty = weighty;
+    private void addComponent(JComponent component, int gridX, int gridY, int weightX, int weightY, int gridheight, int gridwidth) {
+        constraints.gridx = gridX;
+        constraints.gridy = gridY;
+        constraints.weightx = weightX;
+        constraints.weighty = weightY;
         constraints.gridheight = gridheight;
         constraints.gridwidth = gridwidth;
         layout.setConstraints(component, constraints);
@@ -226,14 +236,4 @@ public class GameFrame extends JFrame implements MouseListener, IGameView {
         }
     }
 
-    /**
-     * Get the image for the given chessman
-     *
-     * @param man the chessman
-     * @return the corresponding ImageIcon
-     */
-    protected ImageIcon getImage(Chessman man) {
-        String color = man.isBlack() ? "black" : "white";
-        return new ImageIcon(getClass().getResource(Settings.SETTINGS.chessmenFolder + "/" + man.getType() + "_" + color + ".gif"));
-    }
 }

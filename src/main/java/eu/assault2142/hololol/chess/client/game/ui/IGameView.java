@@ -7,10 +7,6 @@ package eu.assault2142.hololol.chess.client.game.ui;
  */
 public interface IGameView {
 
-    public void onCheck();
-
-    public void showColor(boolean color);
-
     /**
      * Show a Draw-Offer-Message
      */
@@ -36,6 +32,11 @@ public interface IGameView {
     public void hide();
 
     /**
+     * Show a Check-Message
+     */
+    public void onCheck();
+
+    /**
      * Show a CheckMate-Message
      */
     public void onCheckMate();
@@ -56,6 +57,13 @@ public interface IGameView {
      * Show a StaleMate-Message
      */
     public void onStaleMate();
+
+    /**
+     * Tell the player which color he plays
+     *
+     * @param black true if the player's color is black, false otherwise
+     */
+    public void showColor(boolean black);
 
     /**
      * Show the promotion-choice

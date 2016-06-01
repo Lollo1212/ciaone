@@ -21,29 +21,30 @@ public class GameBoard extends JPanel {
 
     protected boolean check = false;
     protected boolean movementsupdating = false;
-    private final GameState gamestate;
-    private final GameFrame gameframe;
-    private Graphics graphics;
-    private ImageIcon ibackschachb;
-    private ImageIcon ibackschachw;
 
-    private ImageIcon ibackschwarz;
-    private ImageIcon ibackweiß;
-    private ImageIcon itextschachb;
-    private ImageIcon itextschachw;
-    private ImageIcon itextschwarz;
-    private ImageIcon itextweiß;
+    private ImageIcon backgroundCheckBlack;
+    private ImageIcon backgroundCheckWhite;
+    private ImageIcon backgroundTurnBlack;
+    private ImageIcon backgroundTurnWhite;
+    private ImageIcon fontCheckBlack;
+    private ImageIcon fontCheckWhite;
+    private ImageIcon fontTurnBlack;
+    private ImageIcon fontTurnWhite;
+    private final GameFrame gameframe;
+    private final GameState gamestate;
+    private Graphics graphics;
+
     private final int squarelength;
 
     /**
      * Create a new GameField
      *
-     * @param gf the frame this GameField belongs to
-     * @param g the gamestate to display
+     * @param gameframe the frame this GameField belongs to
+     * @param state the gamestate to display
      */
-    public GameBoard(GameFrame gf, GameState g) {
-        gamestate = g;
-        this.gameframe = gf;
+    public GameBoard(GameFrame gameframe, GameState state) {
+        gamestate = state;
+        this.gameframe = gameframe;
         squarelength = gameframe.getSquareLength();
         loadImages();
         initTimer();
@@ -77,13 +78,13 @@ public class GameBoard extends JPanel {
      * Draws an image to the gamestate-board
      *
      * @param image the image to paint
-     * @param posx the x-pos of the image (in gamestate-fields 0-7)
-     * @param posy the y-pos of the image (in gamestate-fields 0-7)
-     * @param widthx the x-width of the image (in gamestate-fields 0-7)
-     * @param widthy the y-width of the image (in gamestate-fields 0-7)
+     * @param squareX the x-pos of the image (in gamestate-fields 0-7)
+     * @param squareY the y-pos of the image (in gamestate-fields 0-7)
+     * @param width the x-width of the image (in gamestate-fields 0-7)
+     * @param height the y-width of the image (in gamestate-fields 0-7)
      */
-    private void drawImage(ImageIcon image, int posx, int posy, int widthx, int widthy) {
-        graphics.drawImage(image.getImage(), posx * squarelength, posy * squarelength, widthx * squarelength, widthy * squarelength, image.getImageObserver());
+    private void drawImage(ImageIcon image, int squareX, int squareY, int width, int height) {
+        graphics.drawImage(image.getImage(), squareX * squarelength, squareY * squarelength, width * squarelength, height * squarelength, image.getImageObserver());
     }
 
     /**
@@ -92,20 +93,20 @@ public class GameBoard extends JPanel {
     private void drawNotification() {
         if (movementsupdating) {
             if (gamestate.getTurn()) {
-                drawImage(ibackschwarz, 0, 0, 8, 8);
-                drawImage(itextschwarz, 0, 0, 8, 8);
+                drawImage(backgroundTurnBlack, 0, 0, 8, 8);
+                drawImage(fontTurnBlack, 0, 0, 8, 8);
             } else {
-                drawImage(ibackweiß, 0, 0, 8, 8);
-                drawImage(itextweiß, 0, 0, 8, 8);
+                drawImage(backgroundTurnWhite, 0, 0, 8, 8);
+                drawImage(fontTurnWhite, 0, 0, 8, 8);
             }
         }
         if (check) {
             if (gamestate.getTurn()) {
-                drawImage(ibackschachb, 0, 0, 8, 8);
-                drawImage(itextschachb, 0, 0, 8, 8);
+                drawImage(backgroundCheckBlack, 0, 0, 8, 8);
+                drawImage(fontCheckBlack, 0, 0, 8, 8);
             } else {
-                drawImage(ibackschachw, 0, 0, 8, 8);
-                drawImage(itextschachw, 0, 0, 8, 8);
+                drawImage(backgroundCheckWhite, 0, 0, 8, 8);
+                drawImage(fontCheckWhite, 0, 0, 8, 8);
             }
         }
     }
@@ -114,7 +115,7 @@ public class GameBoard extends JPanel {
      * Initialize the Timer which repaints the board
      */
     private void initTimer() {
-        int delay = 33; //milliseconds
+        int delay = 33;
         ActionListener taskPerformer = (ActionEvent evt) -> {
             gameframe.repaint();
         };
@@ -126,14 +127,14 @@ public class GameBoard extends JPanel {
      */
     private void loadImages() {
         String sprache = Translator.getLanguageString();
-        ibackschwarz = new ImageIcon(getClass().getResource(Settings.SETTINGS.chessmenFolder + "/bschwarz.gif"));
-        ibackweiß = new ImageIcon(getClass().getResource(Settings.SETTINGS.chessmenFolder + "/bweiß.gif"));
-        itextweiß = new ImageIcon(getClass().getResource("/fonts/tweiß" + sprache + ".gif"));
-        itextschwarz = new ImageIcon(getClass().getResource("/fonts/tschwarz" + sprache + ".gif"));
-        itextschachw = new ImageIcon(getClass().getResource("/fonts/tschachw" + sprache + ".gif"));
-        itextschachb = new ImageIcon(getClass().getResource("/fonts/tschachb" + sprache + ".gif"));
-        ibackschachb = new ImageIcon(getClass().getResource(Settings.SETTINGS.chessmenFolder + "/bschachb.gif"));
-        ibackschachw = new ImageIcon(getClass().getResource(Settings.SETTINGS.chessmenFolder + "/bschachw.gif"));
+        backgroundTurnBlack = new ImageIcon(getClass().getResource(Settings.SETTINGS.chessmenFolder + "/bschwarz.gif"));
+        backgroundTurnWhite = new ImageIcon(getClass().getResource(Settings.SETTINGS.chessmenFolder + "/bweiß.gif"));
+        fontTurnWhite = new ImageIcon(getClass().getResource("/fonts/tweiß" + sprache + ".gif"));
+        fontTurnBlack = new ImageIcon(getClass().getResource("/fonts/tschwarz" + sprache + ".gif"));
+        fontCheckWhite = new ImageIcon(getClass().getResource("/fonts/tschachw" + sprache + ".gif"));
+        fontCheckBlack = new ImageIcon(getClass().getResource("/fonts/tschachb" + sprache + ".gif"));
+        backgroundCheckBlack = new ImageIcon(getClass().getResource(Settings.SETTINGS.chessmenFolder + "/bschachb.gif"));
+        backgroundCheckWhite = new ImageIcon(getClass().getResource(Settings.SETTINGS.chessmenFolder + "/bschachw.gif"));
     }
 
     /**
