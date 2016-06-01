@@ -3,8 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package eu.assault2142.hololol.chess.client.menus;
+package eu.assault2142.hololol.chess.client.menu.swing;
 
+import eu.assault2142.hololol.chess.client.menu.IMenu;
 import eu.assault2142.hololol.chess.client.networking.ServerConnection;
 import eu.assault2142.hololol.chess.client.util.Translator;
 import eu.assault2142.hololol.chess.game.Settings;
@@ -13,19 +14,30 @@ import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
 
 /**
+ * A Swing-Implementation of IMenu
  *
  * @author hololol2
  */
 public class SwingMenu implements IMenu {
 
-    private ServerConnection client;
-    private MainMenu menu;
+    private ServerConnection connection;
+    private final MainMenu menu;
 
+    /**
+     * Create the Menu
+     */
     public SwingMenu() {
         menu = new MainMenu(this);
         menu.setVisible(true);
     }
 
+    /**
+     * Connect to the (Main)Server
+     *
+     * @param username the loginname
+     * @param password the password
+     * @param create whether to create a account or login to an existing one
+     */
     protected void connectToServer(String username, String password, boolean create) {
         Settings.SETTINGS.username = username;
         if (username.length() < 4) {
@@ -57,9 +69,9 @@ public class SwingMenu implements IMenu {
     public void friendRequest(String username) {
         int addfriend = JOptionPane.showConfirmDialog(menu, username + Translator.getString("FRIENDREQ_ADD_TEXT"), Translator.getString("FRIENDREQ_ADD_HEAD"), JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
         if (addfriend == JOptionPane.NO_OPTION) {
-            client.write(ServerMessages.DeclineFriend, new Object[]{username});
+            connection.write(ServerMessages.DeclineFriend, new Object[]{username});
         } else if (addfriend == JOptionPane.YES_OPTION) {
-            client.write(ServerMessages.AcceptFriend, new Object[]{username});
+            connection.write(ServerMessages.AcceptFriend, new Object[]{username});
         }
     }
 
@@ -67,9 +79,9 @@ public class SwingMenu implements IMenu {
     public void gameChallenge(String username) {
         int selected = JOptionPane.showConfirmDialog(menu, java.text.MessageFormat.format(Translator.getString("GAME_START?_TEXT"), new Object[]{username}), Translator.getString("GAME_START?_HEAD"), JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
         if (selected == JOptionPane.YES_OPTION) {
-            client.write(ServerMessages.AcceptGame, new Object[]{username});
+            connection.write(ServerMessages.AcceptGame, new Object[]{username});
         } else {
-            client.write(ServerMessages.DeclineGame, new Object[]{username});
+            connection.write(ServerMessages.DeclineGame, new Object[]{username});
         }
     }
 
@@ -89,9 +101,9 @@ public class SwingMenu implements IMenu {
     }
 
     @Override
-    public void loggedIn(ServerConnection c) {
-        client = c;
-        menu.loggedIn(c);
+    public void loggedIn(ServerConnection connection) {
+        this.connection = connection;
+        menu.loggedIn(connection);
     }
 
     @Override
@@ -135,8 +147,8 @@ public class SwingMenu implements IMenu {
     }
 
     @Override
-    public void updateFriends(String[] str) {
-        menu.updateFriends(str);
+    public void updateFriends(String[] friends) {
+        menu.updateFriends(friends);
     }
 
     @Override
@@ -158,6 +170,9 @@ public class SwingMenu implements IMenu {
         menu.enableLoginButton();
     }
 
+    /**
+     * Send a Change-Password-Request to the SErver
+     */
     protected void changePassword() {
         JPasswordField passwordField = new JPasswordField();
         int option = JOptionPane.showConfirmDialog(
@@ -168,7 +183,7 @@ public class SwingMenu implements IMenu {
         String input = new String(passwordField.getPassword());
         if (option == JOptionPane.OK_OPTION) {
             if (input.length() > 3) {
-                client.write(ServerMessages.ChangePassword, new Object[]{input});
+                connection.write(ServerMessages.ChangePassword, new Object[]{input});
             } else {
                 JOptionPane.showMessageDialog(menu, Translator.getString("PASSTOOSHORT_TEXT"), Translator.getString("PASSTOOSHORT_HEAD"), JOptionPane.WARNING_MESSAGE);
             }

@@ -8,7 +8,7 @@
   <Properties>
     <Property name="defaultCloseOperation" type="int" value="3"/>
     <Property name="title" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-      <ResourceString bundle="eu/assault2142/hololol/chess/client/menus/Bundle.properties" key="MainMenu.title" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+      <ResourceString bundle="eu/assault2142/hololol/chess/client/menu/swing/Bundle.properties" key="MainMenu.title" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
     </Property>
     <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
       <Color id="Standardcursor"/>
@@ -86,9 +86,9 @@
             <Container class="javax.swing.JPanel" name="jPanel3">
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
-                  <JTabbedPaneConstraints tabName="Local Game">
+                  <JTabbedPaneConstraints tabName="&lt;MainMenu.jPanel3.TabConstraints.tabTitle&gt;">
                     <Property name="tabTitle" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                      <ResourceString bundle="eu/assault2142/hololol/chess/client/menus/Bundle.properties" key="MainMenu.jPanel3.TabConstraints.tabTitle" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                      <ResourceString bundle="eu/assault2142/hololol/chess/client/menu/swing/Bundle.properties" key="MainMenu.jPanel3.TabConstraints.tabTitle" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
                     </Property>
                   </JTabbedPaneConstraints>
                 </Constraint>
@@ -129,7 +129,7 @@
                 <Component class="javax.swing.JButton" name="jButton6">
                   <Properties>
                     <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                      <ResourceString bundle="eu/assault2142/hololol/chess/client/menus/Bundle.properties" key="MainMenu.jButton6.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                      <ResourceString bundle="eu/assault2142/hololol/chess/client/menu/swing/Bundle.properties" key="MainMenu.jButton6.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
                     </Property>
                   </Properties>
                   <Events>
@@ -145,7 +145,7 @@
                       <Font name="Tahoma" size="14" style="1"/>
                     </Property>
                     <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                      <ResourceString bundle="eu/assault2142/hololol/chess/client/menus/Bundle.properties" key="MainMenu.jRadioButton1.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                      <ResourceString bundle="eu/assault2142/hololol/chess/client/menu/swing/Bundle.properties" key="MainMenu.jRadioButton1.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
                     </Property>
                     <Property name="enabled" type="boolean" value="false"/>
                   </Properties>
@@ -159,7 +159,7 @@
                       <Font name="Tahoma" size="14" style="1"/>
                     </Property>
                     <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                      <ResourceString bundle="eu/assault2142/hololol/chess/client/menus/Bundle.properties" key="MainMenu.jRadioButton2.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                      <ResourceString bundle="eu/assault2142/hololol/chess/client/menu/swing/Bundle.properties" key="MainMenu.jRadioButton2.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
                     </Property>
                     <Property name="enabled" type="boolean" value="false"/>
                   </Properties>
@@ -174,7 +174,7 @@
                     </Property>
                     <Property name="selected" type="boolean" value="true"/>
                     <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                      <ResourceString bundle="eu/assault2142/hololol/chess/client/menus/Bundle.properties" key="MainMenu.jRadioButton3.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                      <ResourceString bundle="eu/assault2142/hololol/chess/client/menu/swing/Bundle.properties" key="MainMenu.jRadioButton3.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
                     </Property>
                   </Properties>
                 </Component>
@@ -186,9 +186,9 @@
               </Events>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
-                  <JTabbedPaneConstraints tabName="Online Game">
+                  <JTabbedPaneConstraints tabName="&lt;MainMenu.jPanel2.TabConstraints.tabTitle&gt;">
                     <Property name="tabTitle" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                      <ResourceString bundle="eu/assault2142/hololol/chess/client/menus/Bundle.properties" key="MainMenu.jPanel2.TabConstraints.tabTitle" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                      <ResourceString bundle="eu/assault2142/hololol/chess/client/menu/swing/Bundle.properties" key="MainMenu.jPanel2.TabConstraints.tabTitle" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
                     </Property>
                   </JTabbedPaneConstraints>
                 </Constraint>
@@ -241,7 +241,7 @@
                 <Component class="javax.swing.JCheckBox" name="jCheckBox2">
                   <Properties>
                     <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                      <ResourceString bundle="eu/assault2142/hololol/chess/client/menus/Bundle.properties" key="MainMenu.jCheckBox2.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                      <ResourceString bundle="eu/assault2142/hololol/chess/client/menu/swing/Bundle.properties" key="MainMenu.jCheckBox2.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
                     </Property>
                   </Properties>
                   <Events>
@@ -251,7 +251,7 @@
                 <Component class="javax.swing.JButton" name="jButton1">
                   <Properties>
                     <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                      <ResourceString bundle="eu/assault2142/hololol/chess/client/menus/Bundle.properties" key="MainMenu.jButton1.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                      <ResourceString bundle="eu/assault2142/hololol/chess/client/menu/swing/Bundle.properties" key="MainMenu.jButton1.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
                     </Property>
                   </Properties>
                   <Events>
@@ -264,7 +264,7 @@
                       <Font name="Tahoma" size="14" style="1"/>
                     </Property>
                     <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                      <ResourceString bundle="eu/assault2142/hololol/chess/client/menus/Bundle.properties" key="MainMenu.jLabel1.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                      <ResourceString bundle="eu/assault2142/hololol/chess/client/menu/swing/Bundle.properties" key="MainMenu.jLabel1.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
                     </Property>
                   </Properties>
                 </Component>
@@ -274,7 +274,7 @@
                       <Font name="Tahoma" size="14" style="1"/>
                     </Property>
                     <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                      <ResourceString bundle="eu/assault2142/hololol/chess/client/menus/Bundle.properties" key="MainMenu.jLabel2.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                      <ResourceString bundle="eu/assault2142/hololol/chess/client/menu/swing/Bundle.properties" key="MainMenu.jLabel2.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
                     </Property>
                   </Properties>
                 </Component>
@@ -293,9 +293,9 @@
             <Container class="javax.swing.JPanel" name="jPanel6">
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
-                  <JTabbedPaneConstraints tabName="Online">
+                  <JTabbedPaneConstraints tabName="&lt;MainMenu.jPanel6.TabConstraints.tabTitle&gt;">
                     <Property name="tabTitle" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                      <ResourceString bundle="eu/assault2142/hololol/chess/client/menus/Bundle.properties" key="MainMenu.jPanel6.TabConstraints.tabTitle" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                      <ResourceString bundle="eu/assault2142/hololol/chess/client/menu/swing/Bundle.properties" key="MainMenu.jPanel6.TabConstraints.tabTitle" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
                     </Property>
                   </JTabbedPaneConstraints>
                 </Constraint>
@@ -402,7 +402,7 @@
                 <Component class="javax.swing.JButton" name="jButton7">
                   <Properties>
                     <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                      <ResourceString bundle="eu/assault2142/hololol/chess/client/menus/Bundle.properties" key="MainMenu.jButton7.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                      <ResourceString bundle="eu/assault2142/hololol/chess/client/menu/swing/Bundle.properties" key="MainMenu.jButton7.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
                     </Property>
                   </Properties>
                   <Events>
@@ -412,7 +412,7 @@
                 <Component class="javax.swing.JButton" name="jButton8">
                   <Properties>
                     <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                      <ResourceString bundle="eu/assault2142/hololol/chess/client/menus/Bundle.properties" key="MainMenu.jButton8.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                      <ResourceString bundle="eu/assault2142/hololol/chess/client/menu/swing/Bundle.properties" key="MainMenu.jButton8.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
                     </Property>
                   </Properties>
                   <Events>
@@ -422,7 +422,7 @@
                 <Component class="javax.swing.JButton" name="jButton9">
                   <Properties>
                     <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                      <ResourceString bundle="eu/assault2142/hololol/chess/client/menus/Bundle.properties" key="MainMenu.jButton9.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                      <ResourceString bundle="eu/assault2142/hololol/chess/client/menu/swing/Bundle.properties" key="MainMenu.jButton9.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
                     </Property>
                   </Properties>
                   <Events>
@@ -432,7 +432,7 @@
                 <Component class="javax.swing.JButton" name="jButton10">
                   <Properties>
                     <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                      <ResourceString bundle="eu/assault2142/hololol/chess/client/menus/Bundle.properties" key="MainMenu.jButton10.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                      <ResourceString bundle="eu/assault2142/hololol/chess/client/menu/swing/Bundle.properties" key="MainMenu.jButton10.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
                     </Property>
                   </Properties>
                   <Events>
@@ -442,7 +442,7 @@
                 <Component class="javax.swing.JButton" name="jButton11">
                   <Properties>
                     <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                      <ResourceString bundle="eu/assault2142/hololol/chess/client/menus/Bundle.properties" key="MainMenu.jButton11.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                      <ResourceString bundle="eu/assault2142/hololol/chess/client/menu/swing/Bundle.properties" key="MainMenu.jButton11.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
                     </Property>
                   </Properties>
                   <Events>
@@ -465,9 +465,9 @@
                       </AuxValues>
                       <Constraints>
                         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
-                          <JTabbedPaneConstraints tabName="Info">
+                          <JTabbedPaneConstraints tabName="&lt;MainMenu.jScrollPane2.TabConstraints.tabTitle&gt;">
                             <Property name="tabTitle" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                              <ResourceString bundle="eu/assault2142/hololol/chess/client/menus/Bundle.properties" key="MainMenu.jScrollPane2.TabConstraints.tabTitle" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                              <ResourceString bundle="eu/assault2142/hololol/chess/client/menu/swing/Bundle.properties" key="MainMenu.jScrollPane2.TabConstraints.tabTitle" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
                             </Property>
                           </JTabbedPaneConstraints>
                         </Constraint>
@@ -497,7 +497,7 @@
                 <Component class="javax.swing.JButton" name="jButton12">
                   <Properties>
                     <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                      <ResourceString bundle="eu/assault2142/hololol/chess/client/menus/Bundle.properties" key="MainMenu.jButton12.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                      <ResourceString bundle="eu/assault2142/hololol/chess/client/menu/swing/Bundle.properties" key="MainMenu.jButton12.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
                     </Property>
                   </Properties>
                   <Events>
@@ -507,7 +507,7 @@
                 <Component class="javax.swing.JButton" name="jButton13">
                   <Properties>
                     <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                      <ResourceString bundle="eu/assault2142/hololol/chess/client/menus/Bundle.properties" key="MainMenu.jButton13.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                      <ResourceString bundle="eu/assault2142/hololol/chess/client/menu/swing/Bundle.properties" key="MainMenu.jButton13.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
                     </Property>
                   </Properties>
                   <Events>
@@ -519,9 +519,9 @@
             <Container class="javax.swing.JPanel" name="jPanel7">
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
-                  <JTabbedPaneConstraints tabName="Leaderboard">
+                  <JTabbedPaneConstraints tabName="&lt;MainMenu.jPanel7.TabConstraints.tabTitle&gt;">
                     <Property name="tabTitle" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                      <ResourceString bundle="eu/assault2142/hololol/chess/client/menus/Bundle.properties" key="MainMenu.jPanel7.TabConstraints.tabTitle" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                      <ResourceString bundle="eu/assault2142/hololol/chess/client/menu/swing/Bundle.properties" key="MainMenu.jPanel7.TabConstraints.tabTitle" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
                     </Property>
                   </JTabbedPaneConstraints>
                 </Constraint>
@@ -543,9 +543,9 @@
             <Container class="javax.swing.JPanel" name="jPanel4">
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
-                  <JTabbedPaneConstraints tabName="LAN Game">
+                  <JTabbedPaneConstraints tabName="&lt;MainMenu.jPanel4.TabConstraints.tabTitle&gt;">
                     <Property name="tabTitle" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                      <ResourceString bundle="eu/assault2142/hololol/chess/client/menus/Bundle.properties" key="MainMenu.jPanel4.TabConstraints.tabTitle" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                      <ResourceString bundle="eu/assault2142/hololol/chess/client/menu/swing/Bundle.properties" key="MainMenu.jPanel4.TabConstraints.tabTitle" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
                     </Property>
                   </JTabbedPaneConstraints>
                 </Constraint>
@@ -619,7 +619,7 @@
                 <Component class="javax.swing.JButton" name="jButton2">
                   <Properties>
                     <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                      <ResourceString bundle="eu/assault2142/hololol/chess/client/menus/Bundle.properties" key="MainMenu.jButton2.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                      <ResourceString bundle="eu/assault2142/hololol/chess/client/menu/swing/Bundle.properties" key="MainMenu.jButton2.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
                     </Property>
                   </Properties>
                 </Component>
@@ -633,21 +633,21 @@
                 <Component class="javax.swing.JButton" name="jButton3">
                   <Properties>
                     <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                      <ResourceString bundle="eu/assault2142/hololol/chess/client/menus/Bundle.properties" key="MainMenu.jButton3.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                      <ResourceString bundle="eu/assault2142/hololol/chess/client/menu/swing/Bundle.properties" key="MainMenu.jButton3.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
                     </Property>
                   </Properties>
                 </Component>
                 <Component class="javax.swing.JButton" name="jButton4">
                   <Properties>
                     <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                      <ResourceString bundle="eu/assault2142/hololol/chess/client/menus/Bundle.properties" key="MainMenu.jButton4.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                      <ResourceString bundle="eu/assault2142/hololol/chess/client/menu/swing/Bundle.properties" key="MainMenu.jButton4.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
                     </Property>
                   </Properties>
                 </Component>
                 <Component class="javax.swing.JLabel" name="jLabel4">
                   <Properties>
                     <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                      <ResourceString bundle="eu/assault2142/hololol/chess/client/menus/Bundle.properties" key="MainMenu.jLabel4.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                      <ResourceString bundle="eu/assault2142/hololol/chess/client/menu/swing/Bundle.properties" key="MainMenu.jLabel4.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
                     </Property>
                   </Properties>
                 </Component>
@@ -656,14 +656,14 @@
                 <Component class="javax.swing.JLabel" name="jLabel5">
                   <Properties>
                     <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                      <ResourceString bundle="eu/assault2142/hololol/chess/client/menus/Bundle.properties" key="MainMenu.jLabel5.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                      <ResourceString bundle="eu/assault2142/hololol/chess/client/menu/swing/Bundle.properties" key="MainMenu.jLabel5.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
                     </Property>
                   </Properties>
                 </Component>
                 <Component class="javax.swing.JLabel" name="jLabel6">
                   <Properties>
                     <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                      <ResourceString bundle="eu/assault2142/hololol/chess/client/menus/Bundle.properties" key="MainMenu.jLabel6.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                      <ResourceString bundle="eu/assault2142/hololol/chess/client/menu/swing/Bundle.properties" key="MainMenu.jLabel6.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
                     </Property>
                   </Properties>
                 </Component>
@@ -682,9 +682,9 @@
             <Container class="javax.swing.JPanel" name="jPanel5">
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
-                  <JTabbedPaneConstraints tabName="Options">
+                  <JTabbedPaneConstraints tabName="&lt;MainMenu.jPanel5.TabConstraints.tabTitle&gt;">
                     <Property name="tabTitle" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                      <ResourceString bundle="eu/assault2142/hololol/chess/client/menus/Bundle.properties" key="MainMenu.jPanel5.TabConstraints.tabTitle" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                      <ResourceString bundle="eu/assault2142/hololol/chess/client/menu/swing/Bundle.properties" key="MainMenu.jPanel5.TabConstraints.tabTitle" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
                     </Property>
                   </JTabbedPaneConstraints>
                 </Constraint>
@@ -722,7 +722,7 @@
                 <Component class="javax.swing.JLabel" name="jLabel8">
                   <Properties>
                     <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                      <ResourceString bundle="eu/assault2142/hololol/chess/client/menus/Bundle.properties" key="MainMenu.jLabel8.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                      <ResourceString bundle="eu/assault2142/hololol/chess/client/menu/swing/Bundle.properties" key="MainMenu.jLabel8.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
                     </Property>
                   </Properties>
                 </Component>
@@ -742,7 +742,7 @@
                 <Component class="javax.swing.JButton" name="jButton5">
                   <Properties>
                     <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                      <ResourceString bundle="eu/assault2142/hololol/chess/client/menus/Bundle.properties" key="MainMenu.jButton5.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
+                      <ResourceString bundle="eu/assault2142/hololol/chess/client/menu/swing/Bundle.properties" key="MainMenu.jButton5.text" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;).getString(&quot;{key}&quot;)"/>
                     </Property>
                   </Properties>
                   <Events>

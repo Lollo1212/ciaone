@@ -1,5 +1,6 @@
 package eu.assault2142.hololol.chess.client.game.ui.swing;
 
+import eu.assault2142.hololol.chess.client.game.ui.IGameView;
 import eu.assault2142.hololol.chess.client.game.ClientGame;
 import eu.assault2142.hololol.chess.client.game.Game;
 import eu.assault2142.hololol.chess.client.game.Main;

@@ -1,9 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package eu.assault2142.hololol.chess.client.menus;
+package eu.assault2142.hololol.chess.client.menu.swing;
 
 import eu.assault2142.hololol.chess.client.game.LocalGame;
 import eu.assault2142.hololol.chess.client.networking.ServerConnection;
@@ -28,6 +23,7 @@ import javax.swing.event.ChangeEvent;
 import org.apache.commons.lang3.tuple.Pair;
 
 /**
+ * The SMenu-Frame
  *
  * @author hololol2
  */
@@ -36,7 +32,7 @@ class MainMenu extends javax.swing.JFrame {
     private ServerConnection client;
     private final HashMap<String, Pair<Integer, JTextArea>> areas = new HashMap();
     private static Locale locale = Locale.ENGLISH;
-    private SwingMenu menu;
+    private final SwingMenu menu;
 
     /**
      * Creates new form MainMenu
@@ -152,7 +148,7 @@ class MainMenu extends javax.swing.JFrame {
         jButton5 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("eu/assault2142/hololol/chess/client/menus/Bundle"); // NOI18N
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("eu/assault2142/hololol/chess/client/menu/swing/Bundle"); // NOI18N
         setTitle(bundle.getString("MainMenu.title")); // NOI18N
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         setLocationByPlatform(true);
@@ -572,7 +568,7 @@ class MainMenu extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(0, 407, Short.MAX_VALUE)
             .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                .add(jTabbedPane1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 300, Short.MAX_VALUE))
+                .add(jTabbedPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE))
         );
 
         org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(getContentPane());
@@ -598,7 +594,7 @@ class MainMenu extends javax.swing.JFrame {
     }//GEN-LAST:event_jPasswordField1ActionPerformed
 
     private void jButton6ActionPerformed(ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
-        new LocalGame();
+        LocalGame localGame = new LocalGame();
         setVisible(false);
     }//GEN-LAST:event_jButton6ActionPerformed
 
@@ -796,7 +792,7 @@ class MainMenu extends javax.swing.JFrame {
 
     class PopupListener extends MouseAdapter {
 
-        private JPopupMenu popup;
+        private final JPopupMenu popup;
 
         public PopupListener(JPopupMenu pop) {
             popup = pop;

@@ -1,9 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package eu.assault2142.hololol.chess.client.menus;
+package eu.assault2142.hololol.chess.client.menu.swing;
 
 import eu.assault2142.hololol.chess.client.util.Translator;
 import java.awt.BasicStroke;
@@ -27,6 +22,7 @@ import javax.swing.JTabbedPane;
 import javax.swing.plaf.basic.BasicButtonUI;
 
 /**
+ * The X(Close)-Button of the Chat-Tabs
  *
  * @author hololol2
  */

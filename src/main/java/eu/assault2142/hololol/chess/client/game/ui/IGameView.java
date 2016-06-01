@@ -1,4 +1,4 @@
-package eu.assault2142.hololol.chess.client.game.ui.swing;
+package eu.assault2142.hololol.chess.client.game.ui;
 
 /**
  * Interface for a GameView which displays the Game

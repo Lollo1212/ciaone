@@ -1,26 +1,13 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package eu.assault2142.hololol.chess.client.menus;
+package eu.assault2142.hololol.chess.client.menu;
 
 import eu.assault2142.hololol.chess.client.networking.ServerConnection;
 
 /**
+ * Interface for the Menu
  *
  * @author hololol2
  */
 public interface IMenu {
-
-    /**
-     * Show a Connection-Error-Dialog
-     */
-    public void connectionError();
-
-    public enum LOGINERROR {
-        ACCOUNTEXISTS, ACCOUNTNOTEXISTS, WRONGPASSWORD, ALREADYLOGGEDIN, UNKNONWNERROR
-    };
 
     /**
      * Show a Challenge-Declined-Dialog
@@ -28,6 +15,11 @@ public interface IMenu {
      * @param username the user which declined the challenge
      */
     public void challengeDeclined(String username);
+
+    /**
+     * Show a Connection-Error-Dialog
+     */
+    public void connectionError();
 
     /**
      * Show a Enemy-Offline-Dialog
@@ -97,6 +89,15 @@ public interface IMenu {
     public void passwordChanged();
 
     /**
+     * Show a Error-Dialog
+     *
+     * @param message the error-message
+     * @param exit whether the application should exit after the message is
+     * closed
+     */
+    public void showErrorMessage(String message, boolean exit);
+
+    /**
      * Show a Unknown-Username-Dialog
      */
     public void unknownUsername();
@@ -120,12 +121,7 @@ public interface IMenu {
      */
     public void usernameTaken();
 
-    /**
-     * Show a Error-Dialog
-     *
-     * @param message the error-message
-     * @param exit whether the application should exit after the message is
-     * closed
-     */
-    public void showErrorMessage(String message, boolean exit);
+    public enum LOGINERROR {
+        ACCOUNTEXISTS, ACCOUNTNOTEXISTS, WRONGPASSWORD, ALREADYLOGGEDIN, UNKNONWNERROR
+    }
 }
