@@ -39,10 +39,10 @@ public final class ClientGame extends Game {
     }
 
     @Override
-    public void clickAt(int feldx, int feldy) {
-        selected = getGameState().getSquare(feldx, feldy);
+    public void clickAt(int squareX, int squareY) {
+        selected = getGameState().getSquare(squareX, squareY);
         showPossibleMoves();
-        connection.write(ServerMessages.Click, new Object[]{feldx, feldy});
+        connection.write(ServerMessages.Click, new Object[]{squareX, squareY});
     }
 
     /**

@@ -24,10 +24,27 @@ public final class LocalGame extends Game {
     }
 
     @Override
-    public void clickAt(int feldx, int feldy) {
-        selected = getGameState().getSquare(feldx, feldy);
+    public void clickAt(int squareX, int squareY) {
+        selected = getGameState().getSquare(squareX, squareY);
         doMoveIfPossible();
         showPossibleMoves();
+    }
+
+    @Override
+    public void onCheck() {
+        gameview.onCheck();
+    }
+
+    @Override
+    public void onCheckMate() {
+        gameview.onCheckMate();
+        this.endGame();
+    }
+
+    @Override
+    public void onStaleMate() {
+        gameview.onStaleMate();
+        this.endGame();
     }
 
     @Override
@@ -74,20 +91,4 @@ public final class LocalGame extends Game {
         return new CastlingMove(selected.getX(), selected.getY(), t, tx, ty, (King) picked);
     }
 
-    @Override
-    public void onCheckMate() {
-        gameview.onCheckMate();
-        this.endGame();
-    }
-
-    @Override
-    public void onStaleMate() {
-        gameview.onStaleMate();
-        this.endGame();
-    }
-
-    @Override
-    public void onCheck() {
-        gameview.onCheck();
-    }
 }

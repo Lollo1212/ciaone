@@ -47,6 +47,12 @@ public abstract class Game extends eu.assault2142.hololol.chess.game.Game {
         return gameview;
     }
 
+    @Override
+    public final void updateMovements() {
+        getGameView().setMovementsUpdating(true);
+        new ClientMovementUpdater(getGameState()).start();
+    }
+
     /**
      * Show all possible Moves for the currently selected chessman
      */
@@ -72,11 +78,5 @@ public abstract class Game extends eu.assault2142.hololol.chess.game.Game {
 
             }
         }
-    }
-
-    @Override
-    public void updateMovements() {
-        getGameView().setMovementsUpdating(true);
-        new ClientMovementUpdater(getGameState()).start();
     }
 }
