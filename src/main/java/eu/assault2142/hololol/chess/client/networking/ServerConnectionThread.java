@@ -3,7 +3,6 @@ package eu.assault2142.hololol.chess.client.networking;
 import eu.assault2142.hololol.chess.client.game.ClientGame;
 import eu.assault2142.hololol.chess.client.game.Main;
 import eu.assault2142.hololol.chess.game.GameState;
-import eu.assault2142.hololol.chess.game.chessmen.Movement;
 import eu.assault2142.hololol.chess.networking.ClientMessages;
 import eu.assault2142.hololol.chess.networking.ConnectionThread;
 import eu.assault2142.hololol.chess.networking.ServerMessages;
@@ -20,7 +19,7 @@ import java.util.function.Consumer;
  */
 public class ServerConnectionThread extends ConnectionThread {
 
-    private final ServerConnection client;
+    private final ServerConnection connection;
     private ClientGame game;
     private GameState gamestate;
     private final HashMap<ClientMessages, Consumer<String[]>> consumers;
@@ -28,12 +27,12 @@ public class ServerConnectionThread extends ConnectionThread {
     /**
      * Create a new ServerConnectionThread
      *
-     * @param c the connection to the scanner
+     * @param connection the connection to the scanner
      * @param scanner the scanner for the inputs
      */
-    public ServerConnectionThread(ServerConnection c, Scanner scanner) {
+    public ServerConnectionThread(ServerConnection connection, Scanner scanner) {
         super(scanner);
-        this.client = c;
+        this.connection = connection;
         consumers = new HashMap();
         consumers.put(ClientMessages.AcceptPasswordChange, this::consumeAcceptPasswordChange);
         consumers.put(ClientMessages.AcceptUsernameChange, this::consumeAcceptUsernameChange);
@@ -47,7 +46,6 @@ public class ServerConnectionThread extends ConnectionThread {
         consumers.put(ClientMessages.Gamestart, this::consumeGamestart);
         consumers.put(ClientMessages.Message, this::consumeMessage);
         consumers.put(ClientMessages.Move, this::consumeMove);
-        consumers.put(ClientMessages.Moves, this::consumeMoves);
         consumers.put(ClientMessages.Name, this::consumeName);
         consumers.put(ClientMessages.Newgame, this::consumeNewGame);
         consumers.put(ClientMessages.Promote, this::consumePromote);
@@ -57,7 +55,6 @@ public class ServerConnectionThread extends ConnectionThread {
         consumers.put(ClientMessages.Stalemate, this::consumeStalemate);
         consumers.put(ClientMessages.UsernameWrong, this::consumeNoSuchUsername);
         consumers.put(ClientMessages.Capture, this::consumeCapture);
-        //gamestate = game.getGameState();
     }
 
     @Override
@@ -69,7 +66,7 @@ public class ServerConnectionThread extends ConnectionThread {
      *
      * @param game the game
      */
-    void setGame(ClientGame game) {
+    public void setGame(ClientGame game) {
         this.game = game;
     }
 
@@ -85,7 +82,7 @@ public class ServerConnectionThread extends ConnectionThread {
     }
 
     private void consumeName(String[] parts) {
-        client.setName(parts[0]);
+        connection.setName(parts[0]);
         Main.MENU.setPlayerName(parts[0]);
     }
 
@@ -102,7 +99,7 @@ public class ServerConnectionThread extends ConnectionThread {
     }
 
     private void consumeDeclinePasswordChange(String[] parts) {
-
+        Main.MENU.showErrorMessage("Changing of Password not successfull!", false);
     }
 
     private void consumeCheck(String[] parts) {
@@ -126,8 +123,8 @@ public class ServerConnectionThread extends ConnectionThread {
     }
 
     private void consumeFriends(String[] parts) {
-        String[] str = parts[0].split(";");
-        Main.MENU.updateFriends(str);
+        String[] friends = parts[0].split(";");
+        Main.MENU.updateFriends(friends);
     }
 
     private void consumeRequest(String[] parts) {
@@ -145,58 +142,21 @@ public class ServerConnectionThread extends ConnectionThread {
     }
 
     private void consumeMove(String[] parts) {
-        int a = Integer.parseInt(parts[0]);
-        int x = Integer.parseInt(parts[1]);
-        int y = Integer.parseInt(parts[2]);
-        game.doMove(a, x, y);
+        int number = Integer.parseInt(parts[0]);
+        int targetX = Integer.parseInt(parts[1]);
+        int targetY = Integer.parseInt(parts[2]);
+        game.doMove(number, targetX, targetY);
     }
 
     private void consumeCapture(String[] parts) {
-        int a = Integer.parseInt(parts[0]);
-        int x = Integer.parseInt(parts[1]);
-        int y = Integer.parseInt(parts[2]);
-        game.doCapture(a, x, y);
-    }
-
-    private void consumeMoves(String[] message) {
-        int length = message.length;
-        if (message[0].equals("moves") && length == 4) {
-            boolean color;
-            color = message[1].equals("black");
-            if (message[2].equals("move")) {
-                String s = message[3];
-                String[] str = s.split(";");
-                for (String str1 : str) {
-                    if (str1.length() == 3 || str1.length() == 4) {
-                        String x = str1.substring(0, 1);
-                        int posx = Integer.parseInt(x);
-                        String y = str1.substring(1, 2);
-                        int posy = Integer.parseInt(y);
-                        String fn = str1.substring(2);
-                        int f = Integer.parseInt(fn);
-                        game.getGameState().getChessmen(color)[f].addMove(new Movement(posx, posy, gamestate.getChessmen(color)[f]));
-                    }
-                }
-            } else {
-                String s = message[3];
-                String[] str = s.split(";");
-                for (String str1 : str) {
-                    if (str1.length() == 3 || str1.length() == 4) {
-                        String x = str1.substring(0, 1);
-                        int posx = Integer.parseInt(x);
-                        String y = str1.substring(1, 2);
-                        int posy = Integer.parseInt(y);
-                        String fn = str1.substring(2);
-                        int f = Integer.parseInt(fn);
-                        game.getGameState().getChessmen(color)[f].addCapture(new Movement(posx, posy, gamestate.getChessmen(color)[f]));
-                    }
-                }
-            }
-        }
+        int number = Integer.parseInt(parts[0]);
+        int targetX = Integer.parseInt(parts[1]);
+        int targetY = Integer.parseInt(parts[2]);
+        game.doCapture(number, targetX, targetY);
     }
 
     private void consumePromote(String[] parts) {
-        client.write(ServerMessages.Promotion, new Object[]{game.getGameView().showPromotionChoice(), game.isBlack(), parts[0]});
+        connection.write(ServerMessages.Promotion, new Object[]{game.getGameView().showPromotionChoice(), game.isBlack(), parts[0]});
     }
 
     private void consumePromotion(String[] parts) {
@@ -210,7 +170,7 @@ public class ServerConnectionThread extends ConnectionThread {
     }
 
     private void consumeGamestart(String[] parts) {
-        client.startGame(parts[0]);
+        connection.startGame(parts[0]);
     }
 
     private void consumeNewGame(String[] parts) {
