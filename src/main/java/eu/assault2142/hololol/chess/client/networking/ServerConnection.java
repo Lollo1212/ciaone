@@ -36,38 +36,36 @@ public class ServerConnection {
      *
      * @param username the username
      * @param password the password
-     * @param create wether to create an account
+     * @param create whether to create an account
      */
     public static void connect(String username, String password, boolean create) {
-        ServerConnection c = null;
+        ServerConnection connection;
         try {
-            InetAddress i = InetAddress.getByName("assault2142.eu");
-            c = new ServerConnection(i);
+            InetAddress address = InetAddress.getByName("assault2142.eu");
+            connection = new ServerConnection(address);
         } catch (UnknownHostException ex) {
             Main.MENU.showErrorMessage("Couldn't find Server's IP!", false);
+            return;
         }
-        if (c.scanner != null) {
-            c.scanner.next();
-            //Der Server ist online
-            //Anmeldedaten an Server schicken
-            String str = "";
+        if (connection.scanner != null) {
+            connection.scanner.next();
+            String loginData = "";
             if (create) {
-                str += "r:";
+                loginData += "r:";
             }
-            str += username + ":" + password;
-            c.write(str);
-            String input = c.scanner.next();
-            if (input.equals("loggedin")) {
-                //Der Server bestätigt Anmeldung
-                c = new ServerConnection(c.socket, c.scanner, c.writer);
-                Main.MENU.loggedIn(c);//neues Fenster öffnen
+            loginData += username + ":" + password;
+            connection.write(loginData);
+            String response = connection.scanner.next();
+            if (response.equals("loggedin")) {
+                connection = new ServerConnection(connection.socket, connection.scanner, connection.writer);
+                Main.MENU.loggedIn(connection);
             } else if (create) {
                 Main.MENU.loginError(IMenu.LOGINERROR.ACCOUNTEXISTS);
-            } else if (input.equals(ClientMessages.PasswordWrong.getValue())) {
+            } else if (response.equals(ClientMessages.PasswordWrong.getValue())) {
                 Main.MENU.loginError(IMenu.LOGINERROR.WRONGPASSWORD);
-            } else if (input.equals(ClientMessages.UsernameWrong.getValue())) {
+            } else if (response.equals(ClientMessages.UsernameWrong.getValue())) {
                 Main.MENU.loginError(IMenu.LOGINERROR.ACCOUNTNOTEXISTS);
-            } else if (input.equals(ClientMessages.AlreadyOnline.getValue())) {
+            } else if (response.equals(ClientMessages.AlreadyOnline.getValue())) {
                 Main.MENU.loginError(IMenu.LOGINERROR.ALREADYLOGGEDIN);
             } else {
                 Main.MENU.loginError(IMenu.LOGINERROR.UNKNONWNERROR);
@@ -86,16 +84,16 @@ public class ServerConnection {
     /**
      * Create a new ServerConnection with the given params
      *
-     * @param so the socket of the connection
-     * @param sca the scanner
-     * @param pwr the writer
+     * @param socket the socket of the connection
+     * @param scanner the scanner
+     * @param writer the writer
      */
-    private ServerConnection(Socket so, Scanner sca, PrintWriter pwr) {
-        socket = so;
-        scanner = sca;
-        writer = pwr;
+    private ServerConnection(Socket socket, Scanner scanner, PrintWriter writer) {
+        this.socket = socket;
+        this.scanner = scanner;
+        this.writer = writer;
         write("n");
-        connectionThread = new ServerConnectionThread(this, sca);
+        connectionThread = new ServerConnectionThread(this, scanner);
         Thread t = new Thread(connectionThread);
         t.start();
     }
@@ -107,34 +105,32 @@ public class ServerConnection {
      */
     private ServerConnection(InetAddress address) {
         try {
-            KeyStore ks = KeyStore.getInstance("JKS");
-            ks.load(getClass().getResourceAsStream("/trustStore.ks"), "assault".toCharArray());
-            TrustManagerFactory tmf = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
-            tmf.init(ks);
+            KeyStore keyStore = KeyStore.getInstance("JKS");
+            keyStore.load(getClass().getResourceAsStream("/trustStore.ks"), "assault".toCharArray());
+            TrustManagerFactory trustManagerFactory = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
+            trustManagerFactory.init(keyStore);
 
-            SSLContext sslcon = SSLContext.getInstance("TLS");
+            SSLContext context = SSLContext.getInstance("TLS");
 
-            TrustManager[] trustManagers = tmf.getTrustManagers();
-            sslcon.init(null, trustManagers, null);
+            TrustManager[] trustManagers = trustManagerFactory.getTrustManagers();
+            context.init(null, trustManagers, null);
 
-            SSLSocketFactory ssf = sslcon.getSocketFactory();
-            SSLSocket socket = (SSLSocket) ssf.createSocket(address, 1024);
+            SSLSocketFactory socketFactory = context.getSocketFactory();
+            SSLSocket sslSocket = (SSLSocket) socketFactory.createSocket(address, 1024);
 
-            socket.startHandshake();
-            this.socket = socket;
+            sslSocket.startHandshake();
+            socket = sslSocket;
             scanner = new Scanner(this.socket.getInputStream());
             writer = new PrintWriter(this.socket.getOutputStream(), true);
         } catch (ConnectException ex) {
             Main.MENU.connectionError();
         } catch (IOException | KeyStoreException | NoSuchAlgorithmException | CertificateException | KeyManagementException ex) {
             Main.MENU.showErrorMessage("Unexpected Error while connecting to the Server!", false);
-            //System.out.println(Arrays.toString(ex.getStackTrace()));
-            System.out.println(ex.getMessage());
         }
     }
 
     /**
-     * Return the nam of the client
+     * Return the name of the client
      *
      * @return the name of the client
      */
@@ -155,20 +151,10 @@ public class ServerConnection {
      * Write a message to the server
      *
      * @param message the type of the message
-     * @param replace the things to replace placeholders with
+     * @param replace the things to replace the placeholder with
      */
     public void write(ServerMessages message, Object[] replace) {
         write(MessageFormat.format(message.getValue(), replace));
-    }
-
-    /**
-     * Start a new ClientGame
-     *
-     * @param color the color you play (0 = white, 1 = black)
-     */
-    protected void startGame(String color) {
-        game = new ClientGame(this, !color.equals("0"));
-        connectionThread.setGame(game);
     }
 
     /**
@@ -180,4 +166,12 @@ public class ServerConnection {
         writer.println(str);
     }
 
+    /**
+     * Set the game
+     *
+     * @param game the current game
+     */
+    public void setGame(ClientGame game) {
+        this.game = game;
+    }
 }
