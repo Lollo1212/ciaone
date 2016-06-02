@@ -69,10 +69,10 @@ public class ServerGame extends Game {
         int tx;
         int ty;
         if (picked.getX() < selected.getX()) {
-            t = (Rook) getGameState().getChessmen(picked.isBlack())[9];
+            t = (Rook) getGameState().getChessman(picked.isBlack(), 9);
             tx = 5;
         } else {
-            t = (Rook) getGameState().getChessmen(picked.isBlack())[8];
+            t = (Rook) getGameState().getChessman(picked.isBlack(), 8);
             tx = 3;
         }
         ty = picked.isBlack() ? 0 : 7;

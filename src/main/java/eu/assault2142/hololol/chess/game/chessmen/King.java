@@ -84,21 +84,21 @@ public class King extends Chessman {
      */
     public List<CastlingMove> computeCastlings(boolean checkForCheck, GameState situation) {
         LinkedList<CastlingMove> castlings = new LinkedList();
-        Chessman rook1 = situation.getChessmen(black)[8];
-        Chessman rook2 = situation.getChessmen(black)[8];
+        Chessman rook1 = situation.getChessman(black, 8);
+        Chessman rook2 = situation.getChessman(black, 8);
         if (black == true) {
             if (!moved && !rook1.captured && !rook1.moved && !situation.getSquare(1, 0).isOccupied() && !situation.getSquare(2, 0).isOccupied() && !situation.getSquare(3, 0).isOccupied()) {
                 castlings.add(new CastlingMove(2, 0, (Rook) rook1, 3, 0, this));
             }
             if (!moved && !rook2.captured && !rook2.moved && !situation.getSquare(5, 0).isOccupied() && !situation.getSquare(6, 0).isOccupied()) {
-                castlings.add(new CastlingMove(6, 0, (Rook) gamesituation.getChessmen(true)[9], 5, 0, this));
+                castlings.add(new CastlingMove(6, 0, (Rook) gamesituation.getChessman(true, 9), 5, 0, this));
             }
         } else {
             if (!moved && !rook1.captured && !rook1.moved && !situation.getSquare(1, 7).isOccupied() && !situation.getSquare(2, 7).isOccupied() && !situation.getSquare(3, 7).isOccupied()) {
-                castlings.add(new CastlingMove(2, 7, (Rook) gamesituation.getChessmen(false)[8], 3, 7, this));
+                castlings.add(new CastlingMove(2, 7, (Rook) gamesituation.getChessman(false, 8), 3, 7, this));
             }
             if (!moved && !rook2.captured && !rook2.moved && !situation.getSquare(5, 7).isOccupied() && !situation.getSquare(6, 7).isOccupied()) {
-                castlings.add(new CastlingMove(6, 7, (Rook) gamesituation.getChessmen(false)[9], 5, 7, this));
+                castlings.add(new CastlingMove(6, 7, (Rook) gamesituation.getChessman(false, 9), 5, 7, this));
             }
         }
         //Überprüfen ob legal

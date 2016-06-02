@@ -45,7 +45,7 @@ public abstract class Game {
      * @param number the number of the chessman
      */
     public void execPromotion(String target, boolean black, int number) {
-        Pawn pawn = (Pawn) getGameState().getChessmen(black)[number];
+        Pawn pawn = (Pawn) getGameState().getChessman(black, number);
         Chessman man;
         switch (target) {
             case "ROOK":
@@ -61,7 +61,7 @@ public abstract class Game {
                 man = Queen.promotion(pawn, getGameState());
                 break;
         }
-        getGameState().getChessmen(black)[number] = man;
+        getGameState().setChessman(black, number, man);
         getGameState().getSquare(man.getX(), man.getY()).occupier = man;
 
         updateMovements();

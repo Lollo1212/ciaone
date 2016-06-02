@@ -14,28 +14,27 @@ import java.util.List;
 import java.util.stream.IntStream;
 
 /**
- * A situation of a chessgame
+ * A situation in a chess-game
  *
  * @author hololol2
  */
 public class GameState {
 
-    //true if it's the black player's turn
     private boolean blackturn;
     private int capturedBlack = 0;
     private int capturedWhite = 0;
 
     private Chessman[] chessmenBlack = new Chessman[16];
     private Chessman[] chessmenWhite = new Chessman[16];
-    //the game
+
     private final Game game;
 
     private Chessman lastmoved;
-    //the squares of the game-board
+
     private final Square[] squares;
 
     /**
-     * Create a copy of the current game-state
+     * Create a a new (initial) game-state for the given game
      *
      * @param game the game
      */
@@ -60,21 +59,21 @@ public class GameState {
     /**
      * Create a copy of the current game-state
      *
-     * @param gs the game-situation
+     * @param gamestate the game-situation
      */
-    public GameState(GameState gs) {
+    public GameState(GameState gamestate) {
         chessmenBlack = new Chessman[16];
         chessmenWhite = new Chessman[16];
         squares = new Square[78];
-        for (int a = 0; a < gs.chessmenBlack.length; a++) {
-            chessmenBlack[a] = gs.chessmenBlack[a].clone();
+        for (int a = 0; a < gamestate.chessmenBlack.length; a++) {
+            chessmenBlack[a] = gamestate.chessmenBlack[a].clone();
         }
-        for (int a = 0; a < gs.chessmenWhite.length; a++) {
-            chessmenWhite[a] = gs.chessmenWhite[a].clone();
+        for (int a = 0; a < gamestate.chessmenWhite.length; a++) {
+            chessmenWhite[a] = gamestate.chessmenWhite[a].clone();
         }
-        for (int a = 0; a < gs.getSquares().length; a++) {
-            if (gs.getSquares()[a] != null) {
-                squares[a] = gs.getSquares()[a].clone();
+        for (int a = 0; a < gamestate.getSquares().length; a++) {
+            if (gamestate.getSquares()[a] != null) {
+                squares[a] = gamestate.getSquares()[a].clone();
             }
         }
         Arrays.stream(chessmenBlack).forEach((Chessman man) -> {
@@ -83,13 +82,8 @@ public class GameState {
         Arrays.stream(chessmenWhite).forEach((Chessman man) -> {
             getSquare(man.getX(), man.getY()).occupier = man;
         });
-        blackturn = gs.blackturn;
-        this.game = gs.game;
-    }
-
-    @Override
-    public GameState clone() {
-        return new GameState(this);
+        blackturn = gamestate.blackturn;
+        this.game = gamestate.game;
     }
 
     /**
@@ -98,17 +92,17 @@ public class GameState {
      * @return all captures the given player can currently do
      */
     public List<Movement> computeAllCaptures(boolean black) {
-        LinkedList<Movement> ret = new LinkedList();
+        LinkedList<Movement> captures = new LinkedList();
         IntStream.range(0, 16).mapToObj((int num) -> {
-            return getChessmen(black)[num];
+            return getChessman(black, num);
         }).filter((Chessman man) -> {
             return !man.isCaptured();
         }).map((Chessman man) -> {
             return man.computeCaptures(false, this);
-        }).forEach((List<Movement> captures) -> {
-            ret.addAll(captures);
+        }).forEach((List<Movement> cap) -> {
+            captures.addAll(cap);
         });
-        return ret;
+        return captures;
     }
 
     /**
@@ -118,62 +112,62 @@ public class GameState {
      * @return true if king is in danger, false otherwise
      */
     public boolean dangerForKing(boolean black) {
-        List<Movement> m = computeAllCaptures(!black);
-        boolean b = false;
-        for (Movement m1 : m) {
-            if (m1 != null) {
-                Square f = squares[10 * m1.getTargetX() + m1.getTargetY()];
-                if (f.occupier != null && f.occupier.getClass() == King.class && f.occupier.isBlack() == black) {
-                    b = true;
+        List<Movement> moves = computeAllCaptures(!black);
+        boolean kingInDanger = false;
+        for (Movement move : moves) {
+            if (move != null) {
+                Square square = squares[10 * move.getTargetX() + move.getTargetY()];
+                if (square.occupier != null && square.occupier.getClass() == King.class && square.occupier.isBlack() == black) {
+                    kingInDanger = true;
                 }
             }
         }
-        return b;
+        return kingInDanger;
     }
 
     /**
      * Emulate the given move
      *
      * @param chessman the chessman to do the move
-     * @param targetx the targetX
-     * @param targety the targetY
+     * @param targetX the targetX
+     * @param targetY the targetY
      * @return a new instance representing the situation after the move
      */
-    public GameState emulateMove(Chessman chessman, int targetx, int targety) {
-        GameState gsneu = clone();
-        boolean b = true;
-        Chessman f1;
+    public GameState emulateMove(Chessman chessman, int targetX, int targetY) {
+        GameState newState = new GameState(this);
+        boolean notCaptured = true;
+        Chessman man;
         if (chessman.isBlack()) {
-            f1 = gsneu.chessmenBlack[chessman.getPositionInArray()];
-            if (f1.isCaptured()) {
-                b = false;
+            man = newState.chessmenBlack[chessman.getPositionInArray()];
+            if (man.isCaptured()) {
+                notCaptured = false;
 
             }
         } else {
-            f1 = gsneu.chessmenWhite[chessman.getPositionInArray()];
-            if (f1.isCaptured()) {
-                b = false;
+            man = newState.chessmenWhite[chessman.getPositionInArray()];
+            if (man.isCaptured()) {
+                notCaptured = false;
 
             }
         }
-        Square square = getSquare(targetx, targety);
-        if (b && square != null) {
+        Square square = getSquare(targetX, targetY);
+        if (notCaptured && square != null) {
             if (square.isOccupied()) {
                 Chessman r = square.occupier;
-                if (f1.isBlack() != r.isBlack()) {
-                    gsneu.getChessmen(r.isBlack())[r.getPositionInArray()].setCaptured();
+                if (man.isBlack() != r.isBlack()) {
+                    newState.getChessman(r.isBlack(), r.getPositionInArray()).setCaptured();
                 }
             }
-            gsneu.getSquare(f1.getX(), f1.getY()).occupier = null;
+            newState.getSquare(man.getX(), man.getY()).occupier = null;
 
-            f1.doMove(targetx, targety);
+            man.doMove(targetX, targetY);
 
-            gsneu.getSquares()[10 * targetx + targety].occupier = f1;
-            gsneu.blackturn = !gsneu.blackturn;
-            return gsneu;
+            newState.getSquares()[10 * targetX + targetY].occupier = man;
+            newState.blackturn = !newState.blackturn;
+            return newState;
 
         } else {
-            System.out.println("b");
+            System.out.println("Emulating Move not successfull");
             return this;
         }
     }
@@ -181,11 +175,11 @@ public class GameState {
     /**
      * Emulate the given move
      *
-     * @param m the move
+     * @param move the move
      * @return a new instance representing the situation after the move
      */
-    public GameState emulateMove(Movement m) {
-        return GameState.this.emulateMove(m.getChessman(), m.getTargetX(), m.getTargetY());
+    public GameState emulateMove(Movement move) {
+        return GameState.this.emulateMove(move.getChessman(), move.getTargetX(), move.getTargetY());
     }
 
     /**
@@ -195,17 +189,17 @@ public class GameState {
      * @return all captures the given player can currently do
      */
     public List<Movement> getAllCaptures(boolean black) {
-        LinkedList<Movement> ret = new LinkedList();
+        LinkedList<Movement> captures = new LinkedList();
         IntStream.range(0, 16).mapToObj((int num) -> {
-            return getChessmen(black)[num];
+            return getChessman(black, num);
         }).filter((Chessman man) -> {
             return !man.isCaptured();
         }).map((Chessman man) -> {
             return man.getCaptures();
-        }).forEach((List<Movement> captures) -> {
-            ret.addAll(captures);
+        }).forEach((List<Movement> cap) -> {
+            captures.addAll(cap);
         });
-        return ret;
+        return captures;
 
     }
 
@@ -216,28 +210,28 @@ public class GameState {
      * @return all Moves the given player can currently do
      */
     public List<Movement> getAllMoves(boolean black) {
-        LinkedList<Movement> ret = new LinkedList();
+        LinkedList<Movement> moves = new LinkedList();
         IntStream.range(0, 16).mapToObj((int num) -> {
-            return getChessmen(black)[num];
+            return getChessman(black, num);
         }).filter((Chessman man) -> {
             return !man.isCaptured();
         }).map((Chessman man) -> {
             return man.getMoves();
-        }).forEach((List<Movement> captures) -> {
-            ret.addAll(captures);
+        }).forEach((List<Movement> mov) -> {
+            moves.addAll(mov);
         });
 
-        return ret;
+        return moves;
     }
 
     /**
      * Get the number of captured chessman of the given color
      *
-     * @param color the color
+     * @param black whether to select the number of captured black chessman
      * @return the number of captured chessman of the color
      */
-    public int getCaptured(boolean color) {
-        if (color) {
+    public int getCaptured(boolean black) {
+        if (black) {
             return capturedBlack;
         } else {
             return capturedWhite;
@@ -247,14 +241,15 @@ public class GameState {
     /**
      * Get all chessmen of the given color
      *
-     * @param color the color
-     * @return an array of the 16 chessmen (also the captured ones!)
+     * @param black the color of the chessman
+     * @param number the number of the chessman
+     * @return the chessman with the given number and color
      */
-    public Chessman[] getChessmen(boolean color) {
-        if (color) {
-            return chessmenBlack;
+    public Chessman getChessman(boolean black, int number) {
+        if (black) {
+            return chessmenBlack[number];
         } else {
-            return chessmenWhite;
+            return chessmenWhite[number];
         }
     }
 
@@ -284,7 +279,7 @@ public class GameState {
      * @return a list of all captures
      */
     public List<Movement> getPossibleCaptures(int positioninarray, boolean black) {
-        return getChessmen(black)[positioninarray].getCaptures();
+        return getChessman(black, positioninarray).getCaptures();
     }
 
     /**
@@ -295,7 +290,7 @@ public class GameState {
      * @return a list of all moves
      */
     public List<Movement> getPossibleMoves(int positioninarray, boolean black) {
-        return getChessmen(black)[positioninarray].getMoves();
+        return getChessman(black, positioninarray).getMoves();
     }
 
     /**
@@ -427,5 +422,9 @@ public class GameState {
      */
     private Square[] getSquares() {
         return squares;
+    }
+
+    void setChessman(boolean black, int number, Chessman man) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

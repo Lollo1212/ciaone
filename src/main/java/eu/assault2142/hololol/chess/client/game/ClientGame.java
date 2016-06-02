@@ -53,7 +53,7 @@ public final class ClientGame extends Game {
      * @param targetY the target y-coordinate
      */
     public void doCapture(int number, int targetX, int targetY) {
-        Chessman man = getGameState().getChessmen(getGameState().getTurn())[number];
+        Chessman man = getGameState().getChessman(getGameState().getTurn(), number);
         man.addCapture(new Movement(targetX, targetY, man));
         man.doCapture(targetX, targetY);
         updateMovements();
@@ -67,7 +67,7 @@ public final class ClientGame extends Game {
      * @param targetY the target y-coordinate
      */
     public void doMove(int number, int targetX, int targetY) {
-        Chessman man = getGameState().getChessmen(getGameState().getTurn())[number];
+        Chessman man = getGameState().getChessman(getGameState().getTurn(), number);
         man.addMove(new Movement(targetX, targetY, man));
         man.doMove(targetX, targetY);
         updateMovements();

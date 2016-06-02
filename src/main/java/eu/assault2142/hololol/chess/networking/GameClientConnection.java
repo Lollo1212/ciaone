@@ -53,25 +53,25 @@ public class GameClientConnection {
         String str3 = "moves:black:capture:";
         String str4 = "move:white:capture:";
         for (int a = 0; a < 16; a++) {
-            List<Movement> m = gs.getChessmen(true)[a].getMoves();
+            List<Movement> m = gs.getChessman(true, a).getMoves();
             for (Movement m1 : m) {
                 if (m1 != null) {
                     str1 += m1.getTargetX() + "" + m1.getTargetY() + "" + m1.getChessman().getPositionInArray() + ";";
                 }
             }
-            m = gs.getChessmen(true)[a].getCaptures();
+            m = gs.getChessman(true, a).getCaptures();
             for (Movement m1 : m) {
                 if (m1 != null) {
                     str3 += m1.getTargetX() + "" + m1.getTargetY() + "" + m1.getChessman().getPositionInArray() + ";";
                 }
             }
-            m = gs.getChessmen(false)[a].getMoves();
+            m = gs.getChessman(false, a).getMoves();
             for (Movement m1 : m) {
                 if (m1 != null) {
                     str2 += m1.getTargetX() + "" + m1.getTargetY() + "" + m1.getChessman().getPositionInArray() + ";";
                 }
             }
-            m = gs.getChessmen(false)[a].getCaptures();
+            m = gs.getChessman(false, a).getCaptures();
             for (Movement m1 : m) {
                 if (m1 != null) {
                     str4 += m1.getTargetX() + "" + m1.getTargetY() + "" + m1.getChessman().getPositionInArray() + ";";

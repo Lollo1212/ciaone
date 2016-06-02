@@ -69,12 +69,12 @@ public abstract class MovementUpdater extends Thread {
     protected void updateMovements() {
         Thread[] t = new Thread[32];
         for (int a = 0; a < 16; a++) {
-            if (!gamestate.getChessmen(true)[a].isCaptured()) {
-                t[a] = new MovementUpdaterThread(gamestate.getChessmen(true)[a]);
+            if (!gamestate.getChessman(true, a).isCaptured()) {
+                t[a] = new MovementUpdaterThread(gamestate.getChessman(true, a));
                 t[a].start();
             }
-            if (!gamestate.getChessmen(false)[a].isCaptured()) {
-                t[a + 16] = new MovementUpdaterThread(gamestate.getChessmen(false)[a]);
+            if (!gamestate.getChessman(false, a).isCaptured()) {
+                t[a + 16] = new MovementUpdaterThread(gamestate.getChessman(false, a));
                 t[a + 16].start();
             }
         }
