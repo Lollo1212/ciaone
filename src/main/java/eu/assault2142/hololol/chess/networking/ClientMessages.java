@@ -28,7 +28,6 @@ public enum ClientMessages {
     Check("check"),
     Checkmate("checkmate"),
     Stalemate("stalemate"),
-    Moves("moves:{0}"),
     Resignation("resignation:{0}"),
     Draw("draw"),
     DrawOffer("draw:offer"),
