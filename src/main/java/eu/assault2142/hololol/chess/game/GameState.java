@@ -424,7 +424,18 @@ public class GameState {
         return squares;
     }
 
-    void setChessman(boolean black, int number, Chessman man) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    /**
+     * Update the given chessman
+     *
+     * @param black the color of the old chessman
+     * @param number the number of the old chessman
+     * @param man the new chessman
+     */
+    public void setChessman(boolean black, int number, Chessman man) {
+        if (black) {
+            chessmenBlack[number] = man;
+        } else {
+            chessmenWhite[number] = man;
+        }
     }
 }
