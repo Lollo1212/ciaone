@@ -126,7 +126,7 @@ public class GameBoard extends JPanel {
      * Load the images
      */
     private void loadImages() {
-        String sprache = Translator.getLanguageString();
+        String sprache = Translator.getLanguageCode();
         backgroundTurnBlack = new ImageIcon(getClass().getResource(Settings.SETTINGS.chessmenFolder + "/bschwarz.gif"));
         backgroundTurnWhite = new ImageIcon(getClass().getResource(Settings.SETTINGS.chessmenFolder + "/bweiß.gif"));
         fontTurnWhite = new ImageIcon(getClass().getResource("/fonts/tweiß" + sprache + ".gif"));
