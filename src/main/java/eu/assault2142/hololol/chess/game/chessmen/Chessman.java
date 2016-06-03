@@ -241,11 +241,11 @@ public abstract class Chessman {
      * @param captures the list of captures
      * @param posx the targetX
      * @param posy the targetY
-     * @param situation the current gamestate
+     * @param gamestate the current gamestate
      * @return true if the target is not occupied, false otherwise
      */
-    protected boolean addIfCapturePossible(List<Move> captures, int posx, int posy, GameState situation) {
-        Square square = situation.getSquare(posx, posy);
+    protected boolean addIfCapturePossible(List<Move> captures, int posx, int posy, GameState gamestate) {
+        Square square = gamestate.getSquare(posx, posy);
         if (square != null) {
             if (square.isOccupiedByColor(!black)) {
                 captures.add(new Move(posx, posy, this));
@@ -263,11 +263,11 @@ public abstract class Chessman {
      * @param moves the list of moves
      * @param posx the targetX
      * @param posy the targetY
-     * @param situation the current gamestate
+     * @param gamestate the current gamestate
      * @return true if the target is not occupied, false otherwise
      */
-    protected boolean addIfMovePossible(List<Move> moves, int posx, int posy, GameState situation) {
-        Square square = situation.getSquare(posx, posy);
+    protected boolean addIfMovePossible(List<Move> moves, int posx, int posy, GameState gamestate) {
+        Square square = gamestate.getSquare(posx, posy);
         if (square != null && !square.isOccupied()) {
             moves.add(new Move(posx, posy, this));
             return true;
@@ -309,13 +309,13 @@ public abstract class Chessman {
      * player
      *
      * @param moves the list of moves
-     * @param situation the gamestate
+     * @param gamestate the gamestate
      * @return the list without the check-moves
      */
-    protected LinkedList<Move> removeCheckMoves(List<Move> moves, GameState situation) {
+    protected LinkedList<Move> removeCheckMoves(List<Move> moves, GameState gamestate) {
         LinkedList<Move> ret = new LinkedList();
         moves.stream().filter((Move move) -> {
-            GameState gsnew = situation.emulateMove(this, move.targetX, move.targetY);
+            GameState gsnew = gamestate.emulateMove(this, move.targetX, move.targetY);
             return !gsnew.dangerForKing(black);
         }).forEach(ret::add);
         return ret;

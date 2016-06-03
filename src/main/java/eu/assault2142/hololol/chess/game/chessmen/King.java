@@ -11,6 +11,8 @@ import java.util.Optional;
  */
 public class King extends Chessman {
 
+    private List<CastlingMove> castlings;
+
     /**
      * Creates a new King
      *
@@ -33,8 +35,6 @@ public class King extends Chessman {
         k.positioninarray = numberinarray;
         return k;
     }
-
-    private List<CastlingMove> castlings;
 
     /**
      * Creates a new King
@@ -78,38 +78,38 @@ public class King extends Chessman {
      *
      * @param checkForCheck whether to remove castlings which lead to a
      * check-situation
-     * @param situation
+     * @param gamestate the game-state
      * @return an array of possible castlings
      */
-    public List<CastlingMove> computeCastlings(boolean checkForCheck, GameState situation) {
+    public List<CastlingMove> computeCastlings(boolean checkForCheck, GameState gamestate) {
         LinkedList<CastlingMove> possibleCastlings = new LinkedList();
-        Chessman rook1 = situation.getChessman(black, 8);
-        Chessman rook2 = situation.getChessman(black, 8);
+        Chessman rook1 = gamestate.getChessman(black, 8);
+        Chessman rook2 = gamestate.getChessman(black, 8);
         if (black == true) {
-            if (!moved && !rook1.captured && !rook1.moved && !situation.getSquare(1, 0).isOccupied() && !situation.getSquare(2, 0).isOccupied() && !situation.getSquare(3, 0).isOccupied()) {
+            if (!moved && !rook1.captured && !rook1.moved && !gamestate.getSquare(1, 0).isOccupied() && !gamestate.getSquare(2, 0).isOccupied() && !gamestate.getSquare(3, 0).isOccupied()) {
                 possibleCastlings.add(new CastlingMove(2, 0, (Rook) rook1, 3, 0, this));
             }
-            if (!moved && !rook2.captured && !rook2.moved && !situation.getSquare(5, 0).isOccupied() && !situation.getSquare(6, 0).isOccupied()) {
+            if (!moved && !rook2.captured && !rook2.moved && !gamestate.getSquare(5, 0).isOccupied() && !gamestate.getSquare(6, 0).isOccupied()) {
                 possibleCastlings.add(new CastlingMove(6, 0, (Rook) gamestate.getChessman(true, 9), 5, 0, this));
             }
         } else {
-            if (!moved && !rook1.captured && !rook1.moved && !situation.getSquare(1, 7).isOccupied() && !situation.getSquare(2, 7).isOccupied() && !situation.getSquare(3, 7).isOccupied()) {
+            if (!moved && !rook1.captured && !rook1.moved && !gamestate.getSquare(1, 7).isOccupied() && !gamestate.getSquare(2, 7).isOccupied() && !gamestate.getSquare(3, 7).isOccupied()) {
                 possibleCastlings.add(new CastlingMove(2, 7, (Rook) gamestate.getChessman(false, 8), 3, 7, this));
             }
-            if (!moved && !rook2.captured && !rook2.moved && !situation.getSquare(5, 7).isOccupied() && !situation.getSquare(6, 7).isOccupied()) {
+            if (!moved && !rook2.captured && !rook2.moved && !gamestate.getSquare(5, 7).isOccupied() && !gamestate.getSquare(6, 7).isOccupied()) {
                 possibleCastlings.add(new CastlingMove(6, 7, (Rook) gamestate.getChessman(false, 9), 5, 7, this));
             }
         }
         if (checkForCheck) {
             GameState gsneu;
-            List<Move> schläge;
+            List<Move> enemyCaptures;
             for (int a = 0; a < possibleCastlings.size(); a++) {
                 CastlingMove move = possibleCastlings.get(a);
                 int kx = move.targetX;
                 if (kx < posX) {
                     for (int b = posX; b >= kx; b--) {
                         gsneu = gamestate.emulateMove(this, b, posY);
-                        schläge = gsneu.computeAllCaptures(!black);
+                        enemyCaptures = gsneu.computeAllCaptures(!black);
                         if (gsneu.dangerForKing(black)) {
                             possibleCastlings.remove(a);
                         }
@@ -117,7 +117,7 @@ public class King extends Chessman {
                 } else {
                     for (int b = posX; b < kx; b++) {
                         gsneu = gamestate.emulateMove(this, b, posY);
-                        schläge = gsneu.computeAllCaptures(!black);
+                        enemyCaptures = gsneu.computeAllCaptures(!black);
                         if (gsneu.dangerForKing(black)) {
                             possibleCastlings.remove(a);
                         }
@@ -129,15 +129,15 @@ public class King extends Chessman {
     }
 
     @Override
-    public List<Move> computeMoves(boolean checkForCheck, GameState situation) {
+    public List<Move> computeMoves(boolean checkForCheck, GameState gamestate) {
         LinkedList<Move> possibleMoves = new LinkedList();
         for (int k = -1; k <= 1; k++) {
             for (int j = -1; j <= 1; j++) {
-                addIfMovePossible(possibleMoves, posX + k, posY + j, situation);
+                addIfMovePossible(possibleMoves, posX + k, posY + j, gamestate);
             }
         }
         if (checkForCheck) {
-            possibleMoves = removeCheckMoves(possibleMoves, situation);
+            possibleMoves = removeCheckMoves(possibleMoves, gamestate);
 
         }
         return possibleMoves;
@@ -147,18 +147,18 @@ public class King extends Chessman {
      * Do a castling with this chessman
      *
      * @param move the castling-move to execute
-     * @param situation
+     * @param gamestate the game-state
      * @return true if the capture was successful, false otherwise
      */
-    public boolean doCastling(CastlingMove move, GameState situation) {
-        if (situation.getTurn() == black) {
-            List<CastlingMove> rochaden = computeCastlings(true, situation);
+    public boolean doCastling(CastlingMove move, GameState gamestate) {
+        if (gamestate.getTurn() == black) {
+            List<CastlingMove> rochaden = computeCastlings(true, gamestate);
             Optional<CastlingMove> opt = rochaden.stream().filter((CastlingMove castl) -> {
                 return castl.equals(move);
             }).findFirst();
             boolean ret = opt.isPresent();
             opt.ifPresent((CastlingMove castl) -> {
-                executeCastling(castl, situation);
+                executeCastling(castl, gamestate);
             });
             return ret;
         }
@@ -184,19 +184,20 @@ public class King extends Chessman {
      * Execute the given castling-move. Does not perform any checks if possible
      *
      * @param move the castling to execute
-     * @param situation the current gamestate
+     * @param gamestate the current gamestate
      */
-    private void executeCastling(CastlingMove move, GameState situation) {
-        //könig ziehen
-        situation.getSquare(posX, posY).occupier = null;
-        situation.getSquare(move.targetX, move.targetY).occupier = this;
-        situation.getSquare(move.getRook().posX, move.getRook().posY).occupier = null;
-        situation.getSquare(move.getRookX(), move.getRookY()).occupier = move.getRook();
-        //Turm ziehen
+    private void executeCastling(CastlingMove move, GameState gamestate) {
+
+        gamestate.getSquare(posX, posY).occupier = null;
+        gamestate.getSquare(move.targetX, move.targetY).occupier = this;
+        gamestate.getSquare(move.getRook().posX, move.getRook().posY).occupier = null;
+        gamestate.getSquare(move.getRookX(), move.getRookY()).occupier = move.getRook();
+
         posX = move.targetX;
         posY = move.targetY;
         move.getRook().posX = move.getRookX();
         move.getRook().posY = move.getRookY();
+
         gamestate.nextTurn(this);
     }
 
