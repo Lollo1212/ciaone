@@ -41,18 +41,9 @@ public class GameState {
     public GameState(Game game) {
 
         squares = new Square[78];
-        int squarenumber;
-        for (int squareX = 0; squareX <= 7; squareX++) {
-            for (int squareY = 0; squareY <= 7; squareY++) {
-                squarenumber = 10 * squareX + squareY;
-                squares[squarenumber] = new Square(squareX, squareY);
-            }
-        }
         blackturn = false;
         this.game = game;
 
-        chessmenBlack = buildChessmen(true, squares);
-        chessmenWhite = buildChessmen(false, squares);
     }
 
     /**
@@ -285,6 +276,19 @@ public class GameState {
         } else {
             capturedWhite++;
         }
+    }
+
+    public void init() {
+        int squarenumber;
+        for (int squareX = 0; squareX <= 7; squareX++) {
+            for (int squareY = 0; squareY <= 7; squareY++) {
+                squarenumber = 10 * squareX + squareY;
+                squares[squarenumber] = new Square(squareX, squareY);
+            }
+        }
+
+        chessmenBlack = buildChessmen(true, squares);
+        chessmenWhite = buildChessmen(false, squares);
     }
 
     /**

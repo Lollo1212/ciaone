@@ -22,6 +22,7 @@ public abstract class Game {
     protected Game(TYPE type) {
         this.type = type;
         gamestate = new GameState(this);
+        gamestate.init();
     }
 
     /**

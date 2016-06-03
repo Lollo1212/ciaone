@@ -127,18 +127,18 @@ public class Pawn extends Chessman {
     }
 
     @Override
-    public List<Move> computeMoves(boolean checkForCheck, GameState situation) {
+    public List<Move> computeMoves(boolean checkForCheck, GameState gamestate) {
         LinkedList<Move> moves = new LinkedList();
         if (black) {
-            if (addIfMovePossible(moves, posX, posY + 1, situation) && posY == 1) {
-                addIfMovePossible(moves, posX, posY + 2, situation);
+            if (addIfMovePossible(moves, posX, posY + 1, gamestate) && posY == 1) {
+                addIfMovePossible(moves, posX, posY + 2, gamestate);
             }
-        } else if (addIfMovePossible(moves, posX, posY - 1, situation) && posY == 6) {
-            addIfMovePossible(moves, posX, posY - 2, situation);
+        } else if (addIfMovePossible(moves, posX, posY - 1, gamestate) && posY == 6) {
+            addIfMovePossible(moves, posX, posY - 2, gamestate);
         }
         //Überprüfen auf Schach-Position
         if (checkForCheck) {
-            moves = removeCheckMoves(moves, situation);
+            moves = removeCheckMoves(moves, gamestate);
         }
         return moves;
     }
