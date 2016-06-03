@@ -24,15 +24,22 @@ public class ServerGame extends Game {
         updateMovements();
     }
 
-    public void incomingClick(int posx, int posy, GameClientConnection conn) {
-        if (conn.equals(client1) == getGameState().getTurn()) {
-            clickAt(posx, posy);
+    /**
+     * Handle an click sent from a client
+     *
+     * @param squareX the x-coordinate (in squares)
+     * @param squareY the y-coordinate (in squares)
+     * @param client the client who sent the click
+     */
+    public void incomingClick(int squareX, int squareY, GameClientConnection client) {
+        if (client.equals(client1) == getGameState().getTurn()) {
+            clickAt(squareX, squareY);
         }
     }
 
     @Override
-    public void clickAt(int feldx, int feldy) {
-        selected = getGameState().getSquare(feldx, feldy);
+    public void clickAt(int squareX, int squareY) {
+        selected = getGameState().getSquare(squareX, squareY);
         doMoveIfPossible();
         picked = selected.occupier;
     }
@@ -53,7 +60,7 @@ public class ServerGame extends Game {
                 }
 
                 if (picked.getClass() == King.class) {
-                    //((King) picked).doCastling(getCastlingMove(), getGameState());
+                    ((King) picked).doCastling(getCastlingMove(), getGameState());
                 }
             }
         }
@@ -81,11 +88,13 @@ public class ServerGame extends Game {
 
     @Override
     public void endGame() {
+        client1.endGame();
+        client2.endGame();
     }
 
     @Override
     public void finishedCalcs() {
-        //send moves
+
     }
 
     /**
@@ -134,7 +143,7 @@ public class ServerGame extends Game {
     }
 
     @Override
-    public void updateMovements() {
+    public final void updateMovements() {
         new ServerMovementUpdater(getGameState()).start();
     }
 }

@@ -34,6 +34,10 @@ public class GameClientConnection {
         reader = new GameConnectionThread(this);
     }
 
+    public void endGame() {
+        game = null;
+    }
+
     private void write(String str) {
         printwriter.println(str);
     }
