@@ -22,23 +22,16 @@ public class Bishop extends Chessman {
      * @return the bishop
      */
     public static Bishop createBishop(boolean black, int number, Game game, int numberinarray) {
+        if (number < 0 || number > 1) {
+            throw new IllegalArgumentException("The given number is incorrect");
+        }
         int posY;
-        if (black == true) {
+        if (black) {
             posY = 0;
         } else {
             posY = 7;
         }
-        Bishop bishop;
-        switch (number) {
-            case 0:
-                bishop = new Bishop(black, 2, posY, game);
-                break;
-            case 1:
-                bishop = new Bishop(black, 5, posY, game);
-                break;
-            default:
-                throw new IllegalArgumentException("The given number is incorrect");
-        }
+        Bishop bishop = new Bishop(black, 2 + number * 3, posY, game);
         bishop.positioninarray = numberinarray;
         return bishop;
     }

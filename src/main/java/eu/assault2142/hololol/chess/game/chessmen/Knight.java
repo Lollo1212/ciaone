@@ -21,23 +21,16 @@ public class Knight extends Chessman {
      * @return the knight
      */
     public static Knight createKnight(boolean black, int number, Game game, int numberinarray) {
+        if (number < 0 || number > 1) {
+            throw new IllegalArgumentException("The given number is incorrect");
+        }
         int posY;
-        if (black == true) {
+        if (black) {
             posY = 0;
         } else {
             posY = 7;
         }
-        Knight knight;
-        switch (number) {
-            case 0:
-                knight = new Knight(black, 1, posY, game);
-                break;
-            case 1:
-                knight = new Knight(black, 6, posY, game);
-                break;
-            default:
-                throw new IllegalArgumentException("The given number is incorrect");
-        }
+        Knight knight = new Knight(black, 1 + number * 5, posY, game);
         knight.positioninarray = numberinarray;
         return knight;
     }
@@ -83,37 +76,37 @@ public class Knight extends Chessman {
     }
 
     @Override
-    public List<Move> computeCaptures(boolean checkForChecks, GameState situation) {
+    public List<Move> computeCaptures(boolean checkForChecks, GameState gamestate) {
         LinkedList<Move> possibleCaptures = new LinkedList();
-        addIfCapturePossible(possibleCaptures, posX - 2, posY + 1, situation);
-        addIfCapturePossible(possibleCaptures, posX - 2, posY - 1, situation);
-        addIfCapturePossible(possibleCaptures, posX + 2, posY + 1, situation);
-        addIfCapturePossible(possibleCaptures, posX + 2, posY - 1, situation);
-        addIfCapturePossible(possibleCaptures, posX + 1, posY + 2, situation);
-        addIfCapturePossible(possibleCaptures, posX - 1, posY + 2, situation);
-        addIfCapturePossible(possibleCaptures, posX + 1, posY - 2, situation);
-        addIfCapturePossible(possibleCaptures, posX - 1, posY - 2, situation);
+        addIfCapturePossible(possibleCaptures, posX - 2, posY + 1, gamestate);
+        addIfCapturePossible(possibleCaptures, posX - 2, posY - 1, gamestate);
+        addIfCapturePossible(possibleCaptures, posX + 2, posY + 1, gamestate);
+        addIfCapturePossible(possibleCaptures, posX + 2, posY - 1, gamestate);
+        addIfCapturePossible(possibleCaptures, posX + 1, posY + 2, gamestate);
+        addIfCapturePossible(possibleCaptures, posX - 1, posY + 2, gamestate);
+        addIfCapturePossible(possibleCaptures, posX + 1, posY - 2, gamestate);
+        addIfCapturePossible(possibleCaptures, posX - 1, posY - 2, gamestate);
 
         if (checkForChecks) {
-            possibleCaptures = removeCheckMoves(possibleCaptures, situation);
+            possibleCaptures = removeCheckMoves(possibleCaptures, gamestate);
         }
         return possibleCaptures;
     }
 
     @Override
-    public List<Move> computeMoves(boolean checkForCheck, GameState situation) {
+    public List<Move> computeMoves(boolean checkForCheck, GameState gamestate) {
         LinkedList<Move> possibleMoves = new LinkedList();
-        addIfMovePossible(possibleMoves, posX - 2, posY + 1, situation);
-        addIfMovePossible(possibleMoves, posX - 2, posY - 1, situation);
-        addIfMovePossible(possibleMoves, posX + 2, posY + 1, situation);
-        addIfMovePossible(possibleMoves, posX + 2, posY - 1, situation);
-        addIfMovePossible(possibleMoves, posX + 1, posY + 2, situation);
-        addIfMovePossible(possibleMoves, posX - 1, posY + 2, situation);
-        addIfMovePossible(possibleMoves, posX + 1, posY - 2, situation);
-        addIfMovePossible(possibleMoves, posX - 1, posY - 2, situation);
+        addIfMovePossible(possibleMoves, posX - 2, posY + 1, gamestate);
+        addIfMovePossible(possibleMoves, posX - 2, posY - 1, gamestate);
+        addIfMovePossible(possibleMoves, posX + 2, posY + 1, gamestate);
+        addIfMovePossible(possibleMoves, posX + 2, posY - 1, gamestate);
+        addIfMovePossible(possibleMoves, posX + 1, posY + 2, gamestate);
+        addIfMovePossible(possibleMoves, posX - 1, posY + 2, gamestate);
+        addIfMovePossible(possibleMoves, posX + 1, posY - 2, gamestate);
+        addIfMovePossible(possibleMoves, posX - 1, posY - 2, gamestate);
 
         if (checkForCheck) {
-            possibleMoves = removeCheckMoves(possibleMoves, situation);
+            possibleMoves = removeCheckMoves(possibleMoves, gamestate);
         }
         return possibleMoves;
     }
