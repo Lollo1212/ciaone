@@ -23,7 +23,7 @@ public abstract class Chessman {
     //the gamestate
     GameState gamestate;
     //false if not moved till now
-    boolean moved = false;
+    boolean moved;
     List<Move> moves;
     //x-coordinate
     int posX;
@@ -33,8 +33,6 @@ public abstract class Chessman {
     int positioninarray;
     //the class of the chessman
     NAMES type;
-    //the value of this chessman
-    int value;
 
     /**
      * Create a new Chessman
@@ -177,14 +175,6 @@ public abstract class Chessman {
 
     public NAMES getType() {
         return type;
-    }
-
-    /**
-     *
-     * @return the value of the chessman
-     */
-    public int getValue() {
-        return value;
     }
 
     /**

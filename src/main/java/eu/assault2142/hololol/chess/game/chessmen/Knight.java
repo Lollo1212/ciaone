@@ -74,7 +74,6 @@ public class Knight extends Chessman {
     private Knight(boolean black, int posx, int posy, Game game) {
         super(black, posx, posy, game);
         type = NAMES.KNIGHT;
-        value = 8;
     }
 
     @Override

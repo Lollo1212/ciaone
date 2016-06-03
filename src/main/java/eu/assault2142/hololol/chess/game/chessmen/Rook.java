@@ -23,7 +23,6 @@ public class Rook extends Chessman {
     private Rook(boolean black, int posx, int posy, Game game) {
         super(black, posx, posy, game);
         type = NAMES.ROOK;
-        value = 5;
     }
 
     /**

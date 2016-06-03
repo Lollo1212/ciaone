@@ -48,7 +48,6 @@ public class King extends Chessman {
     private King(boolean black, int posx, int posy, Game game) {
         super(black, posx, posy, game);
         type = NAMES.KING;
-        value = 500;
     }
 
     @Override

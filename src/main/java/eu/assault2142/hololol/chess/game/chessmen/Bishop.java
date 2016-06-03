@@ -75,7 +75,6 @@ public class Bishop extends Chessman {
     private Bishop(boolean black, int posx, int posy, Game game) {
         super(black, posx, posy, game);
         type = NAMES.BISHOP;
-        value = 3;
     }
 
     @Override

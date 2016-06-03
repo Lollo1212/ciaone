@@ -22,7 +22,6 @@ public class Queen extends Chessman {
     private Queen(boolean black, int posx, int posy, Game game) {
         super(black, posx, posy, game);
         type = NAMES.QUEEN;
-        value = 10;
     }
 
     /**
