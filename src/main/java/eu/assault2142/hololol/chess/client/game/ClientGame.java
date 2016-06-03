@@ -3,7 +3,7 @@ package eu.assault2142.hololol.chess.client.game;
 import eu.assault2142.hololol.chess.client.game.ui.swing.GameFrame;
 import eu.assault2142.hololol.chess.client.networking.ServerConnection;
 import eu.assault2142.hololol.chess.game.chessmen.Chessman;
-import eu.assault2142.hololol.chess.game.chessmen.Movement;
+import eu.assault2142.hololol.chess.game.chessmen.Move;
 import eu.assault2142.hololol.chess.game.chessmen.Pawn;
 import eu.assault2142.hololol.chess.networking.ServerMessages;
 import java.awt.EventQueue;
@@ -54,7 +54,7 @@ public final class ClientGame extends Game {
      */
     public void doCapture(int number, int targetX, int targetY) {
         Chessman man = getGameState().getChessman(getGameState().getTurn(), number);
-        man.addCapture(new Movement(targetX, targetY, man));
+        man.addCapture(new Move(targetX, targetY, man));
         man.doCapture(targetX, targetY);
         updateMovements();
     }
@@ -68,7 +68,7 @@ public final class ClientGame extends Game {
      */
     public void doMove(int number, int targetX, int targetY) {
         Chessman man = getGameState().getChessman(getGameState().getTurn(), number);
-        man.addMove(new Movement(targetX, targetY, man));
+        man.addMove(new Move(targetX, targetY, man));
         man.doMove(targetX, targetY);
         updateMovements();
     }

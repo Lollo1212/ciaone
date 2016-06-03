@@ -1,7 +1,7 @@
 package eu.assault2142.hololol.chess.game;
 
 import eu.assault2142.hololol.chess.game.chessmen.King;
-import eu.assault2142.hololol.chess.game.chessmen.Movement;
+import eu.assault2142.hololol.chess.game.chessmen.Move;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -28,8 +28,8 @@ public abstract class MovementUpdater extends Thread {
      * Check for check, checkmate and stalemate
      */
     protected void testCheck() {
-        List<Movement> captures = gamestate.getAllCaptures(!gamestate.getTurn());
-        for (Movement capture : captures) {
+        List<Move> captures = gamestate.getAllCaptures(!gamestate.getTurn());
+        for (Move capture : captures) {
             if (capture != null) {
                 Square square = gamestate.getSquare(capture.getTargetX(), capture.getTargetY());
                 if (square.isOccupied() && square.occupier.getClass() == King.class) {
@@ -39,11 +39,11 @@ public abstract class MovementUpdater extends Thread {
             }
         }
 
-        List<Movement> moves = gamestate.getAllMoves(gamestate.getTurn());
+        List<Move> moves = gamestate.getAllMoves(gamestate.getTurn());
         captures = gamestate.getAllCaptures(gamestate.getTurn());
         moves.addAll(captures);
         nomovepossible = true;
-        for (Movement move : moves) {
+        for (Move move : moves) {
             if (move != null) {
                 nomovepossible = false;
                 break;

@@ -66,8 +66,8 @@ public class Queen extends Chessman {
     }
 
     @Override
-    public List<Movement> computeMoves(boolean checkForCheck, GameState situation) {
-        LinkedList<Movement> moves = new LinkedList();
+    public List<Move> computeMoves(boolean checkForCheck, GameState situation) {
+        LinkedList<Move> moves = new LinkedList();
         for (int c = 1; c <= 6; c++) {
             if (!addIfMovePossible(moves, posX + c, posY + c, situation)) {
                 break;
@@ -116,8 +116,8 @@ public class Queen extends Chessman {
     }
 
     @Override
-    public List<Movement> computeCaptures(boolean checkForCheck, GameState situation) {
-        LinkedList<Movement> captures = new LinkedList();
+    public List<Move> computeCaptures(boolean checkForCheck, GameState situation) {
+        LinkedList<Move> captures = new LinkedList();
         for (int c = 1; c <= 6; c++) {
             if (!addIfCapturePossible(captures, posX + c, posY + c, situation)) {
                 break;

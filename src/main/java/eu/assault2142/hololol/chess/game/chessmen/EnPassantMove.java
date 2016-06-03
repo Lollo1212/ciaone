@@ -1,13 +1,13 @@
 package eu.assault2142.hololol.chess.game.chessmen;
 
 /**
- * Represents a EnPassant-move
+ * Represents an EnPassant-move
  *
  * @author hololol2
  */
-public class EnPassantMove extends Movement {
+public class EnPassantMove extends Move {
 
-    private final Pawn enemy;
+    private final Pawn pawn;
 
     /**
      * Create a new EnPassantMove
@@ -15,11 +15,11 @@ public class EnPassantMove extends Movement {
      * @param targetX the target x-coordinate
      * @param targetY the target y-coordinate
      * @param chessman the chessman which does the move
-     * @param e the enemy pawn which will be captured
+     * @param pawn the enemy pawn which will be captured
      */
-    public EnPassantMove(int targetX, int targetY, Chessman chessman, Pawn e) {
+    public EnPassantMove(int targetX, int targetY, Chessman chessman, Pawn pawn) {
         super(targetX, targetY, chessman);
-        enemy = e;
+        this.pawn = pawn;
     }
 
     /**
@@ -28,7 +28,7 @@ public class EnPassantMove extends Movement {
      * @return the pawn which will be captured
      */
     public Pawn getEnemyPawn() {
-        return enemy;
+        return pawn;
     }
 
 }

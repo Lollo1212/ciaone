@@ -5,14 +5,14 @@ package eu.assault2142.hololol.chess.game.chessmen;
  *
  * @author hololol2
  */
-public class CastlingMove extends Movement {
+public class CastlingMove extends Move {
 
     //The rook involved
-    Rook rook;
+    private Rook rook;
     //the targetX of the rook
-    int rookX;
+    private int rookX;
     //the targetY of the rook
-    int rookY;
+    private int rookY;
 
     /**
      * Create a new Castling-Move
@@ -39,5 +39,17 @@ public class CastlingMove extends Movement {
      */
     public boolean equals(CastlingMove rm) {
         return rm.rook == rook && rm.rookX == rookX && rm.rookY == rookY && super.equals(rm);
+    }
+
+    public Rook getRook() {
+        return rook;
+    }
+
+    public int getRookX() {
+        return rookX;
+    }
+
+    public int getRookY() {
+        return rookY;
     }
 }

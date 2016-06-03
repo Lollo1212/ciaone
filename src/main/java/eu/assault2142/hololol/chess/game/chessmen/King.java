@@ -60,8 +60,8 @@ public class King extends Chessman {
     }
 
     @Override
-    public List<Movement> computeCaptures(boolean checkForChecks, GameState situation) {
-        LinkedList<Movement> captures = new LinkedList();
+    public List<Move> computeCaptures(boolean checkForChecks, GameState situation) {
+        LinkedList<Move> captures = new LinkedList();
         for (int k = -1; k <= 1; k++) {
             for (int j = -1; j <= 1; j++) {
                 addIfCapturePossible(captures, posX + k, posY + j, situation);
@@ -104,7 +104,7 @@ public class King extends Chessman {
         //Überprüfen ob legal
         if (checkForCheck) {
             GameState gsneu;
-            List<Movement> schläge;
+            List<Move> schläge;
             for (int a = 0; a < castlings.size(); a++) {
                 CastlingMove move = castlings.get(a);
                 int kx = move.targetX;
@@ -131,8 +131,8 @@ public class King extends Chessman {
     }
 
     @Override
-    public List<Movement> computeMoves(boolean checkForCheck, GameState situation) {
-        LinkedList<Movement> moves = new LinkedList();
+    public List<Move> computeMoves(boolean checkForCheck, GameState situation) {
+        LinkedList<Move> moves = new LinkedList();
         for (int k = -1; k <= 1; k++) {
             for (int j = -1; j <= 1; j++) {
                 addIfMovePossible(moves, posX + k, posY + j, situation);
@@ -207,13 +207,13 @@ public class King extends Chessman {
         //könig ziehen
         situation.getSquare(posX, posY).occupier = null;
         situation.getSquare(move.targetX, move.targetY).occupier = this;
-        situation.getSquare(move.rook.posX, move.rook.posY).occupier = null;
-        situation.getSquare(move.rookX, move.rookY).occupier = move.rook;
+        situation.getSquare(move.getRook().posX, move.getRook().posY).occupier = null;
+        situation.getSquare(move.getRookX(), move.getRookY()).occupier = move.getRook();
         //Turm ziehen
         posX = move.targetX;
         posY = move.targetY;
-        move.rook.posX = move.rookX;
-        move.rook.posY = move.rookY;
+        move.getRook().posX = move.getRookX();
+        move.getRook().posY = move.getRookY();
         gamestate.nextTurn(this);
     }
 

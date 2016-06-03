@@ -2,7 +2,7 @@ package eu.assault2142.hololol.chess.networking;
 
 import eu.assault2142.hololol.chess.game.GameState;
 import eu.assault2142.hololol.chess.game.ServerGame;
-import eu.assault2142.hololol.chess.game.chessmen.Movement;
+import eu.assault2142.hololol.chess.game.chessmen.Move;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
@@ -57,26 +57,26 @@ public class GameClientConnection {
         String str3 = "moves:black:capture:";
         String str4 = "move:white:capture:";
         for (int a = 0; a < 16; a++) {
-            List<Movement> m = gs.getChessman(true, a).getMoves();
-            for (Movement m1 : m) {
+            List<Move> m = gs.getChessman(true, a).getMoves();
+            for (Move m1 : m) {
                 if (m1 != null) {
                     str1 += m1.getTargetX() + "" + m1.getTargetY() + "" + m1.getChessman().getPositionInArray() + ";";
                 }
             }
             m = gs.getChessman(true, a).getCaptures();
-            for (Movement m1 : m) {
+            for (Move m1 : m) {
                 if (m1 != null) {
                     str3 += m1.getTargetX() + "" + m1.getTargetY() + "" + m1.getChessman().getPositionInArray() + ";";
                 }
             }
             m = gs.getChessman(false, a).getMoves();
-            for (Movement m1 : m) {
+            for (Move m1 : m) {
                 if (m1 != null) {
                     str2 += m1.getTargetX() + "" + m1.getTargetY() + "" + m1.getChessman().getPositionInArray() + ";";
                 }
             }
             m = gs.getChessman(false, a).getCaptures();
-            for (Movement m1 : m) {
+            for (Move m1 : m) {
                 if (m1 != null) {
                     str4 += m1.getTargetX() + "" + m1.getTargetY() + "" + m1.getChessman().getPositionInArray() + ";";
                 }

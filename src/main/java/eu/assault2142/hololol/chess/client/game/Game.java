@@ -4,7 +4,7 @@ import eu.assault2142.hololol.chess.client.game.ui.IGameView;
 import eu.assault2142.hololol.chess.game.Square;
 import eu.assault2142.hololol.chess.game.chessmen.CastlingMove;
 import eu.assault2142.hololol.chess.game.chessmen.King;
-import eu.assault2142.hololol.chess.game.chessmen.Movement;
+import eu.assault2142.hololol.chess.game.chessmen.Move;
 import java.util.List;
 
 /**
@@ -59,14 +59,14 @@ public abstract class Game extends eu.assault2142.hololol.chess.game.Game {
     protected void showPossibleMoves() {
         if (selected.occupier != null) {
             picked = selected.occupier;
-            List<Movement> moves = getGameState().getChessman(picked.isBlack(), picked.getPositionInArray()).getMoves();
-            List<Movement> captures = getGameState().getChessman(picked.isBlack(), picked.getPositionInArray()).getCaptures();
+            List<Move> moves = getGameState().getChessman(picked.isBlack(), picked.getPositionInArray()).getMoves();
+            List<Move> captures = getGameState().getChessman(picked.isBlack(), picked.getPositionInArray()).getCaptures();
 
-            moves.stream().forEach((Movement move) -> {
+            moves.stream().forEach((Move move) -> {
                 getGameState().getSquare(move.getTargetX(), move.getTargetY()).highlight(Square.HIGHLIGHT.MOVETARGET);
             });
 
-            captures.stream().forEach((Movement move) -> {
+            captures.stream().forEach((Move move) -> {
                 getGameState().getSquare(move.getTargetX(), move.getTargetY()).highlight(Square.HIGHLIGHT.CAPTURETARGET);
             });
 

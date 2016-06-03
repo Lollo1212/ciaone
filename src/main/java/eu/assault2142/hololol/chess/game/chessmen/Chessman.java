@@ -18,12 +18,12 @@ public abstract class Chessman {
     boolean black;
     //true if it is captured
     boolean captured;
-    List<Movement> captures;
+    List<Move> captures;
     //the gamestate
     GameState gamestate;
     //false if not moved till now
     boolean moved = false;
-    List<Movement> moves;
+    List<Move> moves;
     //x-coordinate
     int posX;
     //y-coordinate
@@ -57,7 +57,7 @@ public abstract class Chessman {
      *
      * @param move a capture this chessman should be allowed to do
      */
-    public void addCapture(Movement move) {
+    public void addCapture(Move move) {
         if (gamestate.getGame().getType() == Game.TYPE.CLIENT) {
             captures.add(move);
         }
@@ -68,7 +68,7 @@ public abstract class Chessman {
      *
      * @param move a move this chessman should be allowed to do
      */
-    public void addMove(Movement move) {
+    public void addMove(Move move) {
         if (gamestate.getGame().getType() == Game.TYPE.CLIENT) {
             moves.add(move);
         }
@@ -85,7 +85,7 @@ public abstract class Chessman {
      * @param gamestate
      * @return an array of possible captures
      */
-    public abstract List<Movement> computeCaptures(boolean checkForCheck, GameState gamestate);
+    public abstract List<Move> computeCaptures(boolean checkForCheck, GameState gamestate);
 
     /**
      * Compute the moves this chessman is allowed to do
@@ -95,7 +95,7 @@ public abstract class Chessman {
      * @param gamestate
      * @return an array of possible moves
      */
-    public abstract List<Movement> computeMoves(boolean checkForCheck, GameState gamestate);
+    public abstract List<Move> computeMoves(boolean checkForCheck, GameState gamestate);
 
     /**
      * Do a capture with this chessman
@@ -105,17 +105,17 @@ public abstract class Chessman {
      * @return true if the capture was successful, false otherwise
      */
     public boolean doCapture(int targetX, int targetY) {
-        Movement capture = new Movement(targetX, targetY, this);
+        Move capture = new Move(targetX, targetY, this);
         Square square = gamestate.getSquare(targetX, targetY);
         boolean successfull = false;
         if (gamestate.getTurn() == black) {
-            List<Movement> bewegungen = getCaptures();
+            List<Move> bewegungen = getCaptures();
             if (bewegungen != null && square.isOccupiedByColor(!black)) {
-                Optional<Movement> findFirst = bewegungen.stream().filter((Movement m) -> {
+                Optional<Move> findFirst = bewegungen.stream().filter((Move m) -> {
                     return capture.equals(m);
                 }).findFirst();
                 successfull = findFirst.isPresent();
-                findFirst.ifPresent((Movement m) -> {
+                findFirst.ifPresent((Move m) -> {
                     executeCapture(m);
                 });
             }
@@ -131,17 +131,17 @@ public abstract class Chessman {
      * @return true if the move was successful, false otherwise
      */
     public boolean doMove(int targetX, int targetY) {
-        Movement move = new Movement(targetX, targetY, this);
+        Move move = new Move(targetX, targetY, this);
         Square square = gamestate.getSquare(targetX, targetY);
         boolean successfull = false;
         if (gamestate.getTurn() == black) {
-            List<Movement> bewegungen = getMoves();
+            List<Move> bewegungen = getMoves();
             if (bewegungen != null && !square.isOccupied()) {
-                Optional<Movement> findFirst = bewegungen.stream().filter((Movement m) -> {
+                Optional<Move> findFirst = bewegungen.stream().filter((Move m) -> {
                     return move.equals(m);
                 }).findFirst();
                 successfull = findFirst.isPresent();
-                findFirst.ifPresent((Movement m) -> {
+                findFirst.ifPresent((Move m) -> {
                     executeMove(m);
                 });
             }
@@ -154,7 +154,7 @@ public abstract class Chessman {
      *
      * @return the captures this chessman is allowed to do
      */
-    public List<Movement> getCaptures() {
+    public List<Move> getCaptures() {
         return captures;
     }
 
@@ -163,7 +163,7 @@ public abstract class Chessman {
      *
      * @return the moves this chessman is allowed to do
      */
-    public List<Movement> getMoves() {
+    public List<Move> getMoves() {
         return moves;
     }
 
@@ -246,11 +246,11 @@ public abstract class Chessman {
      * @param situation the current gamestate
      * @return true if the target is not occupied, false otherwise
      */
-    protected boolean addIfCapturePossible(List<Movement> captures, int posx, int posy, GameState situation) {
+    protected boolean addIfCapturePossible(List<Move> captures, int posx, int posy, GameState situation) {
         Square square = situation.getSquare(posx, posy);
         if (square != null) {
             if (square.isOccupiedByColor(!black)) {
-                captures.add(new Movement(posx, posy, this));
+                captures.add(new Move(posx, posy, this));
                 return false;
             }
             return !square.isOccupied();
@@ -268,10 +268,10 @@ public abstract class Chessman {
      * @param situation the current gamestate
      * @return true if the target is not occupied, false otherwise
      */
-    protected boolean addIfMovePossible(List<Movement> moves, int posx, int posy, GameState situation) {
+    protected boolean addIfMovePossible(List<Move> moves, int posx, int posy, GameState situation) {
         Square square = situation.getSquare(posx, posy);
         if (square != null && !square.isOccupied()) {
-            moves.add(new Movement(posx, posy, this));
+            moves.add(new Move(posx, posy, this));
             return true;
         }
         return false;
@@ -314,9 +314,9 @@ public abstract class Chessman {
      * @param situation the gamestate
      * @return the list without the check-moves
      */
-    protected LinkedList<Movement> removeCheckMoves(List<Movement> moves, GameState situation) {
-        LinkedList<Movement> ret = new LinkedList();
-        moves.stream().filter((Movement move) -> {
+    protected LinkedList<Move> removeCheckMoves(List<Move> moves, GameState situation) {
+        LinkedList<Move> ret = new LinkedList();
+        moves.stream().filter((Move move) -> {
             GameState gsnew = situation.emulateMove(this, move.targetX, move.targetY);
             return !gsnew.dangerForKing(black);
         }).forEach(ret::add);
@@ -328,7 +328,7 @@ public abstract class Chessman {
      *
      * @param move the capture to execute
      */
-    private void executeCapture(Movement move) {
+    private void executeCapture(Move move) {
         Chessman chessman = gamestate.getSquare(move.targetX, move.targetY).occupier;
         chessman.captured = true;
         chessman.moveToEdgeZone();
@@ -344,7 +344,7 @@ public abstract class Chessman {
      *
      * @param move the move to execute
      */
-    private void executeMove(Movement move) {
+    private void executeMove(Move move) {
         gamestate.getSquare(posX, posY).occupier = null;
         posX = move.targetX;
         posY = move.targetY;

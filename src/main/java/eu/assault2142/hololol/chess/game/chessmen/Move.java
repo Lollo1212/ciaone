@@ -5,7 +5,7 @@ package eu.assault2142.hololol.chess.game.chessmen;
  *
  * @author hololol2
  */
-public class Movement {
+public class Move {
 
     //the x-coordinate of the target-square
     int targetX;
@@ -20,7 +20,7 @@ public class Movement {
      * @param targetY the target y-coordinate
      * @param chessman the chessman
      */
-    public Movement(int targetX, int targetY, Chessman chessman) {
+    public Move(int targetX, int targetY, Chessman chessman) {
         this.targetX = targetX;
         this.targetY = targetY;
         this.chessman = chessman;
@@ -51,12 +51,12 @@ public class Movement {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (o != null && o.getClass() == Movement.class) {
-            Movement other = (Movement) o;
-            return other.targetX == targetX && other.targetY == targetY && other.chessman.equals(chessman);
+    public boolean equals(Object other) {
+        if (other != null && other.getClass() == Move.class) {
+            Move move = (Move) other;
+            return move.targetX == targetX && move.targetY == targetY && move.chessman.equals(chessman);
         } else {
-            return super.equals(o);
+            return super.equals(other);
         }
     }
 }

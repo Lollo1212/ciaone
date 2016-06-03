@@ -50,13 +50,13 @@ public class Pawn extends Chessman {
         if (!r) {
             Square square = gamestate.getSquare(targetX, targetY + (black ? -1 : +1));
             if (gamestate.getTurn() == black) {
-                List<Movement> bewegungen = getMoves();
+                List<Move> bewegungen = getMoves();
                 if (square != null && bewegungen != null && square.isOccupiedByColor(!black)) {
-                    Optional<Movement> findFirst = bewegungen.stream().filter((Movement m) -> {
+                    Optional<Move> findFirst = bewegungen.stream().filter((Move m) -> {
                         return m.getClass() == EnPassantMove.class && targetX == m.getTargetX();
                     }).findFirst();
                     r = findFirst.isPresent();
-                    findFirst.ifPresent((Movement m) -> {
+                    findFirst.ifPresent((Move m) -> {
                         executeEnPassant((EnPassantMove) m);
                     });
                 }
@@ -127,8 +127,8 @@ public class Pawn extends Chessman {
     }
 
     @Override
-    public List<Movement> computeMoves(boolean checkForCheck, GameState situation) {
-        LinkedList<Movement> moves = new LinkedList();
+    public List<Move> computeMoves(boolean checkForCheck, GameState situation) {
+        LinkedList<Move> moves = new LinkedList();
         if (black) {
             if (addIfMovePossible(moves, posX, posY + 1, situation) && posY == 1) {
                 addIfMovePossible(moves, posX, posY + 2, situation);
@@ -144,8 +144,8 @@ public class Pawn extends Chessman {
     }
 
     @Override
-    public List<Movement> computeCaptures(boolean checkForCheck, GameState situation) {
-        LinkedList<Movement> captures = new LinkedList();
+    public List<Move> computeCaptures(boolean checkForCheck, GameState situation) {
+        LinkedList<Move> captures = new LinkedList();
         if (black == true) {
             addIfCapturePossible(captures, posX + 1, posY + 1, situation);
             addIfCapturePossible(captures, posX - 1, posY + 1, situation);
