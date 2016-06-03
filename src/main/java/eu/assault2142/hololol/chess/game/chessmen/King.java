@@ -23,16 +23,16 @@ public class King extends Chessman {
      * @return the king
      */
     public static King createKing(boolean black, Game game, int numberinarray) {
-        int a;
-        int b;
+        int posX;
+        int posY;
         if (black == true) {
-            a = 4;
-            b = 0;
+            posX = 4;
+            posY = 0;
         } else {
-            a = 4;
-            b = 7;
+            posX = 4;
+            posY = 7;
         }
-        King k = new King(black, a, b, game);
+        King k = new King(black, posX, posY, game);
         k.positioninarray = numberinarray;
         return k;
     }
@@ -60,15 +60,15 @@ public class King extends Chessman {
     }
 
     @Override
-    public List<Move> computeCaptures(boolean checkForChecks, GameState situation) {
+    public List<Move> computeCaptures(boolean considerCheck, GameState gamestate) {
         LinkedList<Move> possibleCaptures = new LinkedList();
         for (int k = -1; k <= 1; k++) {
             for (int j = -1; j <= 1; j++) {
-                addIfCapturePossible(possibleCaptures, posX + k, posY + j, situation);
+                addIfCapturePossible(possibleCaptures, posX + k, posY + j, gamestate);
             }
         }
-        if (checkForChecks) {
-            possibleCaptures = removeCheckMoves(possibleCaptures, situation);
+        if (considerCheck) {
+            possibleCaptures = removeCheckMoves(possibleCaptures, gamestate);
         }
         return possibleCaptures;
     }
@@ -76,12 +76,12 @@ public class King extends Chessman {
     /**
      * Compute the castlings this king is allowed to do
      *
-     * @param checkForCheck whether to remove castlings which lead to a
+     * @param considerCheck whether to remove castlings which lead to a
      * check-situation
      * @param gamestate the game-state
      * @return an array of possible castlings
      */
-    public List<CastlingMove> computeCastlings(boolean checkForCheck, GameState gamestate) {
+    public List<CastlingMove> computeCastlings(boolean considerCheck, GameState gamestate) {
         LinkedList<CastlingMove> possibleCastlings = new LinkedList();
         Chessman rook1 = gamestate.getChessman(black, 8);
         Chessman rook2 = gamestate.getChessman(black, 8);
@@ -100,7 +100,7 @@ public class King extends Chessman {
                 possibleCastlings.add(new CastlingMove(6, 7, (Rook) gamestate.getChessman(false, 9), 5, 7, this));
             }
         }
-        if (checkForCheck) {
+        if (considerCheck) {
             GameState gsneu;
             List<Move> enemyCaptures;
             for (int a = 0; a < possibleCastlings.size(); a++) {
@@ -129,14 +129,14 @@ public class King extends Chessman {
     }
 
     @Override
-    public List<Move> computeMoves(boolean checkForCheck, GameState gamestate) {
+    public List<Move> computeMoves(boolean considerCheck, GameState gamestate) {
         LinkedList<Move> possibleMoves = new LinkedList();
         for (int k = -1; k <= 1; k++) {
             for (int j = -1; j <= 1; j++) {
                 addIfMovePossible(possibleMoves, posX + k, posY + j, gamestate);
             }
         }
-        if (checkForCheck) {
+        if (considerCheck) {
             possibleMoves = removeCheckMoves(possibleMoves, gamestate);
 
         }
