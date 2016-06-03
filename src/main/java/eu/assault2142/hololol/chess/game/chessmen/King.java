@@ -17,7 +17,7 @@ public class King extends Chessman {
      * Creates a new King
      *
      * @param black whether this chessman is black or not
-     * @param game the gamesituation
+     * @param game the gamestate
      * @param numberinarray the number in the chessmen-array
      * @return the king
      */
@@ -42,7 +42,7 @@ public class King extends Chessman {
      * @param black whether this chessman is black or not
      * @param posx the x-coordinate
      * @param posy the y-coordinate
-     * @param game the gamesituation
+     * @param game the gamestate
      */
     private King(boolean black, int posx, int posy, GameState game) {
         super(black, posx, posy, game);
@@ -52,7 +52,7 @@ public class King extends Chessman {
 
     @Override
     public King clone() {
-        King k = new King(black, posx, posy, gamesituation);
+        King k = new King(black, posX, posY, gamestate);
         k.captured = captured;
         k.moved = moved;
         k.positioninarray = positioninarray;
@@ -64,7 +64,7 @@ public class King extends Chessman {
         LinkedList<Movement> captures = new LinkedList();
         for (int k = -1; k <= 1; k++) {
             for (int j = -1; j <= 1; j++) {
-                addIfCapturePossible(captures, posx + k, posy + j, situation);
+                addIfCapturePossible(captures, posX + k, posY + j, situation);
             }
         }
         //Überprüfen auf Schach-Position
@@ -91,14 +91,14 @@ public class King extends Chessman {
                 castlings.add(new CastlingMove(2, 0, (Rook) rook1, 3, 0, this));
             }
             if (!moved && !rook2.captured && !rook2.moved && !situation.getSquare(5, 0).isOccupied() && !situation.getSquare(6, 0).isOccupied()) {
-                castlings.add(new CastlingMove(6, 0, (Rook) gamesituation.getChessman(true, 9), 5, 0, this));
+                castlings.add(new CastlingMove(6, 0, (Rook) gamestate.getChessman(true, 9), 5, 0, this));
             }
         } else {
             if (!moved && !rook1.captured && !rook1.moved && !situation.getSquare(1, 7).isOccupied() && !situation.getSquare(2, 7).isOccupied() && !situation.getSquare(3, 7).isOccupied()) {
-                castlings.add(new CastlingMove(2, 7, (Rook) gamesituation.getChessman(false, 8), 3, 7, this));
+                castlings.add(new CastlingMove(2, 7, (Rook) gamestate.getChessman(false, 8), 3, 7, this));
             }
             if (!moved && !rook2.captured && !rook2.moved && !situation.getSquare(5, 7).isOccupied() && !situation.getSquare(6, 7).isOccupied()) {
-                castlings.add(new CastlingMove(6, 7, (Rook) gamesituation.getChessman(false, 9), 5, 7, this));
+                castlings.add(new CastlingMove(6, 7, (Rook) gamestate.getChessman(false, 9), 5, 7, this));
             }
         }
         //Überprüfen ob legal
@@ -108,17 +108,17 @@ public class King extends Chessman {
             for (int a = 0; a < castlings.size(); a++) {
                 CastlingMove move = castlings.get(a);
                 int kx = move.targetX;
-                if (kx < posx) {
-                    for (int b = posx; b >= kx; b--) {
-                        gsneu = gamesituation.emulateMove(this, b, posy);
+                if (kx < posX) {
+                    for (int b = posX; b >= kx; b--) {
+                        gsneu = gamestate.emulateMove(this, b, posY);
                         schläge = gsneu.computeAllCaptures(!black);
                         if (gsneu.dangerForKing(black)) {
                             castlings.remove(a);
                         }
                     }
                 } else {
-                    for (int b = posx; b < kx; b++) {
-                        gsneu = gamesituation.emulateMove(this, b, posy);
+                    for (int b = posX; b < kx; b++) {
+                        gsneu = gamestate.emulateMove(this, b, posY);
                         schläge = gsneu.computeAllCaptures(!black);
                         if (gsneu.dangerForKing(black)) {
                             castlings.remove(a);
@@ -135,7 +135,7 @@ public class King extends Chessman {
         LinkedList<Movement> moves = new LinkedList();
         for (int k = -1; k <= 1; k++) {
             for (int j = -1; j <= 1; j++) {
-                addIfMovePossible(moves, posx + k, posy + j, situation);
+                addIfMovePossible(moves, posX + k, posY + j, situation);
             }
         }
         //Überprüfen auf Schach-Position
@@ -205,22 +205,22 @@ public class King extends Chessman {
      */
     private void executeCastling(CastlingMove move, GameState situation) {
         //könig ziehen
-        situation.getSquare(posx, posy).occupier = null;
+        situation.getSquare(posX, posY).occupier = null;
         situation.getSquare(move.targetX, move.targetY).occupier = this;
-        situation.getSquare(move.rook.posx, move.rook.posy).occupier = null;
+        situation.getSquare(move.rook.posX, move.rook.posY).occupier = null;
         situation.getSquare(move.rookX, move.rookY).occupier = move.rook;
         //Turm ziehen
-        posx = move.targetX;
-        posy = move.targetY;
-        move.rook.posx = move.rookX;
-        move.rook.posy = move.rookY;
-        gamesituation.nextTurn(this);
+        posX = move.targetX;
+        posY = move.targetY;
+        move.rook.posX = move.rookX;
+        move.rook.posY = move.rookY;
+        gamestate.nextTurn(this);
     }
 
     @Override
     public void updateMovements() {
         super.updateMovements();
-        castlings = computeCastlings(true, gamesituation);
+        castlings = computeCastlings(true, gamestate);
     }
 
 }

@@ -16,7 +16,7 @@ public class Knight extends Chessman {
      * @param black whether this chessman is black or not
      * @param posx the x-coordinate
      * @param posy the y-coordinate
-     * @param game the gamesituation
+     * @param game the gamestate
      */
     private Knight(boolean black, int posx, int posy, GameState game) {
         super(black, posx, posy, game);
@@ -29,7 +29,7 @@ public class Knight extends Chessman {
      *
      * @param black whether this chessman is black or not
      * @param number the number of the bishop (0 for the left, 1 for the right)
-     * @param game the gamesituation
+     * @param game the gamestate
      * @param numberinarray the number in the chessmen-array
      * @return the knight
      */
@@ -61,14 +61,14 @@ public class Knight extends Chessman {
     @Override
     public List<Movement> computeMoves(boolean checkForCheck, GameState situation) {
         LinkedList<Movement> moves = new LinkedList();
-        addIfMovePossible(moves, posx - 2, posy + 1, situation);
-        addIfMovePossible(moves, posx - 2, posy - 1, situation);
-        addIfMovePossible(moves, posx + 2, posy + 1, situation);
-        addIfMovePossible(moves, posx + 2, posy - 1, situation);
-        addIfMovePossible(moves, posx + 1, posy + 2, situation);
-        addIfMovePossible(moves, posx - 1, posy + 2, situation);
-        addIfMovePossible(moves, posx + 1, posy - 2, situation);
-        addIfMovePossible(moves, posx - 1, posy - 2, situation);
+        addIfMovePossible(moves, posX - 2, posY + 1, situation);
+        addIfMovePossible(moves, posX - 2, posY - 1, situation);
+        addIfMovePossible(moves, posX + 2, posY + 1, situation);
+        addIfMovePossible(moves, posX + 2, posY - 1, situation);
+        addIfMovePossible(moves, posX + 1, posY + 2, situation);
+        addIfMovePossible(moves, posX - 1, posY + 2, situation);
+        addIfMovePossible(moves, posX + 1, posY - 2, situation);
+        addIfMovePossible(moves, posX - 1, posY - 2, situation);
         if (checkForCheck) {
             moves = removeCheckMoves(moves, situation);
         }
@@ -78,14 +78,14 @@ public class Knight extends Chessman {
     @Override
     public List<Movement> computeCaptures(boolean checkForChecks, GameState situation) {
         LinkedList<Movement> captures = new LinkedList();
-        addIfCapturePossible(captures, posx - 2, posy + 1, situation);
-        addIfCapturePossible(captures, posx - 2, posy - 1, situation);
-        addIfCapturePossible(captures, posx + 2, posy + 1, situation);
-        addIfCapturePossible(captures, posx + 2, posy - 1, situation);
-        addIfCapturePossible(captures, posx + 1, posy + 2, situation);
-        addIfCapturePossible(captures, posx - 1, posy + 2, situation);
-        addIfCapturePossible(captures, posx + 1, posy - 2, situation);
-        addIfCapturePossible(captures, posx - 1, posy - 2, situation);
+        addIfCapturePossible(captures, posX - 2, posY + 1, situation);
+        addIfCapturePossible(captures, posX - 2, posY - 1, situation);
+        addIfCapturePossible(captures, posX + 2, posY + 1, situation);
+        addIfCapturePossible(captures, posX + 2, posY - 1, situation);
+        addIfCapturePossible(captures, posX + 1, posY + 2, situation);
+        addIfCapturePossible(captures, posX - 1, posY + 2, situation);
+        addIfCapturePossible(captures, posX + 1, posY - 2, situation);
+        addIfCapturePossible(captures, posX - 1, posY - 2, situation);
 
         //Überprüfen auf Schach-Position
         if (checkForChecks) {
@@ -98,13 +98,13 @@ public class Knight extends Chessman {
      * Create a new Knight by promotion
      *
      * @param pawn the pawn to promote
-     * @param game the gamesituation
+     * @param game the gamestate
      * @return a new knight
      */
     public static Knight promotion(Pawn pawn, GameState game) {
         Knight l = null;
-        if ((pawn.posy == 0 && !pawn.black) || (pawn.posy == 7 && pawn.black)) {
-            l = new Knight(pawn.black, pawn.posx, pawn.posy, game);
+        if ((pawn.posY == 0 && !pawn.black) || (pawn.posY == 7 && pawn.black)) {
+            l = new Knight(pawn.black, pawn.posX, pawn.posY, game);
         } else {
             throw new IllegalArgumentException("The pawn is currently not promotable");
         }
@@ -114,7 +114,7 @@ public class Knight extends Chessman {
 
     @Override
     public Knight clone() {
-        Knight s = new Knight(black, posx, posy, gamesituation);
+        Knight s = new Knight(black, posX, posY, gamestate);
         s.captured = captured;
         s.moved = moved;
         s.positioninarray = positioninarray;

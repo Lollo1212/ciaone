@@ -18,7 +18,7 @@ public class Pawn extends Chessman {
      * @param black whether this chessman is black or not
      * @param posx the x-coordinate
      * @param posy the y-coordinate
-     * @param game the gamesituation
+     * @param game the gamestate
      */
     private Pawn(boolean black, int posx, int posy, GameState game) {
         super(black, posx, posy, game);
@@ -34,11 +34,11 @@ public class Pawn extends Chessman {
             if (black == true) {
                 if (targetY == 7) {
                     //Bauer ist ganz "hinten"
-                    gamesituation.getGame().promotion(this);
+                    gamestate.getGame().promotion(this);
 
                 }
             } else if (targetY == 0) {
-                gamesituation.getGame().promotion(this);
+                gamestate.getGame().promotion(this);
             }
         }
         return r;
@@ -48,8 +48,8 @@ public class Pawn extends Chessman {
     public boolean doCapture(int targetX, int targetY) {
         boolean r = super.doCapture(targetX, targetY);
         if (!r) {
-            Square square = gamesituation.getSquare(targetX, targetY + (black ? -1 : +1));
-            if (gamesituation.getTurn() == black) {
+            Square square = gamestate.getSquare(targetX, targetY + (black ? -1 : +1));
+            if (gamestate.getTurn() == black) {
                 List<Movement> bewegungen = getMoves();
                 if (square != null && bewegungen != null && square.isOccupiedByColor(!black)) {
                     Optional<Movement> findFirst = bewegungen.stream().filter((Movement m) -> {
@@ -67,10 +67,10 @@ public class Pawn extends Chessman {
             if (black == true) {
                 if (targetY == 7) {
                     //Bauer ist ganz "hinten"
-                    gamesituation.getGame().promotion(this);
+                    gamestate.getGame().promotion(this);
                 }
             } else if (targetY == 0) {
-                gamesituation.getGame().promotion(this);
+                gamestate.getGame().promotion(this);
             }
         }
         return r;
@@ -82,7 +82,7 @@ public class Pawn extends Chessman {
      * @param black whether this chessman is black or not
      * @param number the number of the bishop (from 0 to 7; 0 for the left, 7
      * for the right)
-     * @param game the gamesituation
+     * @param game the gamestate
      * @param numberinarray the number in the chessmen-array
      * @return the pawn
      */
@@ -130,11 +130,11 @@ public class Pawn extends Chessman {
     public List<Movement> computeMoves(boolean checkForCheck, GameState situation) {
         LinkedList<Movement> moves = new LinkedList();
         if (black) {
-            if (addIfMovePossible(moves, posx, posy + 1, situation) && posy == 1) {
-                addIfMovePossible(moves, posx, posy + 2, situation);
+            if (addIfMovePossible(moves, posX, posY + 1, situation) && posY == 1) {
+                addIfMovePossible(moves, posX, posY + 2, situation);
             }
-        } else if (addIfMovePossible(moves, posx, posy - 1, situation) && posy == 6) {
-            addIfMovePossible(moves, posx, posy - 2, situation);
+        } else if (addIfMovePossible(moves, posX, posY - 1, situation) && posY == 6) {
+            addIfMovePossible(moves, posX, posY - 2, situation);
         }
         //Überprüfen auf Schach-Position
         if (checkForCheck) {
@@ -147,18 +147,18 @@ public class Pawn extends Chessman {
     public List<Movement> computeCaptures(boolean checkForCheck, GameState situation) {
         LinkedList<Movement> captures = new LinkedList();
         if (black == true) {
-            addIfCapturePossible(captures, posx + 1, posy + 1, situation);
-            addIfCapturePossible(captures, posx - 1, posy + 1, situation);
-            Chessman lastmoved = gamesituation.getLastMoved();
-            if (posy == 4 && lastmoved.getClass() == Pawn.class && lastmoved.posy == 4 && (lastmoved.posx == posx + 1 || lastmoved.posx == posx - 1)) {
-                captures.add(new EnPassantMove(lastmoved.posx, 5, this, (Pawn) lastmoved));
+            addIfCapturePossible(captures, posX + 1, posY + 1, situation);
+            addIfCapturePossible(captures, posX - 1, posY + 1, situation);
+            Chessman lastmoved = gamestate.getLastMoved();
+            if (posY == 4 && lastmoved.getClass() == Pawn.class && lastmoved.posY == 4 && (lastmoved.posX == posX + 1 || lastmoved.posX == posX - 1)) {
+                captures.add(new EnPassantMove(lastmoved.posX, 5, this, (Pawn) lastmoved));
             }
         } else {
-            addIfCapturePossible(captures, posx + 1, posy - 1, situation);
-            addIfCapturePossible(captures, posx - 1, posy - 1, situation);
-            Chessman lastmoved = gamesituation.getLastMoved();
-            if (posy == 3 && lastmoved.getClass() == Pawn.class && lastmoved.posy == 3 && (lastmoved.posx == posx + 1 || lastmoved.posx == posx - 1)) {
-                captures.add(new EnPassantMove(lastmoved.posx, 2, this, (Pawn) lastmoved));
+            addIfCapturePossible(captures, posX + 1, posY - 1, situation);
+            addIfCapturePossible(captures, posX - 1, posY - 1, situation);
+            Chessman lastmoved = gamestate.getLastMoved();
+            if (posY == 3 && lastmoved.getClass() == Pawn.class && lastmoved.posY == 3 && (lastmoved.posX == posX + 1 || lastmoved.posX == posX - 1)) {
+                captures.add(new EnPassantMove(lastmoved.posX, 2, this, (Pawn) lastmoved));
             }
         }
         //Überprüfen auf Schach-Position
@@ -170,7 +170,7 @@ public class Pawn extends Chessman {
 
     @Override
     public Pawn clone() {
-        Pawn b = new Pawn(black, posx, posy, gamesituation);
+        Pawn b = new Pawn(black, posX, posY, gamestate);
         b.captured = captured;
         b.moved = moved;
         b.positioninarray = positioninarray;
@@ -187,10 +187,10 @@ public class Pawn extends Chessman {
         Pawn p = m.getEnemyPawn();
         p.captured = true;
         p.moveToEdgeZone();
-        gamesituation.getSquare(posx, posy).occupier = null;
-        posx = m.targetX;
-        posy = m.targetY;
-        gamesituation.getSquare(m.targetX, m.targetY).occupier = this;
-        gamesituation.nextTurn(this);
+        gamestate.getSquare(posX, posY).occupier = null;
+        posX = m.targetX;
+        posY = m.targetY;
+        gamestate.getSquare(m.targetX, m.targetY).occupier = this;
+        gamestate.nextTurn(this);
     }
 }
