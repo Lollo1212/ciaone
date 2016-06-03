@@ -41,12 +41,11 @@ public class GameState {
     public GameState(Game game) {
 
         squares = new Square[78];
-        int o;
-        for (int q = 0; q <= 7; q++) {
-            for (int y = 0; y <= 7; y++) {
-                int l = 0;
-                o = 10 * q + y;
-                squares[o] = new Square(q, y);
+        int squarenumber;
+        for (int squareX = 0; squareX <= 7; squareX++) {
+            for (int squareY = 0; squareY <= 7; squareY++) {
+                squarenumber = 10 * squareX + squareY;
+                squares[squarenumber] = new Square(squareX, squareY);
             }
         }
         blackturn = false;
@@ -71,9 +70,9 @@ public class GameState {
         for (int a = 0; a < gamestate.chessmenWhite.length; a++) {
             chessmenWhite[a] = gamestate.chessmenWhite[a].clone();
         }
-        for (int a = 0; a < gamestate.getSquares().length; a++) {
-            if (gamestate.getSquares()[a] != null) {
-                squares[a] = gamestate.getSquares()[a].clone();
+        for (int a = 0; a < gamestate.squares.length; a++) {
+            if (gamestate.squares[a] != null) {
+                squares[a] = gamestate.squares[a].clone();
             }
         }
         Arrays.stream(chessmenBlack).forEach((Chessman man) -> {
@@ -162,7 +161,7 @@ public class GameState {
 
             man.doMove(targetX, targetY);
 
-            newState.getSquares()[10 * targetX + targetY].occupier = man;
+            newState.squares[10 * targetX + targetY].occupier = man;
             newState.blackturn = !newState.blackturn;
             return newState;
 
@@ -179,7 +178,7 @@ public class GameState {
      * @return a new instance representing the situation after the move
      */
     public GameState emulateMove(Movement move) {
-        return GameState.this.emulateMove(move.getChessman(), move.getTargetX(), move.getTargetY());
+        return this.emulateMove(move.getChessman(), move.getTargetX(), move.getTargetY());
     }
 
     /**
@@ -272,28 +271,6 @@ public class GameState {
     }
 
     /**
-     * Get all possible Captures for the given chessman
-     *
-     * @param positioninarray the number of the chessman
-     * @param black the color of the chessman
-     * @return a list of all captures
-     */
-    public List<Movement> getPossibleCaptures(int positioninarray, boolean black) {
-        return getChessman(black, positioninarray).getCaptures();
-    }
-
-    /**
-     * Get all possible Moves for the given chessman
-     *
-     * @param positioninarray the number of the chessman
-     * @param black the color of the chessman
-     * @return a list of all moves
-     */
-    public List<Movement> getPossibleMoves(int positioninarray, boolean black) {
-        return getChessman(black, positioninarray).getMoves();
-    }
-
-    /**
      * Returns the square at the given position
      *
      * @param targetX the x-coordinate
@@ -335,7 +312,6 @@ public class GameState {
      * @param moved the chessman which was moved
      */
     public void nextTurn(Chessman moved) {
-
         resetFields();
         lastmoved = moved;
         blackturn = !blackturn;
@@ -352,6 +328,21 @@ public class GameState {
                     squares[10 * x + y].resetHighlighting();
                 }
             }
+        }
+    }
+
+    /**
+     * Update the given chessman
+     *
+     * @param black the color of the old chessman
+     * @param number the number of the old chessman
+     * @param man the new chessman
+     */
+    public void setChessman(boolean black, int number, Chessman man) {
+        if (black) {
+            chessmenBlack[number] = man;
+        } else {
+            chessmenWhite[number] = man;
         }
     }
 
@@ -415,27 +406,4 @@ public class GameState {
         return figuren;
     }
 
-    /**
-     * Return the squares
-     *
-     * @return the squares of the game-board
-     */
-    private Square[] getSquares() {
-        return squares;
-    }
-
-    /**
-     * Update the given chessman
-     *
-     * @param black the color of the old chessman
-     * @param number the number of the old chessman
-     * @param man the new chessman
-     */
-    public void setChessman(boolean black, int number, Chessman man) {
-        if (black) {
-            chessmenBlack[number] = man;
-        } else {
-            chessmenWhite[number] = man;
-        }
-    }
 }

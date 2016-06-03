@@ -50,7 +50,7 @@ public class Pawn extends Chessman {
         if (!r) {
             Square square = gamesituation.getSquare(targetX, targetY + (black ? -1 : +1));
             if (gamesituation.getTurn() == black) {
-                List<Movement> bewegungen = gamesituation.getPossibleCaptures(positioninarray, black);
+                List<Movement> bewegungen = getMoves();
                 if (square != null && bewegungen != null && square.isOccupiedByColor(!black)) {
                     Optional<Movement> findFirst = bewegungen.stream().filter((Movement m) -> {
                         return m.getClass() == EnPassantMove.class && targetX == m.getTargetX();

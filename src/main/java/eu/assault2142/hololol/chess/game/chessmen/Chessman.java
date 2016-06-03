@@ -103,7 +103,7 @@ public abstract class Chessman {
         Square square = gamesituation.getSquare(targetX, targetY);
         boolean r = false;
         if (gamesituation.getTurn() == black) {
-            List<Movement> bewegungen = gamesituation.getPossibleCaptures(positioninarray, black);
+            List<Movement> bewegungen = getCaptures();
             if (bewegungen != null && square.isOccupiedByColor(!black)) {
                 Optional<Movement> findFirst = bewegungen.stream().filter((Movement m) -> {
                     return capture.equals(m);
@@ -129,7 +129,7 @@ public abstract class Chessman {
         Square square = gamesituation.getSquare(targetX, targetY);
         boolean r = false;
         if (gamesituation.getTurn() == black) {
-            List<Movement> bewegungen = gamesituation.getPossibleMoves(positioninarray, black);
+            List<Movement> bewegungen = getMoves();
             if (bewegungen != null && !square.isOccupied()) {
                 Optional<Movement> findFirst = bewegungen.stream().filter((Movement m) -> {
                     return move.equals(m);
