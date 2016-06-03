@@ -65,21 +65,21 @@ public abstract class MovementUpdater extends Thread {
      * Update the movements
      */
     protected void updateMovements() {
-        Thread[] t = new Thread[32];
-        for (int a = 0; a < 16; a++) {
-            if (!gamestate.getChessman(true, a).isCaptured()) {
-                t[a] = new MovementUpdaterThread(gamestate.getChessman(true, a));
-                t[a].start();
+        Thread[] threads = new Thread[32];
+        for (int chessmanNumber = 0; chessmanNumber < 16; chessmanNumber++) {
+            if (!gamestate.getChessman(true, chessmanNumber).isCaptured()) {
+                threads[chessmanNumber] = new MovementUpdaterThread(gamestate.getChessman(true, chessmanNumber));
+                threads[chessmanNumber].start();
             }
-            if (!gamestate.getChessman(false, a).isCaptured()) {
-                t[a + 16] = new MovementUpdaterThread(gamestate.getChessman(false, a));
-                t[a + 16].start();
+            if (!gamestate.getChessman(false, chessmanNumber).isCaptured()) {
+                threads[chessmanNumber + 16] = new MovementUpdaterThread(gamestate.getChessman(false, chessmanNumber));
+                threads[chessmanNumber + 16].start();
             }
         }
-        for (int a = 0; a < 32; a++) {
+        for (Thread thread : threads) {
             try {
-                if (t[a] != null) {
-                    t[a].join();
+                if (thread != null) {
+                    thread.join();
                 }
             } catch (InterruptedException ex) {
                 Logger.getLogger(MovementUpdater.class.getName()).log(Level.SEVERE, null, ex);

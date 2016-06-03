@@ -16,55 +16,55 @@ public class Square {
 
     public Color baseColor;
     public Color currentColor;
-    //the x-coordinate
-    private final int x;
-    //the y-coordinate
-    private final int y;
+    //the posX-coordinate
+    private final int posX;
+    //the posY-coordinate
+    private final int posY;
     //the chessman on the field
     public Chessman occupier;
 
     /**
      * Create a new Square
      *
-     * @param x the x-coordinate
-     * @param y the y-coordinate
+     * @param x the posX-coordinate
+     * @param y the posY-coordinate
      */
     public Square(int x, int y) {
-        this.x = x;
-        this.y = y;
+        this.posX = x;
+        this.posY = y;
         setColor();
     }
 
     @Override
     public Square clone() {
-        Square f = new Square(x, y);
+        Square f = new Square(posX, posY);
         f.occupier = occupier;
         return f;
     }
 
     /**
-     * Get the x-coordinate
+     * Get the posX-coordinate
      *
-     * @return the x-coordinate
+     * @return the posX-coordinate
      */
     public int getX() {
-        return x;
+        return posX;
     }
 
     /**
-     * Get the y-coordinate
+     * Get the posY-coordinate
      *
-     * @return the y-coordinate
+     * @return the posY-coordinate
      */
     public int getY() {
-        return y;
+        return posY;
     }
 
     /**
      * Set the Color to light or dark depending on the coordinates
      */
     private void setColor() {
-        if ((x + y) % 2 == 0) {
+        if ((posX + posY) % 2 == 0) {
             baseColor = Settings.SETTINGS.light;
         } else {
             baseColor = Settings.SETTINGS.dark;
