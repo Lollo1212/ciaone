@@ -19,6 +19,7 @@ public abstract class Chessman {
     //true if it is captured
     boolean captured;
     List<Move> captures;
+    Game game;
     //the gamestate
     GameState gamestate;
     //false if not moved till now
@@ -41,10 +42,11 @@ public abstract class Chessman {
      * @param black whether this chessman is black
      * @param posx the x-coordinate
      * @param posy the y-coordinate
-     * @param gamestate the gamestate
+     * @param game the game
      */
-    protected Chessman(boolean black, int posx, int posy, GameState gamestate) {
-        this.gamestate = gamestate;
+    protected Chessman(boolean black, int posx, int posy, Game game) {
+        this.game = game;
+        gamestate = game.getGameState();
         if (posx <= 7 && posx >= 0 && posy <= 7 && posy >= 0) {
             this.black = black;
             this.posX = posx;
@@ -58,7 +60,7 @@ public abstract class Chessman {
      * @param move a capture this chessman should be allowed to do
      */
     public void addCapture(Move move) {
-        if (gamestate.getGame().getType() == Game.TYPE.CLIENT) {
+        if (game.getType() == Game.TYPE.CLIENT) {
             captures.add(move);
         }
     }
@@ -69,7 +71,7 @@ public abstract class Chessman {
      * @param move a move this chessman should be allowed to do
      */
     public void addMove(Move move) {
-        if (gamestate.getGame().getType() == Game.TYPE.CLIENT) {
+        if (game.getType() == Game.TYPE.CLIENT) {
             moves.add(move);
         }
     }

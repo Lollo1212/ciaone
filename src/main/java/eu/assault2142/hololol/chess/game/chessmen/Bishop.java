@@ -1,5 +1,6 @@
 package eu.assault2142.hololol.chess.game.chessmen;
 
+import eu.assault2142.hololol.chess.game.Game;
 import eu.assault2142.hololol.chess.game.GameState;
 import java.util.LinkedList;
 import java.util.List;
@@ -16,11 +17,11 @@ public class Bishop extends Chessman {
      *
      * @param black whether this chessman is black or not
      * @param number the number of the bishop (0 for the left, 1 for the right)
-     * @param game the gamestate
+     * @param game the game
      * @param numberinarray the number in the chessmen-array
      * @return the bishop
      */
-    public static Bishop createBishop(boolean black, int number, GameState game, int numberinarray) {
+    public static Bishop createBishop(boolean black, int number, Game game, int numberinarray) {
         int a;
         int b;
         if (black == true) {
@@ -49,10 +50,10 @@ public class Bishop extends Chessman {
      * Create a new Bishop by promotion
      *
      * @param pawn the pawn to promote
-     * @param game the gamestate
+     * @param game the game
      * @return a new bishop
      */
-    public static Bishop promotion(Pawn pawn, GameState game) {
+    public static Bishop promotion(Pawn pawn, Game game) {
         Bishop l = null;
         if ((pawn.posY == 0 && !pawn.black) || (pawn.posY == 7 && pawn.black)) {
             l = new Bishop(pawn.black, pawn.posX, pawn.posY, game);
@@ -69,9 +70,9 @@ public class Bishop extends Chessman {
      * @param black whether this chessman is black or not
      * @param posx the x-coordinate
      * @param posy the y-coordinate
-     * @param game the gamestate
+     * @param game the game
      */
-    private Bishop(boolean black, int posx, int posy, GameState game) {
+    private Bishop(boolean black, int posx, int posy, Game game) {
         super(black, posx, posy, game);
         type = NAMES.BISHOP;
         value = 3;
@@ -79,7 +80,7 @@ public class Bishop extends Chessman {
 
     @Override
     public Bishop clone() {
-        Bishop l = new Bishop(black, posX, posY, gamestate);
+        Bishop l = new Bishop(black, posX, posY, game);
         l.captured = captured;
         l.moved = moved;
         l.positioninarray = positioninarray;

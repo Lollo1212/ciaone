@@ -1,5 +1,6 @@
 package eu.assault2142.hololol.chess.game.chessmen;
 
+import eu.assault2142.hololol.chess.game.Game;
 import eu.assault2142.hololol.chess.game.GameState;
 import eu.assault2142.hololol.chess.game.Square;
 import java.util.LinkedList;
@@ -18,9 +19,9 @@ public class Pawn extends Chessman {
      * @param black whether this chessman is black or not
      * @param posx the x-coordinate
      * @param posy the y-coordinate
-     * @param game the gamestate
+     * @param game the game
      */
-    private Pawn(boolean black, int posx, int posy, GameState game) {
+    private Pawn(boolean black, int posx, int posy, Game game) {
         super(black, posx, posy, game);
         type = NAMES.PAWN;
         value = 1;
@@ -34,11 +35,11 @@ public class Pawn extends Chessman {
             if (black == true) {
                 if (targetY == 7) {
                     //Bauer ist ganz "hinten"
-                    gamestate.getGame().promotion(this);
+                    game.promotion(this);
 
                 }
             } else if (targetY == 0) {
-                gamestate.getGame().promotion(this);
+                game.promotion(this);
             }
         }
         return r;
@@ -67,10 +68,10 @@ public class Pawn extends Chessman {
             if (black == true) {
                 if (targetY == 7) {
                     //Bauer ist ganz "hinten"
-                    gamestate.getGame().promotion(this);
+                    game.promotion(this);
                 }
             } else if (targetY == 0) {
-                gamestate.getGame().promotion(this);
+                game.promotion(this);
             }
         }
         return r;
@@ -82,11 +83,11 @@ public class Pawn extends Chessman {
      * @param black whether this chessman is black or not
      * @param number the number of the bishop (from 0 to 7; 0 for the left, 7
      * for the right)
-     * @param game the gamestate
+     * @param game the game
      * @param numberinarray the number in the chessmen-array
      * @return the pawn
      */
-    public static Pawn createPawn(boolean black, int number, GameState game, int numberinarray) {
+    public static Pawn createPawn(boolean black, int number, Game game, int numberinarray) {
         int a;
         if (black == true) {
             a = 1;
@@ -170,7 +171,7 @@ public class Pawn extends Chessman {
 
     @Override
     public Pawn clone() {
-        Pawn b = new Pawn(black, posX, posY, gamestate);
+        Pawn b = new Pawn(black, posX, posY, game);
         b.captured = captured;
         b.moved = moved;
         b.positioninarray = positioninarray;

@@ -6,8 +6,8 @@ package eu.assault2142.hololol.chess.game;
  */
 public class ServerMovementUpdater extends MovementUpdater {
 
-    public ServerMovementUpdater(GameState g) {
-        super(g);
+    public ServerMovementUpdater(Game game) {
+        super(game);
     }
 
     @Override

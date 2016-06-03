@@ -49,16 +49,16 @@ public abstract class Game {
         Chessman man;
         switch (target) {
             case "ROOK":
-                man = Rook.promotion(pawn, getGameState());
+                man = Rook.promotion(pawn, this);
                 break;
             case "KNIGHT":
-                man = Knight.promotion(pawn, getGameState());
+                man = Knight.promotion(pawn, this);
                 break;
             case "BISHOP":
-                man = Bishop.promotion(pawn, getGameState());
+                man = Bishop.promotion(pawn, this);
                 break;
             default:
-                man = Queen.promotion(pawn, getGameState());
+                man = Queen.promotion(pawn, this);
                 break;
         }
         getGameState().setChessman(black, number, man);

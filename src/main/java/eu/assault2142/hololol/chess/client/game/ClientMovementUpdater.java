@@ -1,6 +1,5 @@
 package eu.assault2142.hololol.chess.client.game;
 
-import eu.assault2142.hololol.chess.game.GameState;
 import eu.assault2142.hololol.chess.game.MovementUpdater;
 
 /**
@@ -14,10 +13,10 @@ public class ClientMovementUpdater extends MovementUpdater {
     /**
      * Create a new Instance
      *
-     * @param state the game-state to update
+     * @param game the game
      */
-    public ClientMovementUpdater(GameState state) {
-        super(state);
+    public ClientMovementUpdater(Game game) {
+        super(game);
     }
 
     @Override

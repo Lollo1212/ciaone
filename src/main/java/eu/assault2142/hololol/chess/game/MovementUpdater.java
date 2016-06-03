@@ -12,16 +12,18 @@ import java.util.logging.Logger;
  */
 public abstract class MovementUpdater extends Thread {
 
+    private final Game game;
     private final GameState gamestate;
     private boolean schach, nomovepossible;
 
     /**
      * Create a new MovementUpdate
      *
-     * @param g the gamestate to update
+     * @param game the game
      */
-    public MovementUpdater(GameState g) {
-        this.gamestate = g;
+    public MovementUpdater(Game game) {
+        this.game = game;
+        this.gamestate = game.getGameState();
     }
 
     /**
@@ -51,14 +53,14 @@ public abstract class MovementUpdater extends Thread {
         }
         if (nomovepossible) {
             if (schach) {
-                gamestate.getGame().onCheckMate();
+                game.onCheckMate();
             } else {
-                gamestate.getGame().onStaleMate();
+                game.onStaleMate();
             }
         } else if (schach) {
-            gamestate.getGame().onCheck();
+            game.onCheck();
         }
-        gamestate.getGame().finishedCalcs();
+        game.finishedCalcs();
     }
 
     /**

@@ -144,6 +144,6 @@ public class ServerGame extends Game {
 
     @Override
     public final void updateMovements() {
-        new ServerMovementUpdater(getGameState()).start();
+        new ServerMovementUpdater(this).start();
     }
 }

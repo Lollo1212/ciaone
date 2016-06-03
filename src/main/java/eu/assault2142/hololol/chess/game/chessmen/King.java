@@ -1,5 +1,6 @@
 package eu.assault2142.hololol.chess.game.chessmen;
 
+import eu.assault2142.hololol.chess.game.Game;
 import eu.assault2142.hololol.chess.game.GameState;
 import java.util.LinkedList;
 import java.util.List;
@@ -17,11 +18,11 @@ public class King extends Chessman {
      * Creates a new King
      *
      * @param black whether this chessman is black or not
-     * @param game the gamestate
+     * @param game the game
      * @param numberinarray the number in the chessmen-array
      * @return the king
      */
-    public static King createKing(boolean black, GameState game, int numberinarray) {
+    public static King createKing(boolean black, Game game, int numberinarray) {
         int a;
         int b;
         if (black == true) {
@@ -42,9 +43,9 @@ public class King extends Chessman {
      * @param black whether this chessman is black or not
      * @param posx the x-coordinate
      * @param posy the y-coordinate
-     * @param game the gamestate
+     * @param game the game
      */
-    private King(boolean black, int posx, int posy, GameState game) {
+    private King(boolean black, int posx, int posy, Game game) {
         super(black, posx, posy, game);
         type = NAMES.KING;
         value = 500;
@@ -52,7 +53,7 @@ public class King extends Chessman {
 
     @Override
     public King clone() {
-        King k = new King(black, posX, posY, gamestate);
+        King k = new King(black, posX, posY, game);
         k.captured = captured;
         k.moved = moved;
         k.positioninarray = positioninarray;

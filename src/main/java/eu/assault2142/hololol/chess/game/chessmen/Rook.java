@@ -1,5 +1,6 @@
 package eu.assault2142.hololol.chess.game.chessmen;
 
+import eu.assault2142.hololol.chess.game.Game;
 import eu.assault2142.hololol.chess.game.GameState;
 import java.util.LinkedList;
 import java.util.List;
@@ -19,7 +20,7 @@ public class Rook extends Chessman {
      * @param posy the y-coordinate
      * @param game the gamestate
      */
-    private Rook(boolean black, int posx, int posy, GameState game) {
+    private Rook(boolean black, int posx, int posy, Game game) {
         super(black, posx, posy, game);
         type = NAMES.ROOK;
         value = 5;
@@ -34,7 +35,7 @@ public class Rook extends Chessman {
      * @param numberinarray the number in the chessmen-array
      * @return the rook
      */
-    public static Rook createTurm(boolean black, int number, GameState game, int numberinarray) {
+    public static Rook createTurm(boolean black, int number, Game game, int numberinarray) {
         int a;
         int b;
         if (black == true) {
@@ -116,10 +117,10 @@ public class Rook extends Chessman {
      * Create a new Rook by promotion
      *
      * @param pawn the pawn to promote
-     * @param game the gamestate
+     * @param game the game
      * @return a new rook
      */
-    public static Rook promotion(Pawn pawn, GameState game) {
+    public static Rook promotion(Pawn pawn, Game game) {
         Rook l = null;
         if ((pawn.posY == 0 && !pawn.black) || (pawn.posY == 7 && pawn.black)) {
             l = new Rook(pawn.black, pawn.posX, pawn.posY, game);
@@ -152,7 +153,7 @@ public class Rook extends Chessman {
 
     @Override
     public Rook clone() {
-        Rook t = new Rook(black, posX, posY, gamestate);
+        Rook t = new Rook(black, posX, posY, game);
         t.captured = captured;
         t.moved = moved;
         t.positioninarray = positioninarray;

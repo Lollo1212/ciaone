@@ -172,16 +172,6 @@ public class GameState {
     }
 
     /**
-     * Emulate the given move
-     *
-     * @param move the move
-     * @return a new instance representing the situation after the move
-     */
-    public GameState emulateMove(Move move) {
-        return this.emulateMove(move.getChessman(), move.getTargetX(), move.getTargetY());
-    }
-
-    /**
      * Get all captures for the given player
      *
      * @param black true for black player, false for white
@@ -250,15 +240,6 @@ public class GameState {
         } else {
             return chessmenWhite[number];
         }
-    }
-
-    /**
-     * Get the Game
-     *
-     * @return the Game this state belongs to
-     */
-    public Game getGame() {
-        return game;
     }
 
     /**
@@ -357,16 +338,16 @@ public class GameState {
 
         Chessman[] figuren = new Chessman[16];
         for (int a = 0; a < 8; a++) {
-            figuren[a] = Pawn.createPawn(black, a, this, a);
+            figuren[a] = Pawn.createPawn(black, a, game, a);
         }
-        figuren[8] = Rook.createTurm(black, 0, this, 8);
-        figuren[9] = Rook.createTurm(black, 1, this, 9);
-        figuren[10] = Knight.createKnight(black, 0, this, 10);
-        figuren[11] = Knight.createKnight(black, 1, this, 11);
-        figuren[12] = Bishop.createBishop(black, 0, this, 12);
-        figuren[13] = Bishop.createBishop(black, 1, this, 13);
-        figuren[14] = Queen.createQueen(black, this, 14);
-        figuren[15] = King.createKing(black, this, 15);
+        figuren[8] = Rook.createTurm(black, 0, game, 8);
+        figuren[9] = Rook.createTurm(black, 1, game, 9);
+        figuren[10] = Knight.createKnight(black, 0, game, 10);
+        figuren[11] = Knight.createKnight(black, 1, game, 11);
+        figuren[12] = Bishop.createBishop(black, 0, game, 12);
+        figuren[13] = Bishop.createBishop(black, 1, game, 13);
+        figuren[14] = Queen.createQueen(black, game, 14);
+        figuren[15] = King.createKing(black, game, 15);
         if (black == true) {
             squares[1].occupier = figuren[0];
             squares[11].occupier = figuren[1];

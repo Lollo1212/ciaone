@@ -1,5 +1,6 @@
 package eu.assault2142.hololol.chess.game.chessmen;
 
+import eu.assault2142.hololol.chess.game.Game;
 import eu.assault2142.hololol.chess.game.GameState;
 import java.util.LinkedList;
 import java.util.List;
@@ -16,9 +17,9 @@ public class Queen extends Chessman {
      * @param black whether this chessman is black or not
      * @param posx the x-coordinate
      * @param posy the y-coordinate
-     * @param game the gamestate
+     * @param game the game
      */
-    private Queen(boolean black, int posx, int posy, GameState game) {
+    private Queen(boolean black, int posx, int posy, Game game) {
         super(black, posx, posy, game);
         type = NAMES.QUEEN;
         value = 10;
@@ -28,11 +29,11 @@ public class Queen extends Chessman {
      * Creates a new Queen
      *
      * @param black whether this chessman is black or not
-     * @param game the gamestate
+     * @param game the game
      * @param numberinarray the number in the chessmen-array
      * @return the queen
      */
-    public static Queen createQueen(boolean black, GameState game, int numberinarray) {
+    public static Queen createQueen(boolean black, Game game, int numberinarray) {
         int a;
         int b;
         if (black == true) {
@@ -51,10 +52,10 @@ public class Queen extends Chessman {
      * Create a new Queen by promotion
      *
      * @param pawn the pawn to promote
-     * @param game the gamestate
+     * @param game the game
      * @return a new queen
      */
-    public static Queen promotion(Pawn pawn, GameState game) {
+    public static Queen promotion(Pawn pawn, Game game) {
         Queen l = null;
         if ((pawn.posY == 0 && !pawn.black) || (pawn.posY == 7 && pawn.black)) {
             l = new Queen(pawn.black, pawn.posX, pawn.posY, game);
@@ -167,7 +168,7 @@ public class Queen extends Chessman {
 
     @Override
     public Queen clone() {
-        Queen d = new Queen(black, posX, posY, gamestate);
+        Queen d = new Queen(black, posX, posY, game);
         d.captured = captured;
         d.moved = moved;
         d.positioninarray = positioninarray;
