@@ -21,11 +21,12 @@ public class Main {
 
     public static void main(String[] Args) throws URISyntaxException, FileNotFoundException, IOException, ClassNotFoundException {
         Settings.init("");
-        Locale locale = Locale.ENGLISH;
+        Locale locale = Locale.GERMANY;
         Locale.setDefault(locale);
         Translator.setLanguage(locale);
         JOptionPane.setDefaultLocale(locale);
         WebLookAndFeel.install(true);
+
         MENU = new SwingMenu();
     }
 }
