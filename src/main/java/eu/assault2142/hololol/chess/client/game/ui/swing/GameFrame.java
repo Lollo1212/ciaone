@@ -94,7 +94,7 @@ public class GameFrame extends JFrame implements MouseListener, IGameView {
     @Override
     public void mousePressed(MouseEvent evt) {
         if (evt.getClickCount() == 1 && !gamefield.movementsupdating) {
-            game.getGameState().resetFields();
+            game.getGameState().resetHighlightedFields();
             game.clickAt(evt.getX() / squarelength, evt.getY() / squarelength);
         }
     }

@@ -293,7 +293,7 @@ public class GameState {
      * @param moved the chessman which was moved
      */
     public void nextTurn(Chessman moved) {
-        resetFields();
+        resetHighlightedFields();
         lastmoved = moved;
         blackturn = !blackturn;
         game.updateMovements();
@@ -302,28 +302,13 @@ public class GameState {
     /**
      * Reset markings on all fields
      */
-    public void resetFields() {
+    public void resetHighlightedFields() {
         for (int x = 0; x < 8; x++) {
             for (int y = 0; y < 8; y++) {
                 if (squares[10 * x + y] != null) {
                     squares[10 * x + y].resetHighlighting();
                 }
             }
-        }
-    }
-
-    /**
-     * Update the given chessman
-     *
-     * @param black the color of the old chessman
-     * @param number the number of the old chessman
-     * @param man the new chessman
-     */
-    public void setChessman(boolean black, int number, Chessman man) {
-        if (black) {
-            chessmenBlack[number] = man;
-        } else {
-            chessmenWhite[number] = man;
         }
     }
 
@@ -385,6 +370,21 @@ public class GameState {
             squares[37].occupier = figuren[14];
         }
         return figuren;
+    }
+
+    /**
+     * Update the given chessman
+     *
+     * @param black the color of the old chessman
+     * @param number the number of the old chessman
+     * @param man the new chessman
+     */
+    protected void setChessman(boolean black, int number, Chessman man) {
+        if (black) {
+            chessmenBlack[number] = man;
+        } else {
+            chessmenWhite[number] = man;
+        }
     }
 
 }
