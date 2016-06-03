@@ -22,28 +22,25 @@ public class Bishop extends Chessman {
      * @return the bishop
      */
     public static Bishop createBishop(boolean black, int number, Game game, int numberinarray) {
-        int a;
-        int b;
+        int posY;
         if (black == true) {
-            a = 0;
+            posY = 0;
         } else {
-            a = 7;
+            posY = 7;
         }
-        Bishop l;
+        Bishop bishop;
         switch (number) {
             case 0:
-                b = 2;
-                l = new Bishop(black, b, a, game);
+                bishop = new Bishop(black, 2, posY, game);
                 break;
             case 1:
-                b = 5;
-                l = new Bishop(black, b, a, game);
+                bishop = new Bishop(black, 5, posY, game);
                 break;
             default:
                 throw new IllegalArgumentException("The given number is incorrect");
         }
-        l.positioninarray = numberinarray;
-        return l;
+        bishop.positioninarray = numberinarray;
+        return bishop;
     }
 
     /**
@@ -54,14 +51,14 @@ public class Bishop extends Chessman {
      * @return a new bishop
      */
     public static Bishop promotion(Pawn pawn, Game game) {
-        Bishop l = null;
+        Bishop bishop;
         if ((pawn.posY == 0 && !pawn.black) || (pawn.posY == 7 && pawn.black)) {
-            l = new Bishop(pawn.black, pawn.posX, pawn.posY, game);
+            bishop = new Bishop(pawn.black, pawn.posX, pawn.posY, game);
         } else {
             throw new IllegalArgumentException("The pawn is currently not promotable");
         }
-        l.positioninarray = pawn.positioninarray;
-        return l;
+        bishop.positioninarray = pawn.positioninarray;
+        return bishop;
     }
 
     /**
@@ -87,58 +84,48 @@ public class Bishop extends Chessman {
     }
 
     @Override
-    public List<Move> computeCaptures(boolean checkForChecks, GameState situation) {
-        LinkedList<Move> possibelCaptures = new LinkedList();
-        for (int c = 1; c <= 6; c++) {
-            if (!addIfCapturePossible(possibelCaptures, posX + c, posY + c, situation)) {
-                break;
+    public List<Move> computeCaptures(boolean considerCheck, GameState situation) {
+        LinkedList<Move> possibleCaptures = new LinkedList();
+        boolean upright = true, downright = true, downleft = true, upleft = true;
+        for (int step = 1; step <= 6; step++) {
+            if (downright && !addIfCapturePossible(possibleCaptures, posX + step, posY + step, situation)) {
+                downright = false;
+            }
+            if (upright && !addIfCapturePossible(possibleCaptures, posX + step, posY - step, situation)) {
+                upright = false;
+            }
+            if (downleft && !addIfCapturePossible(possibleCaptures, posX - step, posY + step, situation)) {
+                downleft = false;
+            }
+            if (upleft && !addIfCapturePossible(possibleCaptures, posX - step, posY - step, situation)) {
+                upleft = false;
             }
         }
-        for (int c = 1; c <= 6; c++) {
-            if (!addIfCapturePossible(possibelCaptures, posX + c, posY - c, situation)) {
-                break;
-            }
+        if (considerCheck) {
+            possibleCaptures = removeCheckMoves(possibleCaptures, situation);
         }
-        for (int c = 1; c <= 6; c++) {
-            if (!addIfCapturePossible(possibelCaptures, posX - c, posY + c, situation)) {
-                break;
-            }
-        }
-        for (int c = 1; c <= 6; c++) {
-            if (!addIfCapturePossible(possibelCaptures, posX - c, posY - c, situation)) {
-                break;
-            }
-        }
-        if (checkForChecks) {
-            possibelCaptures = removeCheckMoves(possibelCaptures, situation);
-        }
-        return possibelCaptures;
+        return possibleCaptures;
     }
 
     @Override
-    public List<Move> computeMoves(boolean checkForCheck, GameState situation) {
+    public List<Move> computeMoves(boolean considerCheck, GameState situation) {
         LinkedList<Move> possibleMoves = new LinkedList();
-        for (int c = 1; c <= 6; c++) {
-            if (!addIfMovePossible(possibleMoves, posX + c, posY + c, situation)) {
-                break;
+        boolean upright = true, downright = true, downleft = true, upleft = true;
+        for (int step = 1; step <= 6; step++) {
+            if (downright && !addIfMovePossible(possibleMoves, posX + step, posY + step, situation)) {
+                downright = false;
+            }
+            if (upright && !addIfMovePossible(possibleMoves, posX + step, posY - step, situation)) {
+                upright = false;
+            }
+            if (downleft && !addIfMovePossible(possibleMoves, posX - step, posY + step, situation)) {
+                downleft = false;
+            }
+            if (upleft && !addIfMovePossible(possibleMoves, posX - step, posY - step, situation)) {
+                upleft = false;
             }
         }
-        for (int c = 1; c <= 6; c++) {
-            if (!addIfMovePossible(possibleMoves, posX + c, posY - c, situation)) {
-                break;
-            }
-        }
-        for (int c = 1; c <= 6; c++) {
-            if (!addIfMovePossible(possibleMoves, posX - c, posY + c, situation)) {
-                break;
-            }
-        }
-        for (int c = 1; c <= 6; c++) {
-            if (!addIfMovePossible(possibleMoves, posX - c, posY - c, situation)) {
-                break;
-            }
-        }
-        if (checkForCheck) {
+        if (considerCheck) {
             possibleMoves = removeCheckMoves(possibleMoves, situation);
         }
         return possibleMoves;
