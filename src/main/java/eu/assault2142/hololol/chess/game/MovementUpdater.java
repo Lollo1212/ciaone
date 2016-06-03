@@ -13,7 +13,7 @@ import java.util.logging.Logger;
 public abstract class MovementUpdater extends Thread {
 
     private final GameState gamestate;
-    private boolean schach, schachmatt;
+    private boolean schach, nomovepossible;
 
     /**
      * Create a new MovementUpdate
@@ -28,30 +28,28 @@ public abstract class MovementUpdater extends Thread {
      * Check for check, checkmate and stalemate
      */
     protected void testCheck() {
-        List<Movement> schläge = gamestate.getAllCaptures(!gamestate.getTurn());
-        //wenn ziel König ist, dann Schach
-        for (Movement schläge1 : schläge) {
-            if (schläge1 != null) {
-                Square f = gamestate.getSquare(schläge1.getTargetX(), schläge1.getTargetY());
-                if (f.isOccupied() && f.occupier.getClass() == King.class) {
+        List<Movement> captures = gamestate.getAllCaptures(!gamestate.getTurn());
+        for (Movement capture : captures) {
+            if (capture != null) {
+                Square square = gamestate.getSquare(capture.getTargetX(), capture.getTargetY());
+                if (square.isOccupied() && square.occupier.getClass() == King.class) {
                     schach = true;
                     break;
                 }
             }
         }
 
-        List<Movement> zü = gamestate.getAllMoves(gamestate.getTurn());
-        List<Movement> schl = gamestate.getAllCaptures(gamestate.getTurn());
-        zü.addAll(schl);
-        schachmatt = true;
-        //wenn irgendein Zug möglich ist, dann kein schachmatt
-        for (Movement bewegungen1 : zü) {
-            if (bewegungen1 != null) {
-                schachmatt = false;
+        List<Movement> moves = gamestate.getAllMoves(gamestate.getTurn());
+        captures = gamestate.getAllCaptures(gamestate.getTurn());
+        moves.addAll(captures);
+        nomovepossible = true;
+        for (Movement move : moves) {
+            if (move != null) {
+                nomovepossible = false;
                 break;
             }
         }
-        if (schachmatt) {
+        if (nomovepossible) {
             if (schach) {
                 gamestate.getGame().onCheckMate();
             } else {
