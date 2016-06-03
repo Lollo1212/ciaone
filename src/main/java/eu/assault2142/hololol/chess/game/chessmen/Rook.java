@@ -16,100 +16,24 @@ public class Rook extends Chessman {
      * Creates a new Rook
      *
      * @param black whether this chessman is black or not
-     * @param posx the x-coordinate
-     * @param posy the y-coordinate
-     * @param game the gamestate
-     */
-    private Rook(boolean black, int posx, int posy, Game game) {
-        super(black, posx, posy, game);
-        type = NAMES.ROOK;
-    }
-
-    /**
-     * Creates a new Rook
-     *
-     * @param black whether this chessman is black or not
      * @param number the number of the bishop (0 for the left, 1 for the right)
      * @param game the gamestate
      * @param numberinarray the number in the chessmen-array
      * @return the rook
      */
-    public static Rook createTurm(boolean black, int number, Game game, int numberinarray) {
-        int a;
-        int b;
+    public static Rook createRook(boolean black, int number, Game game, int numberinarray) {
+        if (number < 0 || number > 1) {
+            throw new IllegalArgumentException("The given number is incorrect");
+        }
+        int posY;
         if (black == true) {
-            a = 0;
+            posY = 0;
         } else {
-            a = 7;
+            posY = 7;
         }
-        if (number == 0) {
-            b = 0;
-        } else {
-            b = 7;
-        }
-        Rook t = new Rook(black, b, a, game);
+        Rook t = new Rook(black, number * 7, posY, game);
         t.positioninarray = numberinarray;
         return t;
-    }
-
-    @Override
-    public List<Move> computeMoves(boolean checkForCheck, GameState situation) {
-        LinkedList<Move> moves = new LinkedList();
-        for (int u = posX - 1; u >= 0; u--) {
-            if (!addIfMovePossible(moves, u, posY, situation)) {
-                break;
-            }
-        }
-        for (int u = posX + 1; u <= 7; u++) {
-            if (!addIfMovePossible(moves, u, posY, situation)) {
-                break;
-            }
-        }
-        for (int u = posY - 1; u >= 0; u--) {
-            if (!addIfMovePossible(moves, posX, u, situation)) {
-                break;
-            }
-        }
-        for (int u = posY + 1; u <= 7; u++) {
-            if (!addIfMovePossible(moves, posX, u, situation)) {
-                break;
-            }
-        }
-        //Überprüfen auf Schach-Position
-        if (checkForCheck) {
-            moves = removeCheckMoves(moves, situation);
-        }
-        return moves;
-    }
-
-    @Override
-    public List<Move> computeCaptures(boolean checkForCheck, GameState situation) {
-        LinkedList<Move> captures = new LinkedList();
-        for (int u = posX - 1; u >= 0; u--) {
-            if (!addIfCapturePossible(captures, u, posY, situation)) {
-                break;
-            }
-        }
-        for (int u = posX + 1; u <= 7; u++) {
-            if (!addIfCapturePossible(captures, u, posY, situation)) {
-                break;
-            }
-        }
-        for (int u = posY - 1; u >= 0; u--) {
-            if (!addIfCapturePossible(captures, posX, u, situation)) {
-                break;
-            }
-        }
-        for (int u = posY + 1; u <= 7; u++) {
-            if (!addIfCapturePossible(captures, posX, u, situation)) {
-                break;
-            }
-        }
-        //Überprüfen auf Schach-Position
-        if (checkForCheck) {
-            captures = removeCheckMoves(captures, situation);
-        }
-        return captures;
     }
 
     /**
@@ -130,24 +54,17 @@ public class Rook extends Chessman {
         return l;
     }
 
-    @Override
-    public boolean doMove(int targetX, int targetY) {
-        boolean b;
-        b = super.doMove(targetX, targetY);
-        if (b == true) {
-            moved = true;
-        }
-        return b;
-    }
-
-    @Override
-    public boolean doCapture(int targetX, int targetY) {
-        boolean b;
-        b = super.doCapture(targetX, targetY);
-        if (b == true) {
-            moved = true;
-        }
-        return b;
+    /**
+     * Creates a new Rook
+     *
+     * @param black whether this chessman is black or not
+     * @param posx the x-coordinate
+     * @param posy the y-coordinate
+     * @param game the gamestate
+     */
+    private Rook(boolean black, int posx, int posy, Game game) {
+        super(black, posx, posy, game);
+        type = NAMES.ROOK;
     }
 
     @Override
@@ -157,5 +74,53 @@ public class Rook extends Chessman {
         t.moved = moved;
         t.positioninarray = positioninarray;
         return t;
+    }
+
+    @Override
+    public List<Move> computeCaptures(boolean considerCheck, GameState gamestate) {
+        LinkedList<Move> possibleCaptures = new LinkedList();
+        boolean right = true, left = true, up = true, down = true;
+        for (int step = 1; step <= 7; step++) {
+            if (right && !addIfCapturePossible(possibleCaptures, posX + step, posY, gamestate)) {
+                right = false;
+            }
+            if (left && !addIfCapturePossible(possibleCaptures, posX - step, posY, gamestate)) {
+                left = false;
+            }
+            if (up && !addIfCapturePossible(possibleCaptures, posX, posY - step, gamestate)) {
+                up = false;
+            }
+            if (down && !addIfCapturePossible(possibleCaptures, posX, posY + step, gamestate)) {
+                down = false;
+            }
+        }
+        if (considerCheck) {
+            possibleCaptures = removeCheckMoves(possibleCaptures, gamestate);
+        }
+        return possibleCaptures;
+    }
+
+    @Override
+    public List<Move> computeMoves(boolean considerCheck, GameState gamestate) {
+        LinkedList<Move> possibleMoves = new LinkedList();
+        boolean right = true, left = true, up = true, down = true;
+        for (int step = 1; step <= 7; step++) {
+            if (right && !addIfMovePossible(possibleMoves, posX + step, posY, gamestate)) {
+                right = false;
+            }
+            if (left && !addIfMovePossible(possibleMoves, posX - step, posY, gamestate)) {
+                left = false;
+            }
+            if (up && !addIfMovePossible(possibleMoves, posX, posY - step, gamestate)) {
+                up = false;
+            }
+            if (down && !addIfMovePossible(possibleMoves, posX, posY + step, gamestate)) {
+                down = false;
+            }
+        }
+        if (considerCheck) {
+            possibleMoves = removeCheckMoves(possibleMoves, gamestate);
+        }
+        return possibleMoves;
     }
 }

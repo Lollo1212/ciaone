@@ -329,8 +329,8 @@ public class GameState {
         for (int a = 0; a < 8; a++) {
             figuren[a] = Pawn.createPawn(black, a, game, a);
         }
-        figuren[8] = Rook.createTurm(black, 0, game, 8);
-        figuren[9] = Rook.createTurm(black, 1, game, 9);
+        figuren[8] = Rook.createRook(black, 0, game, 8);
+        figuren[9] = Rook.createRook(black, 1, game, 9);
         figuren[10] = Knight.createKnight(black, 0, game, 10);
         figuren[11] = Knight.createKnight(black, 1, game, 11);
         figuren[12] = Bishop.createBishop(black, 0, game, 12);
