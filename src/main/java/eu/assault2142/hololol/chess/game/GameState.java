@@ -76,10 +76,10 @@ public class GameState {
             }
         }
         Arrays.stream(chessmenBlack).forEach((Chessman man) -> {
-            getSquare(man.getX(), man.getY()).occupier = man;
+            getSquare(man.getXPosition(), man.getYPosition()).occupier = man;
         });
         Arrays.stream(chessmenWhite).forEach((Chessman man) -> {
-            getSquare(man.getX(), man.getY()).occupier = man;
+            getSquare(man.getXPosition(), man.getYPosition()).occupier = man;
         });
         blackturn = gamestate.blackturn;
         this.game = gamestate.game;
@@ -157,7 +157,7 @@ public class GameState {
                     newState.getChessman(r.isBlack(), r.getPositionInArray()).setCaptured();
                 }
             }
-            newState.getSquare(man.getX(), man.getY()).occupier = null;
+            newState.getSquare(man.getXPosition(), man.getYPosition()).occupier = null;
 
             man.doMove(targetX, targetY);
 

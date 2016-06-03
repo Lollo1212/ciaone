@@ -80,22 +80,22 @@ public abstract class Chessman {
     /**
      * Compute the captures this chessman is allowed to do
      *
-     * @param checkForCheck whether to remove captures which lead to a
+     * @param considerCheck whether to remove captures which lead to a
      * check-situation
      * @param gamestate
      * @return an array of possible captures
      */
-    public abstract List<Move> computeCaptures(boolean checkForCheck, GameState gamestate);
+    public abstract List<Move> computeCaptures(boolean considerCheck, GameState gamestate);
 
     /**
      * Compute the moves this chessman is allowed to do
      *
-     * @param checkForCheck whether to remove moves which lead to a
+     * @param considerCheck whether to remove moves which lead to a
      * check-situation
      * @param gamestate
      * @return an array of possible moves
      */
-    public abstract List<Move> computeMoves(boolean checkForCheck, GameState gamestate);
+    public abstract List<Move> computeMoves(boolean considerCheck, GameState gamestate);
 
     /**
      * Do a capture with this chessman
@@ -116,9 +116,7 @@ public abstract class Chessman {
                 findFirst.ifPresent(this::executeCapture);
             }
         }
-        if (successfull) {
-            moved = true;
-        }
+        moved |= successfull;
         return successfull;
     }
 
@@ -141,9 +139,7 @@ public abstract class Chessman {
                 findFirst.ifPresent(this::executeMove);
             }
         }
-        if (successfull) {
-            moved = true;
-        }
+        moved |= successfull;
         return successfull;
     }
 
@@ -181,7 +177,7 @@ public abstract class Chessman {
      *
      * @return the x-coordinate of the chessman
      */
-    public int getX() {
+    public int getXPosition() {
         return posX;
     }
 
@@ -189,7 +185,7 @@ public abstract class Chessman {
      *
      * @return the y-coordinate of the chessman
      */
-    public int getY() {
+    public int getYPosition() {
         return posY;
     }
 
@@ -210,7 +206,8 @@ public abstract class Chessman {
     }
 
     /**
-     * Set this chessman as captured and move it to the edge
+     * Set this chessman as captured and move it to the edge (don't use for game
+     * action)
      */
     public void setCaptured() {
         captured = true;

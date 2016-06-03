@@ -66,11 +66,11 @@ public class GameBoard extends JPanel {
     private void drawChessman() {
         for (int i = 0; i <= 15; i++) {
             Chessman f = gamestate.getChessman(true, i);
-            drawImage(gameframe.getImage(f), f.getX(), f.getY(), 1, 1);
+            drawImage(gameframe.getImage(f), f.getXPosition(), f.getYPosition(), 1, 1);
         }
         for (int i = 0; i <= 15; i++) {
             Chessman f = gamestate.getChessman(false, i);
-            drawImage(gameframe.getImage(f), f.getX(), f.getY(), 1, 1);
+            drawImage(gameframe.getImage(f), f.getXPosition(), f.getYPosition(), 1, 1);
         }
     }
 

@@ -75,7 +75,7 @@ public class ServerGame extends Game {
         Rook t;
         int tx;
         int ty;
-        if (picked.getX() < selected.getX()) {
+        if (picked.getXPosition() < selected.getX()) {
             t = (Rook) getGameState().getChessman(picked.isBlack(), 9);
             tx = 5;
         } else {
