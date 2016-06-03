@@ -15,20 +15,6 @@ public class Bishop extends Chessman {
      * Creates a new Bishop
      *
      * @param black whether this chessman is black or not
-     * @param posx the x-coordinate
-     * @param posy the y-coordinate
-     * @param game the gamestate
-     */
-    private Bishop(boolean black, int posx, int posy, GameState game) {
-        super(black, posx, posy, game);
-        type = NAMES.BISHOP;
-        value = 3;
-    }
-
-    /**
-     * Creates a new Bishop
-     *
-     * @param black whether this chessman is black or not
      * @param number the number of the bishop (0 for the left, 1 for the right)
      * @param game the gamestate
      * @param numberinarray the number in the chessmen-array
@@ -59,67 +45,6 @@ public class Bishop extends Chessman {
         return l;
     }
 
-    @Override
-    public List<Move> computeMoves(boolean checkForCheck, GameState situation) {
-        LinkedList<Move> moves = new LinkedList();
-        for (int c = 1; c <= 6; c++) {
-            if (!addIfMovePossible(moves, posX + c, posY + c, situation)) {
-                break;
-            }
-        }
-        for (int c = 1; c <= 6; c++) {
-            if (!addIfMovePossible(moves, posX + c, posY - c, situation)) {
-                break;
-            }
-        }
-        for (int c = 1; c <= 6; c++) {
-            if (!addIfMovePossible(moves, posX - c, posY + c, situation)) {
-                break;
-            }
-        }
-        for (int c = 1; c <= 6; c++) {
-            if (!addIfMovePossible(moves, posX - c, posY - c, situation)) {
-                break;
-            }
-        }
-        //Überprüfen auf Schach-Position
-        if (checkForCheck) {
-            moves = removeCheckMoves(moves, situation);
-        }
-        return moves;
-    }
-
-    @Override
-    public List<Move> computeCaptures(boolean checkForChecks, GameState situation) {
-        LinkedList<Move> captures = new LinkedList();
-        for (int c = 1; c <= 6; c++) {
-            if (!addIfCapturePossible(captures, posX + c, posY + c, situation)) {
-                break;
-            }
-        }
-        for (int c = 1; c <= 6; c++) {
-            if (!addIfCapturePossible(captures, posX + c, posY - c, situation)) {
-                break;
-            }
-        }
-        for (int c = 1; c <= 6; c++) {
-            if (!addIfCapturePossible(captures, posX - c, posY + c, situation)) {
-                break;
-            }
-        }
-        for (int c = 1; c <= 6; c++) {
-            if (!addIfCapturePossible(captures, posX - c, posY - c, situation)) {
-                break;
-            }
-        }
-
-        //Überprüfen auf Schach-Position
-        if (checkForChecks) {
-            captures = removeCheckMoves(captures, situation);
-        }
-        return captures;
-    }
-
     /**
      * Create a new Bishop by promotion
      *
@@ -138,6 +63,20 @@ public class Bishop extends Chessman {
         return l;
     }
 
+    /**
+     * Creates a new Bishop
+     *
+     * @param black whether this chessman is black or not
+     * @param posx the x-coordinate
+     * @param posy the y-coordinate
+     * @param game the gamestate
+     */
+    private Bishop(boolean black, int posx, int posy, GameState game) {
+        super(black, posx, posy, game);
+        type = NAMES.BISHOP;
+        value = 3;
+    }
+
     @Override
     public Bishop clone() {
         Bishop l = new Bishop(black, posX, posY, gamestate);
@@ -145,5 +84,63 @@ public class Bishop extends Chessman {
         l.moved = moved;
         l.positioninarray = positioninarray;
         return l;
+    }
+
+    @Override
+    public List<Move> computeCaptures(boolean checkForChecks, GameState situation) {
+        LinkedList<Move> possibelCaptures = new LinkedList();
+        for (int c = 1; c <= 6; c++) {
+            if (!addIfCapturePossible(possibelCaptures, posX + c, posY + c, situation)) {
+                break;
+            }
+        }
+        for (int c = 1; c <= 6; c++) {
+            if (!addIfCapturePossible(possibelCaptures, posX + c, posY - c, situation)) {
+                break;
+            }
+        }
+        for (int c = 1; c <= 6; c++) {
+            if (!addIfCapturePossible(possibelCaptures, posX - c, posY + c, situation)) {
+                break;
+            }
+        }
+        for (int c = 1; c <= 6; c++) {
+            if (!addIfCapturePossible(possibelCaptures, posX - c, posY - c, situation)) {
+                break;
+            }
+        }
+        if (checkForChecks) {
+            possibelCaptures = removeCheckMoves(possibelCaptures, situation);
+        }
+        return possibelCaptures;
+    }
+
+    @Override
+    public List<Move> computeMoves(boolean checkForCheck, GameState situation) {
+        LinkedList<Move> possibleMoves = new LinkedList();
+        for (int c = 1; c <= 6; c++) {
+            if (!addIfMovePossible(possibleMoves, posX + c, posY + c, situation)) {
+                break;
+            }
+        }
+        for (int c = 1; c <= 6; c++) {
+            if (!addIfMovePossible(possibleMoves, posX + c, posY - c, situation)) {
+                break;
+            }
+        }
+        for (int c = 1; c <= 6; c++) {
+            if (!addIfMovePossible(possibleMoves, posX - c, posY + c, situation)) {
+                break;
+            }
+        }
+        for (int c = 1; c <= 6; c++) {
+            if (!addIfMovePossible(possibleMoves, posX - c, posY - c, situation)) {
+                break;
+            }
+        }
+        if (checkForCheck) {
+            possibleMoves = removeCheckMoves(possibleMoves, situation);
+        }
+        return possibleMoves;
     }
 }
