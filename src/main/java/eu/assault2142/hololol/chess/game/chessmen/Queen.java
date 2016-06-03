@@ -33,16 +33,13 @@ public class Queen extends Chessman {
      * @return the queen
      */
     public static Queen createQueen(boolean black, Game game, int numberinarray) {
-        int a;
-        int b;
-        if (black == true) {
-            a = 3;
-            b = 0;
+        int posY;
+        if (black) {
+            posY = 0;
         } else {
-            a = 3;
-            b = 7;
+            posY = 7;
         }
-        Queen d = new Queen(black, a, b, game);
+        Queen d = new Queen(black, 3, posY, game);
         d.positioninarray = numberinarray;
         return d;
     }
@@ -66,103 +63,81 @@ public class Queen extends Chessman {
     }
 
     @Override
-    public List<Move> computeMoves(boolean checkForCheck, GameState situation) {
-        LinkedList<Move> moves = new LinkedList();
-        for (int c = 1; c <= 6; c++) {
-            if (!addIfMovePossible(moves, posX + c, posY + c, situation)) {
-                break;
+    public List<Move> computeMoves(boolean considerCheck, GameState gamestate) {
+        LinkedList<Move> possibleMoves = new LinkedList();
+        boolean upright = true, downright = true, downleft = true, upleft = true;
+        for (int step = 1; step <= 6; step++) {
+            if (downright && !addIfMovePossible(possibleMoves, posX + step, posY + step, gamestate)) {
+                downright = false;
+            }
+            if (upright && !addIfMovePossible(possibleMoves, posX + step, posY - step, gamestate)) {
+                upright = false;
+            }
+            if (downleft && !addIfMovePossible(possibleMoves, posX - step, posY + step, gamestate)) {
+                downleft = false;
+            }
+            if (upleft && !addIfMovePossible(possibleMoves, posX - step, posY - step, gamestate)) {
+                upleft = false;
             }
         }
-        for (int c = 1; c <= 6; c++) {
-            if (!addIfMovePossible(moves, posX + c, posY - c, situation)) {
-                break;
+        boolean right = true, left = true, up = true, down = true;
+        for (int step = 1; step <= 7; step++) {
+            if (right && !addIfMovePossible(possibleMoves, posX + step, posY, gamestate)) {
+                right = false;
+            }
+            if (left && !addIfMovePossible(possibleMoves, posX - step, posY, gamestate)) {
+                left = false;
+            }
+            if (up && !addIfMovePossible(possibleMoves, posX, posY - step, gamestate)) {
+                up = false;
+            }
+            if (down && !addIfMovePossible(possibleMoves, posX, posY + step, gamestate)) {
+                down = false;
             }
         }
-        for (int c = 1; c <= 6; c++) {
-            if (!addIfMovePossible(moves, posX - c, posY + c, situation)) {
-                break;
-            }
+        if (considerCheck) {
+            possibleMoves = removeCheckMoves(possibleMoves, gamestate);
         }
-        for (int c = 1; c <= 6; c++) {
-            if (!addIfMovePossible(moves, posX - c, posY - c, situation)) {
-                break;
-            }
-        }
-        for (int u = posX - 1; u >= 0; u--) {
-            if (!addIfMovePossible(moves, u, posY, situation)) {
-                break;
-            }
-        }
-        for (int u = posX + 1; u <= 7; u++) {
-            if (!addIfMovePossible(moves, u, posY, situation)) {
-                break;
-            }
-        }
-        for (int u = posY - 1; u >= 0; u--) {
-            if (!addIfMovePossible(moves, posX, u, situation)) {
-                break;
-            }
-        }
-        for (int u = posY + 1; u <= 7; u++) {
-            if (!addIfMovePossible(moves, posX, u, situation)) {
-                break;
-            }
-        }
-        //Überprüfen auf Schach-Position
-        if (checkForCheck) {
-            moves = removeCheckMoves(moves, situation);
-        }
-        return moves;
+        return possibleMoves;
     }
 
     @Override
-    public List<Move> computeCaptures(boolean checkForCheck, GameState situation) {
-        LinkedList<Move> captures = new LinkedList();
-        for (int c = 1; c <= 6; c++) {
-            if (!addIfCapturePossible(captures, posX + c, posY + c, situation)) {
-                break;
+    public List<Move> computeCaptures(boolean considerCheck, GameState gamestate) {
+        LinkedList<Move> possibleCaptures = new LinkedList();
+        boolean upright = true, downright = true, downleft = true, upleft = true;
+        for (int step = 1; step <= 6; step++) {
+            if (downright && !addIfCapturePossible(possibleCaptures, posX + step, posY + step, gamestate)) {
+                downright = false;
+            }
+            if (upright && !addIfCapturePossible(possibleCaptures, posX + step, posY - step, gamestate)) {
+                upright = false;
+            }
+            if (downleft && !addIfCapturePossible(possibleCaptures, posX - step, posY + step, gamestate)) {
+                downleft = false;
+            }
+            if (upleft && !addIfCapturePossible(possibleCaptures, posX - step, posY - step, gamestate)) {
+                upleft = false;
             }
         }
-        for (int c = 1; c <= 6; c++) {
-            if (!addIfCapturePossible(captures, posX + c, posY - c, situation)) {
-                break;
+        boolean right = true, left = true, up = true, down = true;
+        for (int step = 1; step <= 7; step++) {
+            if (right && !addIfCapturePossible(possibleCaptures, posX + step, posY, gamestate)) {
+                right = false;
+            }
+            if (left && !addIfCapturePossible(possibleCaptures, posX - step, posY, gamestate)) {
+                left = false;
+            }
+            if (up && !addIfCapturePossible(possibleCaptures, posX, posY - step, gamestate)) {
+                up = false;
+            }
+            if (down && !addIfCapturePossible(possibleCaptures, posX, posY + step, gamestate)) {
+                down = false;
             }
         }
-        for (int c = 1; c <= 6; c++) {
-            if (!addIfCapturePossible(captures, posX - c, posY + c, situation)) {
-                break;
-            }
+        if (considerCheck) {
+            possibleCaptures = removeCheckMoves(possibleCaptures, gamestate);
         }
-        for (int c = 1; c <= 6; c++) {
-            if (!addIfCapturePossible(captures, posX - c, posY - c, situation)) {
-                break;
-            }
-        }
-        for (int u = posX - 1; u >= 0; u--) {
-            if (!addIfCapturePossible(captures, u, posY, situation)) {
-                break;
-            }
-        }
-        for (int u = posX + 1; u <= 7; u++) {
-            if (!addIfCapturePossible(captures, u, posY, situation)) {
-                break;
-            }
-        }
-        for (int u = posY - 1; u >= 0; u--) {
-            if (!addIfCapturePossible(captures, posX, u, situation)) {
-                break;
-            }
-        }
-        for (int u = posY + 1; u <= 7; u++) {
-            if (!addIfCapturePossible(captures, posX, u, situation)) {
-                break;
-            }
-        }
-        //Überprüfen auf Schach-Position
-        if (checkForCheck) {
-            captures = removeCheckMoves(captures, situation);
-        }
-        return captures;
+        return possibleCaptures;
     }
 
     @Override

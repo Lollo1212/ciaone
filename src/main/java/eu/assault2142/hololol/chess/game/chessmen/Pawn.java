@@ -69,10 +69,10 @@ public class Pawn extends Chessman {
 
         Chessman lastmoved = gamestate.getLastMoved();
         if (black) {
-            if (!moved && lastmoved.getClass() == Pawn.class && lastmoved.posY == 4 && (lastmoved.posX == posX + 1 || lastmoved.posX == posX - 1)) {
+            if (lastmoved != null && !moved && lastmoved.getClass() == Pawn.class && lastmoved.posY == 4 && (lastmoved.posX == posX + 1 || lastmoved.posX == posX - 1)) {
                 possibleCaptures.add(new EnPassantMove(lastmoved.posX, 5, this, (Pawn) lastmoved));
             }
-        } else if (!moved && lastmoved.getClass() == Pawn.class && lastmoved.posY == 3 && (lastmoved.posX == posX + 1 || lastmoved.posX == posX - 1)) {
+        } else if (lastmoved != null && !moved && lastmoved.getClass() == Pawn.class && lastmoved.posY == 3 && (lastmoved.posX == posX + 1 || lastmoved.posX == posX - 1)) {
             possibleCaptures.add(new EnPassantMove(lastmoved.posX, 2, this, (Pawn) lastmoved));
         }
 

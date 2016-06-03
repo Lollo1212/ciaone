@@ -84,49 +84,49 @@ public class Bishop extends Chessman {
     }
 
     @Override
-    public List<Move> computeCaptures(boolean considerCheck, GameState situation) {
+    public List<Move> computeCaptures(boolean considerCheck, GameState gamestate) {
         LinkedList<Move> possibleCaptures = new LinkedList();
         boolean upright = true, downright = true, downleft = true, upleft = true;
         for (int step = 1; step <= 6; step++) {
-            if (downright && !addIfCapturePossible(possibleCaptures, posX + step, posY + step, situation)) {
+            if (downright && !addIfCapturePossible(possibleCaptures, posX + step, posY + step, gamestate)) {
                 downright = false;
             }
-            if (upright && !addIfCapturePossible(possibleCaptures, posX + step, posY - step, situation)) {
+            if (upright && !addIfCapturePossible(possibleCaptures, posX + step, posY - step, gamestate)) {
                 upright = false;
             }
-            if (downleft && !addIfCapturePossible(possibleCaptures, posX - step, posY + step, situation)) {
+            if (downleft && !addIfCapturePossible(possibleCaptures, posX - step, posY + step, gamestate)) {
                 downleft = false;
             }
-            if (upleft && !addIfCapturePossible(possibleCaptures, posX - step, posY - step, situation)) {
+            if (upleft && !addIfCapturePossible(possibleCaptures, posX - step, posY - step, gamestate)) {
                 upleft = false;
             }
         }
         if (considerCheck) {
-            possibleCaptures = removeCheckMoves(possibleCaptures, situation);
+            possibleCaptures = removeCheckMoves(possibleCaptures, gamestate);
         }
         return possibleCaptures;
     }
 
     @Override
-    public List<Move> computeMoves(boolean considerCheck, GameState situation) {
+    public List<Move> computeMoves(boolean considerCheck, GameState gamestate) {
         LinkedList<Move> possibleMoves = new LinkedList();
         boolean upright = true, downright = true, downleft = true, upleft = true;
         for (int step = 1; step <= 6; step++) {
-            if (downright && !addIfMovePossible(possibleMoves, posX + step, posY + step, situation)) {
+            if (downright && !addIfMovePossible(possibleMoves, posX + step, posY + step, gamestate)) {
                 downright = false;
             }
-            if (upright && !addIfMovePossible(possibleMoves, posX + step, posY - step, situation)) {
+            if (upright && !addIfMovePossible(possibleMoves, posX + step, posY - step, gamestate)) {
                 upright = false;
             }
-            if (downleft && !addIfMovePossible(possibleMoves, posX - step, posY + step, situation)) {
+            if (downleft && !addIfMovePossible(possibleMoves, posX - step, posY + step, gamestate)) {
                 downleft = false;
             }
-            if (upleft && !addIfMovePossible(possibleMoves, posX - step, posY - step, situation)) {
+            if (upleft && !addIfMovePossible(possibleMoves, posX - step, posY - step, gamestate)) {
                 upleft = false;
             }
         }
         if (considerCheck) {
-            possibleMoves = removeCheckMoves(possibleMoves, situation);
+            possibleMoves = removeCheckMoves(possibleMoves, gamestate);
         }
         return possibleMoves;
     }
