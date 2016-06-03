@@ -111,14 +111,13 @@ public abstract class Chessman {
         if (gamestate.getTurn() == black) {
             List<Move> bewegungen = getCaptures();
             if (bewegungen != null && square.isOccupiedByColor(!black)) {
-                Optional<Move> findFirst = bewegungen.stream().filter((Move m) -> {
-                    return capture.equals(m);
-                }).findFirst();
+                Optional<Move> findFirst = bewegungen.stream().filter(capture::equals).findFirst();
                 successfull = findFirst.isPresent();
-                findFirst.ifPresent((Move m) -> {
-                    executeCapture(m);
-                });
+                findFirst.ifPresent(this::executeCapture);
             }
+        }
+        if (successfull) {
+            moved = true;
         }
         return successfull;
     }
@@ -137,14 +136,13 @@ public abstract class Chessman {
         if (gamestate.getTurn() == black) {
             List<Move> bewegungen = getMoves();
             if (bewegungen != null && !square.isOccupied()) {
-                Optional<Move> findFirst = bewegungen.stream().filter((Move m) -> {
-                    return move.equals(m);
-                }).findFirst();
+                Optional<Move> findFirst = bewegungen.stream().filter(move::equals).findFirst();
                 successfull = findFirst.isPresent();
-                findFirst.ifPresent((Move m) -> {
-                    executeMove(m);
-                });
+                findFirst.ifPresent(this::executeMove);
             }
+        }
+        if (successfull) {
+            moved = true;
         }
         return successfull;
     }
