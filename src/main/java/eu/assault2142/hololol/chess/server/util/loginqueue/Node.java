@@ -9,8 +9,8 @@ import eu.assault2142.hololol.chess.server.user.LoginRequest;
  */
 public class Node {
 
-    private Node next;
     private final LoginRequest data;
+    private Node next;
 
     /**
      * Create a new Node

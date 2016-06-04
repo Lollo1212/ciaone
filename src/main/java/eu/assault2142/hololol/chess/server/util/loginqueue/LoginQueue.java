@@ -34,6 +34,15 @@ public class LoginQueue {
     }
 
     /**
+     * Check whether the list is empty
+     *
+     * @return true if there is no pending request, false otherwise
+     */
+    public boolean isEmpty() {
+        return first == null;
+    }
+
+    /**
      * Remove and retrieve the first LoginRequest
      *
      * @return the next LoginRequest
@@ -42,17 +51,8 @@ public class LoginQueue {
         if (first == null) {
             return null;
         }
-        LoginRequest d = first.getData();
+        LoginRequest request = first.getData();
         first = first.getNext();
-        return d;
-    }
-
-    /**
-     * Check whether the list is empty
-     *
-     * @return true if there is no pending request, false otherwise
-     */
-    public boolean isEmpty() {
-        return first == null;
+        return request;
     }
 }

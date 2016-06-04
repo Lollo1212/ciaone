@@ -28,37 +28,35 @@ public class LoginThread extends Thread {
     @Override
     public void run() {
         while (true) {
-
             if (!loginqueue.isEmpty()) {
                 LoginRequest request = loginqueue.pop();
                 try {
                     User u2 = Server.SERVER.getUser(request.getUsername());
                     if (u2 == null) {
                         Log.MAINLOG.log(request.getUsername() + " couldn't log in.");
-                        request.getConnection().write(ClientMessages.UsernameWrong, new Object[]{});
+                        request.getConnection().write(ClientMessages.UsernameWrong);
                         continue;
                     }
                     if (Server.SERVER.isOnline(u2.getID())) {
-                        request.getConnection().write(ClientMessages.AlreadyOnline, new Object[]{});
+                        request.getConnection().write(ClientMessages.AlreadyOnline);
                         continue;
                     }
                     if (Server.SERVER.checkPassword(u2.getID(), request.getPassword())) {
                         //Passwords match
                         Log.MAINLOG.log(request.getUsername() + " logged in successful");
-                        request.getConnection().write(ClientMessages.LoggedIn, new Object[]{});
+                        request.getConnection().write(ClientMessages.LoggedIn);
                         Server.SERVER.loginUser(u2.getID(), request.getConnection());
                         request.getConnection().startReading();
                         request.getConnection().setUser(u2);
-                        String[] str = Server.SERVER.getFriends(u2.getID());
                         request.getConnection().writeFriendList();
-                        request.getConnection().write(ClientMessages.Name, new Object[]{request.getConnection().getUser().getUsername()});
+                        request.getConnection().write(ClientMessages.Name, request.getConnection().getUser().getUsername());
                     } else {
                         //Passwords don't match
                         Log.MAINLOG.log(u2.getUsername() + " couldn't log in.");
-                        request.getConnection().write(ClientMessages.PasswordWrong, new Object[]{});
+                        request.getConnection().write(ClientMessages.PasswordWrong);
                     }
                 } catch (UnknownUserException ex) {
-                    request.getConnection().write(ClientMessages.UsernameWrong, new Object[]{});
+                    request.getConnection().write(ClientMessages.UsernameWrong);
                     Log.MAINLOG.log(ex.getMessage());
                 }
 
