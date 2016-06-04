@@ -22,20 +22,20 @@ public class ClientConnection extends GameClientConnection {
         reader = new ClientConnectionThread(this);
     }
 
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
     @Override
     public void closeConnection() {
         Server.SERVER.logoutUser(user.getID());
         printwriter.close();
         scanner.close();
         Log.MAINLOG.log(user.getUsername() + " logged out");
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public void writeFriendList() {
