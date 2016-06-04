@@ -61,6 +61,7 @@
                                     <artifact>*:*</artifact>
                                     <excludes>
                                         <exclude>eu/assault2142/hololol/chess/server/</exclude>
+                                        <minimizeJar>true</minimizeJar>
                                     </excludes>
                                 </filter>
                             </filters>
