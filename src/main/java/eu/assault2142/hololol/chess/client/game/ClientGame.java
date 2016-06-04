@@ -1,12 +1,10 @@
 package eu.assault2142.hololol.chess.client.game;
 
-import eu.assault2142.hololol.chess.client.game.ui.swing.GameFrame;
 import eu.assault2142.hololol.chess.client.networking.ServerConnection;
 import eu.assault2142.hololol.chess.game.chessmen.Chessman;
 import eu.assault2142.hololol.chess.game.chessmen.Move;
 import eu.assault2142.hololol.chess.game.chessmen.Pawn;
 import eu.assault2142.hololol.chess.networking.ServerMessages;
-import java.awt.EventQueue;
 
 /**
  * A connection-game for a game played on a server
@@ -31,11 +29,7 @@ public final class ClientGame extends Game {
         this.black = black;
         this.connection = connection;
         final ClientGame g = this;
-        EventQueue.invokeLater(() -> {
-            gameview = new GameFrame(g);
-            updateMovements();
-            gameview.showColor(black);
-        });
+        gameview.showColor(black);
     }
 
     @Override
