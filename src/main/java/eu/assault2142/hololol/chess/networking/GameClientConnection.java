@@ -1,14 +1,13 @@
 package eu.assault2142.hololol.chess.networking;
 
-import eu.assault2142.hololol.chess.game.GameState;
 import eu.assault2142.hololol.chess.game.ServerGame;
-import eu.assault2142.hololol.chess.game.chessmen.Move;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.text.MessageFormat;
-import java.util.List;
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -16,89 +15,57 @@ import java.util.Scanner;
  */
 public class GameClientConnection {
 
-    private Socket socket;
+    protected PrintWriter printwriter;
     protected ConnectionThread reader;
     protected Scanner scanner;
-    protected PrintWriter printwriter;
-    private boolean white;
-    private ServerGame game;
     private boolean draw;
+    private ServerGame game;
+    private Socket socket;
+    private boolean white;
 
     public GameClientConnection(Socket socket) {
-        this.socket = socket;
         try {
+            this.socket = socket;
             printwriter = new PrintWriter(socket.getOutputStream(), true);
             scanner = new Scanner(socket.getInputStream());
+            reader = new GameConnectionThread(this);
         } catch (IOException ex) {
+            Logger.getLogger(GameClientConnection.class.getName()).log(Level.SEVERE, null, ex);
         }
-        reader = new GameConnectionThread(this);
+    }
+
+    public void closeConnection() {
+        try {
+            printwriter.close();
+            scanner.close();
+            socket.close();
+        } catch (IOException ex) {
+            Logger.getLogger(GameClientConnection.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     public void endGame() {
         game = null;
     }
 
-    private void write(String str) {
-        printwriter.println(str);
+    public void setDraw(boolean draw) {
+        this.draw = draw;
     }
 
-    public void startReading() {
-        reader.start();
+    public ServerGame getGame() {
+        return game;
     }
 
-    public void write(ClientMessages message, Object[] replace) {
-        write(MessageFormat.format(message.getValue(), replace));
-    }
-
-    public void writeMovements() {
-        GameState gs = game.getGameState();
-        String str1 = "moves:black:move:";
-        String str2 = "moves:white:move:";
-        String str3 = "moves:black:capture:";
-        String str4 = "move:white:capture:";
-        for (int a = 0; a < 16; a++) {
-            List<Move> m = gs.getChessman(true, a).getMoves();
-            for (Move m1 : m) {
-                if (m1 != null) {
-                    str1 += m1.getTargetX() + "" + m1.getTargetY() + "" + m1.getChessman().getPositionInArray() + ";";
-                }
-            }
-            m = gs.getChessman(true, a).getCaptures();
-            for (Move m1 : m) {
-                if (m1 != null) {
-                    str3 += m1.getTargetX() + "" + m1.getTargetY() + "" + m1.getChessman().getPositionInArray() + ";";
-                }
-            }
-            m = gs.getChessman(false, a).getMoves();
-            for (Move m1 : m) {
-                if (m1 != null) {
-                    str2 += m1.getTargetX() + "" + m1.getTargetY() + "" + m1.getChessman().getPositionInArray() + ";";
-                }
-            }
-            m = gs.getChessman(false, a).getCaptures();
-            for (Move m1 : m) {
-                if (m1 != null) {
-                    str4 += m1.getTargetX() + "" + m1.getTargetY() + "" + m1.getChessman().getPositionInArray() + ";";
-                }
-            }
-        }
-        write(str1);
-        write(str2);
-        write(str3);
-        write(str4);
+    public void setGame(ServerGame game) {
+        this.game = game;
     }
 
     public Scanner getScanner() {
         return scanner;
     }
 
-    public void closeConnection() {
-        printwriter.close();
-        scanner.close();
-        try {
-            socket.close();
-        } catch (IOException ex) {
-        }
+    public boolean isDrawSet() {
+        return draw;
     }
 
     public boolean isWhite() {
@@ -109,43 +76,12 @@ public class GameClientConnection {
         this.white = white;
     }
 
-    public boolean isDrawSet() {
-        return draw;
+    public void startReading() {
+        reader.start();
     }
 
-    public void setDraw(boolean draw) {
-        this.draw = draw;
+    public void write(ClientMessages message, Object[] replace) {
+        printwriter.println(MessageFormat.format(message.getValue(), replace));
     }
 
-    public void checkmate() {
-        write("checkmate");
-    }
-
-    public void stalemate() {
-        write("stalemate");
-    }
-
-    public void check() {
-        write("check");
-    }
-
-    void hello() {
-        write("hello");
-    }
-
-    void startGame(int i) {
-        write("gamestart:" + i);
-    }
-
-    public void promotion(int i, int positioninarray) {
-        write("promotion:" + i + ":" + positioninarray);
-    }
-
-    public ServerGame getGame() {
-        return game;
-    }
-
-    public void setGame(ServerGame g) {
-        game = g;
-    }
 }
