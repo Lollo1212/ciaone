@@ -14,9 +14,9 @@ import eu.assault2142.hololol.chess.server.networking.ClientConnection;
  */
 public class LoginRequest {
 
-    private final String username;
-    private final String password;
     private final ClientConnection connection;
+    private final String password;
+    private final String username;
 
     /**
      * Create a new login-request
@@ -29,15 +29,6 @@ public class LoginRequest {
         username = name;
         password = pass;
         connection = conn;
-    }
-
-    /**
-     * Retrieve the Username
-     *
-     * @return the username
-     */
-    public String getUsername() {
-        return username;
     }
 
     /**
@@ -56,5 +47,14 @@ public class LoginRequest {
      */
     public String getPassword() {
         return password;
+    }
+
+    /**
+     * Retrieve the Username
+     *
+     * @return the username
+     */
+    public String getUsername() {
+        return username;
     }
 }

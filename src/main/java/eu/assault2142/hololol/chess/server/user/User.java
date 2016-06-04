@@ -9,9 +9,9 @@ import java.util.List;
  */
 public class User {
 
-    private final String username;
     private final List<Integer> friends;
     private final int id;
+    private final String username;
 
     /**
      * Create a new User
@@ -24,15 +24,6 @@ public class User {
         username = name;
         this.friends = friends;
         this.id = id;
-    }
-
-    /**
-     * Retrieve the username
-     *
-     * @return the username
-     */
-    public String getUsername() {
-        return username;
     }
 
     /**
@@ -51,5 +42,14 @@ public class User {
      */
     public int getID() {
         return id;
+    }
+
+    /**
+     * Retrieve the username
+     *
+     * @return the username
+     */
+    public String getUsername() {
+        return username;
     }
 }
