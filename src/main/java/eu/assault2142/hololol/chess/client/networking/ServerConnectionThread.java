@@ -2,7 +2,6 @@ package eu.assault2142.hololol.chess.client.networking;
 
 import eu.assault2142.hololol.chess.client.game.ClientGame;
 import eu.assault2142.hololol.chess.client.game.Main;
-import eu.assault2142.hololol.chess.game.GameState;
 import eu.assault2142.hololol.chess.networking.ClientMessages;
 import eu.assault2142.hololol.chess.networking.ConnectionThread;
 import eu.assault2142.hololol.chess.networking.ServerMessages;
@@ -21,7 +20,6 @@ public class ServerConnectionThread extends ConnectionThread {
 
     private final ServerConnection connection;
     private ClientGame game;
-    private GameState gamestate;
     private final HashMap<ClientMessages, Consumer<String[]>> consumers;
 
     /**
@@ -55,19 +53,11 @@ public class ServerConnectionThread extends ConnectionThread {
         consumers.put(ClientMessages.Stalemate, this::consumeStalemate);
         consumers.put(ClientMessages.UsernameWrong, this::consumeNoSuchUsername);
         consumers.put(ClientMessages.Capture, this::consumeCapture);
+        consumers.put(ClientMessages.ChallengeDeclined, this::consumeChallengeDeclined);
     }
 
     @Override
     protected void closeConnection() {
-    }
-
-    /**
-     * Sets the game
-     *
-     * @param game the game
-     */
-    public void setGame(ClientGame game) {
-        this.game = game;
     }
 
     @Override
@@ -156,13 +146,13 @@ public class ServerConnectionThread extends ConnectionThread {
     }
 
     private void consumePromote(String[] parts) {
-        connection.write(ServerMessages.Promotion, new Object[]{game.getGameView().showPromotionChoice(), game.isBlack(), parts[0]});
+        connection.write(ServerMessages.Promotion, game.getGameView().showPromotionChoice(), game.isBlack(), parts[0]);
     }
 
     private void consumePromotion(String[] parts) {
-        int nummerinarray = Integer.parseInt(parts[2]);
+        int number = Integer.parseInt(parts[2]);
         boolean color = parts[1].equals("0");
-        game.execPromotion(parts[0], color, nummerinarray);
+        game.execPromotion(parts[0], color, number);
     }
 
     private void consumeResignation(String[] parts) {
