@@ -5,7 +5,7 @@ import eu.assault2142.hololol.chess.client.game.ClientGame;
 import eu.assault2142.hololol.chess.client.game.Game;
 import eu.assault2142.hololol.chess.client.game.Main;
 import eu.assault2142.hololol.chess.client.util.Translator;
-import eu.assault2142.hololol.chess.game.Settings;
+import eu.assault2142.hololol.chess.client.util.Settings;
 import eu.assault2142.hololol.chess.game.chessmen.Chessman;
 import eu.assault2142.hololol.chess.networking.ServerMessages;
 import java.awt.*;

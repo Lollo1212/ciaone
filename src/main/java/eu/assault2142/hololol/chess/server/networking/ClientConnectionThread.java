@@ -18,10 +18,10 @@ public class ClientConnectionThread extends GameConnectionThread {
     protected final ClientConnection connection;
     protected final Server server;
 
-    public ClientConnectionThread(ClientConnection serverclient, Server server) {
+    public ClientConnectionThread(ClientConnection serverclient) {
         super(serverclient);
         this.connection = serverclient;
-        this.server = server;
+        this.server = Server.SERVER;
         consumers.put(ServerMessages.AcceptGame, this::consumeAcceptGame);
         consumers.put(ServerMessages.AcceptFriend, this::consumeAcceptFriend);
         consumers.put(ServerMessages.AddFriend, this::consumeAddFriend);

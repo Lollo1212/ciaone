@@ -2,7 +2,7 @@ package eu.assault2142.hololol.chess.client.game.ui.swing;
 
 import eu.assault2142.hololol.chess.client.util.Translator;
 import eu.assault2142.hololol.chess.game.GameState;
-import eu.assault2142.hololol.chess.game.Settings;
+import eu.assault2142.hololol.chess.client.util.Settings;
 import eu.assault2142.hololol.chess.game.chessmen.Chessman;
 import java.awt.Color;
 import java.awt.Graphics;

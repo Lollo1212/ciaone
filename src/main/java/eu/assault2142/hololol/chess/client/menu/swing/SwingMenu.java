@@ -8,7 +8,7 @@ package eu.assault2142.hololol.chess.client.menu.swing;
 import eu.assault2142.hololol.chess.client.menu.IMenu;
 import eu.assault2142.hololol.chess.client.networking.ServerConnection;
 import eu.assault2142.hololol.chess.client.util.Translator;
-import eu.assault2142.hololol.chess.game.Settings;
+import eu.assault2142.hololol.chess.client.util.Settings;
 import eu.assault2142.hololol.chess.networking.ServerMessages;
 import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;

@@ -15,13 +15,11 @@ import java.util.logging.Logger;
  */
 public class ClientConnection extends GameClientConnection {
 
-    private Server server;
     private User user;
 
-    public ClientConnection(Socket socket, Server server) {
+    public ClientConnection(Socket socket) {
         super(socket);
-        this.server = server;
-        reader = new ClientConnectionThread(this, server);
+        reader = new ClientConnectionThread(this);
     }
 
     public User getUser() {
@@ -42,7 +40,7 @@ public class ClientConnection extends GameClientConnection {
 
     public void writeFriendList() {
         try {
-            write(ClientMessages.Friends, new Object[]{server.getFriendsAsString(getUser().getID())});
+            write(ClientMessages.Friends, new Object[]{Server.SERVER.getFriendsAsString(getUser().getID())});
         } catch (UnknownUserException ex) {
             Logger.getLogger(ClientConnection.class.getName()).log(Level.SEVERE, null, ex);
         }

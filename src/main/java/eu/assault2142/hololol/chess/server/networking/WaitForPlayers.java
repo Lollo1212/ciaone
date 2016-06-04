@@ -25,7 +25,7 @@ public class WaitForPlayers extends Thread {
         while (true) {
             try {
                 socket = server.getServerSocket().accept();
-                ClientConnection serverclient = new ClientConnection(socket, server);
+                ClientConnection serverclient = new ClientConnection(socket);
                 serverclient.write(ClientMessages.Hello, new Object[]{});
                 String input = serverclient.getScanner().next();
                 String username;

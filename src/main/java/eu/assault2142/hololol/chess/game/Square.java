@@ -1,5 +1,6 @@
 package eu.assault2142.hololol.chess.game;
 
+import eu.assault2142.hololol.chess.client.util.Settings;
 import eu.assault2142.hololol.chess.game.chessmen.Chessman;
 import java.awt.Color;
 

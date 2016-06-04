@@ -4,7 +4,7 @@ import com.alee.laf.WebLookAndFeel;
 import eu.assault2142.hololol.chess.client.menu.IMenu;
 import eu.assault2142.hololol.chess.client.menu.swing.SwingMenu;
 import eu.assault2142.hololol.chess.client.util.Translator;
-import eu.assault2142.hololol.chess.game.Settings;
+import eu.assault2142.hololol.chess.client.util.Settings;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URISyntaxException;
