@@ -2,6 +2,7 @@ package eu.assault2142.hololol.chess.client.menu.swing;
 
 import eu.assault2142.hololol.chess.client.game.LocalGame;
 import eu.assault2142.hololol.chess.client.networking.ServerConnection;
+import eu.assault2142.hololol.chess.client.util.Pair;
 import eu.assault2142.hololol.chess.client.util.Translator;
 import eu.assault2142.hololol.chess.networking.ServerMessages;
 import java.awt.event.ActionEvent;
@@ -20,7 +21,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.event.AncestorEvent;
 import javax.swing.event.ChangeEvent;
-import org.apache.commons.lang3.tuple.Pair;
 
 /**
  * The SMenu-Frame
@@ -76,7 +76,7 @@ class MainMenu extends javax.swing.JFrame {
                 jTabbedPane2.add(scroll, jList1.getSelectedValue());
                 jTabbedPane2.setSelectedComponent(scroll);
 
-                areas.put(from, Pair.of(jTabbedPane2.getSelectedIndex(), text));
+                areas.put(from, new Pair(jTabbedPane2.getSelectedIndex(), text));
                 jTabbedPane2.setTabComponentAt(jTabbedPane2.getSelectedIndex(), new ButtonTabComponent(jTabbedPane2, this, from));
             } else {
                 jTabbedPane2.setSelectedIndex(areas.get(from).getLeft());
@@ -726,7 +726,7 @@ class MainMenu extends javax.swing.JFrame {
             JScrollPane scroll = new JScrollPane(area);
             jTabbedPane2.add(scroll, from);
             jTabbedPane2.setSelectedComponent(scroll);
-            areas.put(from, Pair.of(jTabbedPane2.getSelectedIndex(), area));
+            areas.put(from, new Pair(jTabbedPane2.getSelectedIndex(), area));
             jTabbedPane2.setTabComponentAt(jTabbedPane2.getSelectedIndex(), new ButtonTabComponent(jTabbedPane2, this, from));
         } else {
             area = pair.getRight();
