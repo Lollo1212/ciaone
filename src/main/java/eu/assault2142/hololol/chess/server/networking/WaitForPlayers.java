@@ -26,7 +26,7 @@ public class WaitForPlayers extends Thread {
             try {
                 socket = server.getServerSocket().accept();
                 ClientConnection serverclient = new ClientConnection(socket);
-                serverclient.write(ClientMessages.Hello, new Object[]{});
+                serverclient.write(ClientMessages.Hello);
                 String input = serverclient.getScanner().next();
                 String username;
                 String pass;
@@ -42,7 +42,7 @@ public class WaitForPlayers extends Thread {
                         server.createNewUser(str[1], str[2]);
                         server.getLoginQueue().addLast(new LoginRequest(str[1], str[2], serverclient));
                     } catch (UsernameNotFreeException ex) {
-                        serverclient.write(ClientMessages.UsernameWrong, new Object[]{});
+                        serverclient.write(ClientMessages.UsernameWrong);
                     }
                 }
             } catch (IOException ex) {

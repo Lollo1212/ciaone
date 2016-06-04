@@ -40,7 +40,7 @@ public class ClientConnection extends GameClientConnection {
 
     public void writeFriendList() {
         try {
-            write(ClientMessages.Friends, new Object[]{Server.SERVER.getFriendsAsString(getUser().getID())});
+            write(ClientMessages.Friends, Server.SERVER.getFriendsAsString(getUser().getID()));
         } catch (UnknownUserException ex) {
             Logger.getLogger(ClientConnection.class.getName()).log(Level.SEVERE, null, ex);
         }
