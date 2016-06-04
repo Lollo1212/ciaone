@@ -23,6 +23,7 @@ import javax.net.ssl.SSLSocket;
 import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.TrustManagerFactory;
+import org.mindrot.jbcrypt.BCrypt;
 
 /**
  * The Connection to a (game-)server
@@ -53,6 +54,7 @@ public class ServerConnection {
             if (create) {
                 loginData += "r:";
             }
+            password = BCrypt.hashpw(password, username);
             loginData += username + ":" + password;
             connection.writer.println(loginData);
             String response = connection.scanner.next();
