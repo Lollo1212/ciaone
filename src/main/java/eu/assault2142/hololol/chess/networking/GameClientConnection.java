@@ -80,7 +80,7 @@ public class GameClientConnection {
         reader.start();
     }
 
-    public void write(ClientMessages message, Object[] replace) {
+    public void write(ClientMessages message, Object... replace) {
         printwriter.println(MessageFormat.format(message.getValue(), replace));
     }
 
