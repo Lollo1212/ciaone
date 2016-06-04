@@ -112,7 +112,7 @@ public class GameFrame extends JFrame implements MouseListener, IGameView {
                 Thread.sleep(2000);
                 setShowCheck(false);
             } catch (InterruptedException ex) {
-                Main.MENU.showErrorMessage("Unexpected Critical Error!", true);
+                Main.MENU.showErrorMessage(Translator.getString("CRITICAL_ERROR"), true);
             }
         };
         new Thread(checkimage).start();
@@ -120,27 +120,27 @@ public class GameFrame extends JFrame implements MouseListener, IGameView {
 
     @Override
     public void onCheckMate() {
-        JOptionPane.showMessageDialog(this, "Checkmate!", "Checkmate", JOptionPane.INFORMATION_MESSAGE);
+        JOptionPane.showMessageDialog(this, Translator.getString("CHECKMATE_TEXT"), Translator.getString("CHECKMATE_HEAD"), JOptionPane.INFORMATION_MESSAGE);
     }
 
     @Override
     public void onDraw() {
-        JOptionPane.showMessageDialog(null, Translator.getString("DRAW_TEXT"), Translator.getString("DRAW_HEAD"), JOptionPane.INFORMATION_MESSAGE);
+        JOptionPane.showMessageDialog(this, Translator.getString("DRAW_TEXT"), Translator.getString("DRAW_HEAD"), JOptionPane.INFORMATION_MESSAGE);
     }
 
     @Override
     public void onResignation(boolean enemy) {
-        JOptionPane.showMessageDialog(null, Translator.getString("RESIGNATION_" + (enemy ? "ENEMY" : "SELF") + "_TEXT"), Translator.getString("RESIGNATION_ENEMY_HEAD"), JOptionPane.INFORMATION_MESSAGE);
+        JOptionPane.showMessageDialog(this, Translator.getString("RESIGNATION_" + (enemy ? "ENEMY" : "SELF") + "_TEXT"), Translator.getString("RESIGNATION_ENEMY_HEAD"), JOptionPane.INFORMATION_MESSAGE);
     }
 
     @Override
     public void onStaleMate() {
-        JOptionPane.showMessageDialog(this, "Stalemate!", "Stalemate", JOptionPane.INFORMATION_MESSAGE);
+        JOptionPane.showMessageDialog(this, Translator.getString("STALEMATE_TEXT"), Translator.getString("STALEMATE_HEAD"), JOptionPane.INFORMATION_MESSAGE);
     }
 
     @Override
     public void showColor(boolean color) {
-        JOptionPane.showMessageDialog(this, "Color", "Your color is " + (color ? "black" : "white") + ".", JOptionPane.INFORMATION_MESSAGE);
+        JOptionPane.showMessageDialog(this, Translator.getString("COLOR_" + (color ? "BLACK" : "WHITE") + "_TEXT"), Translator.getString("COLOR_HEAD"), JOptionPane.INFORMATION_MESSAGE);
     }
 
     @Override

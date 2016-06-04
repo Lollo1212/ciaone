@@ -2,6 +2,7 @@ package eu.assault2142.hololol.chess.client.networking;
 
 import eu.assault2142.hololol.chess.client.game.Main;
 import eu.assault2142.hololol.chess.client.menu.IMenu;
+import eu.assault2142.hololol.chess.client.util.Translator;
 import eu.assault2142.hololol.chess.networking.ClientMessages;
 import eu.assault2142.hololol.chess.networking.ServerMessages;
 import java.io.IOException;
@@ -43,7 +44,7 @@ public class ServerConnection {
             InetAddress address = InetAddress.getByName("assault2142.eu");
             connection = new ServerConnection(address);
         } catch (UnknownHostException ex) {
-            Main.MENU.showErrorMessage("Couldn't find Server's IP!", false);
+            Main.MENU.showErrorMessage(Translator.getString("NETWORK ERROR"), false);
             return;
         }
         if (connection.scanner != null) {
@@ -122,7 +123,7 @@ public class ServerConnection {
         } catch (ConnectException ex) {
             Main.MENU.connectionError();
         } catch (IOException | KeyStoreException | NoSuchAlgorithmException | CertificateException | KeyManagementException ex) {
-            Main.MENU.showErrorMessage("Unexpected Error while connecting to the Server!", false);
+            Main.MENU.showErrorMessage(Translator.getString("UNEXPECTED_NETWORK_ERROR"), false);
         }
     }
 

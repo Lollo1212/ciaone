@@ -1,5 +1,6 @@
 package eu.assault2142.hololol.chess.client.game;
 
+import eu.assault2142.hololol.chess.client.util.Translator;
 import eu.assault2142.hololol.chess.game.MovementUpdater;
 
 /**
@@ -26,7 +27,7 @@ public class ClientMovementUpdater extends MovementUpdater {
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException ex) {
-                Main.MENU.showErrorMessage("Unexpected Critical Error!", true);
+                Main.MENU.showErrorMessage(Translator.getString("CRITICAL_ERROR"), true);
             }
         };
         Thread waitthread = new Thread(wait);
@@ -35,7 +36,7 @@ public class ClientMovementUpdater extends MovementUpdater {
         try {
             waitthread.join();
         } catch (InterruptedException ex) {
-            Main.MENU.showErrorMessage("Unexpected Critical Error!", true);
+            Main.MENU.showErrorMessage(Translator.getString("CRITICAL_ERROR"), true);
         }
         testCheck();
     }

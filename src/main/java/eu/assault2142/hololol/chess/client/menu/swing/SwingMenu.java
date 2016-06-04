@@ -33,7 +33,7 @@ public class SwingMenu implements IMenu {
 
     @Override
     public void challengeDeclined(String username) {
-        JOptionPane.showMessageDialog(menu, username + " declined your Challenge!", "Challenge Declined", JOptionPane.INFORMATION_MESSAGE);
+        JOptionPane.showMessageDialog(menu, username + Translator.getString("CHALLENGE_DECLINED_TEXT"), Translator.getString("CHALLENGE_DECLINED_HEAD"), JOptionPane.INFORMATION_MESSAGE);
     }
 
     @Override
@@ -96,11 +96,11 @@ public class SwingMenu implements IMenu {
                 menu.enableLoginButton();
                 break;
             case ALREADYLOGGEDIN:
-                JOptionPane.showMessageDialog(menu, "Already Online", Translator.getString("LOGIN ERROR"), JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(menu, Translator.getString("ALREADY_ONLINE"), Translator.getString("LOGIN ERROR"), JOptionPane.ERROR_MESSAGE);
                 menu.enableLoginButton();
                 break;
             default:
-                JOptionPane.showMessageDialog(menu, "Unknown Login Error", Translator.getString("LOGIN ERROR"), JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(menu, Translator.getString("UNKNOWN_LOGIN_ERROR"), Translator.getString("LOGIN ERROR"), JOptionPane.ERROR_MESSAGE);
                 menu.enableLoginButton();
         }
     }
@@ -117,7 +117,7 @@ public class SwingMenu implements IMenu {
 
     @Override
     public void showErrorMessage(String message, boolean exit) {
-        JOptionPane.showMessageDialog(menu, message, "Error", JOptionPane.ERROR_MESSAGE);
+        JOptionPane.showMessageDialog(menu, message, Translator.getString("ERROR"), JOptionPane.ERROR_MESSAGE);
         if (exit) {
             System.exit(1);
         }
@@ -126,7 +126,7 @@ public class SwingMenu implements IMenu {
 
     @Override
     public void unknownUsername() {
-        JOptionPane.showMessageDialog(menu, "There is no User with this name!", "Unknown Username", JOptionPane.INFORMATION_MESSAGE);
+        JOptionPane.showMessageDialog(menu, Translator.getString("UNKNOWN_USERNAME_TEXT"), Translator.getString("UNKNOWN_USERNAME_HEAD"), JOptionPane.INFORMATION_MESSAGE);
     }
 
     @Override

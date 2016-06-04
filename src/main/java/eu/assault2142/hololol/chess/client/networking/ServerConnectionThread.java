@@ -2,6 +2,7 @@ package eu.assault2142.hololol.chess.client.networking;
 
 import eu.assault2142.hololol.chess.client.game.ClientGame;
 import eu.assault2142.hololol.chess.client.game.Main;
+import eu.assault2142.hololol.chess.client.util.Translator;
 import eu.assault2142.hololol.chess.networking.ClientMessages;
 import eu.assault2142.hololol.chess.networking.ConnectionThread;
 import eu.assault2142.hololol.chess.networking.ServerMessages;
@@ -89,7 +90,7 @@ public class ServerConnectionThread extends ConnectionThread {
     }
 
     private void consumeDeclinePasswordChange(String[] parts) {
-        Main.MENU.showErrorMessage("Changing of Password not successfull!", false);
+        Main.MENU.showErrorMessage(Translator.getString("DECLINE_PASS_CHANGE"), false);
     }
 
     private void consumeCheck(String[] parts) {
