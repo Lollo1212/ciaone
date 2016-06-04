@@ -1,6 +1,5 @@
 package eu.assault2142.hololol.chess.client.networking;
 
-import eu.assault2142.hololol.chess.client.game.ClientGame;
 import eu.assault2142.hololol.chess.client.game.Main;
 import eu.assault2142.hololol.chess.client.menu.IMenu;
 import eu.assault2142.hololol.chess.networking.ClientMessages;
@@ -54,7 +53,7 @@ public class ServerConnection {
                 loginData += "r:";
             }
             loginData += username + ":" + password;
-            connection.write(loginData);
+            connection.writer.println(loginData);
             String response = connection.scanner.next();
             if (response.equals("loggedin")) {
                 connection = new ServerConnection(connection.socket, connection.scanner, connection.writer);
@@ -74,8 +73,6 @@ public class ServerConnection {
     }
 
     private ServerConnectionThread connectionThread;
-
-    private ClientGame game;
     private String name;
     private Scanner scanner;
     private Socket socket;
@@ -92,7 +89,7 @@ public class ServerConnection {
         this.socket = socket;
         this.scanner = scanner;
         this.writer = writer;
-        write("n");
+        writer.println("n");
         connectionThread = new ServerConnectionThread(this, scanner);
         Thread t = new Thread(connectionThread);
         t.start();
@@ -153,25 +150,7 @@ public class ServerConnection {
      * @param message the type of the message
      * @param replace the things to replace the placeholder with
      */
-    public void write(ServerMessages message, Object[] replace) {
-        write(MessageFormat.format(message.getValue(), replace));
-    }
-
-    /**
-     * Writes a message to the server
-     *
-     * @param str the message to send
-     */
-    private void write(String str) {
-        writer.println(str);
-    }
-
-    /**
-     * Set the game
-     *
-     * @param game the current game
-     */
-    public void setGame(ClientGame game) {
-        this.game = game;
+    public void write(ServerMessages message, Object... replace) {
+        writer.println(MessageFormat.format(message.getValue(), replace));
     }
 }

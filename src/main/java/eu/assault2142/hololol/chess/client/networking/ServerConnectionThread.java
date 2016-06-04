@@ -171,7 +171,6 @@ public class ServerConnectionThread extends ConnectionThread {
 
     private void consumeGamestart(String[] parts) {
         game = new ClientGame(connection, !parts[0].equals("0"));
-        connection.setGame(game);
     }
 
     private void consumeNewGame(String[] parts) {
