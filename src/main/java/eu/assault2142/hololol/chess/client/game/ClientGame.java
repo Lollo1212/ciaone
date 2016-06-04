@@ -42,7 +42,7 @@ public final class ClientGame extends Game {
     public void clickAt(int squareX, int squareY) {
         selected = getGameState().getSquare(squareX, squareY);
         showPossibleMoves();
-        connection.write(ServerMessages.Click, new Object[]{squareX, squareY});
+        connection.write(ServerMessages.Click, squareX, squareY);
     }
 
     /**
