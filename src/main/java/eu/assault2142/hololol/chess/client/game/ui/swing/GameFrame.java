@@ -1,11 +1,11 @@
 package eu.assault2142.hololol.chess.client.game.ui.swing;
 
-import eu.assault2142.hololol.chess.client.game.ui.IGameView;
 import eu.assault2142.hololol.chess.client.game.ClientGame;
 import eu.assault2142.hololol.chess.client.game.Game;
 import eu.assault2142.hololol.chess.client.game.Main;
-import eu.assault2142.hololol.chess.client.util.Translator;
+import eu.assault2142.hololol.chess.client.game.ui.IGameView;
 import eu.assault2142.hololol.chess.client.util.Settings;
+import eu.assault2142.hololol.chess.client.util.Translator;
 import eu.assault2142.hololol.chess.game.chessmen.Chessman;
 import eu.assault2142.hololol.chess.networking.ServerMessages;
 import java.awt.*;
@@ -130,11 +130,7 @@ public class GameFrame extends JFrame implements MouseListener, IGameView {
 
     @Override
     public void onResignation(boolean enemy) {
-        if (enemy) {
-            JOptionPane.showMessageDialog(null, Translator.getString("RESIGNATION_ENEMY_TEXT"), Translator.getString("RESIGNATION_ENEMY_HEAD"), JOptionPane.INFORMATION_MESSAGE);
-        } else {
-            JOptionPane.showMessageDialog(null, Translator.getString("RESIGNATION_SELF_TEXT"), Translator.getString("RESIGNATION_SELF_HEAD"), JOptionPane.INFORMATION_MESSAGE);
-        }
+        JOptionPane.showMessageDialog(null, Translator.getString("RESIGNATION_" + (enemy ? "ENEMY" : "SELF") + "_TEXT"), Translator.getString("RESIGNATION_ENEMY_HEAD"), JOptionPane.INFORMATION_MESSAGE);
     }
 
     @Override
@@ -144,16 +140,12 @@ public class GameFrame extends JFrame implements MouseListener, IGameView {
 
     @Override
     public void showColor(boolean color) {
-        if (color) {
-            JOptionPane.showMessageDialog(this, "Color", "Your color is black.", JOptionPane.INFORMATION_MESSAGE);
-        } else {
-            JOptionPane.showMessageDialog(this, "Color", "Your color is white.", JOptionPane.INFORMATION_MESSAGE);
-        }
+        JOptionPane.showMessageDialog(this, "Color", "Your color is " + (color ? "black" : "white") + ".", JOptionPane.INFORMATION_MESSAGE);
     }
 
     @Override
     public String showPromotionChoice() {
-        return (String) JOptionPane.showInputDialog(this, Translator.getString("PROMOTION_HEAD"), Translator.getString("PROMOTION_TEXT"), JOptionPane.QUESTION_MESSAGE, null, new String[]{Translator.getString("CHESSMAN_QUEEN"), Translator.getString("CHESSMAN_ROOK"), Translator.getString("CHESSMAN_KNIGHT"), Translator.getString("CHESSMAN_BISHOP")}, Translator.getString("CHESSMAN_QUEEN"));
+        return JOptionPane.showInputDialog(this, Translator.getString("PROMOTION_HEAD"), Translator.getString("PROMOTION_TEXT"), JOptionPane.QUESTION_MESSAGE, null, new String[]{Translator.getString("CHESSMAN_QUEEN"), Translator.getString("CHESSMAN_ROOK"), Translator.getString("CHESSMAN_KNIGHT"), Translator.getString("CHESSMAN_BISHOP")}, Translator.getString("CHESSMAN_QUEEN")).toString();
     }
 
     /**
@@ -216,7 +208,7 @@ public class GameFrame extends JFrame implements MouseListener, IGameView {
         addComponent(gamefield, 0, 0, 10, 10, 8, GridBagConstraints.REMAINDER);
         JLabel turn = new JLabel("");
         addComponent(turn, 0, 9, 10, 1, 8, 1);
-        if (game.getType() == Game.TYPE.LOCAL) {//Überprüfen auf lokales Spiel
+        if (game.getType() == Game.TYPE.LOCAL) {
             JButton b = new JButton(Translator.getString("GAME_BUTTON_END"));
             b.addActionListener((ActionEvent e) -> {
                 setVisible(false);
@@ -227,10 +219,10 @@ public class GameFrame extends JFrame implements MouseListener, IGameView {
             JButton jb1 = new JButton(Translator.getString("GAME_BUTTON_DRAW"));
             JButton jb2 = new JButton(Translator.getString("GAME_BUTTON_RESIGNATION"));
             jb1.addActionListener((ActionEvent e) -> {
-                ((ClientGame) game).getConnection().write(ServerMessages.Draw, null);
+                ((ClientGame) game).getConnection().write(ServerMessages.Draw);
             });
             jb2.addActionListener((ActionEvent e) -> {
-                ((ClientGame) game).getConnection().write(ServerMessages.Resignation, null);
+                ((ClientGame) game).getConnection().write(ServerMessages.Resignation);
             });
             addComponent(jb1, 1, 9, 1, 1, 1, 1);
             addComponent(jb2, 2, 9, 1, 1, 1, 1);

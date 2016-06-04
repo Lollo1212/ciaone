@@ -1,8 +1,8 @@
 package eu.assault2142.hololol.chess.client.game.ui.swing;
 
+import eu.assault2142.hololol.chess.client.util.Settings;
 import eu.assault2142.hololol.chess.client.util.Translator;
 import eu.assault2142.hololol.chess.game.GameState;
-import eu.assault2142.hololol.chess.client.util.Settings;
 import eu.assault2142.hololol.chess.game.chessmen.Chessman;
 import java.awt.Color;
 import java.awt.Graphics;
@@ -19,8 +19,8 @@ import javax.swing.Timer;
  */
 public class GameBoard extends JPanel {
 
-    protected boolean check = false;
-    protected boolean movementsupdating = false;
+    protected boolean check;
+    protected boolean movementsupdating;
 
     private ImageIcon backgroundCheckBlack;
     private ImageIcon backgroundCheckWhite;
@@ -65,12 +65,11 @@ public class GameBoard extends JPanel {
      */
     private void drawChessman() {
         for (int i = 0; i <= 15; i++) {
-            Chessman f = gamestate.getChessman(true, i);
-            drawImage(gameframe.getImage(f), f.getXPosition(), f.getYPosition(), 1, 1);
-        }
-        for (int i = 0; i <= 15; i++) {
-            Chessman f = gamestate.getChessman(false, i);
-            drawImage(gameframe.getImage(f), f.getXPosition(), f.getYPosition(), 1, 1);
+            Chessman chessman = gamestate.getChessman(true, i);
+            drawImage(gameframe.getImage(chessman), chessman.getXPosition(), chessman.getYPosition(), 1, 1);
+
+            chessman = gamestate.getChessman(false, i);
+            drawImage(gameframe.getImage(chessman), chessman.getXPosition(), chessman.getYPosition(), 1, 1);
         }
     }
 
