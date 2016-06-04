@@ -16,12 +16,10 @@ import java.util.logging.Logger;
 public class ClientConnectionThread extends GameConnectionThread {
 
     protected final ClientConnection connection;
-    protected final Server server;
 
     public ClientConnectionThread(ClientConnection serverclient) {
         super(serverclient);
         this.connection = serverclient;
-        this.server = Server.SERVER;
         consumers.put(ServerMessages.AcceptGame, this::consumeAcceptGame);
         consumers.put(ServerMessages.AcceptFriend, this::consumeAcceptFriend);
         consumers.put(ServerMessages.AddFriend, this::consumeAddFriend);
@@ -36,9 +34,20 @@ public class ClientConnectionThread extends GameConnectionThread {
         consumers.put(ServerMessages.RemoveFriend, this::consumeRemoveFriend);
     }
 
-    protected void consumeMessage(String[] parts) {
+    protected void consumeAcceptFriend(String[] parts) {
+        String str = parts[0];
         try {
-            server.sendMessage(server.getUserID(parts[0]), connection.getUser().getUsername() + ":" + parts[1]);
+            Server.SERVER.acceptRequest(connection.getUser().getID(), Server.SERVER.getUser(str).getID());
+        } catch (UnknownUserException ex) {
+            Log.MAINLOG.log(ex.getMessage());
+        }
+    }
+
+    protected void consumeAcceptGame(String[] parts) {
+        try {
+            if (Server.SERVER.challengeExists(connection.getUser().getID(), Server.SERVER.getUserID(parts[0]))) {
+                Server.SERVER.startGame(connection.getUser(), Server.SERVER.getUser(parts[0]));
+            }
         } catch (UnknownUserException ex) {
             Log.MAINLOG.log(ex.getMessage());
         }
@@ -47,26 +56,28 @@ public class ClientConnectionThread extends GameConnectionThread {
     protected void consumeAddFriend(String[] parts) {
         String str = parts[0];
         try {
-            Server.SERVER.addFriendRequest(connection.getUser().getID(), server.getUser(str).getID());
+            Server.SERVER.addFriendRequest(connection.getUser().getID(), Server.SERVER.getUser(str).getID());
         } catch (UnknownUserException ex) {
-            connection.write(ClientMessages.UsernameWrong, new Object[0]);
+            connection.write(ClientMessages.UsernameWrong, 0);
             Log.MAINLOG.log(ex.getMessage());
         }
     }
 
-    protected void consumeRemoveFriend(String[] parts) {
-        String str = parts[0];
+    protected void consumeChangePassword(String[] parts) {
         try {
-            Server.SERVER.removeFriend(connection.getUser().getID(), server.getUser(str).getID());
+            Server.SERVER.setPassword(connection.getUser().getID(), parts[0]);
+            connection.write(ClientMessages.AcceptPasswordChange);
         } catch (UnknownUserException ex) {
             Log.MAINLOG.log(ex.getMessage());
         }
     }
 
-    protected void consumeAcceptFriend(String[] parts) {
-        String str = parts[0];
+    protected void consumeChangeUsername(String[] parts) {
         try {
-            Server.SERVER.acceptRequest(connection.getUser().getID(), server.getUser(str).getID());
+            Server.SERVER.setUsername(connection.getUser().getID(), parts[0]);
+            connection.write(ClientMessages.AcceptUsernameChange, parts[0]);
+        } catch (UsernameNotFreeException ex) {
+            connection.write(ClientMessages.DeclineUsernameChange);
         } catch (UnknownUserException ex) {
             Log.MAINLOG.log(ex.getMessage());
         }
@@ -75,7 +86,28 @@ public class ClientConnectionThread extends GameConnectionThread {
     protected void consumeDeclineFriend(String[] parts) {
         String str = parts[0];
         try {
-            Server.SERVER.declineRequest(connection.getUser().getID(), server.getUser(str).getID());
+            Server.SERVER.declineRequest(connection.getUser().getID(), Server.SERVER.getUser(str).getID());
+        } catch (UnknownUserException ex) {
+            Log.MAINLOG.log(ex.getMessage());
+        }
+    }
+
+    protected void consumeDeclineGame(String[] parts) {
+        try {
+            Server.SERVER.declineChallenge(connection.getUser().getID(), Server.SERVER.getUserID(parts[0]));
+        } catch (UnknownUserException ex) {
+            Logger.getLogger(ClientConnectionThread.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    protected void consumeFriendGame(String[] parts) {
+        try {
+            if (Server.SERVER.isOnline(Server.SERVER.getUserID(parts[0]))) {
+                Server.SERVER.getConnection(Server.SERVER.getUserID(parts[0])).write(ClientMessages.Newgame, connection.getUser().getUsername());
+                Server.SERVER.challenge(connection.getUser().getID(), Server.SERVER.getUserID(parts[0]));
+            } else {
+                connection.write(ClientMessages.Newgame, "enemyoffline");
+            }
         } catch (UnknownUserException ex) {
             Log.MAINLOG.log(ex.getMessage());
         }
@@ -85,21 +117,11 @@ public class ClientConnectionThread extends GameConnectionThread {
         connection.closeConnection();
     }
 
-    protected void consumeAcceptGame(String[] parts) {
+    protected void consumeMessage(String[] parts) {
         try {
-            if (server.challengeExists(connection.getUser().getID(), server.getUserID(parts[0]))) {
-                server.startGame(connection.getUser(), server.getUser(parts[0]));
-            }
+            Server.SERVER.sendMessage(Server.SERVER.getUserID(parts[0]), connection.getUser().getUsername() + ":" + parts[1]);
         } catch (UnknownUserException ex) {
             Log.MAINLOG.log(ex.getMessage());
-        }
-    }
-
-    protected void consumeDeclineGame(String[] parts) {
-        try {
-            server.declineChallenge(connection.getUser().getID(), server.getUserID(parts[0]));
-        } catch (UnknownUserException ex) {
-            Logger.getLogger(ClientConnectionThread.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -107,34 +129,10 @@ public class ClientConnectionThread extends GameConnectionThread {
 
     }
 
-    protected void consumeFriendGame(String[] parts) {
+    protected void consumeRemoveFriend(String[] parts) {
+        String str = parts[0];
         try {
-            if (server.isOnline(server.getUserID(parts[0]))) {
-                server.getConnection(server.getUserID(parts[0])).write(ClientMessages.Newgame, new Object[]{connection.getUser().getUsername()});
-                server.challenge(connection.getUser().getID(), server.getUserID(parts[0]));
-            } else {
-                connection.write(ClientMessages.Newgame, new Object[]{"enemyoffline"});
-            }
-        } catch (UnknownUserException ex) {
-            Log.MAINLOG.log(ex.getMessage());
-        }
-    }
-
-    protected void consumeChangeUsername(String[] parts) {
-        try {
-            server.setUsername(connection.getUser().getID(), parts[0]);
-            connection.write(ClientMessages.AcceptUsernameChange, new Object[]{parts[0]});
-        } catch (UsernameNotFreeException ex) {
-            connection.write(ClientMessages.DeclineUsernameChange, new Object[]{});
-        } catch (UnknownUserException ex) {
-            Log.MAINLOG.log(ex.getMessage());
-        }
-    }
-
-    protected void consumeChangePassword(String[] parts) {
-        try {
-            server.setPassword(connection.getUser().getID(), parts[0]);
-            connection.write(ClientMessages.AcceptPasswordChange, new Object[]{});
+            Server.SERVER.removeFriend(connection.getUser().getID(), Server.SERVER.getUser(str).getID());
         } catch (UnknownUserException ex) {
             Log.MAINLOG.log(ex.getMessage());
         }
