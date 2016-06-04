@@ -39,15 +39,184 @@ import javax.net.ssl.SSLServerSocketFactory;
 public class Server {
 
     public static Server SERVER;
-    private ServerSocket serverSocket;
+    private final ArrayList<Pair<Integer, Integer>> challenges = new ArrayList();
+    private final HashMap<Integer, Integer> gamechallenges = new HashMap();
     private final HashMap<Integer, ClientConnection> loggedinaccounts = new HashMap();
     private LoginQueue loginqueue;
+    private ServerSocket serverSocket;
     private Store store;
-    private final HashMap<Integer, Integer> gamechallenges = new HashMap();
-    private final ArrayList<Pair<Integer, Integer>> challenges = new ArrayList();
+
+    /**
+     * Accept a friend-request
+     *
+     * @param uid the id of the acceptor
+     * @param acceptedid the id of the original requester
+     * @throws
+     * eu.assault2142.hololol.chess.server.exceptions.UnknownUserException
+     */
+    public void acceptRequest(int uid, int acceptedid) throws UnknownUserException {
+        if (store.requestExists(acceptedid, uid)) {
+            store.removeRequest(acceptedid, uid);
+            store.addFriend(uid, acceptedid);
+            if (isOnline(uid)) {
+                loggedinaccounts.get(uid).writeFriendList();
+            }
+            if (isOnline(acceptedid)) {
+                loggedinaccounts.get(acceptedid).writeFriendList();
+            }
+        }
+    }
+
+    /**
+     * Create a new friend-request and notify the target
+     *
+     * @param uid the id of the requester
+     * @param targetid the id of the target
+     * @throws
+     * eu.assault2142.hololol.chess.server.exceptions.UnknownUserException
+     */
+    public void addFriendRequest(int uid, int targetid) throws UnknownUserException {
+        store.addFriendRequest(uid, targetid);
+        if (isOnline(targetid)) {
+            loggedinaccounts.get(targetid).write(ClientMessages.Request, store.getName(uid));
+        }
+    }
+
+    public void challenge(int challenger, int challenged) {
+        gamechallenges.put(challenger, challenged);
+    }
+
+    /**
+     * Check if a challenge for the given user exists
+     *
+     * @param uid the ID of the challenged user
+     * @param challengerid the ID of the challenging user
+     * @return true if the user was challenged
+     */
+    public boolean challengeExists(int uid, int challengerid) {
+        return gamechallenges.get(challengerid) == uid;
+    }
 
     public boolean checkPassword(int id, String password) throws UnknownUserException {
         return store.checkPassword(id, password);
+    }
+
+    /**
+     * Create a new User
+     *
+     * @param name the username
+     * @param pass the password
+     * @throws
+     * eu.assault2142.hololol.chess.server.exceptions.UsernameNotFreeException
+     */
+    public void createNewUser(String name, String pass) throws UsernameNotFreeException {
+        int id = store.createNewUser(name, pass);
+    }
+
+    public void declineChallenge(int uid, int challengerid) {
+        try {
+            challenges.remove(challengerid);
+            loggedinaccounts.get(challengerid).write(ClientMessages.ChallengeDeclined, getName(uid));
+        } catch (UnknownUserException ex) {
+            Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    /**
+     * Decline a friend-request
+     *
+     * @param uid the id of the decline
+     * @param declinedid the id of the original requester
+     * @throws
+     * eu.assault2142.hololol.chess.server.exceptions.UnknownUserException
+     */
+    public void declineRequest(int uid, int declinedid) throws UnknownUserException {
+        store.removeRequest(declinedid, uid);
+        sendMessage(declinedid, "Info:" + store.getName(uid) + "_declined_your_Friendrequest");
+    }
+
+    /**
+     * Get the connection of a user
+     *
+     * @param uid the user's id
+     * @return the connection or null if he is offline
+     */
+    public ClientConnection getConnection(int uid) {
+        return loggedinaccounts.get(uid);
+    }
+
+    /**
+     * Retrieve the user's friends
+     *
+     * @param uid the user's id
+     * @return a list of his friends' ids
+     * @throws
+     * eu.assault2142.hololol.chess.server.exceptions.UnknownUserException
+     */
+    public String[] getFriends(int uid) throws UnknownUserException {
+        List<Integer> friends = store.getFriends(uid);
+        String[] names = new String[friends.size()];
+        for (int i = 0; i < friends.size(); i++) {
+            names[i] = store.getName(friends.get(i));
+        }
+        return names;
+    }
+
+    /**
+     * Retrieve the friends of the user
+     *
+     * @param uid the user's id
+     * @return the friends as a string separated with semicolons
+     * @throws
+     * eu.assault2142.hololol.chess.server.exceptions.UnknownUserException
+     */
+    public String getFriendsAsString(int uid) throws UnknownUserException {
+        String[] string = getFriends(uid);
+        String s = "";
+        for (String string1 : string) {
+            s += string1 + ";";
+        }
+        return s;
+    }
+
+    /**
+     *
+     * @return the login-queue of this instance
+     */
+    public LoginQueue getLoginQueue() {
+        return loginqueue;
+    }
+
+    /**
+     *
+     * @return the server-socket of this instance
+     */
+    public ServerSocket getServerSocket() {
+        return serverSocket;
+    }
+
+    /**
+     * Retrieve the given user
+     *
+     * @param name the user's name
+     * @return the user
+     * @throws
+     * eu.assault2142.hololol.chess.server.exceptions.UnknownUserException
+     */
+    public User getUser(String name) throws UnknownUserException {
+        return store.getUser(store.getID(name));
+    }
+
+    /**
+     * Retrieve the user-id
+     *
+     * @param name the user's name
+     * @return the id of the user
+     * @throws
+     * eu.assault2142.hololol.chess.server.exceptions.UnknownUserException
+     */
+    public int getUserID(String name) throws UnknownUserException {
+        return store.getID(name);
     }
 
     /**
@@ -85,23 +254,13 @@ public class Server {
     }
 
     /**
-     * Start a new game with the given clients
+     * Checks if the user is online
      *
-     * @param u1 the first player
-     * @param u2 the second player
+     * @param uid the user's id
+     * @return true if the user is online, false otherwise
      */
-    public void startGame(User u1, User u2) {
-        ClientConnection conn1 = getConnection(u1.getID());
-        ClientConnection conn2 = getConnection(u2.getID());
-        Log.MAINLOG.log("Game started");
-        conn1.write(ClientMessages.Gamestart, new Object[]{1});
-        conn2.write(ClientMessages.Gamestart, new Object[]{0});
-        conn1.setWhite(false);
-        conn2.setWhite(true);
-        ServerGame g = new ServerGame(conn1, conn2);
-        conn1.setGame(g);
-        conn2.setGame(g);
-
+    public boolean isOnline(int uid) {
+        return loggedinaccounts.containsKey(uid);
     }
 
     /**
@@ -116,7 +275,7 @@ public class Server {
         loggedinaccounts.put(uid, connection);
         List<String> msgs = store.getMessages(uid);
         msgs.stream().forEach((msg) -> {
-            connection.write(ClientMessages.Message, new Object[]{msg});
+            connection.write(ClientMessages.Message, msg);
             try {
                 store.deleteMessage(uid, msg);
             } catch (UnknownUserException ex) {
@@ -126,7 +285,7 @@ public class Server {
         List<Integer> requests = store.getRequests(uid);
         requests.stream().forEach((requid) -> {
             try {
-                connection.write(ClientMessages.Request, new Object[]{store.getName(requid)});
+                connection.write(ClientMessages.Request, store.getName(requid));
             } catch (UnknownUserException ex) {
 
             }
@@ -141,95 +300,6 @@ public class Server {
      */
     public void logoutUser(int uid) {
         loggedinaccounts.remove(uid);
-    }
-
-    /**
-     * Checks if the user is online
-     *
-     * @param uid the user's id
-     * @return true if the user is online, false otherwise
-     */
-    public boolean isOnline(int uid) {
-        return loggedinaccounts.containsKey(uid);
-    }
-
-    /**
-     *
-     * @return the server-socket of this instance
-     */
-    public ServerSocket getServerSocket() {
-        return serverSocket;
-    }
-
-    /**
-     *
-     * @return the login-queue of this instance
-     */
-    public LoginQueue getLoginQueue() {
-        return loginqueue;
-    }
-
-    /**
-     * Create a new User
-     *
-     * @param name the username
-     * @param pass the password
-     * @throws
-     * eu.assault2142.hololol.chess.server.exceptions.UsernameNotFreeException
-     */
-    public void createNewUser(String name, String pass) throws UsernameNotFreeException {
-        int id = store.createNewUser(name, pass);
-    }
-
-    /**
-     * Retrieve the given user
-     *
-     * @param name the user's name
-     * @return the user
-     * @throws
-     * eu.assault2142.hololol.chess.server.exceptions.UnknownUserException
-     */
-    public User getUser(String name) throws UnknownUserException {
-        return store.getUser(store.getID(name));
-    }
-
-    /**
-     * Get the connection of a user
-     *
-     * @param uid the user's id
-     * @return the connection or null if he is offline
-     */
-    public ClientConnection getConnection(int uid) {
-        return loggedinaccounts.get(uid);
-    }
-
-    /**
-     * Retrieve the user's friends
-     *
-     * @param uid the user's id
-     * @return a list of his friends' ids
-     * @throws
-     * eu.assault2142.hololol.chess.server.exceptions.UnknownUserException
-     */
-    public String[] getFriends(int uid) throws UnknownUserException {
-        List<Integer> friends = store.getFriends(uid);
-        String[] names = new String[friends.size()];
-        for (int i = 0; i < friends.size(); i++) {
-            names[i] = store.getName(friends.get(i));
-        }
-        return names;
-    }
-
-    /**
-     * Retrieve the user-id
-     *
-     * @param name the user's name
-     * @return the id of the user
-     * @throws
-     * eu.assault2142.hololol.chess.server.exceptions.UnknownUserException
-     */
-    public int getUserID(String name) throws UnknownUserException {
-        return store.getID(name);
     }
 
     /**
@@ -251,55 +321,6 @@ public class Server {
     }
 
     /**
-     * Create a new friend-request and notify the target
-     *
-     * @param uid the id of the requester
-     * @param targetid the id of the target
-     * @throws
-     * eu.assault2142.hololol.chess.server.exceptions.UnknownUserException
-     */
-    public void addFriendRequest(int uid, int targetid) throws UnknownUserException {
-        store.addFriendRequest(uid, targetid);
-        if (isOnline(targetid)) {
-            loggedinaccounts.get(targetid).write(ClientMessages.Request, new Object[]{store.getName(uid)});
-        }
-    }
-
-    /**
-     * Decline a friend-request
-     *
-     * @param uid the id of the decline
-     * @param declinedid the id of the original requester
-     * @throws
-     * eu.assault2142.hololol.chess.server.exceptions.UnknownUserException
-     */
-    public void declineRequest(int uid, int declinedid) throws UnknownUserException {
-        store.removeRequest(declinedid, uid);
-        sendMessage(declinedid, "Info:" + store.getName(uid) + "_declined_your_Friendrequest");
-    }
-
-    /**
-     * Accept a friend-request
-     *
-     * @param uid the id of the acceptor
-     * @param acceptedid the id of the original requester
-     * @throws
-     * eu.assault2142.hololol.chess.server.exceptions.UnknownUserException
-     */
-    public void acceptRequest(int uid, int acceptedid) throws UnknownUserException {
-        if (store.requestExists(acceptedid, uid)) {
-            store.removeRequest(acceptedid, uid);
-            store.addFriend(uid, acceptedid);
-            if (isOnline(uid)) {
-                loggedinaccounts.get(uid).writeFriendList();
-            }
-            if (isOnline(acceptedid)) {
-                loggedinaccounts.get(acceptedid).writeFriendList();
-            }
-        }
-    }
-
-    /**
      * Send a message to the given user
      *
      * @param recipient the recipient's id
@@ -310,50 +331,37 @@ public class Server {
     public void sendMessage(int recipient, String msg) throws UnknownUserException {
         store.addMessage(recipient, msg);
         if (isOnline(recipient)) {
-            loggedinaccounts.get(recipient).write(ClientMessages.Message, new Object[]{msg});
+            loggedinaccounts.get(recipient).write(ClientMessages.Message, msg);
             store.deleteMessage(recipient, msg);
         }
     }
 
-    /**
-     * Retrieve the friends of the user
-     *
-     * @param uid the user's id
-     * @return the friends as a string separated with semicolons
-     * @throws
-     * eu.assault2142.hololol.chess.server.exceptions.UnknownUserException
-     */
-    public String getFriendsAsString(int uid) throws UnknownUserException {
-        String[] string = getFriends(uid);
-        String s = "";
-        for (String string1 : string) {
-            s += string1 + ";";
-        }
-        return s;
+    public void setPassword(int uid, String password) throws UnknownUserException {
+        store.setPassword(uid, password);
     }
 
-    public void challenge(int challenger, int challenged) {
-        gamechallenges.put(challenger, challenged);
+    public void setUsername(int uid, String username) throws UnknownUserException, UsernameNotFreeException {
+        store.setUsername(uid, username);
     }
 
     /**
-     * Check if a challenge for the given user exists
+     * Start a new game with the given clients
      *
-     * @param uid the ID of the challenged user
-     * @param challengerid the ID of the challenging user
-     * @return true if the user was challenged
+     * @param u1 the first player
+     * @param u2 the second player
      */
-    public boolean challengeExists(int uid, int challengerid) {
-        return gamechallenges.get(challengerid) == uid;
-    }
+    public void startGame(User u1, User u2) {
+        ClientConnection conn1 = getConnection(u1.getID());
+        ClientConnection conn2 = getConnection(u2.getID());
+        Log.MAINLOG.log("Game started");
+        conn1.write(ClientMessages.Gamestart, new Object[]{1});
+        conn2.write(ClientMessages.Gamestart, new Object[]{0});
+        conn1.setWhite(false);
+        conn2.setWhite(true);
+        ServerGame g = new ServerGame(conn1, conn2);
+        conn1.setGame(g);
+        conn2.setGame(g);
 
-    public void declineChallenge(int uid, int challengerid) {
-        try {
-            challenges.remove(challengerid);
-            loggedinaccounts.get(challengerid).write(ClientMessages.ChallengeDeclined, new Object[]{getName(uid)});
-        } catch (UnknownUserException ex) {
-            Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
-        }
     }
 
     /**
@@ -364,13 +372,5 @@ public class Server {
      */
     private String getName(int uid) throws UnknownUserException {
         return store.getName(uid);
-    }
-
-    public void setPassword(int uid, String password) throws UnknownUserException {
-        store.setPassword(uid, password);
-    }
-
-    public void setUsername(int uid, String username) throws UnknownUserException, UsernameNotFreeException {
-        store.setUsername(uid, username);
     }
 }
