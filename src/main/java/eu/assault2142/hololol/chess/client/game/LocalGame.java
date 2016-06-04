@@ -74,18 +74,18 @@ public final class LocalGame extends Game {
      * @return the assembled CastlingMove
      */
     private CastlingMove getCastlingMove() {
-        Rook t;
-        int tx;
-        int ty;
+        Rook rook;
+        int rookX;
+        int rookY;
         if (picked.getXPosition() < selected.getX()) {
-            t = (Rook) getGameState().getChessman(picked.isBlack(), 9);
-            tx = 5;
+            rook = (Rook) getGameState().getChessman(picked.isBlack(), 9);
+            rookX = 5;
         } else {
-            t = (Rook) getGameState().getChessman(picked.isBlack(), 8);
-            tx = 3;
+            rook = (Rook) getGameState().getChessman(picked.isBlack(), 8);
+            rookX = 3;
         }
-        ty = picked.isBlack() ? 0 : 7;
-        return new CastlingMove(selected.getX(), selected.getY(), t, tx, ty, (King) picked);
+        rookY = picked.isBlack() ? 0 : 7;
+        return new CastlingMove(selected.getX(), selected.getY(), rook, rookX, rookY, (King) picked);
     }
 
 }
