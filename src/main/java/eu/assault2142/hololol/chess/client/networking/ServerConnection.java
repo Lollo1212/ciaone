@@ -44,7 +44,7 @@ public class ServerConnection {
             InetAddress address = InetAddress.getByName("assault2142.eu");
             connection = new ServerConnection(address);
         } catch (UnknownHostException ex) {
-            Main.MENU.showErrorMessage(Translator.getString("NETWORK ERROR"), false);
+            Main.MENU.showErrorMessage(Translator.getString("NETWORK_ERROR"), false);
             return;
         }
         if (connection.scanner != null) {
