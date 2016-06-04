@@ -51,12 +51,12 @@ public class ServerGame extends Game {
         if (selected != null) {
             if (picked != null) {
                 if (picked.doMove(selected.getX(), selected.getY())) {
-                    client1.write(ClientMessages.Move, new Object[]{picked.getPositionInArray(), selected.getX(), selected.getY()});
-                    client2.write(ClientMessages.Move, new Object[]{picked.getPositionInArray(), selected.getX(), selected.getY()});
+                    client1.write(ClientMessages.Move, picked.getPositionInArray(), selected.getX(), selected.getY());
+                    client2.write(ClientMessages.Move, picked.getPositionInArray(), selected.getX(), selected.getY());
                 }
                 if (picked.doCapture(selected.getX(), selected.getY())) {
-                    client1.write(ClientMessages.Capture, new Object[]{picked.getPositionInArray(), selected.getX(), selected.getY()});
-                    client2.write(ClientMessages.Capture, new Object[]{picked.getPositionInArray(), selected.getX(), selected.getY()});
+                    client1.write(ClientMessages.Capture, picked.getPositionInArray(), selected.getX(), selected.getY());
+                    client2.write(ClientMessages.Capture, picked.getPositionInArray(), selected.getX(), selected.getY());
                 }
 
                 if (picked.getClass() == King.class) {
@@ -117,28 +117,28 @@ public class ServerGame extends Game {
 
     @Override
     public void onCheck() {
-        client1.write(ClientMessages.Check, null);
-        client2.write(ClientMessages.Check, null);
+        client1.write(ClientMessages.Check);
+        client2.write(ClientMessages.Check);
     }
 
     @Override
     public void onCheckMate() {
-        client1.write(ClientMessages.Checkmate, null);
-        client2.write(ClientMessages.Checkmate, null);
+        client1.write(ClientMessages.Checkmate);
+        client2.write(ClientMessages.Checkmate);
     }
 
     @Override
     public void onStaleMate() {
-        client1.write(ClientMessages.Stalemate, null);
-        client2.write(ClientMessages.Stalemate, null);
+        client1.write(ClientMessages.Stalemate);
+        client2.write(ClientMessages.Stalemate);
     }
 
     @Override
     public void promotion(Pawn pawn) {
         if (pawn.isBlack()) {
-            client1.write(ClientMessages.Promote, new Object[]{pawn.getPositionInArray()});
+            client1.write(ClientMessages.Promote, pawn.getPositionInArray());
         } else {
-            client2.write(ClientMessages.Promote, new Object[]{pawn.getPositionInArray()});
+            client2.write(ClientMessages.Promote, pawn.getPositionInArray());
         }
     }
 

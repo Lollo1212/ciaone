@@ -49,15 +49,15 @@ public class GameConnectionThread extends ConnectionThread {
     private void consumeDraw(String[] parts) {
         connection.setDraw(true);
         if (connection.getGame().getClient1().isDrawSet() && connection.getGame().getClient2().isDrawSet()) {
-            connection.getGame().getClient1().write(ClientMessages.Draw, 1);
-            connection.getGame().getClient2().write(ClientMessages.Resignation, 1);
+            connection.getGame().getClient1().write(ClientMessages.Draw);
+            connection.getGame().getClient2().write(ClientMessages.Draw);
             connection.getGame().endGame();
         }
 
         if (connection == connection.getGame().getClient1()) {
-            connection.getGame().getClient2().write(ClientMessages.DrawOffer, 0);
+            connection.getGame().getClient2().write(ClientMessages.DrawOffer);
         } else {
-            connection.getGame().getClient1().write(ClientMessages.DrawOffer, 0);
+            connection.getGame().getClient1().write(ClientMessages.DrawOffer);
         }
     }
 

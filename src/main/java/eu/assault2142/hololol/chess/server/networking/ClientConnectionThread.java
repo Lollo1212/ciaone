@@ -58,7 +58,7 @@ public class ClientConnectionThread extends GameConnectionThread {
         try {
             Server.SERVER.addFriendRequest(connection.getUser().getID(), Server.SERVER.getUser(str).getID());
         } catch (UnknownUserException ex) {
-            connection.write(ClientMessages.UsernameWrong, 0);
+            connection.write(ClientMessages.UsernameWrong);
             Log.MAINLOG.log(ex.getMessage());
         }
     }

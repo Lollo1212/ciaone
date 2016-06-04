@@ -354,8 +354,8 @@ public class Server {
         ClientConnection conn1 = getConnection(u1.getID());
         ClientConnection conn2 = getConnection(u2.getID());
         Log.MAINLOG.log("Game started");
-        conn1.write(ClientMessages.Gamestart, new Object[]{1});
-        conn2.write(ClientMessages.Gamestart, new Object[]{0});
+        conn1.write(ClientMessages.Gamestart, 1);
+        conn2.write(ClientMessages.Gamestart, 0);
         conn1.setWhite(false);
         conn2.setWhite(true);
         ServerGame g = new ServerGame(conn1, conn2);
