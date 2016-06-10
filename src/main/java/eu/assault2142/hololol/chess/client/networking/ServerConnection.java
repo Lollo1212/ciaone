@@ -14,16 +14,18 @@ import java.net.UnknownHostException;
 import java.security.KeyManagementException;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
+import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
 import java.text.MessageFormat;
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSocket;
 import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.TrustManagerFactory;
-import org.mindrot.jbcrypt.BCrypt;
 
 /**
  * The Connection to a (game-)server
@@ -54,8 +56,15 @@ public class ServerConnection {
             if (create) {
                 loginData += "r:";
             }
-            password = BCrypt.hashpw(password, username);
-            loginData += username + ":" + password;
+            MessageDigest md;
+            try {
+                md = MessageDigest.getInstance("SHA-512");
+                md.update(password.getBytes());
+                byte[] hash = md.digest();
+                loginData += username + ":" + new String(hash);
+            } catch (NoSuchAlgorithmException ex) {
+                Logger.getLogger(ServerConnection.class.getName()).log(Level.SEVERE, null, ex);
+            }
             connection.writer.println(loginData);
             String response = connection.scanner.next();
             if (response.equals("loggedin")) {
