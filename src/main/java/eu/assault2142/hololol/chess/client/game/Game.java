@@ -30,9 +30,9 @@ public abstract class Game extends eu.assault2142.hololol.chess.game.Game {
             @Override
             public void run() {
                 gameview = new GameFrame(Game.this);
+                updateMovements();
             }
         });
-        updateMovements();
     }
 
     @Override
