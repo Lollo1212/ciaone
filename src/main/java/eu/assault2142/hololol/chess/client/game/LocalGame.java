@@ -1,10 +1,12 @@
 package eu.assault2142.hololol.chess.client.game;
 
+import eu.assault2142.hololol.chess.client.game.ui.swing.GameFrame;
 import eu.assault2142.hololol.chess.game.Square;
 import eu.assault2142.hololol.chess.game.chessmen.CastlingMove;
 import eu.assault2142.hololol.chess.game.chessmen.King;
 import eu.assault2142.hololol.chess.game.chessmen.Pawn;
 import eu.assault2142.hololol.chess.game.chessmen.Rook;
+import java.awt.EventQueue;
 
 /**
  * A Game which is completely played locally
@@ -18,6 +20,14 @@ public final class LocalGame extends Game {
      */
     public LocalGame() {
         super(TYPE.LOCAL);
+
+        EventQueue.invokeLater(new Thread() {
+            @Override
+            public void run() {
+                gameview = new GameFrame(LocalGame.this);
+                updateMovements();
+            }
+        });
     }
 
     @Override
