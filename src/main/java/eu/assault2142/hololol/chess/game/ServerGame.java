@@ -96,7 +96,11 @@ public class ServerGame extends Game {
 
     @Override
     public void finishedCalcs() {
-
+        if (getGameState().getTurn()) {
+            client1.write(ClientMessages.Turn);
+        } else {
+            client1.write(ClientMessages.Turn);
+        }
     }
 
     /**

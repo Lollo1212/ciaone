@@ -36,12 +36,6 @@ public abstract class Game extends eu.assault2142.hololol.chess.game.Game {
         Main.MENU.setVisible(true);
     }
 
-    @Override
-    public void finishedCalcs() {
-        getGameState().resetHighlightedFields();
-        gameview.setMovementsUpdating(false);
-    }
-
     /**
      * Return the GameView
      *

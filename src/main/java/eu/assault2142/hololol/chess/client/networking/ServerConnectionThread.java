@@ -20,8 +20,8 @@ import java.util.function.Consumer;
 public class ServerConnectionThread extends ConnectionThread {
 
     private final ServerConnection connection;
-    private ClientGame game;
     private final HashMap<ClientMessages, Consumer<String[]>> consumers;
+    private ClientGame game;
 
     /**
      * Create a new ServerConnectionThread
@@ -55,6 +55,7 @@ public class ServerConnectionThread extends ConnectionThread {
         consumers.put(ClientMessages.UsernameWrong, this::consumeNoSuchUsername);
         consumers.put(ClientMessages.Capture, this::consumeCapture);
         consumers.put(ClientMessages.ChallengeDeclined, this::consumeChallengeDeclined);
+        consumers.put(ClientMessages.Turn, this::consumeTurn);
     }
 
     @Override
@@ -72,25 +73,23 @@ public class ServerConnectionThread extends ConnectionThread {
         });
     }
 
-    private void consumeName(String[] parts) {
-        connection.setName(parts[0]);
-        Main.MENU.setPlayerName(parts[0]);
+    private void consumeAcceptPasswordChange(String[] parts) {
+        Main.MENU.passwordChanged();
     }
 
     private void consumeAcceptUsernameChange(String[] parts) {
         Main.MENU.usernameChanged(parts[0]);
     }
 
-    private void consumeDeclineUsernameChange(String[] parts) {
-        Main.MENU.usernameTaken();
+    private void consumeCapture(String[] parts) {
+        int number = Integer.parseInt(parts[0]);
+        int targetX = Integer.parseInt(parts[1]);
+        int targetY = Integer.parseInt(parts[2]);
+        game.doCapture(number, targetX, targetY);
     }
 
-    private void consumeAcceptPasswordChange(String[] parts) {
-        Main.MENU.passwordChanged();
-    }
-
-    private void consumeDeclinePasswordChange(String[] parts) {
-        Main.MENU.showErrorMessage(Translator.getString("DECLINE_PASS_CHANGE"), false);
+    private void consumeChallengeDeclined(String[] parts) {
+        Main.MENU.challengeDeclined(parts[0]);
     }
 
     private void consumeCheck(String[] parts) {
@@ -101,8 +100,12 @@ public class ServerConnectionThread extends ConnectionThread {
         game.incomingCheckMate();
     }
 
-    private void consumeStalemate(String[] parts) {
-        game.incomingStaleMate();
+    private void consumeDeclinePasswordChange(String[] parts) {
+        Main.MENU.showErrorMessage(Translator.getString("DECLINE_PASS_CHANGE"), false);
+    }
+
+    private void consumeDeclineUsernameChange(String[] parts) {
+        Main.MENU.usernameTaken();
     }
 
     private void consumeDraw(String[] parts) {
@@ -118,8 +121,8 @@ public class ServerConnectionThread extends ConnectionThread {
         Main.MENU.updateFriends(friends);
     }
 
-    private void consumeRequest(String[] parts) {
-        Main.MENU.friendRequest(parts[0]);
+    private void consumeGamestart(String[] parts) {
+        game = new ClientGame(connection, !parts[0].equals("0"));
     }
 
     private void consumeMessage(String[] parts) {
@@ -139,29 +142,9 @@ public class ServerConnectionThread extends ConnectionThread {
         game.doMove(number, targetX, targetY);
     }
 
-    private void consumeCapture(String[] parts) {
-        int number = Integer.parseInt(parts[0]);
-        int targetX = Integer.parseInt(parts[1]);
-        int targetY = Integer.parseInt(parts[2]);
-        game.doCapture(number, targetX, targetY);
-    }
-
-    private void consumePromote(String[] parts) {
-        connection.write(ServerMessages.Promotion, game.getGameView().showPromotionChoice(), game.isBlack(), parts[0]);
-    }
-
-    private void consumePromotion(String[] parts) {
-        int number = Integer.parseInt(parts[2]);
-        boolean color = parts[1].equals("0");
-        game.execPromotion(parts[0], color, number);
-    }
-
-    private void consumeResignation(String[] parts) {
-        game.incomingResignation(parts[0].equals("1"));
-    }
-
-    private void consumeGamestart(String[] parts) {
-        game = new ClientGame(connection, !parts[0].equals("0"));
+    private void consumeName(String[] parts) {
+        connection.setName(parts[0]);
+        Main.MENU.setPlayerName(parts[0]);
     }
 
     private void consumeNewGame(String[] parts) {
@@ -176,7 +159,29 @@ public class ServerConnectionThread extends ConnectionThread {
         Main.MENU.unknownUsername();
     }
 
-    private void consumeChallengeDeclined(String[] parts) {
-        Main.MENU.challengeDeclined(parts[0]);
+    private void consumePromote(String[] parts) {
+        connection.write(ServerMessages.Promotion, game.getGameView().showPromotionChoice(), game.isBlack(), parts[0]);
+    }
+
+    private void consumePromotion(String[] parts) {
+        int number = Integer.parseInt(parts[2]);
+        boolean color = parts[1].equals("0");
+        game.execPromotion(parts[0], color, number);
+    }
+
+    private void consumeRequest(String[] parts) {
+        Main.MENU.friendRequest(parts[0]);
+    }
+
+    private void consumeResignation(String[] parts) {
+        game.incomingResignation(parts[0].equals("1"));
+    }
+
+    private void consumeStalemate(String[] parts) {
+        game.incomingStaleMate();
+    }
+
+    private void consumeTurn(String[] parts) {
+        game.getGameView().setMovementsUpdating(false);
     }
 }

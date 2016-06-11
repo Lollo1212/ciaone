@@ -88,6 +88,11 @@ public final class ClientGame extends Game {
         gameview.drawOffer();
     }
 
+    @Override
+    public void finishedCalcs() {
+        getGameState().resetHighlightedFields();
+    }
+
     /**
      * Returns the connection to the server
      *

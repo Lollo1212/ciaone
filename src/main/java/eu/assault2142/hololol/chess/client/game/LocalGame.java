@@ -37,6 +37,12 @@ public final class LocalGame extends Game {
     }
 
     @Override
+    public void finishedCalcs() {
+        getGameState().resetHighlightedFields();
+        gameview.setMovementsUpdating(false);
+    }
+
+    @Override
     public void onCheck() {
         gameview.onCheck();
     }
