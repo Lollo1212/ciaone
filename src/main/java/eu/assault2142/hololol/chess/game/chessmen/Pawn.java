@@ -69,10 +69,10 @@ public class Pawn extends Chessman {
 
         Chessman lastmoved = gamestate.getLastMoved();
         if (black) {
-            if (lastmoved != null && !moved && lastmoved.getClass() == Pawn.class && lastmoved.posY == 4 && (lastmoved.posX == posX + 1 || lastmoved.posX == posX - 1)) {
+            if (lastmoved != null && lastmoved.getClass() == Pawn.class && lastmoved.posY == 4 && lastmoved.posY == posY && (lastmoved.posX == posX + 1 || lastmoved.posX == posX - 1)) {
                 possibleCaptures.add(new EnPassantMove(lastmoved.posX, 5, this, (Pawn) lastmoved));
             }
-        } else if (lastmoved != null && !moved && lastmoved.getClass() == Pawn.class && lastmoved.posY == 3 && (lastmoved.posX == posX + 1 || lastmoved.posX == posX - 1)) {
+        } else if (lastmoved != null && lastmoved.getClass() == Pawn.class && lastmoved.posY == 3 && lastmoved.posY == posY && (lastmoved.posX == posX + 1 || lastmoved.posX == posX - 1)) {
             possibleCaptures.add(new EnPassantMove(lastmoved.posX, 2, this, (Pawn) lastmoved));
         }
 
@@ -105,9 +105,9 @@ public class Pawn extends Chessman {
         if (!successfull) {
             Square square = gamestate.getSquare(targetX, targetY + (black ? -1 : +1));
             if (gamestate.getTurn() == black) {
-                List<Move> bewegungen = getMoves();
-                if (square != null && bewegungen != null && square.isOccupiedByColor(!black)) {
-                    Optional<Move> findFirst = bewegungen.stream().filter((Move move) -> {
+                List<Move> captures = getCaptures();
+                if (square != null && captures != null && square.isOccupiedByColor(!black)) {
+                    Optional<Move> findFirst = captures.stream().filter((Move move) -> {
                         return move.getClass() == EnPassantMove.class && targetX == move.getTargetX();
                     }).findFirst();
                     successfull = findFirst.isPresent();
