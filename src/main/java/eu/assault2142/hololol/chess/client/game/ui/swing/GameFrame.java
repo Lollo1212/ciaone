@@ -67,7 +67,7 @@ public class GameFrame extends JFrame implements MouseListener, IGameView {
 
     @Override
     public void setShowCheck(boolean show) {
-        gamefield.movementsupdating = show;
+        gamefield.check = show;
     }
 
     /**
