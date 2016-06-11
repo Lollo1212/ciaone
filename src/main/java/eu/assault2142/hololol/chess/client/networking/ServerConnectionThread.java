@@ -39,8 +39,8 @@ public class ServerConnectionThread extends ConnectionThread {
         consumers.put(ClientMessages.Checkmate, this::consumeCheckmate);
         consumers.put(ClientMessages.DeclinePasswordChange, this::consumeDeclinePasswordChange);
         consumers.put(ClientMessages.DeclineUsernameChange, this::consumeDeclineUsernameChange);
-        consumers.put(ClientMessages.DrawOffer, this::consumeDraw);
-        consumers.put(ClientMessages.Draw, this::consumeDrawOffer);
+        consumers.put(ClientMessages.Draw, this::consumeDraw);
+        consumers.put(ClientMessages.DrawOffer, this::consumeDrawOffer);
         consumers.put(ClientMessages.Friends, this::consumeFriends);
         consumers.put(ClientMessages.Gamestart, this::consumeGamestart);
         consumers.put(ClientMessages.Message, this::consumeMessage);
