@@ -1,7 +1,6 @@
 package eu.assault2142.hololol.chess.client.game;
 
 import eu.assault2142.hololol.chess.client.game.ui.swing.GameFrame;
-import eu.assault2142.hololol.chess.game.Square;
 import eu.assault2142.hololol.chess.game.chessmen.CastlingMove;
 import eu.assault2142.hololol.chess.game.chessmen.King;
 import eu.assault2142.hololol.chess.game.chessmen.Pawn;
@@ -64,18 +63,15 @@ public final class LocalGame extends Game {
      * Execute the selected Move or Capture if it is possible
      */
     private void doMoveIfPossible() {
-        if (selected != null) {
-            selected.highlight(Square.HIGHLIGHT.SELECTED);
-            if (picked != null) {
-                picked.doMove(selected.getX(), selected.getY());
-                picked.doCapture(selected.getX(), selected.getY());
+        if (selected != null && picked != null) {
+            picked.doMove(selected.getX(), selected.getY());
+            picked.doCapture(selected.getX(), selected.getY());
 
-                if (picked.getClass() == King.class) {
-                    ((King) picked).doCastling(getCastlingMove(), getGameState());
-                }
+            if (picked.getClass() == King.class) {
+                ((King) picked).doCastling(getCastlingMove(), getGameState());
             }
-            picked = null;
         }
+        picked = null;
     }
 
     /**

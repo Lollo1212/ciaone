@@ -57,25 +57,28 @@ public abstract class Game extends eu.assault2142.hololol.chess.game.Game {
      * Show all possible Moves for the currently selected chessman
      */
     protected void showPossibleMoves() {
-        if (selected != null && selected.occupier != null) {
-            picked = selected.occupier;
-            List<Move> moves = getGameState().getChessman(picked.isBlack(), picked.getPositionInArray()).getMoves();
-            List<Move> captures = getGameState().getChessman(picked.isBlack(), picked.getPositionInArray()).getCaptures();
+        if (selected != null) {
+            selected.highlight(Square.HIGHLIGHT.SELECTED);
+            if (selected.occupier != null) {
+                picked = selected.occupier;
+                List<Move> moves = getGameState().getChessman(picked.isBlack(), picked.getPositionInArray()).getMoves();
+                List<Move> captures = getGameState().getChessman(picked.isBlack(), picked.getPositionInArray()).getCaptures();
 
-            moves.stream().forEach((Move move) -> {
-                getGameState().getSquare(move.getTargetX(), move.getTargetY()).highlight(Square.HIGHLIGHT.MOVETARGET);
-            });
-
-            captures.stream().forEach((Move move) -> {
-                getGameState().getSquare(move.getTargetX(), move.getTargetY()).highlight(Square.HIGHLIGHT.CAPTURETARGET);
-            });
-
-            if (picked.getClass() == King.class) {
-                List<CastlingMove> castlings = ((King) picked).getCastlings();
-                castlings.stream().forEach((CastlingMove castling) -> {
-                    getGameState().getSquare(castling.getTargetX(), castling.getTargetY()).highlight(Square.HIGHLIGHT.CASTLING);
+                moves.stream().forEach((Move move) -> {
+                    getGameState().getSquare(move.getTargetX(), move.getTargetY()).highlight(Square.HIGHLIGHT.MOVETARGET);
                 });
 
+                captures.stream().forEach((Move move) -> {
+                    getGameState().getSquare(move.getTargetX(), move.getTargetY()).highlight(Square.HIGHLIGHT.CAPTURETARGET);
+                });
+
+                if (picked.getClass() == King.class) {
+                    List<CastlingMove> castlings = ((King) picked).getCastlings();
+                    castlings.stream().forEach((CastlingMove castling) -> {
+                        getGameState().getSquare(castling.getTargetX(), castling.getTargetY()).highlight(Square.HIGHLIGHT.CASTLING);
+                    });
+
+                }
             }
         }
     }
