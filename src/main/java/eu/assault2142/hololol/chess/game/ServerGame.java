@@ -41,7 +41,9 @@ public class ServerGame extends Game {
     public void clickAt(int squareX, int squareY) {
         selected = getGameState().getSquare(squareX, squareY);
         doMoveIfPossible();
-        picked = selected.occupier;
+        if (selected != null) {
+            picked = selected.occupier;
+        }
     }
 
     /**
