@@ -356,12 +356,9 @@ public class Server {
         Log.MAINLOG.log("Game started");
         conn1.write(ClientMessages.Gamestart, 1);
         conn2.write(ClientMessages.Gamestart, 0);
-        conn1.setWhite(false);
-        conn2.setWhite(true);
         ServerGame g = new ServerGame(conn1, conn2);
         conn1.setGame(g);
         conn2.setGame(g);
-
     }
 
     /**

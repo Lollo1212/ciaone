@@ -51,8 +51,6 @@ public class GameConnectionThread extends ConnectionThread {
         if (connection.getGame().getClient1().isDrawSet() && connection.getGame().getClient2().isDrawSet()) {
             connection.getGame().getClient1().write(ClientMessages.Draw);
             connection.getGame().getClient2().write(ClientMessages.Draw);
-            connection.getGame().getClient1().setDraw(false);
-            connection.getGame().getClient2().setDraw(false);
             connection.getGame().endGame();
         } else if (connection == connection.getGame().getClient1()) {
             connection.getGame().getClient2().write(ClientMessages.DrawOffer);

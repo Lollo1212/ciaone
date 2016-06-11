@@ -21,7 +21,6 @@ public class GameClientConnection {
     private boolean draw;
     private ServerGame game;
     private Socket socket;
-    private boolean white;
 
     public GameClientConnection(Socket socket) {
         draw = false;
@@ -47,6 +46,7 @@ public class GameClientConnection {
 
     public void endGame() {
         game = null;
+        draw = false;
     }
 
     public void setDraw(boolean draw) {
@@ -67,10 +67,6 @@ public class GameClientConnection {
 
     public boolean isDrawSet() {
         return draw;
-    }
-
-    public void setWhite(boolean white) {
-        this.white = white;
     }
 
     public void startReading() {
