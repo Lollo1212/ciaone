@@ -26,6 +26,10 @@ public abstract class Game extends eu.assault2142.hololol.chess.game.Game {
         super(type);
     }
 
+    public void acceptDraw() {
+
+    }
+
     @Override
     public void endGame() {
         gameview.hide();

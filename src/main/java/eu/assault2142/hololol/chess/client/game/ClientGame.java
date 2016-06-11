@@ -42,6 +42,11 @@ public final class ClientGame extends Game {
     }
 
     @Override
+    public void acceptDraw() {
+        connection.write(ServerMessages.Draw);
+    }
+
+    @Override
     public void clickAt(int squareX, int squareY) {
         selected = getGameState().getSquare(squareX, squareY);
         showPossibleMoves();

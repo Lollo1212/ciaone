@@ -48,7 +48,10 @@ public class GameFrame extends JFrame implements MouseListener, IGameView {
 
     @Override
     public void drawOffer() {
-        JOptionPane.showConfirmDialog(null, Translator.getString("DRAWOFFER_TEXT"), Translator.getString("DRAWOFFER_HEAD"), JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+        int accept = JOptionPane.showConfirmDialog(null, Translator.getString("DRAWOFFER_TEXT"), Translator.getString("DRAWOFFER_HEAD"), JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+        if (accept == JOptionPane.YES_OPTION) {
+            game.acceptDraw();
+        }
     }
 
     /**
