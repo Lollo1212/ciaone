@@ -24,6 +24,7 @@ public class GameClientConnection {
     private boolean white;
 
     public GameClientConnection(Socket socket) {
+        draw = false;
         try {
             this.socket = socket;
             printwriter = new PrintWriter(socket.getOutputStream(), true);

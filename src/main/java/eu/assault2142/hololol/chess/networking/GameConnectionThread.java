@@ -52,9 +52,7 @@ public class GameConnectionThread extends ConnectionThread {
             connection.getGame().getClient1().write(ClientMessages.Draw);
             connection.getGame().getClient2().write(ClientMessages.Draw);
             connection.getGame().endGame();
-        }
-
-        if (connection == connection.getGame().getClient1()) {
+        } else if (connection == connection.getGame().getClient1()) {
             connection.getGame().getClient2().write(ClientMessages.DrawOffer);
         } else {
             connection.getGame().getClient1().write(ClientMessages.DrawOffer);

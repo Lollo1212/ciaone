@@ -23,7 +23,6 @@ public abstract class ConnectionThread extends Thread {
         String input;
         while (true) {
             try {
-
                 input = scanner.next();
                 consume(input);
             } catch (NoSuchElementException | IllegalStateException nsee) {
