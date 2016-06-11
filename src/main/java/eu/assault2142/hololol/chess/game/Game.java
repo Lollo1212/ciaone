@@ -64,7 +64,6 @@ public abstract class Game {
         }
         getGameState().setChessman(black, number, man);
         getGameState().getSquare(man.getXPosition(), man.getYPosition()).occupier = man;
-
         updateMovements();
     }
 

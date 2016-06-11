@@ -16,6 +16,7 @@ public class ServerGame extends Game {
 
     public GameClientConnection client1;
     public GameClientConnection client2;
+    private boolean turnfinished = true;
 
     public ServerGame(ClientConnection a, ClientConnection b) {
         super(TYPE.SERVER);
@@ -95,11 +96,19 @@ public class ServerGame extends Game {
     }
 
     @Override
+    public void execPromotion(String target, boolean black, int number) {
+        turnfinished = false;
+        super.execPromotion(target, black, number);
+    }
+
+    @Override
     public void finishedCalcs() {
-        if (getGameState().getTurn()) {
-            client1.write(ClientMessages.Turn);
-        } else {
-            client2.write(ClientMessages.Turn);
+        if (turnfinished) {
+            if (getGameState().getTurn()) {
+                client1.write(ClientMessages.Turn);
+            } else {
+                client2.write(ClientMessages.Turn);
+            }
         }
     }
 
@@ -141,6 +150,7 @@ public class ServerGame extends Game {
 
     @Override
     public void promotion(Pawn pawn) {
+        turnfinished = false;
         if (pawn.isBlack()) {
             client1.write(ClientMessages.Promote, pawn.getPositionInArray());
         } else {
