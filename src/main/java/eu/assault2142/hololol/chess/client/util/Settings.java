@@ -4,8 +4,6 @@
  */
 package eu.assault2142.hololol.chess.client.util;
 
-import java.awt.Color;
-
 /**
  * Stores Settings of the Application
  *
@@ -18,10 +16,6 @@ public class Settings {
     public String username;
     //the current chessmen-folder
     public String chessmenFolder = "/chessmen_high";
-    //Color of dark squares
-    public Color dark = new Color(209, 139, 71);
-    //Color of light squares
-    public Color light = new Color(255, 206, 158);
 
     private Settings(String user) {
         username = user;

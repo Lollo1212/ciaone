@@ -1,6 +1,5 @@
 package eu.assault2142.hololol.chess.game;
 
-import eu.assault2142.hololol.chess.client.util.Settings;
 import eu.assault2142.hololol.chess.game.chessmen.Chessman;
 import java.awt.Color;
 
@@ -10,6 +9,11 @@ import java.awt.Color;
  * @author hololol2
  */
 public class Square {
+
+    //Color of dark squares
+    private static final Color DARK = new Color(209, 139, 71);
+    //Color of light squares
+    private static final Color LIGHT = new Color(255, 206, 158);
 
     public static enum HIGHLIGHT {
         MOVETARGET, CAPTURETARGET, CASTLING, SELECTED
@@ -66,9 +70,9 @@ public class Square {
      */
     private void setColor() {
         if ((posX + posY) % 2 == 0) {
-            baseColor = Settings.SETTINGS.light;
+            baseColor = LIGHT;
         } else {
-            baseColor = Settings.SETTINGS.dark;
+            baseColor = DARK;
         }
         currentColor = baseColor;
     }
