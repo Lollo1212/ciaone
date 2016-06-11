@@ -16,12 +16,13 @@ public class ServerGame extends Game {
 
     public GameClientConnection client1;
     public GameClientConnection client2;
-    private boolean turnfinished = true;
+    private boolean turnfinished;
 
     public ServerGame(ClientConnection a, ClientConnection b) {
         super(TYPE.SERVER);
         client1 = a;
         client2 = b;
+        turnfinished = true;
         updateMovements();
     }
 
@@ -97,7 +98,7 @@ public class ServerGame extends Game {
 
     @Override
     public void execPromotion(String target, boolean black, int number) {
-        turnfinished = false;
+        turnfinished = true;
         super.execPromotion(target, black, number);
     }
 
