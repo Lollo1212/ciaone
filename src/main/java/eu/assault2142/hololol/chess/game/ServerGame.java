@@ -99,7 +99,7 @@ public class ServerGame extends Game {
         if (getGameState().getTurn()) {
             client1.write(ClientMessages.Turn);
         } else {
-            client1.write(ClientMessages.Turn);
+            client2.write(ClientMessages.Turn);
         }
     }
 

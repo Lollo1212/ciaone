@@ -6,6 +6,7 @@ import eu.assault2142.hololol.chess.client.util.Translator;
 import eu.assault2142.hololol.chess.networking.ClientMessages;
 import eu.assault2142.hololol.chess.networking.ConnectionThread;
 import eu.assault2142.hololol.chess.networking.ServerMessages;
+import java.awt.EventQueue;
 import java.text.ParseException;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -182,6 +183,11 @@ public class ServerConnectionThread extends ConnectionThread {
     }
 
     private void consumeTurn(String[] parts) {
-        game.getGameView().setMovementsUpdating(false);
+        EventQueue.invokeLater(new Thread() {
+            @Override
+            public void run() {
+                game.getGameView().setMovementsUpdating(false);
+            }
+        });
     }
 }
