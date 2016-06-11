@@ -28,7 +28,6 @@ public final class ClientGame extends Game {
         super(TYPE.CLIENT);
         this.black = black;
         this.connection = connection;
-        final ClientGame g = this;
         gameview.showColor(black);
     }
 

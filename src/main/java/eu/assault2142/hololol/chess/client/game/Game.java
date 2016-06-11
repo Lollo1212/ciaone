@@ -6,6 +6,7 @@ import eu.assault2142.hololol.chess.game.Square;
 import eu.assault2142.hololol.chess.game.chessmen.CastlingMove;
 import eu.assault2142.hololol.chess.game.chessmen.King;
 import eu.assault2142.hololol.chess.game.chessmen.Move;
+import java.awt.EventQueue;
 import java.util.List;
 
 /**
@@ -25,7 +26,12 @@ public abstract class Game extends eu.assault2142.hololol.chess.game.Game {
      */
     public Game(TYPE type) {
         super(type);
-        gameview = new GameFrame(this);
+        EventQueue.invokeLater(new Thread() {
+            @Override
+            public void run() {
+                gameview = new GameFrame(Game.this);
+            }
+        });
         updateMovements();
     }
 
