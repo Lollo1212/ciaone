@@ -32,7 +32,7 @@ public enum ClientMessages {
     Draw("draw:end"),
     DrawOffer("draw:offer"),
     Promotion("promotion:{0}:{1}:{2}"),
-    Promote("promote:{1}"),
+    Promote("promote:{0}"),
     AlreadyOnline("loginerror:alreadyonline");
 
     private final String value;
