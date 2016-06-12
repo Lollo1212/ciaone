@@ -152,14 +152,10 @@ public class King extends Chessman {
      */
     public boolean doCastling(CastlingMove move, GameState gamestate) {
         if (gamestate.getTurn() == black) {
-            List<CastlingMove> rochaden = computeCastlings(true, gamestate);
-            Optional<CastlingMove> opt = rochaden.stream().filter((CastlingMove castl) -> {
-                return castl.equals(move);
-            }).findFirst();
+            List<CastlingMove> rochaden = getCastlings();
+            Optional<CastlingMove> opt = rochaden.stream().filter(move::equals).findFirst();
             boolean ret = opt.isPresent();
-            opt.ifPresent((CastlingMove castl) -> {
-                executeCastling(castl, gamestate);
-            });
+            opt.ifPresent(this::executeCastling);
             return ret;
         }
         return false;
@@ -184,9 +180,8 @@ public class King extends Chessman {
      * Execute the given castling-move. Does not perform any checks if possible
      *
      * @param move the castling to execute
-     * @param gamestate the current gamestate
      */
-    private void executeCastling(CastlingMove move, GameState gamestate) {
+    private void executeCastling(CastlingMove move) {
 
         gamestate.getSquare(posX, posY).occupier = null;
         gamestate.getSquare(move.targetX, move.targetY).occupier = this;

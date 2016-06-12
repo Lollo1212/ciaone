@@ -34,11 +34,17 @@ public class CastlingMove extends Move {
     /**
      * Check if 2 castling-moves are equivalent
      *
-     * @param rm the move to compare to
+     * @param other the move to compare to
      * @return true if equal, false otherwise
      */
-    public boolean equals(CastlingMove rm) {
-        return rm.rook == rook && rm.rookX == rookX && rm.rookY == rookY && super.equals(rm);
+    @Override
+    public boolean equals(Object other) {
+        if (other != null && other.getClass() == CastlingMove.class) {
+            CastlingMove rm = (CastlingMove) other;
+            return rm.rook.equals(rook) && rm.rookX == rookX && rm.rookY == rookY && rm.targetX == targetX && rm.targetY == targetY && rm.chessman.equals(chessman);
+        } else {
+            return super.equals(other);
+        }
     }
 
     public Rook getRook() {
