@@ -129,6 +129,7 @@ public class Pawn extends Chessman {
     public boolean doMove(int targetX, int targetY) {
         boolean successfull = super.doMove(targetX, targetY);
         if (successfull) {
+            gamestate.resetMovesCounter();
             if ((black && targetY == 7) || (!black && targetY == 0)) {
                 game.promotion(this);
             }
@@ -150,5 +151,6 @@ public class Pawn extends Chessman {
         posY = move.targetY;
         gamestate.getSquare(move.targetX, move.targetY).occupier = this;
         gamestate.nextTurn(this);
+        gamestate.resetMovesCounter();
     }
 }

@@ -324,6 +324,7 @@ public abstract class Chessman {
         posY = move.targetY;
         gamestate.getSquare(move.targetX, move.targetY).occupier = this;
         gamestate.nextTurn(this);
+        gamestate.resetMovesCounter();
     }
 
     /**

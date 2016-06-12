@@ -33,6 +33,8 @@ public class GameState {
 
     private final Square[] squares;
 
+    private int movesCounter;
+
     /**
      * Create a a new (initial) game-state for the given game
      *
@@ -43,7 +45,7 @@ public class GameState {
         squares = new Square[78];
         blackturn = false;
         this.game = game;
-
+        movesCounter = 0;
     }
 
     /**
@@ -73,7 +75,8 @@ public class GameState {
             getSquare(man.getXPosition(), man.getYPosition()).occupier = man;
         });
         blackturn = gamestate.blackturn;
-        this.game = gamestate.game;
+        game = gamestate.game;
+        movesCounter = gamestate.movesCounter;
     }
 
     /**
@@ -154,6 +157,7 @@ public class GameState {
 
             newState.squares[10 * targetX + targetY].occupier = man;
             newState.blackturn = !newState.blackturn;
+            newState.movesCounter++;
             return newState;
 
         } else {
@@ -300,6 +304,10 @@ public class GameState {
         resetHighlightedFields();
         lastmoved = moved;
         blackturn = !blackturn;
+        movesCounter++;
+        if (movesCounter >= 50) {
+            game.onStaleMate();
+        }
         game.updateMovements();
     }
 
@@ -389,6 +397,10 @@ public class GameState {
         } else {
             chessmenWhite[number] = man;
         }
+    }
+
+    public void resetMovesCounter() {
+        movesCounter = 0;
     }
 
 }
