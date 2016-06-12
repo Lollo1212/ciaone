@@ -2,9 +2,12 @@ package eu.assault2142.hololol.chess.client.game;
 
 import eu.assault2142.hololol.chess.client.game.ui.swing.GameFrame;
 import eu.assault2142.hololol.chess.client.networking.ServerConnection;
+import eu.assault2142.hololol.chess.game.chessmen.CastlingMove;
 import eu.assault2142.hololol.chess.game.chessmen.Chessman;
+import eu.assault2142.hololol.chess.game.chessmen.King;
 import eu.assault2142.hololol.chess.game.chessmen.Move;
 import eu.assault2142.hololol.chess.game.chessmen.Pawn;
+import eu.assault2142.hololol.chess.game.chessmen.Rook;
 import eu.assault2142.hololol.chess.networking.ServerMessages;
 import java.awt.EventQueue;
 
@@ -64,6 +67,16 @@ public final class ClientGame extends Game {
         Chessman man = getGameState().getChessman(getGameState().getTurn(), number);
         man.addCapture(new Move(targetX, targetY, man));
         man.doCapture(targetX, targetY);
+        updateMovements();
+    }
+
+    public void doCastling(int number, int targetX, int rookX) {
+        int posY = getGameState().getTurn() ? 0 : 7;
+        Rook rook = (Rook) getGameState().getChessman(getGameState().getTurn(), number);
+        King king = (King) getGameState().getChessman(getGameState().getTurn(), 15);
+        CastlingMove move = new CastlingMove(targetX, posY, rook, rookX, posY, king);
+        king.addCastling(move);
+        king.doCastling(move);
         updateMovements();
     }
 

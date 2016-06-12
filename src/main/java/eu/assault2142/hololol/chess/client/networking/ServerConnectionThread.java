@@ -57,6 +57,7 @@ public class ServerConnectionThread extends ConnectionThread {
         consumers.put(ClientMessages.Capture, this::consumeCapture);
         consumers.put(ClientMessages.ChallengeDeclined, this::consumeChallengeDeclined);
         consumers.put(ClientMessages.Turn, this::consumeTurn);
+        consumers.put(ClientMessages.Castling, this::consumeCastling);
     }
 
     @Override
@@ -87,6 +88,13 @@ public class ServerConnectionThread extends ConnectionThread {
         int targetX = Integer.parseInt(parts[1]);
         int targetY = Integer.parseInt(parts[2]);
         game.doCapture(number, targetX, targetY);
+    }
+
+    private void consumeCastling(String[] parts) {
+        int number = Integer.parseInt(parts[0]);
+        int rookX = Integer.parseInt(parts[1]);
+        int targetX = Integer.parseInt(parts[2]);
+        game.doCastling(number, targetX, rookX);
     }
 
     private void consumeChallengeDeclined(String[] parts) {
@@ -190,4 +198,5 @@ public class ServerConnectionThread extends ConnectionThread {
             }
         });
     }
+
 }

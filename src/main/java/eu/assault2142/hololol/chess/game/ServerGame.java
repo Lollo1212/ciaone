@@ -62,9 +62,10 @@ public class ServerGame extends Game {
                     client1.write(ClientMessages.Capture, picked.getPositionInArray(), selected.getX(), selected.getY());
                     client2.write(ClientMessages.Capture, picked.getPositionInArray(), selected.getX(), selected.getY());
                 }
-
-                if (picked.getClass() == King.class) {
-                    ((King) picked).doCastling(getCastlingMove(), getGameState());
+                CastlingMove castl;
+                if (picked.getClass() == King.class && ((King) picked).doCastling(castl = getCastlingMove())) {
+                    client1.write(ClientMessages.Castling, castl.getRook().getPositionInArray(), castl.getRookX(), selected.getX());
+                    client2.write(ClientMessages.Castling, castl.getRook().getPositionInArray(), castl.getRookX(), selected.getX());
                 }
             }
         }

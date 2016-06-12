@@ -74,7 +74,7 @@ public final class LocalGame extends Game {
             picked.doCapture(selected.getX(), selected.getY());
 
             if (picked.getClass() == King.class) {
-                ((King) picked).doCastling(getCastlingMove(), getGameState());
+                ((King) picked).doCastling(getCastlingMove());
             }
         }
         picked = null;

@@ -50,6 +50,10 @@ public class King extends Chessman {
         type = NAMES.KING;
     }
 
+    public void addCastling(CastlingMove castlingMove) {
+        castlings.add(castlingMove);
+    }
+
     @Override
     public King clone() {
         King k = new King(black, posX, posY, game);
@@ -147,10 +151,9 @@ public class King extends Chessman {
      * Do a castling with this chessman
      *
      * @param move the castling-move to execute
-     * @param gamestate the game-state
      * @return true if the capture was successful, false otherwise
      */
-    public boolean doCastling(CastlingMove move, GameState gamestate) {
+    public boolean doCastling(CastlingMove move) {
         if (gamestate.getTurn() == black) {
             List<CastlingMove> rochaden = getCastlings();
             Optional<CastlingMove> opt = rochaden.stream().filter(move::equals).findFirst();

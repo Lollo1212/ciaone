@@ -34,7 +34,8 @@ public enum ClientMessages {
     Promotion("promotion:{0}:{1}:{2}"),
     Promote("promote:{0}"),
     AlreadyOnline("loginerror:alreadyonline"),
-    Turn("turn");
+    Turn("turn"),
+    Castling("castling:{0}:{1}:{2}");
 
     private final String value;
     private final MessageFormat format;
