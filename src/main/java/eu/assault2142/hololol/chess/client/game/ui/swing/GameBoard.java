@@ -142,6 +142,8 @@ public class GameBoard extends JPanel {
     private void paintBoard() {
         for (int x = 0; x <= 7; x++) {
             for (int y = 0; y <= 7; y++) {
+                graphics.setColor(Color.BLACK);
+                graphics.drawRect(x*squarelength, y*squarelength, squarelength, squarelength);
                 graphics.setColor(gamestate.getSquare(x, y).currentColor);
                 graphics.fillRect(x * squarelength, y * squarelength, squarelength, squarelength);
             }
