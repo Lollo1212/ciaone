@@ -57,7 +57,7 @@ public abstract class Game extends eu.assault2142.hololol.chess.game.Game {
     protected void showPossibleMoves() {
         if (selected != null) {
             selected.highlight(Square.HIGHLIGHT.SELECTED);
-            if (selected.occupier != null) {
+            if (selected.occupier != null && selected.occupier.isBlack()== getGameState().getTurn()) {
                 picked = selected.occupier;
                 List<Move> moves = getGameState().getChessman(picked.isBlack(), picked.getPositionInArray()).getMoves();
                 List<Move> captures = getGameState().getChessman(picked.isBlack(), picked.getPositionInArray()).getCaptures();
