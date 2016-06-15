@@ -27,6 +27,21 @@
             <artifactId>jBCrypt</artifactId>
             <version>0.4.1</version>
         </dependency>
+        <dependency>
+            <groupId>org.jmonkeyengine</groupId>
+            <artifactId>jme3-desktop</artifactId>
+            <version>3.1.0-beta1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jmonkeyengine</groupId>
+            <artifactId>jme3-bullet-native</artifactId>
+            <version>3.1.0-beta1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jmonkeyengine</groupId>
+            <artifactId>jme3-lwjgl3</artifactId>
+            <version>3.1.0-beta1</version>
+        </dependency>
     </dependencies>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -92,6 +107,14 @@
                                     <exclude>com.mortennobel:java-image-scaling</exclude>
                                     <exclude>com.jhlabs:filters</exclude>
                                     <exclude>org.apache.commons:commons-lang3</exclude>
+                                    <exclude>org.jmonkeyengine:jme3-core</exclude>
+                                    <exclude>org.jmonkeyengine:jme3-bullet-native</exclude>
+                                    <exclude>org.jmonkeyengine:jme3-desktop</exclude>
+                                    <exclude>org.jmonkeyengine:jme3-lwjgl3</exclude>
+                                    <exclude>org.jmonkeyengine:jme3-bullet</exclude>
+                                    <exclude>org.jmonkeyengine:jme3-terrain</exclude>
+                                    <exclude>org.lwjgl:lwjgl</exclude>
+                                    <exclude>org.lwjgl:lwjgl-platform</exclude>
                                 </excludes>
                             </artifactSet>
                             <filters>
