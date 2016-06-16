@@ -14,14 +14,16 @@ import eu.assault2142.hololol.chess.client.game.ui.swing.GameFrame;
  * @author jojow
  */
 public class GameViewFactory {
-    
-    public enum GameViews { SWING, JMONKEY };
-    
-    public static IGameView startGameView(Game game, GameViews type){
-        switch(type){
+
+    public enum GameViews {
+        SWING, JMONKEY
+    };
+
+    public static IGameView startGameView(Game game, GameViews type) {
+        switch (type) {
             case JMONKEY:
                 MonkeyGameView view = new MonkeyGameView(game);
-                view.start();
+                new Thread(view::start).start();
                 return view;
             default:
                 return new GameFrame(game);

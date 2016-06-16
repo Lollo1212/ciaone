@@ -39,7 +39,6 @@ public class MonkeyGameView extends SimpleApplication implements IGameView {
 
     @Override
     public void setMovementsUpdating(boolean updating) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
@@ -89,7 +88,7 @@ public class MonkeyGameView extends SimpleApplication implements IGameView {
 
     @Override
     public void simpleInitApp() {
-        Box b = new Box(1, 1, 1);
+        Box b = new Box(0.5f, 0.5f, 0.5f);
         Geometry geom;
         Color color;
         for (int x = 0; x <= 7; x++) {
@@ -97,7 +96,6 @@ public class MonkeyGameView extends SimpleApplication implements IGameView {
                 Material mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
                 geom = new Geometry("Box" + x + y, b);
                 color = game.getGameState().getSquare(x, y).currentColor;
-                System.out.println(color.getRed() + " " + color.getGreen() + " " + color.getBlue() + " " + color.getAlpha());
                 mat.setColor("Color", new ColorRGBA(color.getRed() / 255f, color.getGreen() / 255f, color.getBlue() / 255f, color.getAlpha() / 255f));
                 geom.setMaterial(mat);
                 geom.setLocalTranslation(x, y, 0);
