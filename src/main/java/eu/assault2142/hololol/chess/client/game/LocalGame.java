@@ -1,7 +1,6 @@
 package eu.assault2142.hololol.chess.client.game;
 
 import eu.assault2142.hololol.chess.client.game.ui.GameViewFactory;
-import eu.assault2142.hololol.chess.client.game.ui.swing.GameFrame;
 import eu.assault2142.hololol.chess.game.chessmen.CastlingMove;
 import eu.assault2142.hololol.chess.game.chessmen.King;
 import eu.assault2142.hololol.chess.game.chessmen.Pawn;
@@ -24,7 +23,7 @@ public final class LocalGame extends Game {
         EventQueue.invokeLater(new Thread() {
             @Override
             public void run() {
-                gameview = GameViewFactory.startGameView(LocalGame.this, GameViewFactory.GameViews.SWING);
+                gameview = GameViewFactory.startGameView(LocalGame.this, GameViewFactory.GameViews.JMONKEY);
                 updateMovements();
             }
         });

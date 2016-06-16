@@ -11,20 +11,25 @@ import com.jme3.math.ColorRGBA;
 import com.jme3.renderer.RenderManager;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.shape.Box;
+import com.jme3.system.AppSettings;
 import eu.assault2142.hololol.chess.client.game.Game;
 import eu.assault2142.hololol.chess.client.game.ui.IGameView;
+import java.awt.Color;
 
 /**
  *
  * @author hololol2
  */
 public class MonkeyGameView extends SimpleApplication implements IGameView {
-    
+
     private Game game;
-    
+
     public MonkeyGameView(Game game) {
         this.game = game;
         this.setShowSettings(false);
+        settings = new AppSettings(true);
+        //settings.setFullscreen(true);
+        settings.setVSync(true);
     }
 
     @Override
@@ -84,15 +89,22 @@ public class MonkeyGameView extends SimpleApplication implements IGameView {
 
     @Override
     public void simpleInitApp() {
-
         Box b = new Box(1, 1, 1);
-        Geometry geom = new Geometry("Box", b);
+        Geometry geom;
+        Color color;
+        for (int x = 0; x <= 7; x++) {
+            for (int y = 0; y <= 7; y++) {
+                Material mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+                geom = new Geometry("Box" + x + y, b);
+                color = game.getGameState().getSquare(x, y).currentColor;
+                System.out.println(color.getRed() + " " + color.getGreen() + " " + color.getBlue() + " " + color.getAlpha());
+                mat.setColor("Color", new ColorRGBA(color.getRed() / 255f, color.getGreen() / 255f, color.getBlue() / 255f, color.getAlpha() / 255f));
+                geom.setMaterial(mat);
+                geom.setLocalTranslation(x, y, 0);
+                rootNode.attachChild(geom);
+            }
 
-        Material mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-        mat.setColor("Color", ColorRGBA.Blue);
-        geom.setMaterial(mat);
-
-        rootNode.attachChild(geom);
+        }
     }
 
     @Override
