@@ -11,6 +11,7 @@ import com.jme3.math.ColorRGBA;
 import com.jme3.renderer.RenderManager;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.shape.Box;
+import eu.assault2142.hololol.chess.client.game.Game;
 import eu.assault2142.hololol.chess.client.game.ui.IGameView;
 
 /**
@@ -18,6 +19,13 @@ import eu.assault2142.hololol.chess.client.game.ui.IGameView;
  * @author hololol2
  */
 public class MonkeyGameView extends SimpleApplication implements IGameView {
+    
+    private Game game;
+    
+    public MonkeyGameView(Game game) {
+        this.game = game;
+        this.setShowSettings(false);
+    }
 
     @Override
     public void drawOffer() {
@@ -95,11 +103,5 @@ public class MonkeyGameView extends SimpleApplication implements IGameView {
     @Override
     public void simpleUpdate(float tpf) {
         //TODO: add update code
-    }
-
-    public static void startView() {
-        SimpleApplication app = new MonkeyGameView();
-        app.setShowSettings(false);
-        app.start();
     }
 }

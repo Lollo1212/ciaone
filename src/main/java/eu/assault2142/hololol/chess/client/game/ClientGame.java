@@ -1,5 +1,6 @@
 package eu.assault2142.hololol.chess.client.game;
 
+import eu.assault2142.hololol.chess.client.game.ui.GameViewFactory;
 import eu.assault2142.hololol.chess.client.game.ui.swing.GameFrame;
 import eu.assault2142.hololol.chess.client.networking.ServerConnection;
 import eu.assault2142.hololol.chess.game.chessmen.CastlingMove;
@@ -37,7 +38,7 @@ public final class ClientGame extends Game {
         EventQueue.invokeLater(new Thread() {
             @Override
             public void run() {
-                gameview = new GameFrame(ClientGame.this);
+                gameview = GameViewFactory.startGameView(ClientGame.this, GameViewFactory.GameViews.SWING);
                 updateMovements();
                 gameview.showColor(black);
             }
