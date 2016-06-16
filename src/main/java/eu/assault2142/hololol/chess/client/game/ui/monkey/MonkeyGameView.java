@@ -8,6 +8,7 @@ package eu.assault2142.hololol.chess.client.game.ui.monkey;
 import com.jme3.app.SimpleApplication;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
+import com.jme3.math.Vector3f;
 import com.jme3.renderer.RenderManager;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.shape.Box;
@@ -23,13 +24,17 @@ import java.awt.Color;
 public class MonkeyGameView extends SimpleApplication implements IGameView {
 
     private Game game;
+    private Geometry[][] board;
 
     public MonkeyGameView(Game game) {
         this.game = game;
         this.setShowSettings(false);
         settings = new AppSettings(true);
-        //settings.setFullscreen(true);
+        settings.setFullscreen(true);
         settings.setVSync(true);
+        settings.setResolution(1920, 1080);
+        settings.setSamples(16);
+        board = new Geometry[8][8];
     }
 
     @Override
@@ -88,21 +93,28 @@ public class MonkeyGameView extends SimpleApplication implements IGameView {
 
     @Override
     public void simpleInitApp() {
-        Box b = new Box(0.5f, 0.5f, 0.5f);
+        Box b = new Box(0.5f, 0.5f, 0.1f);
         Geometry geom;
-        Color color;
+        Material mat;
         for (int x = 0; x <= 7; x++) {
             for (int y = 0; y <= 7; y++) {
-                Material mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+                mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
                 geom = new Geometry("Box" + x + y, b);
-                color = game.getGameState().getSquare(x, y).currentColor;
-                mat.setColor("Color", new ColorRGBA(color.getRed() / 255f, color.getGreen() / 255f, color.getBlue() / 255f, color.getAlpha() / 255f));
                 geom.setMaterial(mat);
                 geom.setLocalTranslation(x, y, 0);
                 rootNode.attachChild(geom);
+                board[x][y] = geom;
             }
-
         }
+        b = new Box(4.5f, 4.5f, 0.5f);
+        geom = new Geometry("Board", b);
+        mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+        mat.setColor("Color", ColorRGBA.Brown);
+        geom.setMaterial(mat);
+        geom.setLocalTranslation(3.5f, 3.5f, -0.6f);
+        rootNode.attachChild(geom);
+        cam.setLocation(new Vector3f(1.5f, -3.5f, 10f));
+        cam.lookAt(new Vector3f(3.5f, 3.5f, 0), Vector3f.UNIT_Z);
     }
 
     @Override
@@ -112,6 +124,17 @@ public class MonkeyGameView extends SimpleApplication implements IGameView {
 
     @Override
     public void simpleUpdate(float tpf) {
-        //TODO: add update code
+        Material mat;
+        Geometry geom;
+        Color color;
+        for (int x = 0; x <= 7; x++) {
+            for (int y = 0; y <= 7; y++) {
+                geom = board[x][y];
+                mat = geom.getMaterial();
+                color = game.getGameState().getSquare(x, y).currentColor;
+                mat.setColor("Color", new ColorRGBA(color.getRed() / 255f, color.getGreen() / 255f, color.getBlue() / 255f, color.getAlpha() / 255f));
+            }
+
+        }
     }
 }
