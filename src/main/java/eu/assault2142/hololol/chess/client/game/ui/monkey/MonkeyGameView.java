@@ -15,6 +15,7 @@ import com.jme3.scene.shape.Box;
 import com.jme3.system.AppSettings;
 import eu.assault2142.hololol.chess.client.game.Game;
 import eu.assault2142.hololol.chess.client.game.ui.IGameView;
+import eu.assault2142.hololol.chess.game.chessmen.Chessman;
 import java.awt.Color;
 
 /**
@@ -25,6 +26,8 @@ public class MonkeyGameView extends SimpleApplication implements IGameView {
 
     private Game game;
     private Geometry[][] board;
+    private Geometry[] black;
+    private Geometry[] white;
 
     public MonkeyGameView(Game game) {
         this.game = game;
@@ -35,6 +38,8 @@ public class MonkeyGameView extends SimpleApplication implements IGameView {
         settings.setResolution(1920, 1080);
         settings.setSamples(16);
         board = new Geometry[8][8];
+        black = new Geometry[16];
+        white = new Geometry[16];
     }
 
     @Override
@@ -106,6 +111,22 @@ public class MonkeyGameView extends SimpleApplication implements IGameView {
                 board[x][y] = geom;
             }
         }
+        b = new Box(0.3f, 0.3f, 0.5f);
+        for (int i = 0; i <= 15; i++) {
+            mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+            mat.setColor("Color", ColorRGBA.Black);
+            geom = new Geometry("Chessman_black_" + i, b);
+            geom.setMaterial(mat);
+            rootNode.attachChild(geom);
+            black[i] = geom;
+
+            mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+            mat.setColor("Color", ColorRGBA.White);
+            geom = new Geometry("Chessman_white_" + i, b);
+            geom.setMaterial(mat);
+            rootNode.attachChild(geom);
+            white[i] = geom;
+        }
         b = new Box(4.5f, 4.5f, 0.5f);
         geom = new Geometry("Board", b);
         mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
@@ -134,7 +155,13 @@ public class MonkeyGameView extends SimpleApplication implements IGameView {
                 color = game.getGameState().getSquare(x, y).currentColor;
                 mat.setColor("Color", new ColorRGBA(color.getRed() / 255f, color.getGreen() / 255f, color.getBlue() / 255f, color.getAlpha() / 255f));
             }
+        }
+        for (int i = 0; i <= 15; i++) {
+            Chessman chessman = game.getGameState().getChessman(true, i);
+            black[i].setLocalTranslation(chessman.getXPosition(), chessman.getYPosition(), 0.6f);
 
+            chessman = game.getGameState().getChessman(false, i);
+            white[i].setLocalTranslation(chessman.getXPosition(), chessman.getYPosition(), 0.6f);
         }
     }
 }
