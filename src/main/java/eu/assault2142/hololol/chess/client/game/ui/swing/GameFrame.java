@@ -214,8 +214,7 @@ public class GameFrame extends JFrame implements MouseListener, IGameView {
         if (game.getType() == Game.TYPE.LOCAL) {
             JButton b = new JButton(Translator.getString("GAME_BUTTON_END"));
             b.addActionListener((ActionEvent e) -> {
-                setVisible(false);
-                Main.MENU.setVisible(true);
+                game.endGame();
             });
             addComponent(b, 1, 9, 2, 1, 1, 1);
         } else if (game.getType() != Game.TYPE.LOCAL) {

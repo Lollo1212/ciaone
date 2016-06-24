@@ -8,6 +8,9 @@ package eu.assault2142.hololol.chess.client.game.ui.monkey;
 import com.jme3.app.FlyCamAppState;
 import com.jme3.app.SimpleApplication;
 import com.jme3.app.state.AppState;
+import com.jme3.input.KeyInput;
+import com.jme3.input.controls.ActionListener;
+import com.jme3.input.controls.KeyTrigger;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
@@ -25,7 +28,7 @@ import java.util.LinkedList;
  *
  * @author hololol2
  */
-public class MonkeyGameView extends SimpleApplication implements IGameView {
+public class MonkeyGameView extends SimpleApplication implements IGameView, ActionListener {
 
     private Game game;
     private GameSquare[][] board;
@@ -71,6 +74,13 @@ public class MonkeyGameView extends SimpleApplication implements IGameView {
     }
 
     @Override
+    public void onAction(String name, boolean isPressed, float tps) {
+        if (name.equals("EXIT") && isPressed) {
+            game.endGame();
+        }
+    }
+
+    @Override
     public void onCheck() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
@@ -107,8 +117,13 @@ public class MonkeyGameView extends SimpleApplication implements IGameView {
 
     @Override
     public void simpleInitApp() {
+        inputManager.clearMappings();
         inputManager.setCursorVisible(true);
         getFlyByCamera().setEnabled(false);
+
+        inputManager.addMapping("EXIT",
+                new KeyTrigger(KeyInput.KEY_ESCAPE));
+        inputManager.addListener(this, "EXIT");
         stateManager.detach(stateManager.getState(FlyCamAppState.class));
         LinkedList<GameSquare> squares = new LinkedList();
         for (int x = 0; x <= 7; x++) {
