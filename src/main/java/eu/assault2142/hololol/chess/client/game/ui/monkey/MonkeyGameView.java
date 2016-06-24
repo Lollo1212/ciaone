@@ -35,6 +35,8 @@ public class MonkeyGameView extends SimpleApplication implements IGameView, Acti
     private Geometry[] black;
     private Geometry[] white;
     private AppState selectstate;
+    private Geometry wait;
+    private boolean waiting;
 
     public MonkeyGameView(Game game) {
         this.game = game;
@@ -56,9 +58,11 @@ public class MonkeyGameView extends SimpleApplication implements IGameView, Acti
 
     @Override
     public void setMovementsUpdating(boolean updating) {
+        waiting = updating;
         if (updating) {
             getStateManager().detach(selectstate);
         } else {
+            guiNode.detachChild(wait);
             getStateManager().attach(selectstate);
         }
     }
@@ -162,6 +166,12 @@ public class MonkeyGameView extends SimpleApplication implements IGameView, Acti
         cam.setLocation(new Vector3f(1.5f, -3.5f, 10f));
         cam.lookAt(new Vector3f(3.5f, 3.5f, 0), Vector3f.UNIT_Z);
 
+        b = new Box(400, 300, 1);
+        wait = new Geometry("Wait", b);
+        mat = new Material(getAssetManager(), "Common/MatDefs/Misc/Unshaded.j3md");
+        wait.setMaterial(mat);
+        wait.setLocalTranslation(500, 500, 0);
+        guiNode.attachChild(wait);
     }
 
     @Override
@@ -188,6 +198,10 @@ public class MonkeyGameView extends SimpleApplication implements IGameView, Acti
 
             chessman = game.getGameState().getChessman(false, i);
             white[i].setLocalTranslation(chessman.getXPosition(), chessman.getYPosition(), 0.6f);
+        }
+        if (waiting) {
+            guiNode.attachChild(wait);
+            waiting = false;
         }
     }
 
