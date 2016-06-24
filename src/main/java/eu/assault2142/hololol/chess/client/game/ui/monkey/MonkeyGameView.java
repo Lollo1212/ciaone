@@ -5,7 +5,9 @@
  */
 package eu.assault2142.hololol.chess.client.game.ui.monkey;
 
+import com.jme3.app.FlyCamAppState;
 import com.jme3.app.SimpleApplication;
+import com.jme3.app.state.AppState;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
@@ -17,6 +19,7 @@ import eu.assault2142.hololol.chess.client.game.Game;
 import eu.assault2142.hololol.chess.client.game.ui.IGameView;
 import eu.assault2142.hololol.chess.game.chessmen.Chessman;
 import java.awt.Color;
+import java.util.LinkedList;
 
 /**
  *
@@ -25,9 +28,10 @@ import java.awt.Color;
 public class MonkeyGameView extends SimpleApplication implements IGameView {
 
     private Game game;
-    private Geometry[][] board;
+    private GameSquare[][] board;
     private Geometry[] black;
     private Geometry[] white;
+    private AppState selectstate;
 
     public MonkeyGameView(Game game) {
         this.game = game;
@@ -37,7 +41,7 @@ public class MonkeyGameView extends SimpleApplication implements IGameView {
         settings.setVSync(true);
         settings.setResolution(1920, 1080);
         settings.setSamples(16);
-        board = new Geometry[8][8];
+        board = new GameSquare[8][8];
         black = new Geometry[16];
         white = new Geometry[16];
     }
@@ -49,6 +53,11 @@ public class MonkeyGameView extends SimpleApplication implements IGameView {
 
     @Override
     public void setMovementsUpdating(boolean updating) {
+        if (updating) {
+            getStateManager().detach(selectstate);
+        } else {
+            getStateManager().attach(selectstate);
+        }
     }
 
     @Override
@@ -58,7 +67,7 @@ public class MonkeyGameView extends SimpleApplication implements IGameView {
 
     @Override
     public void hide() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        this.stop();
     }
 
     @Override
@@ -98,20 +107,21 @@ public class MonkeyGameView extends SimpleApplication implements IGameView {
 
     @Override
     public void simpleInitApp() {
-        Box b = new Box(0.5f, 0.5f, 0.1f);
-        Geometry geom;
-        Material mat;
+        inputManager.setCursorVisible(true);
+        getFlyByCamera().setEnabled(false);
+        stateManager.detach(stateManager.getState(FlyCamAppState.class));
+        LinkedList<GameSquare> squares = new LinkedList();
         for (int x = 0; x <= 7; x++) {
             for (int y = 0; y <= 7; y++) {
-                mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-                geom = new Geometry("Box" + x + y, b);
-                geom.setMaterial(mat);
-                geom.setLocalTranslation(x, y, 0);
-                rootNode.attachChild(geom);
-                board[x][y] = geom;
+                board[x][y] = new GameSquare(x, y, this);
+                squares.add(board[x][y]);
             }
         }
-        b = new Box(0.3f, 0.3f, 0.5f);
+        selectstate = new SelectAppState(squares);
+        getStateManager().attach(selectstate);
+        Box b = new Box(0.3f, 0.3f, 0.5f);
+        Geometry geom;
+        Material mat;
         for (int i = 0; i <= 15; i++) {
             mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
             mat.setColor("Color", ColorRGBA.Black);
@@ -136,6 +146,7 @@ public class MonkeyGameView extends SimpleApplication implements IGameView {
         rootNode.attachChild(geom);
         cam.setLocation(new Vector3f(1.5f, -3.5f, 10f));
         cam.lookAt(new Vector3f(3.5f, 3.5f, 0), Vector3f.UNIT_Z);
+
     }
 
     @Override
@@ -164,4 +175,10 @@ public class MonkeyGameView extends SimpleApplication implements IGameView {
             white[i].setLocalTranslation(chessman.getXPosition(), chessman.getYPosition(), 0.6f);
         }
     }
+
+    void clickAt(int x, int y) {
+        game.getGameState().resetHighlightedFields();
+        game.clickAt(x, y);
+    }
+
 }
