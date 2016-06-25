@@ -18,6 +18,7 @@ import com.jme3.renderer.RenderManager;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.shape.Box;
 import com.jme3.system.AppSettings;
+import com.jme3.texture.Texture;
 import eu.assault2142.hololol.chess.client.game.Game;
 import eu.assault2142.hololol.chess.client.game.ui.IGameView;
 import eu.assault2142.hololol.chess.game.chessmen.Chessman;
@@ -165,12 +166,13 @@ public class MonkeyGameView extends SimpleApplication implements IGameView, Acti
         rootNode.attachChild(geom);
         cam.setLocation(new Vector3f(1.5f, -3.5f, 10f));
         cam.lookAt(new Vector3f(3.5f, 3.5f, 0), Vector3f.UNIT_Z);
-
-        b = new Box(400, 300, 1);
+        b = new Box(settings.getWidth() * 0.23f, settings.getHeight() * 0.23f, 1);
         wait = new Geometry("Wait", b);
         mat = new Material(getAssetManager(), "Common/MatDefs/Misc/Unshaded.j3md");
+        Texture tex = assetManager.loadTexture("Textures/wood.jpg");
+        mat.setTexture("ColorMap", tex);
         wait.setMaterial(mat);
-        wait.setLocalTranslation(500, 500, 0);
+        wait.setLocalTranslation(settings.getWidth() * 0.5f, settings.getHeight() * 0.5f, 0);
         guiNode.attachChild(wait);
     }
 
