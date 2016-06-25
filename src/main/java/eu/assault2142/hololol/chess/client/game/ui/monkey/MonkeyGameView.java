@@ -13,9 +13,11 @@ import com.jme3.input.controls.ActionListener;
 import com.jme3.input.controls.KeyTrigger;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
+import com.jme3.math.FastMath;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.RenderManager;
 import com.jme3.scene.Geometry;
+import com.jme3.scene.Spatial;
 import com.jme3.scene.shape.Box;
 import com.jme3.system.AppSettings;
 import com.jme3.texture.Texture;
@@ -33,8 +35,8 @@ public class MonkeyGameView extends SimpleApplication implements IGameView, Acti
 
     private Game game;
     private GameSquare[][] board;
-    private Geometry[] black;
-    private Geometry[] white;
+    private Spatial[] black;
+    private Spatial[] white;
     private AppState selectstate;
     private Geometry wait;
     private boolean waiting;
@@ -48,8 +50,8 @@ public class MonkeyGameView extends SimpleApplication implements IGameView, Acti
         settings.setResolution(1920, 1080);
         settings.setSamples(16);
         board = new GameSquare[8][8];
-        black = new Geometry[16];
-        white = new Geometry[16];
+        black = new Spatial[16];
+        white = new Spatial[16];
     }
 
     @Override
@@ -143,19 +145,17 @@ public class MonkeyGameView extends SimpleApplication implements IGameView, Acti
         Geometry geom;
         Material mat;
         for (int i = 0; i <= 15; i++) {
-            mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-            mat.setColor("Color", ColorRGBA.Black);
-            geom = new Geometry("Chessman_black_" + i, b);
-            geom.setMaterial(mat);
-            rootNode.attachChild(geom);
-            black[i] = geom;
+            Spatial spatial = getAssetManager().loadModel("Models/pawn.j3o");
+            spatial.setLocalScale(0.5f);
+            spatial.rotate(FastMath.HALF_PI, 0, 0);
+            rootNode.attachChild(spatial);
+            black[i] = spatial;
 
-            mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-            mat.setColor("Color", ColorRGBA.White);
-            geom = new Geometry("Chessman_white_" + i, b);
-            geom.setMaterial(mat);
-            rootNode.attachChild(geom);
-            white[i] = geom;
+            spatial = getAssetManager().loadModel("Models/pawn.j3o");
+            spatial.setLocalScale(0.5f);
+            spatial.rotate(FastMath.HALF_PI, 0, 0);
+            rootNode.attachChild(spatial);
+            white[i] = spatial;
         }
         b = new Box(4.5f, 4.5f, 0.5f);
         geom = new Geometry("Board", b);
@@ -196,10 +196,10 @@ public class MonkeyGameView extends SimpleApplication implements IGameView, Acti
         }
         for (int i = 0; i <= 15; i++) {
             Chessman chessman = game.getGameState().getChessman(true, i);
-            black[i].setLocalTranslation(chessman.getXPosition(), chessman.getYPosition(), 0.6f);
+            black[i].setLocalTranslation(chessman.getXPosition(), chessman.getYPosition(), 0.1f);
 
             chessman = game.getGameState().getChessman(false, i);
-            white[i].setLocalTranslation(chessman.getXPosition(), chessman.getYPosition(), 0.6f);
+            white[i].setLocalTranslation(chessman.getXPosition(), chessman.getYPosition(), 0.1f);
         }
         if (waiting) {
             guiNode.attachChild(wait);
