@@ -47,7 +47,7 @@ public class Pawn extends Chessman {
      * @param game the game
      */
     private Pawn(boolean black, int posx, int posy, Game game) {
-        super(black, posx, posy, game);
+        super(black, posx, posy, game, 1);
         type = NAMES.PAWN;
     }
 

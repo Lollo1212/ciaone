@@ -46,7 +46,7 @@ public class King extends Chessman {
      * @param game the game
      */
     private King(boolean black, int posx, int posy, Game game) {
-        super(black, posx, posy, game);
+        super(black, posx, posy, game, 200);
         type = NAMES.KING;
     }
 

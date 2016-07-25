@@ -34,6 +34,8 @@ public abstract class Chessman {
     //the class of the chessman
     NAMES type;
 
+    private int value;
+
     /**
      * Create a new Chessman
      *
@@ -42,7 +44,7 @@ public abstract class Chessman {
      * @param posy the y-coordinate
      * @param game the game
      */
-    protected Chessman(boolean black, int posx, int posy, Game game) {
+    protected Chessman(boolean black, int posx, int posy, Game game, int value) {
         this.game = game;
         gamestate = game.getGameState();
         if (posx <= 7 && posx >= 0 && posy <= 7 && posy >= 0) {
@@ -50,6 +52,7 @@ public abstract class Chessman {
             this.posX = posx;
             this.posY = posy;
         }
+        this.value = value;
     }
 
     /**
@@ -171,6 +174,10 @@ public abstract class Chessman {
 
     public NAMES getType() {
         return type;
+    }
+
+    public int getValue() {
+        return value;
     }
 
     /**

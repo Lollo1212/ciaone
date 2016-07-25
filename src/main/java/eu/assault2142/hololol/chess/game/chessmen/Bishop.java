@@ -63,7 +63,7 @@ public class Bishop extends Chessman {
      * @param game the game
      */
     private Bishop(boolean black, int posx, int posy, Game game) {
-        super(black, posx, posy, game);
+        super(black, posx, posy, game, 3);
         type = NAMES.BISHOP;
     }
 

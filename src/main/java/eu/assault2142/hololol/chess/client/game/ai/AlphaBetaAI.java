@@ -16,20 +16,21 @@ import java.util.List;
 public class AlphaBetaAI implements IAI {
 
     private GameState state;
+    private boolean black = true;
 
     @Override
     public Move bestMove() {
-        alphabeta(state, 10, Integer.MIN_VALUE, Integer.MAX_VALUE, state.getTurn());
+        alphabeta(state, 10, Integer.MIN_VALUE, Integer.MAX_VALUE, true);
         return null;
     }
 
     public int alphabeta(GameState state, int depth, int alpha, int beta, boolean maximizingPlayer) {
         if (depth == 0) {
-            return 0;
+            return state.evaluateSituation(black);
         }
         if (maximizingPlayer) {
             int v = Integer.MIN_VALUE;
-            List<Move> moves = state.getAllMoves(maximizingPlayer);
+            List<Move> moves = state.getAllMoves(black);
             for (Move m : moves) {
                 v = Math.max(v, alphabeta(state.emulateMove(m.getChessman(), m.getTargetX(), m.getTargetY()), depth - 1, alpha, beta, false));
                 alpha = Math.max(alpha, v);
@@ -40,7 +41,7 @@ public class AlphaBetaAI implements IAI {
             return v;
         } else {
             int v = Integer.MAX_VALUE;
-            List<Move> moves = state.getAllMoves(maximizingPlayer);
+            List<Move> moves = state.getAllMoves(!black);
             for (Move m : moves) {
                 v = Math.min(v, alphabeta(state.emulateMove(m.getChessman(), m.getTargetX(), m.getTargetY()), depth - 1, alpha, beta, true));
                 beta = Math.min(beta, v);

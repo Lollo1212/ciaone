@@ -20,7 +20,7 @@ public class Queen extends Chessman {
      * @param game the game
      */
     private Queen(boolean black, int posx, int posy, Game game) {
-        super(black, posx, posy, game);
+        super(black, posx, posy, game, 9);
         type = NAMES.QUEEN;
     }
 

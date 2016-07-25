@@ -63,7 +63,7 @@ public class Rook extends Chessman {
      * @param game the gamestate
      */
     private Rook(boolean black, int posx, int posy, Game game) {
-        super(black, posx, posy, game);
+        super(black, posx, posy, game, 5);
         type = NAMES.ROOK;
     }
 

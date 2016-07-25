@@ -99,6 +99,25 @@ public class GameState {
     }
 
     /**
+     *
+     * @param black true for black player, false for white
+     * @return all moves the given player can currently do
+     */
+    public List<Move> computeAllMoves(boolean black) {
+        LinkedList<Move> moves = new LinkedList();
+        IntStream.range(0, 16).mapToObj((int num) -> {
+            return getChessman(black, num);
+        }).filter((Chessman man) -> {
+            return !man.isCaptured();
+        }).map((Chessman man) -> {
+            return man.computeMoves(false, this);
+        }).forEach((List<Move> mov) -> {
+            moves.addAll(mov);
+        });
+        return moves;
+    }
+
+    /**
      * Checks if the king is currently in danger
      *
      * @param black the color to check for
@@ -164,6 +183,20 @@ public class GameState {
             System.out.println("Emulating Move not successfull");
             return this;
         }
+    }
+
+    public int evaluateSituation(boolean black) {
+        int value = 0;
+        if (black) {
+            for (Chessman man : chessmenBlack) {
+                value += man.getValue();
+            }
+            for (Chessman man : chessmenWhite) {
+                value -= man.getValue();
+            }
+        }
+        value += 0.1 * (getAllMoves(black).size() + getAllCaptures(black).size() - computeAllCaptures(!black).size() - computeAllMoves(!black).size());
+        return value;
     }
 
     /**
