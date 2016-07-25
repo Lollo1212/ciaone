@@ -23,7 +23,7 @@ public final class LocalGame extends Game {
         EventQueue.invokeLater(new Thread() {
             @Override
             public void run() {
-                gameview = GameViewFactory.startGameView(LocalGame.this, GameViewFactory.GameViews.JMONKEY);
+                gameview = GameViewFactory.startGameView(LocalGame.this, GameViewFactory.GameViews.SWING);
                 updateMovements();
             }
         });
