@@ -1,6 +1,5 @@
 package eu.assault2142.hololol.chess.game;
 
-import eu.assault2142.hololol.chess.game.chessmen.King;
 import eu.assault2142.hololol.chess.game.chessmen.Move;
 import java.util.List;
 import java.util.logging.Level;
@@ -30,7 +29,7 @@ public abstract class MovementUpdater extends Thread {
      * Check for check, checkmate and stalemate
      */
     protected void testCheck() {
-        List<Move> captures = gamestate.getAllCaptures(!gamestate.getTurn());
+        /*List<Move> captures = gamestate.getAllCaptures(!gamestate.getTurn());
         for (Move capture : captures) {
             if (capture != null) {
                 Square square = gamestate.getSquare(capture.getTargetX(), capture.getTargetY());
@@ -39,10 +38,11 @@ public abstract class MovementUpdater extends Thread {
                     break;
                 }
             }
-        }
+        }*/
+        schach = gamestate.dangerForKing(gamestate.getTurn());
 
         List<Move> moves = gamestate.getAllMoves(gamestate.getTurn());
-        captures = gamestate.getAllCaptures(gamestate.getTurn());
+        List<Move> captures = gamestate.getAllCaptures(gamestate.getTurn());
         moves.addAll(captures);
         nomovepossible = true;
         for (Move move : moves) {
@@ -67,15 +67,11 @@ public abstract class MovementUpdater extends Thread {
      * Update the movements
      */
     protected void updateMovements() {
-        Thread[] threads = new Thread[32];
+        Thread[] threads = new Thread[16];
         for (int chessmanNumber = 0; chessmanNumber < 16; chessmanNumber++) {
-            if (!gamestate.getChessman(true, chessmanNumber).isCaptured()) {
-                threads[chessmanNumber] = new MovementUpdaterThread(gamestate.getChessman(true, chessmanNumber));
+            if (!gamestate.getChessman(gamestate.getTurn(), chessmanNumber).isCaptured()) {
+                threads[chessmanNumber] = new MovementUpdaterThread(gamestate.getChessman(gamestate.getTurn(), chessmanNumber));
                 threads[chessmanNumber].start();
-            }
-            if (!gamestate.getChessman(false, chessmanNumber).isCaptured()) {
-                threads[chessmanNumber + 16] = new MovementUpdaterThread(gamestate.getChessman(false, chessmanNumber));
-                threads[chessmanNumber + 16].start();
             }
         }
         for (Thread thread : threads) {
