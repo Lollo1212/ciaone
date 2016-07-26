@@ -12,7 +12,7 @@ import java.awt.EventQueue;
  *
  * @author hololol2
  */
-public final class LocalGame extends Game {
+public class LocalGame extends Game {
 
     /**
      * Start a new LocalGame

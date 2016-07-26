@@ -189,13 +189,17 @@ public class GameState {
         int value = 0;
         if (black) {
             for (Chessman man : chessmenBlack) {
-                value += man.getValue();
+                if (!man.isCaptured()) {
+                    value += man.getValue();
+                }
             }
             for (Chessman man : chessmenWhite) {
-                value -= man.getValue();
+                if (!man.isCaptured()) {
+                    value -= man.getValue();
+                }
             }
         }
-        value += 0.1 * (getAllMoves(black).size() + getAllCaptures(black).size() - computeAllCaptures(!black).size() - computeAllMoves(!black).size());
+        //value += 0.1 * (computeAllMoves(black).size() + computeAllCaptures(black).size() - computeAllCaptures(!black).size() - computeAllMoves(!black).size());
         return value;
     }
 
@@ -378,7 +382,7 @@ public class GameState {
         figuren[13] = Bishop.createBishop(black, 1, game, 13);
         figuren[14] = Queen.createQueen(black, game, 14);
         figuren[15] = King.createKing(black, game, 15);
-        if (black == true) {
+        if (black) {
             squares[1].occupier = figuren[0];
             squares[11].occupier = figuren[1];
             squares[21].occupier = figuren[2];
@@ -396,7 +400,7 @@ public class GameState {
             squares[40].occupier = figuren[15];
             squares[30].occupier = figuren[14];
         }
-        if (black == false) {
+        if (!black) {
             squares[6].occupier = figuren[0];
             squares[16].occupier = figuren[1];
             squares[26].occupier = figuren[2];

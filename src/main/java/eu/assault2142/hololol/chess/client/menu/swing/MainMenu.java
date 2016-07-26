@@ -1,5 +1,6 @@
 package eu.assault2142.hololol.chess.client.menu.swing;
 
+import eu.assault2142.hololol.chess.client.game.AIGame;
 import eu.assault2142.hololol.chess.client.game.LocalGame;
 import eu.assault2142.hololol.chess.client.networking.ServerConnection;
 import eu.assault2142.hololol.chess.client.util.Pair;
@@ -594,7 +595,7 @@ class MainMenu extends javax.swing.JFrame {
     }//GEN-LAST:event_jPasswordField1ActionPerformed
 
     private void jButton6ActionPerformed(ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
-        LocalGame localGame = new LocalGame();
+        LocalGame localGame = new AIGame();
         setVisible(false);
     }//GEN-LAST:event_jButton6ActionPerformed
 

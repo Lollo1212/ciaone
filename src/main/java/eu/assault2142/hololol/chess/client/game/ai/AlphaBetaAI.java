@@ -5,6 +5,7 @@
  */
 package eu.assault2142.hololol.chess.client.game.ai;
 
+import eu.assault2142.hololol.chess.client.util.Pair;
 import eu.assault2142.hololol.chess.game.GameState;
 import eu.assault2142.hololol.chess.game.chessmen.Move;
 import java.util.List;
@@ -15,36 +16,45 @@ import java.util.List;
  */
 public class AlphaBetaAI implements IAI {
 
-    private GameState state;
+    private GameState currstate;
     private boolean black = true;
+
+    public AlphaBetaAI(GameState state) {
+        this.currstate = state;
+    }
 
     @Override
     public Move bestMove() {
-        alphabeta(state, 10, Integer.MIN_VALUE, Integer.MAX_VALUE, true);
-        return null;
+        Pair<Integer, Move> res = alphabeta(currstate, 2, Integer.MIN_VALUE, Integer.MAX_VALUE, true, null);
+        System.out.println(res.getLeft());
+        return res.getRight();
     }
 
-    public int alphabeta(GameState state, int depth, int alpha, int beta, boolean maximizingPlayer) {
+    public Pair<Integer, Move> alphabeta(GameState before, int depth, int alpha, int beta, boolean maximizingPlayer, Move move) {
+        GameState state = move == null ? before : before.emulateMove(move.getChessman(), move.getTargetX(), move.getTargetY());
         if (depth == 0) {
-            return state.evaluateSituation(black);
+            return new Pair(state.evaluateSituation(black), move);
         }
         if (maximizingPlayer) {
-            int v = Integer.MIN_VALUE;
-            List<Move> moves = state.getAllMoves(black);
+            Pair<Integer, Move> v = new Pair(Integer.MIN_VALUE, null);
+            List<Move> moves = state.computeAllMoves(black);
+            moves.addAll(state.computeAllCaptures(black));
             for (Move m : moves) {
-                v = Math.max(v, alphabeta(state.emulateMove(m.getChessman(), m.getTargetX(), m.getTargetY()), depth - 1, alpha, beta, false));
-                alpha = Math.max(alpha, v);
+                int abc = alphabeta(state, depth - 1, alpha, beta, false, m).getLeft();
+                v = v.getLeft() >= abc ? v : new Pair(abc, m);
+                alpha = Math.max(alpha, v.getLeft());
                 if (beta <= alpha) {
                     break;
                 }
             }
             return v;
         } else {
-            int v = Integer.MAX_VALUE;
-            List<Move> moves = state.getAllMoves(!black);
+            Pair<Integer, Move> v = new Pair(Integer.MAX_VALUE, null);
+            List<Move> moves = state.computeAllMoves(!black);
+            moves.addAll(state.computeAllCaptures(!black));
             for (Move m : moves) {
-                v = Math.min(v, alphabeta(state.emulateMove(m.getChessman(), m.getTargetX(), m.getTargetY()), depth - 1, alpha, beta, true));
-                beta = Math.min(beta, v);
+                v = new Pair(Math.min(v.getLeft(), alphabeta(state, depth - 1, alpha, beta, true, m).getLeft()), m);
+                beta = Math.min(beta, v.getLeft());
                 if (beta <= alpha) {
                     break;
                 }
