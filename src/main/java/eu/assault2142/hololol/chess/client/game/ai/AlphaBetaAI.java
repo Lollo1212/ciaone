@@ -52,8 +52,8 @@ public class AlphaBetaAI implements IAI {
         }
         if (maximizingPlayer) {
             Pair<Integer, Move> v = new Pair(Integer.MIN_VALUE, null);
-            List<Move> moves = state.computeAllMoves(black);
-            moves.addAll(state.computeAllCaptures(black));
+            List<Move> moves = state.computeAllCaptures(black);
+            moves.addAll(state.computeAllMoves(black));
             for (Move m : moves) {
                 int abc = alphabeta(state, depth - 1, alpha, beta, false, m).getLeft();
                 v = v.getLeft() >= abc ? v : new Pair(abc, m);
