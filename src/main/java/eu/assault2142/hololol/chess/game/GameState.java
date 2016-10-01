@@ -320,6 +320,12 @@ public class GameState {
     }
 
     public void init() {
+        initSquares();
+        chessmenBlack = buildChessmen(true, squares);
+        chessmenWhite = buildChessmen(false, squares);
+    }
+
+    protected void initSquares() {
         int squarenumber;
         for (int squareX = 0; squareX <= 7; squareX++) {
             for (int squareY = 0; squareY <= 7; squareY++) {
@@ -327,9 +333,6 @@ public class GameState {
                 squares[squarenumber] = new Square(squareX, squareY);
             }
         }
-
-        chessmenBlack = buildChessmen(true, squares);
-        chessmenWhite = buildChessmen(false, squares);
     }
 
     /**
