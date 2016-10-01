@@ -11,7 +11,7 @@ public abstract class Game {
 
     protected Chessman picked;
     protected Square selected;
-    private final GameState gamestate;
+    public GameState gamestate;
     private final TYPE type;
 
     /**

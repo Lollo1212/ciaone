@@ -15,8 +15,6 @@ import eu.assault2142.hololol.chess.game.chessmen.Rook;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -24,8 +22,8 @@ import java.util.logging.Logger;
  */
 public class TestGameState extends GameState {
 
-    public TestGameState(String pieces, boolean color, String castling, String enpassant) throws NoSuchMethodException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchFieldException {
-        super((Game) null);
+    public TestGameState(Game game, String pieces, boolean color, String castling, String enpassant) throws NoSuchMethodException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchFieldException {
+        super((Game) game);
         initSquares();
         String[] ranks = pieces.split("/");
         int posY = 0;
@@ -35,7 +33,7 @@ public class TestGameState extends GameState {
         for (String rank : ranks) {
             for (char c : rank.toCharArray()) {
                 if (Character.isDigit(c)) {
-                    posX += c;
+                    posX += Integer.parseInt(Character.toString(c));
                 } else {
                     pieceblack = true;
                     if (Character.isUpperCase(c)) {
@@ -45,7 +43,8 @@ public class TestGameState extends GameState {
                         case 'P':
                             Constructor constructor = Pawn.class.getDeclaredConstructor(boolean.class, int.class, int.class, Game.class);
                             constructor.setAccessible(true);
-                            Pawn pawn = (Pawn) constructor.newInstance(pieceblack, posX, posY, null);
+                            Pawn pawn = (Pawn) constructor.newInstance(pieceblack, posX, posY, game);
+                            setChessman(pieceblack, pieceblack ? piablack : piawhite, pawn);
                             getSquare(posX, posY).occupier = pawn;
                             Field field = Chessman.class.getDeclaredField("positioninarray");
                             field.setAccessible(true);
@@ -56,7 +55,8 @@ public class TestGameState extends GameState {
                         case 'N':
                             constructor = Knight.class.getDeclaredConstructor(boolean.class, int.class, int.class, Game.class);
                             constructor.setAccessible(true);
-                            Knight knight = (Knight) constructor.newInstance(pieceblack, posX, posY, null);
+                            Knight knight = (Knight) constructor.newInstance(pieceblack, posX, posY, game);
+                            setChessman(pieceblack, pieceblack ? piablack : piawhite, knight);
                             getSquare(posX, posY).occupier = knight;
                             field = Chessman.class.getDeclaredField("positioninarray");
                             field.setAccessible(true);
@@ -67,7 +67,8 @@ public class TestGameState extends GameState {
                         case 'B':
                             constructor = Bishop.class.getDeclaredConstructor(boolean.class, int.class, int.class, Game.class);
                             constructor.setAccessible(true);
-                            Bishop bishop = (Bishop) constructor.newInstance(pieceblack, posX, posY, null);
+                            Bishop bishop = (Bishop) constructor.newInstance(pieceblack, posX, posY, game);
+                            setChessman(pieceblack, pieceblack ? piablack : piawhite, bishop);
                             getSquare(posX, posY).occupier = bishop;
                             field = Chessman.class.getDeclaredField("positioninarray");
                             field.setAccessible(true);
@@ -78,7 +79,8 @@ public class TestGameState extends GameState {
                         case 'R':
                             constructor = Rook.class.getDeclaredConstructor(boolean.class, int.class, int.class, Game.class);
                             constructor.setAccessible(true);
-                            Rook rook = (Rook) constructor.newInstance(pieceblack, posX, posY, null);
+                            Rook rook = (Rook) constructor.newInstance(pieceblack, posX, posY, game);
+                            setChessman(pieceblack, pieceblack ? piablack : piawhite, rook);
                             getSquare(posX, posY).occupier = rook;
                             field = Chessman.class.getDeclaredField("positioninarray");
                             field.setAccessible(true);
@@ -89,7 +91,8 @@ public class TestGameState extends GameState {
                         case 'Q':
                             constructor = Queen.class.getDeclaredConstructor(boolean.class, int.class, int.class, Game.class);
                             constructor.setAccessible(true);
-                            Queen queen = (Queen) constructor.newInstance(pieceblack, posX, posY, null);
+                            Queen queen = (Queen) constructor.newInstance(pieceblack, posX, posY, game);
+                            setChessman(pieceblack, pieceblack ? piablack : piawhite, queen);
                             getSquare(posX, posY).occupier = queen;
                             field = Chessman.class.getDeclaredField("positioninarray");
                             field.setAccessible(true);
@@ -100,7 +103,8 @@ public class TestGameState extends GameState {
                         case 'K':
                             constructor = King.class.getDeclaredConstructor(boolean.class, int.class, int.class, Game.class);
                             constructor.setAccessible(true);
-                            King king = (King) constructor.newInstance(pieceblack, posX, posY, null);
+                            King king = (King) constructor.newInstance(pieceblack, posX, posY, game);
+                            setChessman(pieceblack, pieceblack ? piablack : piawhite, king);
                             getSquare(posX, posY).occupier = king;
                             field = Chessman.class.getDeclaredField("positioninarray");
                             field.setAccessible(true);
@@ -109,10 +113,37 @@ public class TestGameState extends GameState {
                             piablack = pieceblack ? piablack + 1 : piablack;
                             break;
                     }
+                    posX++;
                 }
             }
             posX = 0;
             posY++;
+        }
+        while (piawhite < 16) {
+            Constructor constructor = Pawn.class.getDeclaredConstructor(boolean.class, int.class, int.class, Game.class);
+            constructor.setAccessible(true);
+            Pawn pawn = (Pawn) constructor.newInstance(false, 9, 9, game);
+            setChessman(false, piawhite, pawn);
+            Field field = Chessman.class.getDeclaredField("captured");
+            field.setAccessible(true);
+            field.set(pawn, true);
+            field = Chessman.class.getDeclaredField("positioninarray");
+            field.setAccessible(true);
+            field.set(pawn, piawhite);
+            piawhite++;
+        }
+        while (piablack < 16) {
+            Constructor constructor = Pawn.class.getDeclaredConstructor(boolean.class, int.class, int.class, Game.class);
+            constructor.setAccessible(true);
+            Pawn pawn = (Pawn) constructor.newInstance(true, 9, 9, game);
+            setChessman(true, piablack, pawn);
+            Field field = Chessman.class.getDeclaredField("captured");
+            field.setAccessible(true);
+            field.set(pawn, true);
+            field = Chessman.class.getDeclaredField("positioninarray");
+            field.setAccessible(true);
+            field.set(pawn, piablack);
+            piablack++;
         }
         if (!enpassant.equals("-")) {
             if (getTurn() == color) {
@@ -131,21 +162,4 @@ public class TestGameState extends GameState {
         }
     }
 
-    public static void main(String[] args) {
-        try {
-            new TestGameState("1k1r4/pp1b1R2/3q2pp/4p3/2B5/4Q3/PPP2B2/2K5", true, "-", "-");
-        } catch (NoSuchMethodException ex) {
-            Logger.getLogger(TestGameState.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            Logger.getLogger(TestGameState.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            Logger.getLogger(TestGameState.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IllegalArgumentException ex) {
-            Logger.getLogger(TestGameState.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (InvocationTargetException ex) {
-            Logger.getLogger(TestGameState.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (NoSuchFieldException ex) {
-            Logger.getLogger(TestGameState.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
 }

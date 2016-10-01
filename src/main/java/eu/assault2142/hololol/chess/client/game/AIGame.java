@@ -20,7 +20,7 @@ public class AIGame extends LocalGame {
 
     public AIGame() {
         super();
-        ai = new AlphaBetaAI(getGameState());
+        ai = new AlphaBetaAI(getGameState(), true);
     }
 
     @Override

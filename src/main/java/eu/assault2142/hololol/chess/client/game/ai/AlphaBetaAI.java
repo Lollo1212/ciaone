@@ -19,10 +19,11 @@ import java.util.Random;
 public class AlphaBetaAI implements IAI {
 
     private GameState currstate;
-    private boolean black = true;
+    private boolean black;
 
-    public AlphaBetaAI(GameState state) {
+    public AlphaBetaAI(GameState state, boolean color) {
         this.currstate = state;
+        black = color;
     }
 
     @Override
@@ -31,8 +32,10 @@ public class AlphaBetaAI implements IAI {
         moves.addAll(currstate.computeAllCaptures(black));
         int maxrating = Integer.MIN_VALUE;
         List<Move> best = new LinkedList();
+        int currrating = currstate.evaluateSituation(black);
+        System.out.println(currrating);
         for (Move move : moves) {
-            Pair<Integer, Move> res = alphabeta(currstate, 1, Integer.MIN_VALUE, Integer.MAX_VALUE, false, move);
+            Pair<Integer, Move> res = alphabeta(currstate, 1, Integer.MIN_VALUE, Integer.MAX_VALUE, !black, move);
             if (res.getLeft() > maxrating) {
                 maxrating = res.getLeft();
                 best.clear();
@@ -40,7 +43,10 @@ public class AlphaBetaAI implements IAI {
             } else if (res.getLeft() == maxrating) {
                 best.add(move);
             }
+            System.out.print(res.getLeft() + " ");
         }
+        System.out.println();
+        System.out.println(maxrating);
         Random random = new Random();
         return best.get(random.nextInt(best.size()));
     }
