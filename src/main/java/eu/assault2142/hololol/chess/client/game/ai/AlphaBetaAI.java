@@ -40,10 +40,7 @@ public class AlphaBetaAI implements IAI {
             } else if (res.getLeft() == maxrating) {
                 best.add(move);
             }
-            //System.out.print(res.getLeft() + " ");
         }
-        //System.out.println();
-        //System.out.println(maxrating - currstate.evaluateSituation(black));
         Random random = new Random();
         return best.get(random.nextInt(best.size()));
     }
@@ -71,7 +68,8 @@ public class AlphaBetaAI implements IAI {
             List<Move> moves = state.computeAllMoves(!black);
             moves.addAll(state.computeAllCaptures(!black));
             for (Move m : moves) {
-                v = new Pair(Math.min(v.getLeft(), alphabeta(state, depth - 1, alpha, beta, true, m).getLeft()), m);
+                int abc = alphabeta(state, depth - 1, alpha, beta, true, m).getLeft();
+                v = v.getLeft() <= abc ? v : new Pair(abc, m);
                 beta = Math.min(beta, v.getLeft());
                 if (beta <= alpha) {
                     break;
