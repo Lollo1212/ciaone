@@ -8,7 +8,9 @@ package eu.assault2142.hololol.chess.client.game.ai;
 import eu.assault2142.hololol.chess.client.util.Pair;
 import eu.assault2142.hololol.chess.game.GameState;
 import eu.assault2142.hololol.chess.game.chessmen.Move;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Random;
 
 /**
  *
@@ -25,9 +27,25 @@ public class AlphaBetaAI implements IAI {
 
     @Override
     public Move bestMove() {
-        Pair<Integer, Move> res = alphabeta(currstate, 2, Integer.MIN_VALUE, Integer.MAX_VALUE, true, null);
-        System.out.println(res.getLeft());
-        return res.getRight();
+        List<Move> moves = currstate.computeAllMoves(black);
+        moves.addAll(currstate.computeAllCaptures(black));
+        int maxrating = Integer.MIN_VALUE;
+        List<Move> best = new LinkedList();
+        for (Move move : moves) {
+            Pair<Integer, Move> res = alphabeta(currstate, 1, Integer.MIN_VALUE, Integer.MAX_VALUE, false, move);
+            if (res.getLeft() > maxrating) {
+                maxrating = res.getLeft();
+                best.clear();
+                best.add(move);
+            } else if (res.getLeft() == maxrating) {
+                best.add(move);
+            }
+            //System.out.print(res.getLeft() + " ");
+        }
+        //System.out.println();
+        //System.out.println(maxrating - currstate.evaluateSituation(black));
+        Random random = new Random();
+        return best.get(random.nextInt(best.size()));
     }
 
     public Pair<Integer, Move> alphabeta(GameState before, int depth, int alpha, int beta, boolean maximizingPlayer, Move move) {
