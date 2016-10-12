@@ -153,4 +153,10 @@
         </plugins>
     </build>
     <name>Chess</name>
+    <repositories>
+        <repository>
+            <id>jcenter</id>
+            <url>http://repo.spring.io/jcenter</url>
+        </repository>
+    </repositories>
 </project>
